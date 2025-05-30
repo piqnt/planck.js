@@ -121,10 +121,10 @@ export interface BodyDef {
 
 /** @internal */ const BodyDefDefault: BodyDef = {
   type: STATIC,
-  position: Vec2.zero(),
+  position: matrix.vec2(0, 0),
   angle: 0.0,
 
-  linearVelocity: Vec2.zero(),
+  linearVelocity: matrix.vec2(0, 0),
   angularVelocity: 0.0,
 
   linearDamping: 0.0,
@@ -188,9 +188,9 @@ export class Body {
   // position and velocity correction
   /** @internal */ c_velocity: Velocity;
   /** @internal */ c_position: Position;
-  /** @internal */ m_force: Vec2;
+  /** @internal */ m_force: Vec2Value;
   /** @internal */ m_torque: number;
-  /** @internal */ m_linearVelocity: Vec2;
+  /** @internal */ m_linearVelocity: Vec2Value;
   /** @internal */ m_angularVelocity: number;
   /** @internal */ m_linearDamping: number;
   /** @internal */ m_angularDamping: number;
@@ -213,8 +213,8 @@ export class Body {
   constructor(world: World, def: BodyDef) {
     def = options(def, BodyDefDefault);
 
-    if (_ASSERT) console.assert(Vec2.isValid(def.position));
-    if (_ASSERT) console.assert(Vec2.isValid(def.linearVelocity));
+    if (_ASSERT) console.assert(matrix.isValidVec2(def.position));
+    if (_ASSERT) console.assert(matrix.isValidVec2(def.linearVelocity));
     if (_ASSERT) console.assert(Number.isFinite(def.angle));
     if (_ASSERT) console.assert(Number.isFinite(def.angularVelocity));
     if (_ASSERT) console.assert(Number.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
@@ -248,7 +248,7 @@ export class Body {
 
     // the body origin transform
     this.m_xf = Transform.identity();
-    this.m_xf.p.setVec2(def.position);
+    matrix.copyVec2(this.m_xf.p, def.position);
     this.m_xf.q.setAngle(def.angle);
 
     // the swept motion for CCD
@@ -259,10 +259,11 @@ export class Body {
     this.c_velocity = new Velocity();
     this.c_position = new Position();
 
-    this.m_force = Vec2.zero();
+    this.m_force = matrix.vec2(0, 0);
     this.m_torque = 0.0;
 
-    this.m_linearVelocity = Vec2.clone(def.linearVelocity);
+    this.m_linearVelocity = matrix.vec2(0, 0);
+    matrix.copyVec2(this.m_linearVelocity, def.linearVelocity);
     this.m_angularVelocity = def.angularVelocity;
 
     this.m_linearDamping = def.linearDamping;
@@ -411,7 +412,7 @@ export class Body {
     this.resetMassData();
 
     if (this.m_type == STATIC) {
-      this.m_linearVelocity.setZero();
+      matrix.zeroVec2(this.m_linearVelocity);
       this.m_angularVelocity = 0.0;
       this.m_sweep.forward();
       this.synchronizeFixtures();
@@ -419,7 +420,7 @@ export class Body {
 
     this.setAwake(true);
 
-    this.m_force.setZero();
+    matrix.zeroVec2(this.m_force);
     this.m_torque = 0.0;
 
     // Delete the attached contacts.
@@ -478,9 +479,9 @@ export class Body {
     } else {
       this.m_awakeFlag = false;
       this.m_sleepTime = 0.0;
-      this.m_linearVelocity.setZero();
+      matrix.zeroVec2(this.m_linearVelocity);
       this.m_angularVelocity = 0.0;
-      this.m_force.setZero();
+      matrix.zeroVec2(this.m_force);
       this.m_torque = 0.0;
     }
   }
@@ -634,7 +635,7 @@ export class Body {
   /**
    * Get the world position for the body's origin.
    */
-  getPosition(): Vec2 {
+  getPosition(): Vec2Value {
     return this.m_xf.p;
   }
 
@@ -656,14 +657,14 @@ export class Body {
   /**
    * Get the world position of the center of mass.
    */
-  getWorldCenter(): Vec2 {
+  getWorldCenter(): Vec2Value {
     return this.m_sweep.c;
   }
 
   /**
    * Get the local position of the center of mass.
    */
-  getLocalCenter(): Vec2 {
+  getLocalCenter(): Vec2Value {
     return this.m_sweep.localCenter;
   }
 
@@ -672,7 +673,7 @@ export class Body {
    *
    * @return the linear velocity of the center of mass.
    */
-  getLinearVelocity(): Vec2 {
+  getLinearVelocity(): Vec2Value {
     return this.m_linearVelocity;
   }
 
@@ -681,9 +682,13 @@ export class Body {
    *
    * @param worldPoint A point in world coordinates.
    */
-  getLinearVelocityFromWorldPoint(worldPoint: Vec2Value): Vec2 {
-    const localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
-    return Vec2.add(this.m_linearVelocity, Vec2.crossNumVec2(this.m_angularVelocity, localCenter));
+  getLinearVelocityFromWorldPoint(worldPoint: Vec2Value): Vec2Value {
+    const localCenter = matrix.vec2(0, 0);
+    matrix.subVec2(localCenter, worldPoint, this.m_sweep.c);
+    const result = matrix.vec2(0, 0);
+    matrix.copyVec2(result, this.m_linearVelocity);
+    matrix.plusCrossNumVec2(result, this.m_angularVelocity, localCenter);
+    return result;
   }
 
   /**
@@ -691,7 +696,7 @@ export class Body {
    *
    * @param localPoint A point in local coordinates.
    */
-  getLinearVelocityFromLocalPoint(localPoint: Vec2Value): Vec2 {
+  getLinearVelocityFromLocalPoint(localPoint: Vec2Value): Vec2Value {
     return this.getLinearVelocityFromWorldPoint(this.getWorldPoint(localPoint));
   }
 
@@ -704,10 +709,10 @@ export class Body {
     if (this.m_type == STATIC) {
       return;
     }
-    if (Vec2.dot(v, v) > 0.0) {
+    if (matrix.dotVec2(v, v) > 0.0) {
       this.setAwake(true);
     }
-    this.m_linearVelocity.setVec2(v);
+    matrix.zeroVec2(this.m_linearVelocity);
   }
 
   /**
@@ -776,7 +781,7 @@ export class Body {
    * @return the rotational inertia, usually in kg-m^2.
    */
   getInertia(): number {
-    return this.m_I + this.m_mass * Vec2.dot(this.m_sweep.localCenter, this.m_sweep.localCenter);
+    return this.m_I + this.m_mass * matrix.dotVec2(this.m_sweep.localCenter, this.m_sweep.localCenter);
   }
 
   /**
@@ -922,8 +927,8 @@ export class Body {
     }
     // Don't accumulate a force if the body is sleeping.
     if (this.m_awakeFlag) {
-      this.m_force.add(force);
-      this.m_torque += Vec2.crossVec2Vec2(Vec2.sub(point, this.m_sweep.c), force);
+      matrix.plusVec2(this.m_force, force);
+      this.m_torque += matrix.crossVec2Vec2(point, force) - matrix.crossVec2Vec2(point, force);
     }
   }
 
@@ -942,7 +947,7 @@ export class Body {
     }
     // Don't accumulate a force if the body is sleeping
     if (this.m_awakeFlag) {
-      this.m_force.add(force);
+      matrix.plusVec2(this.m_force, force);
     }
   }
 
@@ -985,8 +990,9 @@ export class Body {
 
     // Don't accumulate velocity if the body is sleeping
     if (this.m_awakeFlag) {
-      this.m_linearVelocity.addMul(this.m_invMass, impulse);
-      this.m_angularVelocity += this.m_invI * Vec2.crossVec2Vec2(Vec2.sub(point, this.m_sweep.c), impulse);
+      matrix.plusScaleVec2(this.m_linearVelocity, this.m_invMass, impulse);
+      this.m_angularVelocity +=
+        this.m_invI * (matrix.crossVec2Vec2(point, impulse) - matrix.crossVec2Vec2(this.m_sweep.c, impulse));
     }
   }
 
@@ -1160,28 +1166,28 @@ export class Body {
   /**
    * Get the corresponding world point of a local point.
    */
-  getWorldPoint(localPoint: Vec2Value): Vec2 {
+  getWorldPoint(localPoint: Vec2Value): Vec2Value {
     return Transform.mulVec2(this.m_xf, localPoint);
   }
 
   /**
    * Get the corresponding world vector of a local vector.
    */
-  getWorldVector(localVector: Vec2Value): Vec2 {
+  getWorldVector(localVector: Vec2Value): Vec2Value {
     return Rot.mulVec2(this.m_xf.q, localVector);
   }
 
   /**
    * Gets the corresponding local point of a world point.
    */
-  getLocalPoint(worldPoint: Vec2Value): Vec2 {
+  getLocalPoint(worldPoint: Vec2Value): Vec2Value {
     return Transform.mulTVec2(this.m_xf, worldPoint);
   }
 
   /**
    * Gets the corresponding local vector of a world vector.
    */
-  getLocalVector(worldVector: Vec2Value): Vec2 {
+  getLocalVector(worldVector: Vec2Value): Vec2Value {
     return Rot.mulTVec2(this.m_xf.q, worldVector);
   }
 }

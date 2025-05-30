@@ -133,10 +133,10 @@ export class PrismaticJoint extends Joint {
   static TYPE = "prismatic-joint" as const;
 
   /** @internal */ m_type: "prismatic-joint";
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
-  /** @internal */ m_localXAxisA: Vec2;
-  /** @internal */ m_localYAxisA: Vec2;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
+  /** @internal */ m_localXAxisA: Vec2Value;
+  /** @internal */ m_localYAxisA: Vec2Value;
   /** @internal */ m_referenceAngle: number;
   /** @internal */ m_impulse: Vec3Value;
   /** @internal */ m_motorMass: number;
@@ -148,11 +148,11 @@ export class PrismaticJoint extends Joint {
   /** @internal */ m_enableLimit: boolean;
   /** @internal */ m_enableMotor: boolean;
   /** @internal */ m_limitState: number; // TODO enum
-  /** @internal */ m_axis: Vec2;
-  /** @internal */ m_perp: Vec2;
+  /** @internal */ m_axis: Vec2Value;
+  /** @internal */ m_perp: Vec2Value;
   // Solver temp
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
@@ -181,7 +181,7 @@ export class PrismaticJoint extends Joint {
     this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
     this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
     this.m_localXAxisA = Vec2.clone(axis ? bodyA.getLocalVector(axis) : def.localAxisA || Vec2.neo(1.0, 0.0));
-    this.m_localXAxisA.normalize();
+    matrix.normalizeVec2(this.m_localXAxisA);
     this.m_localYAxisA = Vec2.crossNumVec2(1.0, this.m_localXAxisA);
     this.m_referenceAngle = Number.isFinite(def.referenceAngle)
       ? def.referenceAngle
@@ -313,18 +313,18 @@ export class PrismaticJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<PrismaticJointDef>): void {
     if (def.anchorA) {
-      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
+      matrix.copyVec2(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
-      this.m_localAnchorA.setVec2(def.localAnchorA);
+      matrix.copyVec2(this.m_localAnchorA, def.localAnchorA);
     }
     if (def.anchorB) {
-      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
+      matrix.copyVec2(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
-      this.m_localAnchorB.setVec2(def.localAnchorB);
+      matrix.copyVec2(this.m_localAnchorB, def.localAnchorB);
     }
     if (def.localAxisA) {
-      this.m_localXAxisA.setVec2(def.localAxisA);
-      this.m_localYAxisA.setVec2(Vec2.crossNumVec2(1.0, def.localAxisA));
+      matrix.copyVec2(this.m_localXAxisA, def.localAxisA);
+      matrix.crossNumVec2(this.m_localYAxisA, 1.0, def.localAxisA);
     }
     if (Number.isFinite(def.referenceAngle)) {
       this.m_referenceAngle = def.referenceAngle;
@@ -352,21 +352,21 @@ export class PrismaticJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA(): Vec2 {
+  getLocalAnchorA(): Vec2Value {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB(): Vec2 {
+  getLocalAnchorB(): Vec2Value {
     return this.m_localAnchorB;
   }
 
   /**
    * The local joint axis relative to bodyA.
    */
-  getLocalAxisA(): Vec2 {
+  getLocalAxisA(): Vec2Value {
     return this.m_localXAxisA;
   }
 
@@ -520,21 +520,21 @@ export class PrismaticJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse + this.m_impulse.z, this.m_axis).mul(inv_dt);
   }
 
@@ -652,19 +652,19 @@ export class PrismaticJoint extends Joint {
       const LA = this.m_impulse.x * this.m_s1 + this.m_impulse.y + (this.m_motorImpulse + this.m_impulse.z) * this.m_a1;
       const LB = this.m_impulse.x * this.m_s2 + this.m_impulse.y + (this.m_motorImpulse + this.m_impulse.z) * this.m_a2;
 
-      vA.subMul(mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wA -= iA * LA;
 
-      vB.addMul(mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
       wB += iB * LB;
     } else {
       matrix.zeroVec3(this.m_impulse);
       this.m_motorImpulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    matrix.copyVec2(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    matrix.copyVec2(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -692,10 +692,10 @@ export class PrismaticJoint extends Joint {
       const LA = impulse * this.m_a1;
       const LB = impulse * this.m_a2;
 
-      vA.subMul(mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wA -= iA * LA;
 
-      vB.addMul(mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
       wB += iB * LB;
     }
 
@@ -736,10 +736,10 @@ export class PrismaticJoint extends Joint {
       const LA = df.x * this.m_s1 + df.y + df.z * this.m_a1;
       const LB = df.x * this.m_s2 + df.y + df.z * this.m_a2;
 
-      vA.subMul(mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wA -= iA * LA;
 
-      vB.addMul(mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
       wB += iB * LB;
     } else {
       // Limit is inactive, just solve the prismatic constraint in block form.
@@ -752,10 +752,10 @@ export class PrismaticJoint extends Joint {
       const LA = df.x * this.m_s1 + df.y;
       const LB = df.x * this.m_s2 + df.y;
 
-      vA.subMul(mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wA -= iA * LA;
 
-      vB.addMul(mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
       wB += iB * LB;
     }
 
@@ -869,9 +869,9 @@ export class PrismaticJoint extends Joint {
     const LA = impulse.x * s1 + impulse.y + impulse.z * a1;
     const LB = impulse.x * s2 + impulse.y + impulse.z * a2;
 
-    cA.subMul(mA, P);
+    matrix.minusScaleVec2(cA, mA, P);
     aA -= iA * LA;
-    cB.addMul(mB, P);
+    matrix.plusScaleVec2(cB, mB, P);
     aB += iB * LB;
 
     this.m_bodyA.c_position.c = cA;

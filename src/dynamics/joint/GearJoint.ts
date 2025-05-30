@@ -9,8 +9,8 @@
 
 import { options } from "../../util/options";
 import { SettingsInternal as Settings } from "../../Settings";
-import {} from "../../common/Math";
-import { Vec2 } from "../../common/Vec2";
+import * as matrix from "../../common/Matrix";
+import { Vec2, Vec2Value } from "../../common/Vec2";
 import { Rot } from "../../common/Rot";
 import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
@@ -88,24 +88,24 @@ export class GearJoint extends Joint {
   /** @internal */ m_type1: "revolute-joint" | "prismatic-joint";
   /** @internal */ m_type2: "revolute-joint" | "prismatic-joint";
   /** @internal */ m_bodyC: Body;
-  /** @internal */ m_localAnchorC: Vec2;
-  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_localAnchorC: Vec2Value;
+  /** @internal */ m_localAnchorA: Vec2Value;
   /** @internal */ m_referenceAngleA: number;
-  /** @internal */ m_localAxisC: Vec2;
+  /** @internal */ m_localAxisC: Vec2Value;
   /** @internal */ m_bodyD: Body;
-  /** @internal */ m_localAnchorD: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localAnchorD: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_referenceAngleB: number;
-  /** @internal */ m_localAxisD: Vec2;
+  /** @internal */ m_localAxisD: Vec2Value;
   /** @internal */ m_ratio: number;
   /** @internal */ m_constant: number;
   /** @internal */ m_impulse: number;
 
   // Solver temp
-  /** @internal */ m_lcA: Vec2;
-  /** @internal */ m_lcB: Vec2;
-  /** @internal */ m_lcC: Vec2;
-  /** @internal */ m_lcD: Vec2;
+  /** @internal */ m_lcA: Vec2Value;
+  /** @internal */ m_lcB: Vec2Value;
+  /** @internal */ m_lcC: Vec2Value;
+  /** @internal */ m_lcD: Vec2Value;
   /** @internal */ m_mA: number;
   /** @internal */ m_mB: number;
   /** @internal */ m_mC: number;
@@ -114,8 +114,8 @@ export class GearJoint extends Joint {
   /** @internal */ m_iB: number;
   /** @internal */ m_iC: number;
   /** @internal */ m_iD: number;
-  /** @internal */ m_JvAC: Vec2;
-  /** @internal */ m_JvBD: Vec2;
+  /** @internal */ m_JvAC: Vec2Value;
+  /** @internal */ m_JvBD: Vec2Value;
   /** @internal */ m_JwA: number;
   /** @internal */ m_JwB: number;
   /** @internal */ m_JwC: number;
@@ -183,7 +183,7 @@ export class GearJoint extends Joint {
       this.m_localAnchorC = revolute.m_localAnchorA;
       this.m_localAnchorA = revolute.m_localAnchorB;
       this.m_referenceAngleA = revolute.m_referenceAngle;
-      this.m_localAxisC = Vec2.zero();
+      this.m_localAxisC = matrix.vec2(0, 0);
 
       coordinateA = aA - aC - this.m_referenceAngleA;
     } else {
@@ -195,7 +195,7 @@ export class GearJoint extends Joint {
 
       const pC = this.m_localAnchorC;
       const pA = Rot.mulTVec2(xfC.q, Vec2.add(Rot.mulVec2(xfA.q, this.m_localAnchorA), Vec2.sub(xfA.p, xfC.p)));
-      coordinateA = Vec2.dot(pA, this.m_localAxisC) - Vec2.dot(pC, this.m_localAxisC);
+      coordinateA = matrix.dotVec2(pA, this.m_localAxisC) - matrix.dotVec2(pC, this.m_localAxisC);
     }
 
     this.m_bodyD = this.m_joint2.getBodyA();
@@ -212,7 +212,7 @@ export class GearJoint extends Joint {
       this.m_localAnchorD = revolute.m_localAnchorA;
       this.m_localAnchorB = revolute.m_localAnchorB;
       this.m_referenceAngleB = revolute.m_referenceAngle;
-      this.m_localAxisD = Vec2.zero();
+      this.m_localAxisD = matrix.vec2(0, 0);
 
       coordinateB = aB - aD - this.m_referenceAngleB;
     } else {
@@ -224,7 +224,7 @@ export class GearJoint extends Joint {
 
       const pD = this.m_localAnchorD;
       const pB = Rot.mulTVec2(xfD.q, Vec2.add(Rot.mulVec2(xfB.q, this.m_localAnchorB), Vec2.sub(xfB.p, xfD.p)));
-      coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
+      coordinateB = matrix.dotVec2(pB, this.m_localAxisD) - matrix.dotVec2(pD, this.m_localAxisD);
     }
 
     this.m_constant = coordinateA + this.m_ratio * coordinateB;
@@ -319,21 +319,21 @@ export class GearJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.mulNumVec2(this.m_impulse, this.m_JvAC).mul(inv_dt);
   }
 
@@ -383,7 +383,7 @@ export class GearJoint extends Joint {
     this.m_mass = 0.0;
 
     if (this.m_type1 == RevoluteJoint.TYPE) {
-      this.m_JvAC = Vec2.zero();
+      this.m_JvAC = matrix.vec2(0, 0);
       this.m_JwA = 1.0;
       this.m_JwC = 1.0;
       this.m_mass += this.m_iA + this.m_iC;
@@ -398,7 +398,7 @@ export class GearJoint extends Joint {
     }
 
     if (this.m_type2 == RevoluteJoint.TYPE) {
-      this.m_JvBD = Vec2.zero();
+      this.m_JvBD = matrix.vec2(0, 0);
       this.m_JwB = this.m_ratio;
       this.m_JwD = this.m_ratio;
       this.m_mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
@@ -419,28 +419,28 @@ export class GearJoint extends Joint {
     this.m_mass = this.m_mass > 0.0 ? 1.0 / this.m_mass : 0.0;
 
     if (step.warmStarting) {
-      vA.addMul(this.m_mA * this.m_impulse, this.m_JvAC);
+      matrix.plusScaleVec2(vA, this.m_mA * this.m_impulse, this.m_JvAC);
       wA += this.m_iA * this.m_impulse * this.m_JwA;
 
-      vB.addMul(this.m_mB * this.m_impulse, this.m_JvBD);
+      matrix.plusScaleVec2(vB, this.m_mB * this.m_impulse, this.m_JvBD);
       wB += this.m_iB * this.m_impulse * this.m_JwB;
 
-      vC.subMul(this.m_mC * this.m_impulse, this.m_JvAC);
+      matrix.minusScaleVec2(vC, this.m_mC * this.m_impulse, this.m_JvAC);
       wC -= this.m_iC * this.m_impulse * this.m_JwC;
 
-      vD.subMul(this.m_mD * this.m_impulse, this.m_JvBD);
+      matrix.minusScaleVec2(vD, this.m_mD * this.m_impulse, this.m_JvBD);
       wD -= this.m_iD * this.m_impulse * this.m_JwD;
     } else {
       this.m_impulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    matrix.copyVec2(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    matrix.copyVec2(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
-    this.m_bodyC.c_velocity.v.setVec2(vC);
+    matrix.copyVec2(this.m_bodyC.c_velocity.v, vC);
     this.m_bodyC.c_velocity.w = wC;
-    this.m_bodyD.c_velocity.v.setVec2(vD);
+    matrix.copyVec2(this.m_bodyD.c_velocity.v, vD);
     this.m_bodyD.c_velocity.w = wD;
   }
 
@@ -455,28 +455,31 @@ export class GearJoint extends Joint {
     let wD = this.m_bodyD.c_velocity.w;
 
     let Cdot =
-      Vec2.dot(this.m_JvAC, vA) - Vec2.dot(this.m_JvAC, vC) + Vec2.dot(this.m_JvBD, vB) - Vec2.dot(this.m_JvBD, vD);
+      matrix.dotVec2(this.m_JvAC, vA) -
+      matrix.dotVec2(this.m_JvAC, vC) +
+      matrix.dotVec2(this.m_JvBD, vB) -
+      matrix.dotVec2(this.m_JvBD, vD);
     Cdot += this.m_JwA * wA - this.m_JwC * wC + (this.m_JwB * wB - this.m_JwD * wD);
 
     const impulse = -this.m_mass * Cdot;
     this.m_impulse += impulse;
 
-    vA.addMul(this.m_mA * impulse, this.m_JvAC);
+    matrix.plusScaleVec2(vA, this.m_mA * impulse, this.m_JvAC);
     wA += this.m_iA * impulse * this.m_JwA;
-    vB.addMul(this.m_mB * impulse, this.m_JvBD);
+    matrix.plusScaleVec2(vB, this.m_mB * impulse, this.m_JvBD);
     wB += this.m_iB * impulse * this.m_JwB;
-    vC.subMul(this.m_mC * impulse, this.m_JvAC);
+    matrix.minusScaleVec2(vC, this.m_mC * impulse, this.m_JvAC);
     wC -= this.m_iC * impulse * this.m_JwC;
-    vD.subMul(this.m_mD * impulse, this.m_JvBD);
+    matrix.minusScaleVec2(vD, this.m_mD * impulse, this.m_JvBD);
     wD -= this.m_iD * impulse * this.m_JwD;
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    matrix.copyVec2(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    matrix.copyVec2(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
-    this.m_bodyC.c_velocity.v.setVec2(vC);
+    matrix.copyVec2(this.m_bodyC.c_velocity.v, vC);
     this.m_bodyC.c_velocity.w = wC;
-    this.m_bodyD.c_velocity.v.setVec2(vD);
+    matrix.copyVec2(this.m_bodyD.c_velocity.v, vD);
     this.m_bodyD.c_velocity.w = wD;
   }
 
@@ -503,8 +506,8 @@ export class GearJoint extends Joint {
     let coordinateA: number;
     let coordinateB: number;
 
-    let JvAC: Vec2;
-    let JvBD: Vec2;
+    let JvAC: Vec2Value;
+    let JvBD: Vec2Value;
     let JwA: number;
     let JwB: number;
     let JwC: number;
@@ -512,7 +515,7 @@ export class GearJoint extends Joint {
     let mass = 0.0;
 
     if (this.m_type1 == RevoluteJoint.TYPE) {
-      JvAC = Vec2.zero();
+      JvAC = matrix.vec2(0, 0);
       JwA = 1.0;
       JwC = 1.0;
       mass += this.m_iA + this.m_iC;
@@ -529,11 +532,11 @@ export class GearJoint extends Joint {
 
       const pC = Vec2.sub(this.m_localAnchorC, this.m_lcC);
       const pA = Rot.mulTVec2(qC, Vec2.add(rA, Vec2.sub(cA, cC)));
-      coordinateA = Vec2.dot(Vec2.sub(pA, pC), this.m_localAxisC);
+      coordinateA = matrix.dotVec2(Vec2.sub(pA, pC), this.m_localAxisC);
     }
 
     if (this.m_type2 == RevoluteJoint.TYPE) {
-      JvBD = Vec2.zero();
+      JvBD = matrix.vec2(0, 0);
       JwB = this.m_ratio;
       JwD = this.m_ratio;
       mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
@@ -560,22 +563,22 @@ export class GearJoint extends Joint {
       impulse = -C / mass;
     }
 
-    cA.addMul(this.m_mA * impulse, JvAC);
+    matrix.plusScaleVec2(cA, this.m_mA * impulse, JvAC);
     aA += this.m_iA * impulse * JwA;
-    cB.addMul(this.m_mB * impulse, JvBD);
+    matrix.plusScaleVec2(cB, this.m_mB * impulse, JvBD);
     aB += this.m_iB * impulse * JwB;
-    cC.subMul(this.m_mC * impulse, JvAC);
+    matrix.minusScaleVec2(cC, this.m_mC * impulse, JvAC);
     aC -= this.m_iC * impulse * JwC;
-    cD.subMul(this.m_mD * impulse, JvBD);
+    matrix.minusScaleVec2(cD, this.m_mD * impulse, JvBD);
     aD -= this.m_iD * impulse * JwD;
 
-    this.m_bodyA.c_position.c.setVec2(cA);
+    matrix.copyVec2(this.m_bodyA.c_position.c, cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.setVec2(cB);
+    matrix.copyVec2(this.m_bodyB.c_position.c, cB);
     this.m_bodyB.c_position.a = aB;
-    this.m_bodyC.c_position.c.setVec2(cC);
+    matrix.copyVec2(this.m_bodyC.c_position.c, cC);
     this.m_bodyC.c_position.a = aC;
-    this.m_bodyD.c_position.c.setVec2(cD);
+    matrix.copyVec2(this.m_bodyD.c_position.c, cD);
     this.m_bodyD.c_position.a = aD;
 
     // TODO_ERIN not implemented

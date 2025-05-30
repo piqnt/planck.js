@@ -1062,14 +1062,14 @@ export class Contact {
       if (_ASSERT) console.assert(a.x >= 0.0 && a.y >= 0.0);
 
       // Relative velocity at contact
-      // let dv1 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp1.rA));
+      // let dv1 = V2.zero().add(vB).add(V2.crossNumVec2(wB, vcp1.rB)).sub(vA).sub(V2.crossNumVec2(wA, vcp1.rA));
       matrix.zeroVec2(dv1);
       matrix.plusVec2(dv1, vB);
       matrix.plusCrossNumVec2(dv1, wB, vcp1.rB);
       matrix.minusVec2(dv1, vA);
       matrix.minusCrossNumVec2(dv1, wA, vcp1.rA);
 
-      // let dv2 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp2.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp2.rA));
+      // let dv2 = V2.zero().add(vB).add(V2.crossNumVec2(wB, vcp2.rB)).sub(vA).sub(V2.crossNumVec2(wA, vcp2.rA));
       matrix.zeroVec2(dv2);
       matrix.plusVec2(dv2, vB);
       matrix.plusCrossNumVec2(dv2, wB, vcp2.rB);

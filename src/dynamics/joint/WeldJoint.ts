@@ -85,8 +85,8 @@ export class WeldJoint extends Joint {
   static TYPE = "weld-joint" as const;
 
   /** @internal */ m_type: "weld-joint";
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_referenceAngle: number;
 
   /** @internal */ m_frequencyHz: number;
@@ -98,10 +98,10 @@ export class WeldJoint extends Joint {
   /** @internal */ m_gamma: number;
 
   // Solver temp
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
@@ -193,14 +193,14 @@ export class WeldJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<WeldJointDef>): void {
     if (def.anchorA) {
-      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
+      matrix.copyVec2(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
-      this.m_localAnchorA.setVec2(def.localAnchorA);
+      matrix.copyVec2(this.m_localAnchorA, def.localAnchorA);
     }
     if (def.anchorB) {
-      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
+      matrix.copyVec2(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
-      this.m_localAnchorB.setVec2(def.localAnchorB);
+      matrix.copyVec2(this.m_localAnchorB, def.localAnchorB);
     }
     if (Number.isFinite(def.frequencyHz)) {
       this.m_frequencyHz = def.frequencyHz;
@@ -213,14 +213,14 @@ export class WeldJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA(): Vec2 {
+  getLocalAnchorA(): Vec2Value {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB(): Vec2 {
+  getLocalAnchorB(): Vec2Value {
     return this.m_localAnchorB;
   }
 
@@ -262,21 +262,21 @@ export class WeldJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
   }
 
@@ -375,10 +375,10 @@ export class WeldJoint extends Joint {
 
       const P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
 
-      vA.subMul(mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_impulse.z);
 
-      vB.addMul(mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_impulse.z);
     } else {
       matrix.zeroVec3(this.m_impulse);
@@ -422,10 +422,10 @@ export class WeldJoint extends Joint {
 
       const P = Vec2.clone(impulse1);
 
-      vA.subMul(mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wA -= iA * Vec2.crossVec2Vec2(this.m_rA, P);
 
-      vB.addMul(mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
       wB += iB * Vec2.crossVec2Vec2(this.m_rB, P);
     } else {
       const Cdot1 = Vec2.zero();
@@ -441,10 +441,10 @@ export class WeldJoint extends Joint {
 
       const P = Vec2.neo(impulse.x, impulse.y);
 
-      vA.subMul(mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + impulse.z);
 
-      vB.addMul(mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + impulse.z);
     }
 
@@ -500,10 +500,10 @@ export class WeldJoint extends Joint {
       matrix.solveMat22(P, K, C1);
       matrix.negVec2(P);
 
-      cA.subMul(mA, P);
+      matrix.minusScaleVec2(cA, mA, P);
       aA -= iA * Vec2.crossVec2Vec2(rA, P);
 
-      cB.addMul(mB, P);
+      matrix.plusScaleVec2(cB, mB, P);
       aB += iB * Vec2.crossVec2Vec2(rB, P);
     } else {
       const C1 = Vec2.zero();
@@ -519,7 +519,6 @@ export class WeldJoint extends Joint {
       if (K.ez.z > 0.0) {
         matrix.solveMat33Num(impulse, K, C1.x, C1.y, C2);
         matrix.negVec3(impulse);
-
       } else {
         const impulse2 = matrix.vec2(0, 0);
         matrix.solveMat22(impulse2, K, C1);
@@ -532,10 +531,10 @@ export class WeldJoint extends Joint {
 
       const P = Vec2.neo(impulse.x, impulse.y);
 
-      cA.subMul(mA, P);
+      matrix.minusScaleVec2(cA, mA, P);
       aA -= iA * (Vec2.crossVec2Vec2(rA, P) + impulse.z);
 
-      cB.addMul(mB, P);
+      matrix.plusScaleVec2(cB, mB, P);
       aB += iB * (Vec2.crossVec2Vec2(rB, P) + impulse.z);
     }
 

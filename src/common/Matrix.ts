@@ -18,44 +18,53 @@ import type { Vec3Value } from "./Vec3";
 import type { Mat22Value } from "./Mat22";
 import type { Mat33Value } from "./Mat33";
 
+/** Return a new Vec2 object with the given x and y. */
 export function vec2(x: number, y: number): Vec2Value {
   return { x, y };
 }
 
+/** Return a new Vec3 object with the given x and y. */
 export function vec3(x: number, y: number, z: number): Vec3Value {
   return { x, y, z };
 }
 
+/** Return a new Rot object with the given angle. */
 export function rotation(angle: number): RotValue {
   return { s: math_sin(angle), c: math_cos(angle) };
 }
 
+/** Assigns the given x and y to the out Vec2Value. */
 export function setVec2(out: Vec2Value, x: number, y: number): void {
   out.x = x;
   out.y = y;
 }
 
+/** Assigns the given x, y and z to the out Vec3Value. */
 export function setVec3(out: Vec3Value, x: number, y: number, z: number): void {
   out.x = x;
   out.y = y;
   out.z = z;
 }
 
+/** Copies the x and y from the w to the out. */
 export function copyVec2(out: Vec2Value, w: Vec2Value): void {
   out.x = w.x;
   out.y = w.y;
 }
 
+/** Copies the x, y, z from the w to the out. */
 export function copyVec3(out: Vec2Value, w: Vec2Value): void {
   out.x = w.x;
   out.y = w.y;
 }
 
+/** Assigns zero to the x and y of the out. */
 export function zeroVec2(out: Vec2Value): void {
   out.x = 0;
   out.y = 0;
 }
 
+/** Assigns zero to the x, y and z of the out. */
 export function zeroVec3(out: Vec3Value): void {
   out.x = 0;
   out.y = 0;
@@ -73,22 +82,38 @@ export function negVec3(out: Vec3Value): void {
   out.z = -out.z;
 }
 
+/** Adds w to out, equivalent to out += w, or out.add(w) */
 export function plusVec2(out: Vec2Value, w: Vec2Value): void {
   out.x += w.x;
   out.y += w.y;
 }
 
+/** Adds w to out, equivalent to out += w, or out.add(w) */
 export function plusVec3(out: Vec3Value, w: Vec3Value): void {
   out.x += w.x;
   out.y += w.y;
   out.z += w.z;
 }
 
+/** Adds w and v and assigns the result to out, equivalent to out = v + w */
 export function addVec2(out: Vec2Value, v: Vec2Value, w: Vec2Value): void {
   out.x = v.x + w.x;
   out.y = v.x + w.y;
 }
 
+export function clampVec2(out: Vec2Value, max: number): void {
+  const lengthSqr = out.x * out.x + out.y * out.y;
+  if (lengthSqr > max * max) {
+    const scale = max / math_sqrt(lengthSqr);
+    out.x *= scale;
+    out.y *= scale;
+  }
+}
+
+/**
+ * Subtract w from out and assign the result to out.
+ * This is equivalent to out = out - w, or out.sub(w).
+ */
 export function minusVec2(out: Vec2Value, w: Vec2Value): void {
   out.x -= w.x;
   out.y -= w.y;
@@ -112,38 +137,50 @@ export function dotSubVec2(a: Vec2Value, b: Vec2Value, c: Vec2Value): number {
   return (a.x - b.x) * c.x + (a.y - b.y) * c.y;
 }
 
+/** Subtracts w from v and assigns the result to out, equivalent to out = v - w */
 export function subVec2(out: Vec2Value, v: Vec2Value, w: Vec2Value): void {
   out.x = v.x - w.x;
   out.y = v.y - w.y;
 }
 
+export function absVec2(out: Vec2Value): void {
+  out.x = Math.abs(out.x);
+  out.y = Math.abs(out.y);
+}
+
+/** Multiplies out by m, equivalent to out *= m, or out.mul(m) */
 export function mulVec2(out: Vec2Value, m: number): void {
   out.x *= m;
   out.y *= m;
 }
 
+/** Multiplies out by m, equivalent to out *= m, or out.mul(m) */
 export function mulVec3(out: Vec3Value, m: number): void {
   out.x *= m;
   out.y *= m;
   out.z *= m;
 }
 
+/** Multiplies w by m and assigns the result to out, equivalent to out = m * w */
 export function scaleVec2(out: Vec2Value, m: number, w: Vec2Value): void {
   out.x = m * w.x;
   out.y = m * w.y;
 }
 
+/** Multiplies w by m and adds the result to out, equivalent to out += m * w */
 export function plusScaleVec2(out: Vec2Value, m: number, w: Vec2Value): void {
   out.x += m * w.x;
   out.y += m * w.y;
 }
 
+/** Multiplies w by m and subtracts the result from out, equivalent to out -= m * w */
 export function minusScaleVec2(out: Vec2Value, m: number, w: Vec2Value): void {
   out.x -= m * w.x;
   out.y -= m * w.y;
 }
 
 export function crossSubVec2Num(out: Vec2Value, a: Vec2Value, b: Vec2Value, w: number): void {
+  // we need temporary variables, because out might be an input
   const x = w * (a.y - b.y);
   const y = -w * (a.x - b.x);
   out.x = x;
@@ -188,6 +225,7 @@ export function normalizeVec2(out: Vec2Value): void {
 }
 
 export function crossVec2Num(out: Vec2Value, v: Vec2Value, w: number): void {
+  // we need temporary variables, because out might be an input
   const x = w * v.y;
   const y = -w * v.x;
   out.x = x;
@@ -195,6 +233,7 @@ export function crossVec2Num(out: Vec2Value, v: Vec2Value, w: number): void {
 }
 
 export function crossNumVec2(out: Vec2Value, w: number, v: Vec2Value): void {
+  // we need temporary variables, because out might be an input
   const x = -w * v.y;
   const y = w * v.x;
   out.x = x;
@@ -463,4 +502,14 @@ export function solveMat33Num(out: Vec3Value, m: Mat33Value, x: number, y: numbe
   cross_y = m.ey.z * x - m.ey.x * z;
   cross_z = m.ey.x * y - m.ey.y * x;
   out.z = det * (m.ex.x * cross_x + m.ex.y * cross_y + m.ex.z * cross_z);
+}
+
+/** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
+
+export function isValidVec2(obj: any): boolean {
+  return typeof obj === "object" && obj !== null && Number.isFinite(obj.x) && Number.isFinite(obj.y);
+}
+
+export function assertVec2(o: any): void {
+  if (_ASSERT) console.assert(!isValidVec2(o), "Invalid Vec2!", o);
 }

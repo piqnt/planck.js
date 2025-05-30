@@ -38,7 +38,7 @@ export class CircleShape extends Shape {
   static TYPE = "circle" as const;
   /** @hidden */ m_type: "circle";
 
-  /** @hidden */ m_p: Vec2;
+  /** @hidden */ m_p: Vec2Value;
   /** @hidden */ m_radius: number;
 
   constructor(position: Vec2Value, radius?: number);
@@ -52,11 +52,11 @@ export class CircleShape extends Shape {
     super();
 
     this.m_type = CircleShape.TYPE;
-    this.m_p = Vec2.zero();
+    this.m_p = matrix.vec2(0, 0);
     this.m_radius = 1;
 
-    if (typeof a === "object" && Vec2.isValid(a)) {
-      this.m_p.setVec2(a);
+    if (typeof a === "object" && matrix.isValidVec2(a)) {
+      matrix.copyVec2(this.m_p, a);
 
       if (typeof b === "number") {
         this.m_radius = b;
@@ -94,7 +94,7 @@ export class CircleShape extends Shape {
     return this.m_radius;
   }
 
-  getCenter(): Vec2 {
+  getCenter(): Vec2Value {
     return this.m_p;
   }
 
@@ -107,7 +107,7 @@ export class CircleShape extends Shape {
     const clone = new CircleShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
-    clone.m_p = this.m_p.clone();
+    clone.m_p = matrix.vec2(this.m_p.x, this.m_p.y);
     return clone;
   }
 
@@ -167,7 +167,7 @@ export class CircleShape extends Shape {
       a /= rr;
       output.fraction = a;
       output.normal = Vec2.add(s, Vec2.mulNumVec2(a, r));
-      output.normal.normalize();
+      matrix.normalizeVec2(output.normal);
       return true;
     }
 

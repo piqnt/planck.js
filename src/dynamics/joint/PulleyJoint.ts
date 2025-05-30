@@ -9,6 +9,7 @@
 
 import { options } from "../../util/options";
 import { SettingsInternal as Settings } from "../../Settings";
+import * as matrix from "../../common/Matrix";
 import { EPSILON } from "../../common/Math";
 import { Vec2, Vec2Value } from "../../common/Vec2";
 import { Rot } from "../../common/Rot";
@@ -104,10 +105,10 @@ export class PulleyJoint extends Joint {
   // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?
 
   /** @internal */ m_type: "pulley-joint";
-  /** @internal */ m_groundAnchorA: Vec2;
-  /** @internal */ m_groundAnchorB: Vec2;
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_groundAnchorA: Vec2Value;
+  /** @internal */ m_groundAnchorB: Vec2Value;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_lengthA: number;
   /** @internal */ m_lengthB: number;
   /** @internal */ m_ratio: number;
@@ -115,12 +116,12 @@ export class PulleyJoint extends Joint {
   /** @internal */ m_impulse: number;
 
   // Solver temp
-  /** @internal */ m_uA: Vec2;
-  /** @internal */ m_uB: Vec2;
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_uA: Vec2Value;
+  /** @internal */ m_uB: Vec2Value;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
@@ -216,21 +217,21 @@ export class PulleyJoint extends Joint {
 
   /** @hidden */
   _reset(def: Partial<PulleyJointDef>): void {
-    if (Vec2.isValid(def.groundAnchorA)) {
-      this.m_groundAnchorA.set(def.groundAnchorA);
+    if (matrix.isValidVec2(def.groundAnchorA)) {
+      matrix.copyVec2(this.m_groundAnchorA, def.groundAnchorA);
     }
-    if (Vec2.isValid(def.groundAnchorB)) {
-      this.m_groundAnchorB.set(def.groundAnchorB);
+    if (matrix.isValidVec2(def.groundAnchorB)) {
+      matrix.copyVec2(this.m_groundAnchorB, def.groundAnchorB);
     }
-    if (Vec2.isValid(def.localAnchorA)) {
-      this.m_localAnchorA.set(def.localAnchorA);
-    } else if (Vec2.isValid(def.anchorA)) {
-      this.m_localAnchorA.set(this.m_bodyA.getLocalPoint(def.anchorA));
+    if (matrix.isValidVec2(def.localAnchorA)) {
+      matrix.copyVec2(this.m_localAnchorA, def.localAnchorA);
+    } else if (matrix.isValidVec2(def.anchorA)) {
+      matrix.copyVec2(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
     }
-    if (Vec2.isValid(def.localAnchorB)) {
-      this.m_localAnchorB.set(def.localAnchorB);
-    } else if (Vec2.isValid(def.anchorB)) {
-      this.m_localAnchorB.set(this.m_bodyB.getLocalPoint(def.anchorB));
+    if (matrix.isValidVec2(def.localAnchorB)) {
+      matrix.copyVec2(this.m_localAnchorB, def.localAnchorB);
+    } else if (matrix.isValidVec2(def.anchorB)) {
+      matrix.copyVec2(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
     }
     if (Number.isFinite(def.lengthA)) {
       this.m_lengthA = def.lengthA;
@@ -246,14 +247,14 @@ export class PulleyJoint extends Joint {
   /**
    * Get the first ground anchor.
    */
-  getGroundAnchorA(): Vec2 {
+  getGroundAnchorA(): Vec2Value {
     return this.m_groundAnchorA;
   }
 
   /**
    * Get the second ground anchor.
    */
-  getGroundAnchorB(): Vec2 {
+  getGroundAnchorB(): Vec2Value {
     return this.m_groundAnchorB;
   }
 
@@ -302,28 +303,28 @@ export class PulleyJoint extends Joint {
    * @param newOrigin
    */
   shiftOrigin(newOrigin: Vec2Value): void {
-    this.m_groundAnchorA.sub(newOrigin);
-    this.m_groundAnchorB.sub(newOrigin);
+    matrix.minusVec2(this.m_groundAnchorA, newOrigin);
+    matrix.minusVec2(this.m_groundAnchorB, newOrigin);
   }
 
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.mulNumVec2(this.m_impulse, this.m_uB).mul(inv_dt);
   }
 
@@ -362,19 +363,19 @@ export class PulleyJoint extends Joint {
     this.m_uA = Vec2.sub(Vec2.add(cA, this.m_rA), this.m_groundAnchorA);
     this.m_uB = Vec2.sub(Vec2.add(cB, this.m_rB), this.m_groundAnchorB);
 
-    const lengthA = this.m_uA.length();
-    const lengthB = this.m_uB.length();
+    const lengthA = matrix.lengthVec2(this.m_uA);
+    const lengthB = matrix.lengthVec2(this.m_uB);
 
     if (lengthA > 10.0 * Settings.linearSlop) {
-      this.m_uA.mul(1.0 / lengthA);
+      matrix.mulVec2(this.m_uA, 1.0 / lengthA);
     } else {
-      this.m_uA.setZero();
+      matrix.zeroVec2(this.m_rA);
     }
 
     if (lengthB > 10.0 * Settings.linearSlop) {
-      this.m_uB.mul(1.0 / lengthB);
+      matrix.mulVec2(this.m_uB, 1.0 / lengthB);
     } else {
-      this.m_uB.setZero();
+      matrix.zeroVec2(this.m_rB);
     }
 
     // Compute effective mass.
@@ -398,10 +399,10 @@ export class PulleyJoint extends Joint {
       const PA = Vec2.mulNumVec2(-this.m_impulse, this.m_uA);
       const PB = Vec2.mulNumVec2(-this.m_ratio * this.m_impulse, this.m_uB);
 
-      vA.addMul(this.m_invMassA, PA);
+      matrix.plusScaleVec2(vA, this.m_invMassA, PA);
       wA += this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, PA);
 
-      vB.addMul(this.m_invMassB, PB);
+      matrix.plusScaleVec2(vB, this.m_invMassB, PB);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, PB);
     } else {
       this.m_impulse = 0.0;
@@ -428,9 +429,9 @@ export class PulleyJoint extends Joint {
 
     const PA = Vec2.mulNumVec2(-impulse, this.m_uA);
     const PB = Vec2.mulNumVec2(-this.m_ratio * impulse, this.m_uB);
-    vA.addMul(this.m_invMassA, PA);
+    matrix.plusScaleVec2(vA, this.m_invMassA, PA);
     wA += this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, PA);
-    vB.addMul(this.m_invMassB, PB);
+    matrix.plusScaleVec2(vB, this.m_invMassB, PB);
     wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, PB);
 
     this.m_bodyA.c_velocity.v = vA;
@@ -494,9 +495,9 @@ export class PulleyJoint extends Joint {
     const PA = Vec2.mulNumVec2(-impulse, uA);
     const PB = Vec2.mulNumVec2(-this.m_ratio * impulse, uB);
 
-    cA.addMul(this.m_invMassA, PA);
+    matrix.plusScaleVec2(cA, this.m_invMassA, PA);
     aA += this.m_invIA * Vec2.crossVec2Vec2(rA, PA);
-    cB.addMul(this.m_invMassB, PB);
+    matrix.plusScaleVec2(cB, this.m_invMassB, PB);
     aB += this.m_invIB * Vec2.crossVec2Vec2(rB, PB);
 
     this.m_bodyA.c_position.c = cA;

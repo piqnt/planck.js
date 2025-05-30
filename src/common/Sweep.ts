@@ -9,7 +9,7 @@
 
 import * as matrix from "./Matrix";
 import { mod } from "./Math";
-import { Vec2, Vec2Value } from "./Vec2";
+import { Vec2Value } from "./Vec2";
 import { TransformValue } from "./Transform";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
@@ -26,10 +26,10 @@ import { TransformValue } from "./Transform";
  */
 export class Sweep {
   /** Local center of mass position */
-  localCenter = Vec2.zero();
+  localCenter = matrix.vec2(0, 0);
 
   /** World center position */
-  c = Vec2.zero();
+  c = matrix.vec2(0, 0);
 
   /** World angle */
   a = 0;
@@ -37,7 +37,7 @@ export class Sweep {
   /** Fraction of the current time step in the range [0,1], c0 and a0 are c and a at alpha0. */
   alpha0 = 0;
 
-  c0 = Vec2.zero();
+  c0 = matrix.vec2(0, 0);
   a0 = 0;
 
   /** @internal */

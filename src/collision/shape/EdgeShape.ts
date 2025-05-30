@@ -41,13 +41,13 @@ export class EdgeShape extends Shape {
   /** @hidden */ m_radius: number;
 
   // These are the edge vertices
-  /** @hidden */ m_vertex1: Vec2;
-  /** @hidden */ m_vertex2: Vec2;
+  /** @hidden */ m_vertex1: Vec2Value;
+  /** @hidden */ m_vertex2: Vec2Value;
 
   // Optional adjacent vertices. These are used for smooth collision.
   // Used by chain shape.
-  /** @hidden */ m_vertex0: Vec2;
-  /** @hidden */ m_vertex3: Vec2;
+  /** @hidden */ m_vertex0: Vec2Value;
+  /** @hidden */ m_vertex3: Vec2Value;
   /** @hidden */ m_hasVertex0: boolean;
   /** @hidden */ m_hasVertex3: boolean;
 
@@ -62,11 +62,18 @@ export class EdgeShape extends Shape {
     this.m_type = EdgeShape.TYPE;
     this.m_radius = Settings.polygonRadius;
 
-    this.m_vertex1 = v1 ? Vec2.clone(v1) : Vec2.zero();
-    this.m_vertex2 = v2 ? Vec2.clone(v2) : Vec2.zero();
+    this.m_vertex1 = matrix.vec2(0, 0);
+    if (v1) {
+      matrix.copyVec2(this.m_vertex1, v1);
+    }
 
-    this.m_vertex0 = Vec2.zero();
-    this.m_vertex3 = Vec2.zero();
+    this.m_vertex2 = matrix.vec2(0, 0);
+    if (v2) {
+      matrix.copyVec2(this.m_vertex2, v2);
+    }
+
+    this.m_vertex0 = matrix.vec2(0, 0);
+    this.m_vertex3 = matrix.vec2(0, 0);
     this.m_hasVertex0 = false;
     this.m_hasVertex3 = false;
   }
@@ -121,10 +128,10 @@ export class EdgeShape extends Shape {
    */
   setNextVertex(v?: Vec2Value): EdgeShape {
     if (v) {
-      this.m_vertex3.setVec2(v);
+      matrix.copyVec2(this.m_vertex3, v);
       this.m_hasVertex3 = true;
     } else {
-      this.m_vertex3.setZero();
+      matrix.zeroVec2(this.m_vertex3);
       this.m_hasVertex3 = false;
     }
     return this;
@@ -133,7 +140,7 @@ export class EdgeShape extends Shape {
   /**
    * Optional next vertex, used for smooth collision.
    */
-  getNextVertex(): Vec2 {
+  getNextVertex(): Vec2Value {
     return this.m_vertex3;
   }
 
@@ -147,10 +154,10 @@ export class EdgeShape extends Shape {
    */
   setPrevVertex(v?: Vec2Value): EdgeShape {
     if (v) {
-      this.m_vertex0.setVec2(v);
+      matrix.copyVec2(this.m_vertex0, v);
       this.m_hasVertex0 = true;
     } else {
-      this.m_vertex0.setZero();
+      matrix.zeroVec2(this.m_vertex0);
       this.m_hasVertex0 = false;
     }
     return this;
@@ -159,7 +166,7 @@ export class EdgeShape extends Shape {
   /**
    * Optional prev vertex, used for smooth collision.
    */
-  getPrevVertex(): Vec2 {
+  getPrevVertex(): Vec2Value {
     return this.m_vertex0;
   }
 
@@ -167,8 +174,8 @@ export class EdgeShape extends Shape {
    * Set this as an isolated edge.
    */
   _set(v1: Vec2Value, v2: Vec2Value): EdgeShape {
-    this.m_vertex1.setVec2(v1);
-    this.m_vertex2.setVec2(v2);
+    matrix.copyVec2(this.m_vertex1, v1);
+    matrix.copyVec2(this.m_vertex2, v2);
     this.m_hasVertex0 = false;
     this.m_hasVertex3 = false;
     return this;
@@ -183,10 +190,10 @@ export class EdgeShape extends Shape {
     const clone = new EdgeShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
-    clone.m_vertex1.setVec2(this.m_vertex1);
-    clone.m_vertex2.setVec2(this.m_vertex2);
-    clone.m_vertex0.setVec2(this.m_vertex0);
-    clone.m_vertex3.setVec2(this.m_vertex3);
+    matrix.copyVec2(clone.m_vertex1, this.m_vertex1);
+    matrix.copyVec2(clone.m_vertex2, this.m_vertex2);
+    matrix.copyVec2(clone.m_vertex0, this.m_vertex0);
+    matrix.copyVec2(clone.m_vertex3, this.m_vertex3);
     clone.m_hasVertex0 = this.m_hasVertex0;
     clone.m_hasVertex3 = this.m_hasVertex3;
     return clone;

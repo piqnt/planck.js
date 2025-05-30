@@ -44,10 +44,10 @@ export class ChainShape extends Shape {
 
   /** @hidden */ m_radius: number;
 
-  /** @hidden */ m_vertices: Vec2[];
+  /** @hidden */ m_vertices: Vec2Value[];
   /** @hidden */ m_count: number;
-  /** @hidden */ m_prevVertex: Vec2 | null;
-  /** @hidden */ m_nextVertex: Vec2 | null;
+  /** @hidden */ m_prevVertex: Vec2Value | null;
+  /** @hidden */ m_nextVertex: Vec2Value | null;
   /** @hidden */ m_hasPrevVertex: boolean;
   /** @hidden */ m_hasNextVertex: boolean;
 
@@ -89,8 +89,8 @@ export class ChainShape extends Shape {
       isLoop: this.m_isLoop,
       hasPrevVertex: this.m_hasPrevVertex,
       hasNextVertex: this.m_hasNextVertex,
-      prevVertex: null as Vec2 | null,
-      nextVertex: null as Vec2 | null,
+      prevVertex: null as Vec2Value | null,
+      nextVertex: null as Vec2Value | null,
     };
     if (this.m_prevVertex) {
       data.prevVertex = this.m_prevVertex;
@@ -103,7 +103,7 @@ export class ChainShape extends Shape {
 
   /** @hidden */
   static _deserialize(data: any, fixture: any, restore: any): ChainShape {
-    const vertices: Vec2[] = [];
+    const vertices: Vec2Value[] = [];
     if (data.vertices) {
       for (let i = 0; i < data.vertices.length; i++) {
         vertices.push(restore(Vec2, data.vertices[i]));
@@ -208,13 +208,13 @@ export class ChainShape extends Shape {
    * Establish connectivity to a vertex that precedes the first vertex. Don't call
    * this for loops.
    */
-  setPrevVertex(prevVertex: Vec2): void {
+  setPrevVertex(prevVertex: Vec2Value): void {
     // todo: copy or reference
     this.m_prevVertex = prevVertex;
     this.m_hasPrevVertex = true;
   }
 
-  getPrevVertex(): Vec2 {
+  getPrevVertex(): Vec2Value {
     return this.m_prevVertex;
   }
 
@@ -222,13 +222,13 @@ export class ChainShape extends Shape {
    * Establish connectivity to a vertex that follows the last vertex. Don't call
    * this for loops.
    */
-  setNextVertex(nextVertex: Vec2): void {
+  setNextVertex(nextVertex: Vec2Value): void {
     // todo: copy or reference
     this.m_nextVertex = nextVertex;
     this.m_hasNextVertex = true;
   }
 
-  getNextVertex(): Vec2 {
+  getNextVertex(): Vec2Value {
     return this.m_nextVertex;
   }
 
@@ -283,7 +283,7 @@ export class ChainShape extends Shape {
     }
   }
 
-  getVertex(index: number): Vec2 {
+  getVertex(index: number): Vec2Value {
     if (_ASSERT) console.assert(0 <= index && index <= this.m_count);
     if (index < this.m_count) {
       return this.m_vertices[index];

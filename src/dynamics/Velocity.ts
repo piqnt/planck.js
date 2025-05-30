@@ -7,11 +7,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { Vec2 } from "../common/Vec2";
+import * as matrix from "../common/Matrix";
 
 export class Velocity {
   /** linear */
-  v = Vec2.zero();
+  v = matrix.vec2(0, 0);
 
   /** angular */
   w = 0;

@@ -7,7 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import type { Vec2, Vec2Value } from "../common/Vec2";
+import type { Vec2Value } from "../common/Vec2";
 import type { Body } from "./Body";
 import { TimeStep } from "./Solver";
 import { Style } from "../util/Testbed";
@@ -179,17 +179,17 @@ export abstract class Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  abstract getAnchorA(): Vec2;
+  abstract getAnchorA(): Vec2Value;
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  abstract getAnchorB(): Vec2;
+  abstract getAnchorB(): Vec2Value;
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  abstract getReactionForce(inv_dt: number): Vec2;
+  abstract getReactionForce(inv_dt: number): Vec2Value;
 
   /**
    * Get the reaction torque on bodyB in N*m.

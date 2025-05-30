@@ -88,21 +88,21 @@ export class MouseJoint extends Joint {
   static TYPE = "mouse-joint" as const;
 
   /** @internal */ m_type: "mouse-joint";
-  /** @internal */ m_targetA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_targetA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_maxForce: number;
-  /** @internal */ m_impulse: Vec2;
+  /** @internal */ m_impulse: Vec2Value;
   /** @internal */ m_frequencyHz: number;
   /** @internal */ m_dampingRatio: number;
   /** @internal */ m_beta: number;
   /** @internal */ m_gamma: number;
   // Solver temp
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIB: number;
   /** @internal */ m_mass: Mat22Value;
-  /** @internal */ m_C: Vec2;
+  /** @internal */ m_C: Vec2Value;
 
   constructor(def: MouseJointDef);
   constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target?: Vec2Value);
@@ -123,9 +123,9 @@ export class MouseJoint extends Joint {
     if (_ASSERT) console.assert(Number.isFinite(def.frequencyHz) && def.frequencyHz >= 0.0);
     if (_ASSERT) console.assert(Number.isFinite(def.dampingRatio) && def.dampingRatio >= 0.0);
 
-    if (Vec2.isValid(target)) {
+    if (matrix.isValidVec2(target)) {
       this.m_targetA = Vec2.clone(target);
-    } else if (Vec2.isValid(def.target)) {
+    } else if (matrix.isValidVec2(def.target)) {
       this.m_targetA = Vec2.clone(def.target);
     } else {
       this.m_targetA = Vec2.zero();
@@ -208,10 +208,10 @@ export class MouseJoint extends Joint {
   setTarget(target: Vec2Value): void {
     if (Vec2.areEqual(target, this.m_targetA)) return;
     this.m_bodyB.setAwake(true);
-    this.m_targetA.set(target);
+    matrix.copyVec2(this.m_targetA, target);
   }
 
-  getTarget(): Vec2 {
+  getTarget(): Vec2Value {
     return this.m_targetA;
   }
 
@@ -260,21 +260,21 @@ export class MouseJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return Vec2.clone(this.m_targetA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.mulNumVec2(inv_dt, this.m_impulse);
   }
 
@@ -289,7 +289,7 @@ export class MouseJoint extends Joint {
    * Shift the origin for any points stored in world coordinates.
    */
   shiftOrigin(newOrigin: Vec2Value): void {
-    this.m_targetA.sub(newOrigin);
+    matrix.minusVec2(this.m_targetA, newOrigin);
   }
 
   initVelocityConstraints(step: TimeStep): void {
@@ -345,22 +345,23 @@ export class MouseJoint extends Joint {
 
     matrix.inverseMat22(this.m_mass, K);
 
-    this.m_C.setVec2(cB);
-    this.m_C.addCombine(1, this.m_rB, -1, this.m_targetA);
-    this.m_C.mul(this.m_beta);
+    matrix.copyVec2(this.m_C, cB);
+    matrix.plusVec2(this.m_C, this.m_rB);
+    matrix.minusVec2(this.m_C, this.m_targetA);
+    matrix.mulVec2(this.m_C, this.m_beta);
 
     // Cheat with some damping
     wB *= 0.98;
 
     if (step.warmStarting) {
-      this.m_impulse.mul(step.dtRatio);
-      vB.addMul(this.m_invMassB, this.m_impulse);
+      matrix.mulVec2(this.m_impulse, step.dtRatio);
+      matrix.plusScaleVec2(vB, this.m_invMassB, this.m_impulse);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, this.m_impulse);
     } else {
-      this.m_impulse.setZero();
+      matrix.zeroVec2(vB);
     }
 
-    velocity.v.setVec2(vB);
+    matrix.copyVec2(velocity.v, vB);
     velocity.w = wB;
   }
 
@@ -381,15 +382,15 @@ export class MouseJoint extends Joint {
     matrix.mulMat22Vec2(impulse, this.m_mass, Cdot);
 
     const oldImpulse = Vec2.clone(this.m_impulse);
-    this.m_impulse.add(impulse);
+    matrix.plusVec2(this.m_impulse, impulse);
     const maxImpulse = step.dt * this.m_maxForce;
-    this.m_impulse.clamp(maxImpulse);
+    matrix.clampVec2(this.m_impulse, maxImpulse);
     impulse = Vec2.sub(this.m_impulse, oldImpulse);
 
     vB.addMul(this.m_invMassB, impulse);
     wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, impulse);
 
-    velocity.v.setVec2(vB);
+    matrix.copyVec2(velocity.v, vB);
     velocity.w = wB;
   }
 

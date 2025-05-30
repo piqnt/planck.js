@@ -9,6 +9,7 @@
 
 import { options } from "../../util/options";
 import { SettingsInternal as Settings } from "../../Settings";
+import * as matrix from "../../common/Matrix";
 import { clamp } from "../../common/Math";
 import { Vec2, Vec2Value } from "../../common/Vec2";
 import { Rot } from "../../common/Rot";
@@ -91,8 +92,8 @@ export class DistanceJoint extends Joint {
   static TYPE = "distance-joint" as const;
 
   // Solver shared
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_length: number;
   /** @internal */ m_frequencyHz: number;
   /** @internal */ m_dampingRatio: number;
@@ -101,11 +102,11 @@ export class DistanceJoint extends Joint {
   /** @internal */ m_bias: number;
 
   // Solver temp
-  /** @internal */ m_u: Vec2;
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_u: Vec2Value;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
@@ -131,7 +132,7 @@ export class DistanceJoint extends Joint {
     if (bodyB && anchorA && "m_type" in anchorA && "x" in bodyB && "y" in bodyB) {
       const temp = bodyB;
       bodyB = anchorA as any as Body;
-      anchorA = temp as any as Vec2;
+      anchorA = temp as any as Vec2Value;
     }
 
     def = options(def, DEFAULTS);
@@ -202,15 +203,15 @@ export class DistanceJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<DistanceJointDef>): void {
     if (def.anchorA) {
-      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
+      matrix.copyVec2(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
-      this.m_localAnchorA.setVec2(def.localAnchorA);
+      matrix.copyVec2(this.m_localAnchorA, def.localAnchorA);
     }
 
     if (def.anchorB) {
-      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
+      matrix.copyVec2(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
-      this.m_localAnchorB.setVec2(def.localAnchorB);
+      matrix.copyVec2(this.m_localAnchorB, def.localAnchorB);
     }
 
     if (def.length > 0) {
@@ -234,14 +235,14 @@ export class DistanceJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA(): Vec2 {
+  getLocalAnchorA(): Vec2Value {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB(): Vec2 {
+  getLocalAnchorB(): Vec2Value {
     return this.m_localAnchorB;
   }
 
@@ -279,21 +280,21 @@ export class DistanceJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.mulNumVec2(this.m_impulse, this.m_u).mul(inv_dt);
   }
 
@@ -330,11 +331,11 @@ export class DistanceJoint extends Joint {
     this.m_u = Vec2.sub(Vec2.add(cB, this.m_rB), Vec2.add(cA, this.m_rA));
 
     // Handle singularity.
-    const length = this.m_u.length();
+    const length = matrix.lengthVec2(this.m_u);
     if (length > Settings.linearSlop) {
-      this.m_u.mul(1.0 / length);
+      matrix.mulVec2(this.m_u, 1.0 / length);
     } else {
-      this.m_u.setNum(0.0, 0.0);
+      matrix.zeroVec2(this.m_u);
     }
 
     const crAu = Vec2.crossVec2Vec2(this.m_rA, this.m_u);
@@ -375,18 +376,18 @@ export class DistanceJoint extends Joint {
 
       const P = Vec2.mulNumVec2(this.m_impulse, this.m_u);
 
-      vA.subMul(this.m_invMassA, P);
+      matrix.minusScaleVec2(vA, this.m_invMassA, P);
       wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
 
-      vB.addMul(this.m_invMassB, P);
+      matrix.plusScaleVec2(vB, this.m_invMassB, P);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
     } else {
       this.m_impulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    matrix.copyVec2(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    matrix.copyVec2(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -405,14 +406,14 @@ export class DistanceJoint extends Joint {
     this.m_impulse += impulse;
 
     const P = Vec2.mulNumVec2(impulse, this.m_u);
-    vA.subMul(this.m_invMassA, P);
+    matrix.minusScaleVec2(vA, this.m_invMassA, P);
     wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
-    vB.addMul(this.m_invMassB, P);
+    matrix.plusScaleVec2(vB, this.m_invMassB, P);
     wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    matrix.copyVec2(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    matrix.copyVec2(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -443,14 +444,14 @@ export class DistanceJoint extends Joint {
     const impulse = -this.m_mass * C;
     const P = Vec2.mulNumVec2(impulse, u);
 
-    cA.subMul(this.m_invMassA, P);
+    matrix.plusScaleVec2(cA, this.m_invMassA, P);
     aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);
-    cB.addMul(this.m_invMassB, P);
+    matrix.plusScaleVec2(cB, this.m_invMassB, P);
     aB += this.m_invIB * Vec2.crossVec2Vec2(rB, P);
 
-    this.m_bodyA.c_position.c.setVec2(cA);
+    matrix.copyVec2(this.m_bodyA.c_position.c, cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.setVec2(cB);
+    matrix.copyVec2(this.m_bodyB.c_position.c, cB);
     this.m_bodyB.c_position.a = aB;
 
     return math_abs(C) < Settings.linearSlop;

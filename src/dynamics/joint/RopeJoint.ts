@@ -9,6 +9,7 @@
 
 import { options } from "../../util/options";
 import { SettingsInternal as Settings } from "../../Settings";
+import * as matrix from "../../common/Matrix";
 import { clamp } from "../../common/Math";
 import { Vec2, Vec2Value } from "../../common/Vec2";
 import { Rot } from "../../common/Rot";
@@ -84,8 +85,8 @@ export class RopeJoint extends Joint {
   static TYPE = "rope-joint" as const;
 
   /** @internal */ m_type: "rope-joint";
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
 
   /** @internal */ m_maxLength: number;
 
@@ -95,11 +96,11 @@ export class RopeJoint extends Joint {
   /** @internal */ m_state: number; // TODO enum
 
   // Solver temp
-  /** @internal */ m_u: Vec2;
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_u: Vec2Value;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
@@ -171,14 +172,14 @@ export class RopeJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA(): Vec2 {
+  getLocalAnchorA(): Vec2Value {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB(): Vec2 {
+  getLocalAnchorB(): Vec2Value {
     return this.m_localAnchorB;
   }
 
@@ -204,21 +205,21 @@ export class RopeJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.mulNumVec2(this.m_impulse, this.m_u).mul(inv_dt);
   }
 
@@ -230,6 +231,7 @@ export class RopeJoint extends Joint {
   }
 
   initVelocityConstraints(step: TimeStep): void {
+    // todo: copy value or reference?
     this.m_localCenterA = this.m_bodyA.m_sweep.localCenter;
     this.m_localCenterB = this.m_bodyB.m_sweep.localCenter;
     this.m_invMassA = this.m_bodyA.m_invMass;
@@ -253,10 +255,12 @@ export class RopeJoint extends Joint {
     this.m_rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
     this.m_rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
     this.m_u = Vec2.zero();
-    this.m_u.addCombine(1, cB, 1, this.m_rB);
-    this.m_u.subCombine(1, cA, 1, this.m_rA);
+    matrix.plusVec2(this.m_u, cB);
+    matrix.plusVec2(this.m_u, this.m_rB);
+    matrix.minusVec2(this.m_u, cA);
+    matrix.minusVec2(this.m_u, this.m_rA);
 
-    this.m_length = this.m_u.length();
+    this.m_length = matrix.lengthVec2(this.m_u);
 
     const C = this.m_length - this.m_maxLength;
     if (C > 0.0) {
@@ -266,9 +270,9 @@ export class RopeJoint extends Joint {
     }
 
     if (this.m_length > Settings.linearSlop) {
-      this.m_u.mul(1.0 / this.m_length);
+      matrix.mulVec2(this.m_u, 1.0 / this.m_length);
     } else {
-      this.m_u.setZero();
+      matrix.zeroVec2(this.m_u);
       this.m_mass = 0.0;
       this.m_impulse = 0.0;
       return;
@@ -287,18 +291,20 @@ export class RopeJoint extends Joint {
 
       const P = Vec2.mulNumVec2(this.m_impulse, this.m_u);
 
-      vA.subMul(this.m_invMassA, P);
+      // vA.subMul(this.m_invMassA, P);
+      matrix.minusScaleVec2(vA, this.m_invMassA, P);
       wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
 
-      vB.addMul(this.m_invMassB, P);
+      // vB.addMul(this.m_invMassB, P);
+      matrix.plusScaleVec2(vB, this.m_invMassB, P);
       wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
     } else {
       this.m_impulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    matrix.copyVec2(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    matrix.copyVec2(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -325,9 +331,9 @@ export class RopeJoint extends Joint {
     impulse = this.m_impulse - oldImpulse;
 
     const P = Vec2.mulNumVec2(impulse, this.m_u);
-    vA.subMul(this.m_invMassA, P);
+    matrix.minusScaleVec2(vA, this.m_invMassA, P);
     wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
-    vB.addMul(this.m_invMassB, P);
+    matrix.plusScaleVec2(vB, this.m_invMassB, P);
     wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
 
     this.m_bodyA.c_velocity.v = vA;
@@ -362,14 +368,16 @@ export class RopeJoint extends Joint {
     const impulse = -this.m_mass * C;
     const P = Vec2.mulNumVec2(impulse, u);
 
-    cA.subMul(this.m_invMassA, P);
+    matrix.minusScaleVec2(cA, this.m_invMassA, P);
     aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);
-    cB.addMul(this.m_invMassB, P);
+    matrix.plusScaleVec2(cB, this.m_invMassB, P);
     aB += this.m_invIB * Vec2.crossVec2Vec2(rB, P);
 
-    this.m_bodyA.c_position.c.setVec2(cA);
+    // this.m_bodyA.c_position.c.setVec2(cA);
+    matrix.copyVec2(this.m_bodyA.c_position.c, cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.setVec2(cB);
+    // this.m_bodyB.c_position.c.setVec2(cB);
+    matrix.copyVec2(this.m_bodyB.c_position.c, cB);
     this.m_bodyB.c_position.a = aB;
 
     return length - this.m_maxLength < Settings.linearSlop;

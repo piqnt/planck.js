@@ -131,8 +131,8 @@ export class RevoluteJoint extends Joint {
   static TYPE = "revolute-joint" as const;
 
   /** @internal */ m_type: "revolute-joint";
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_referenceAngle: number;
   /** @internal */ m_impulse: Vec3Value;
   /** @internal */ m_motorImpulse: number;
@@ -144,10 +144,10 @@ export class RevoluteJoint extends Joint {
   /** @internal */ m_enableMotor: boolean;
 
   // Solver temp
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
@@ -176,17 +176,18 @@ export class RevoluteJoint extends Joint {
 
     this.m_type = RevoluteJoint.TYPE;
 
-    if (Vec2.isValid(anchor)) {
-      this.m_localAnchorA = bodyA.getLocalPoint(anchor);
-    } else if (Vec2.isValid(def.localAnchorA)) {
+    if (matrix.isValidVec2(anchor)) {
+      this.m_localAnchorA = matrix.vec2(0, 0);
+      matrix.copyVec2(this.m_localAnchorA, bodyA.getLocalPoint(anchor));
+    } else if (matrix.isValidVec2(def.localAnchorA)) {
       this.m_localAnchorA = Vec2.clone(def.localAnchorA);
     } else {
       this.m_localAnchorA = Vec2.zero();
     }
 
-    if (Vec2.isValid(anchor)) {
+    if (matrix.isValidVec2(anchor)) {
       this.m_localAnchorB = bodyB.getLocalPoint(anchor);
-    } else if (Vec2.isValid(def.localAnchorB)) {
+    } else if (matrix.isValidVec2(def.localAnchorB)) {
       this.m_localAnchorB = Vec2.clone(def.localAnchorB);
     } else {
       this.m_localAnchorB = Vec2.zero();
@@ -255,14 +256,14 @@ export class RevoluteJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<RevoluteJointDef>): void {
     if (def.anchorA) {
-      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
+      matrix.copyVec2(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
     } else if (def.localAnchorA) {
-      this.m_localAnchorA.setVec2(def.localAnchorA);
+      matrix.copyVec2(this.m_localAnchorA, def.localAnchorA);
     }
     if (def.anchorB) {
-      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
+      matrix.copyVec2(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
     } else if (def.localAnchorB) {
-      this.m_localAnchorB.setVec2(def.localAnchorB);
+      matrix.copyVec2(this.m_localAnchorB, def.localAnchorB);
     }
     if (Number.isFinite(def.referenceAngle)) {
       this.m_referenceAngle = def.referenceAngle;
@@ -290,14 +291,14 @@ export class RevoluteJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA(): Vec2 {
+  getLocalAnchorA(): Vec2Value {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB(): Vec2 {
+  getLocalAnchorB(): Vec2Value {
     return this.m_localAnchorB;
   }
 
@@ -432,21 +433,21 @@ export class RevoluteJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force given the inverse time step. Unit is N.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
   }
 
@@ -545,10 +546,10 @@ export class RevoluteJoint extends Joint {
 
       const P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
 
-      vA.subMul(mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_motorImpulse + this.m_impulse.z);
 
-      vB.addMul(mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_motorImpulse + this.m_impulse.z);
     } else {
       matrix.zeroVec3(this.m_impulse);
@@ -636,10 +637,10 @@ export class RevoluteJoint extends Joint {
 
       const P = Vec2.neo(impulse.x, impulse.y);
 
-      vA.subMul(mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + impulse.z);
 
-      vB.addMul(mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + impulse.z);
     } else {
       // Solve point-to-point constraint
@@ -652,10 +653,10 @@ export class RevoluteJoint extends Joint {
       this.m_impulse.x += impulse.x;
       this.m_impulse.y += impulse.y;
 
-      vA.subMul(mA, impulse);
+      matrix.minusScaleVec2(vA, mA, impulse);
       wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
 
-      vB.addMul(mB, impulse);
+      matrix.plusScaleVec2(vB, mB, impulse);
       wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
     }
 
@@ -739,16 +740,16 @@ export class RevoluteJoint extends Joint {
       matrix.solveMat22(impulse, K, C);
       matrix.negVec2(impulse);
 
-      cA.subMul(mA, impulse);
+      matrix.minusScaleVec2(cA, mA, impulse);
       aA -= iA * Vec2.crossVec2Vec2(rA, impulse);
 
-      cB.addMul(mB, impulse);
+      matrix.plusScaleVec2(cB, mB, impulse);
       aB += iB * Vec2.crossVec2Vec2(rB, impulse);
     }
 
-    this.m_bodyA.c_position.c.setVec2(cA);
+    matrix.copyVec2(this.m_bodyA.c_position.c, cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.setVec2(cB);
+    matrix.copyVec2(this.m_bodyB.c_position.c, cB);
     this.m_bodyB.c_position.a = aB;
 
     return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;

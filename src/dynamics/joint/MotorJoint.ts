@@ -76,20 +76,20 @@ export class MotorJoint extends Joint {
   static TYPE = "motor-joint" as const;
 
   /** @internal */ m_type: "motor-joint";
-  /** @internal */ m_linearOffset: Vec2;
+  /** @internal */ m_linearOffset: Vec2Value;
   /** @internal */ m_angularOffset: number;
-  /** @internal */ m_linearImpulse: Vec2;
+  /** @internal */ m_linearImpulse: Vec2Value;
   /** @internal */ m_angularImpulse: number;
   /** @internal */ m_maxForce: number;
   /** @internal */ m_maxTorque: number;
   /** @internal */ m_correctionFactor: number;
 
   // Solver temp
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
-  /** @internal */ m_linearError: Vec2;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
+  /** @internal */ m_linearError: Vec2Value;
   /** @internal */ m_angularError: number;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
@@ -113,7 +113,7 @@ export class MotorJoint extends Joint {
 
     this.m_type = MotorJoint.TYPE;
 
-    this.m_linearOffset = Vec2.isValid(def.linearOffset)
+    this.m_linearOffset = matrix.isValidVec2(def.linearOffset)
       ? Vec2.clone(def.linearOffset)
       : bodyA.getLocalPoint(bodyB.getPosition());
     this.m_angularOffset = Number.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
@@ -181,8 +181,8 @@ export class MotorJoint extends Joint {
     if (Number.isFinite(def.correctionFactor)) {
       this.m_correctionFactor = def.correctionFactor;
     }
-    if (Vec2.isValid(def.linearOffset)) {
-      this.m_linearOffset.set(def.linearOffset);
+    if (matrix.isValidVec2(def.linearOffset)) {
+      matrix.copyVec2(this.m_linearOffset, def.linearOffset);
     }
   }
 
@@ -238,11 +238,12 @@ export class MotorJoint extends Joint {
     if (linearOffset.x != this.m_linearOffset.x || linearOffset.y != this.m_linearOffset.y) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);
-      this.m_linearOffset.set(linearOffset);
+      // this.m_linearOffset.set(linearOffset);
+      matrix.copyVec2(this.m_linearOffset, linearOffset);
     }
   }
 
-  getLinearOffset(): Vec2 {
+  getLinearOffset(): Vec2Value {
     return this.m_linearOffset;
   }
 
@@ -264,21 +265,21 @@ export class MotorJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getPosition();
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getPosition();
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
+  getReactionForce(inv_dt: number): Vec2Value {
     return Vec2.mulNumVec2(inv_dt, this.m_linearImpulse);
   }
 
@@ -342,25 +343,28 @@ export class MotorJoint extends Joint {
     }
 
     this.m_linearError = Vec2.zero();
-    this.m_linearError.addCombine(1, cB, 1, this.m_rB);
-    this.m_linearError.subCombine(1, cA, 1, this.m_rA);
+    matrix.plusVec2(this.m_linearError, cB);
+    matrix.plusVec2(this.m_linearError, this.m_rB);
+    matrix.minusVec2(this.m_linearError, cA);
+    matrix.minusVec2(this.m_linearError, this.m_rA);
 
     this.m_angularError = aB - aA - this.m_angularOffset;
 
     if (step.warmStarting) {
       // Scale impulses to support a variable time step.
-      this.m_linearImpulse.mul(step.dtRatio);
+      // this.m_linearImpulse.mul(step.dtRatio);
+      matrix.mulVec2(this.m_linearImpulse, step.dtRatio);
       this.m_angularImpulse *= step.dtRatio;
 
       const P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
 
-      vA.subMul(mA, P);
+      matrix.minusScaleVec2(vA, mA, P);
       wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_angularImpulse);
 
-      vB.addMul(mB, P);
+      matrix.plusScaleVec2(vB, mB, P);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
     } else {
-      this.m_linearImpulse.setZero();
+      matrix.zeroVec2(this.m_linearImpulse);
       this.m_angularImpulse = 0.0;
     }
 
@@ -409,18 +413,18 @@ export class MotorJoint extends Joint {
       matrix.mulMat22Vec2(impulse, this.m_linearMass, Cdot);
       matrix.negVec2(impulse);
       const oldImpulse = Vec2.clone(this.m_linearImpulse);
-      this.m_linearImpulse.add(impulse);
+      matrix.plusVec2(this.m_linearImpulse, impulse);
 
       const maxImpulse = h * this.m_maxForce;
 
-      this.m_linearImpulse.clamp(maxImpulse);
+      matrix.clampVec2(this.m_linearImpulse, maxImpulse);
 
       impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
 
-      vA.subMul(mA, impulse);
+      matrix.minusScaleVec2(vA, mA, impulse);
       wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
 
-      vB.addMul(mB, impulse);
+      matrix.plusScaleVec2(vB, mB, impulse);
       wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
     }
 

@@ -47,9 +47,9 @@ export class PolygonShape extends Shape {
   static TYPE = "polygon" as const;
   /** @hidden */ m_type: "polygon";
 
-  /** @hidden */ m_centroid: Vec2;
-  /** @hidden */ m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
-  /** @hidden */ m_normals: Vec2[]; // [Settings.maxPolygonVertices]
+  /** @hidden */ m_centroid: Vec2Value;
+  /** @hidden */ m_vertices: Vec2Value[]; // [Settings.maxPolygonVertices]
+  /** @hidden */ m_normals: Vec2Value[]; // [Settings.maxPolygonVertices]
   /** @hidden */ m_count: number;
   /** @hidden */ m_radius: number;
 
@@ -63,7 +63,7 @@ export class PolygonShape extends Shape {
 
     this.m_type = PolygonShape.TYPE;
     this.m_radius = Settings.polygonRadius;
-    this.m_centroid = Vec2.zero();
+    this.m_centroid = matrix.vec2(0, 0);
     this.m_vertices = [];
     this.m_normals = [];
     this.m_count = 0;
@@ -84,7 +84,7 @@ export class PolygonShape extends Shape {
 
   /** @hidden */
   static _deserialize(data: any, fixture: any, restore: any): PolygonShape {
-    const vertices: Vec2[] = [];
+    const vertices: Vec2Value[] = [];
     if (data.vertices) {
       for (let i = 0; i < data.vertices.length; i++) {
         vertices.push(restore(Vec2, data.vertices[i]));
@@ -113,12 +113,16 @@ export class PolygonShape extends Shape {
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
     clone.m_count = this.m_count;
-    clone.m_centroid.setVec2(this.m_centroid);
+    matrix.copyVec2(clone.m_centroid, this.m_centroid);
     for (let i = 0; i < this.m_count; i++) {
-      clone.m_vertices.push(this.m_vertices[i].clone());
+      const v = matrix.vec2(0, 0);
+      matrix.copyVec2(v, this.m_vertices[i]);
+      clone.m_vertices.push(v);
     }
     for (let i = 0; i < this.m_normals.length; i++) {
-      clone.m_normals.push(this.m_normals[i].clone());
+      const n = matrix.vec2(0, 0);
+      matrix.copyVec2(n, this.m_vertices[i]);
+      clone.m_normals.push(n);
     }
     return clone;
   }
@@ -155,7 +159,7 @@ export class PolygonShape extends Shape {
     let n = math_min(vertices.length, Settings.maxPolygonVertices);
 
     // Perform welding and copy vertices into local buffer.
-    const ps: Vec2[] = []; // [Settings.maxPolygonVertices];
+    const ps: Vec2Value[] = []; // [Settings.maxPolygonVertices];
     for (let i = 0; i < n; ++i) {
       const v = vertices[i];
 
@@ -253,7 +257,7 @@ export class PolygonShape extends Shape {
       const edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
       if (_ASSERT) console.assert(edge.lengthSquared() > EPSILON * EPSILON);
       this.m_normals[i] = Vec2.crossVec2Num(edge, 1.0);
-      this.m_normals[i].normalize();
+      matrix.normalizeVec2(this.m_normals[i]);
     }
 
     // Compute the polygon centroid.
@@ -274,7 +278,7 @@ export class PolygonShape extends Shape {
 
     this.m_count = 4;
 
-    if (center && Vec2.isValid(center)) {
+    if (center && matrix.isValidVec2(center)) {
       angle = angle || 0;
 
       matrix.copyVec2(this.m_centroid, center);
@@ -534,21 +538,21 @@ export class PolygonShape extends Shape {
   }
 }
 
-/** @internal */ function computeCentroid(vs: Vec2[], count: number): Vec2 {
+/** @internal */ function computeCentroid(vs: Vec2Value[], count: number): Vec2Value {
   if (_ASSERT) console.assert(count >= 3);
 
-  const c = Vec2.zero();
+  const c = matrix.vec2(0, 0);
   let area = 0.0;
 
   // pRef is the reference point for forming triangles.
   // It's location doesn't change the result (except for rounding error).
-  const pRef = Vec2.zero();
+  const pRef = matrix.vec2(0, 0);
   if (false) {
     // This code would put the reference point inside the polygon.
     for (let i = 0; i < count; ++i) {
-      pRef.add(vs[i]);
+      matrix.plusVec2(pRef, vs[i]);
     }
-    pRef.mul(1.0 / count);
+    matrix.mulVec2(pRef, 1.0 / count);
   }
 
   const inv3 = 1.0 / 3.0;
@@ -574,7 +578,7 @@ export class PolygonShape extends Shape {
 
   // Centroid
   if (_ASSERT) console.assert(area > EPSILON);
-  c.mul(1.0 / area);
+  matrix.mulVec2(c, 1.0 / area);
   return c;
 }
 

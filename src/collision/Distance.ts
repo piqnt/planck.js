@@ -790,7 +790,7 @@ export class ShapeCastInput {
   readonly proxyB = new DistanceProxy();
   readonly transformA = Transform.identity();
   readonly transformB = Transform.identity();
-  readonly translationB = Vec2.zero();
+  readonly translationB = matrix.vec2(0, 0);
   recycle() {
     this.proxyA.recycle();
     this.proxyB.recycle();
@@ -804,8 +804,8 @@ export class ShapeCastInput {
  * Output results for b2ShapeCast
  */
 export class ShapeCastOutput {
-  point: Vec2 = Vec2.zero();
-  normal: Vec2 = Vec2.zero();
+  point = matrix.vec2(0, 0);
+  normal = matrix.vec2(0, 0);
   lambda = 1.0;
   iterations = 0;
 }
@@ -823,8 +823,8 @@ export class ShapeCastOutput {
 export const ShapeCast = function (output: ShapeCastOutput, input: ShapeCastInput): boolean {
   output.iterations = 0;
   output.lambda = 1.0;
-  output.normal.setZero();
-  output.point.setZero();
+  matrix.zeroVec2(output.normal);
+  matrix.zeroVec2(output.point);
 
   const proxyA = input.proxyA;
   const proxyB = input.proxyB;
@@ -837,7 +837,7 @@ export const ShapeCast = function (output: ShapeCastOutput, input: ShapeCastInpu
   const xfB = input.transformB;
 
   const r = input.translationB;
-  const n = Vec2.zero();
+  const n = matrix.vec2(0, 0);
   let lambda = 0.0;
 
   // Initial simplex
@@ -889,7 +889,7 @@ export const ShapeCast = function (output: ShapeCastOutput, input: ShapeCastInpu
         return false;
       }
 
-      n.setMul(-1, v);
+      matrix.scaleVec2(n, -1, v);
       simplex.m_count = 0;
     }
 
@@ -941,13 +941,13 @@ export const ShapeCast = function (output: ShapeCastOutput, input: ShapeCastInpu
   }
 
   // Prepare output.
-  const pointA = Vec2.zero();
-  const pointB = Vec2.zero();
+  const pointA = matrix.vec2(0, 0);
+  const pointB = matrix.vec2(0, 0);
   simplex.getWitnessPoints(pointB, pointA);
 
   if (v.lengthSquared() > 0.0) {
-    n.setMul(-1, v);
-    n.normalize();
+    matrix.scaleVec2(n, -1, v);
+    matrix.normalizeVec2(n);
   }
 
   output.point = Vec2.combine(1, pointA, radiusA, n);
