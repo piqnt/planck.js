@@ -9,11 +9,11 @@
 
 import { options } from "../../util/options";
 import { SettingsInternal as Settings } from "../../Settings";
+import * as matrix from "../../common/Matrix";
 import { clamp } from "../../common/Math";
 import { Vec2, Vec2Value } from "../../common/Vec2";
 import { Vec3 } from "../../common/Vec3";
-import { Mat22 } from "../../common/Mat22";
-import { Mat33 } from "../../common/Mat33";
+import { Mat33Value } from "../../common/Mat33";
 import { Rot } from "../../common/Rot";
 import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
@@ -161,7 +161,7 @@ export class PrismaticJoint extends Joint {
   /** @internal */ m_s2: number;
   /** @internal */ m_a1: number;
   /** @internal */ m_a2: number;
-  /** @internal */ m_K: Mat33;
+  /** @internal */ m_K: Mat33Value;
 
   constructor(def: PrismaticJointDef);
   constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value, axis?: Vec2Value);
@@ -202,7 +202,7 @@ export class PrismaticJoint extends Joint {
     this.m_axis = Vec2.zero();
     this.m_perp = Vec2.zero();
 
-    this.m_K = new Mat33();
+    this.m_K = matrix.mat33();
 
     // Linear constraint (point-to-line)
     // d = p2 - p1 = x2 + r2 - x1 - r1
@@ -610,9 +610,9 @@ export class PrismaticJoint extends Joint {
       const k23 = iA * this.m_a1 + iB * this.m_a2;
       const k33 = mA + mB + iA * this.m_a1 * this.m_a1 + iB * this.m_a2 * this.m_a2;
 
-      this.m_K.ex.set(k11, k12, k13);
-      this.m_K.ey.set(k12, k22, k23);
-      this.m_K.ez.set(k13, k23, k33);
+      matrix.setVec3(this.m_K.ex, k11, k12, k13);
+      matrix.setVec3(this.m_K.ey, k12, k22, k23);
+      matrix.setVec3(this.m_K.ez, k13, k23, k33);
     }
 
     // Compute motor and limit terms.
@@ -713,7 +713,8 @@ export class PrismaticJoint extends Joint {
       const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
 
       const f1 = Vec3.clone(this.m_impulse);
-      let df = this.m_K.solve33(Vec3.neg(Cdot));
+      let df = matrix.vec3(0,0,0);
+      matrix.solveMat33(df, this.m_K, Vec3.neg(Cdot));
       this.m_impulse.add(df);
 
       if (this.m_limitState == LimitState.atLowerLimit) {
@@ -725,7 +726,9 @@ export class PrismaticJoint extends Joint {
       // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
       // f1(1:2)
       const b = Vec2.combine(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2.neo(this.m_K.ez.x, this.m_K.ez.y));
-      const f2r = Vec2.add(this.m_K.solve22(b), Vec2.neo(f1.x, f1.y));
+      const f2r = matrix.vec2(0, 0);
+      matrix.solveMat22(f2r, this.m_K, b);
+      matrix.addVec2(f2r, f2r, f1);
       this.m_impulse.x = f2r.x;
       this.m_impulse.y = f2r.y;
 
@@ -742,7 +745,8 @@ export class PrismaticJoint extends Joint {
       wB += iB * LB;
     } else {
       // Limit is inactive, just solve the prismatic constraint in block form.
-      const df = this.m_K.solve22(Vec2.neg(Cdot1));
+      const df = matrix.vec2(0, 0);
+      matrix.solveMat22(df, this.m_K, Vec2.neg(Cdot1));
       this.m_impulse.x += df.x;
       this.m_impulse.y += df.y;
 
@@ -793,7 +797,7 @@ export class PrismaticJoint extends Joint {
     const s1 = Vec2.crossVec2Vec2(Vec2.add(d, rA), perp);
     const s2 = Vec2.crossVec2Vec2(rB, perp);
 
-    let impulse = new Vec3();
+    const impulse = matrix.vec3(0, 0, 0);
     const C1 = Vec2.zero();
     C1.x = Vec2.dot(perp, d);
     C1.y = aB - aA - this.m_referenceAngle;
@@ -838,17 +842,17 @@ export class PrismaticJoint extends Joint {
       const k23 = iA * a1 + iB * a2;
       const k33 = mA + mB + iA * a1 * a1 + iB * a2 * a2;
 
-      const K = new Mat33();
-      K.ex.set(k11, k12, k13);
-      K.ey.set(k12, k22, k23);
-      K.ez.set(k13, k23, k33);
+      const K = matrix.mat33();
+      matrix.setVec3(K.ex, k11, k12, k13);
+      matrix.setVec3(K.ey, k12, k22, k23);
+      matrix.setVec3(K.ez, k13, k23, k33);
 
       const C = new Vec3();
       C.x = C1.x;
       C.y = C1.y;
       C.z = C2;
 
-      impulse = K.solve33(Vec3.neg(C));
+      matrix.solveMat33(impulse, K, Vec3.neg(C));
     } else {
       const k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2;
       const k12 = iA * s1 + iB * s2;
@@ -857,11 +861,12 @@ export class PrismaticJoint extends Joint {
         k22 = 1.0;
       }
 
-      const K = new Mat22();
-      K.ex.setNum(k11, k12);
-      K.ey.setNum(k12, k22);
+      const K = matrix.mat22();
+      matrix.setVec2(K.ex, k11, k12);
+      matrix.setVec2(K.ey, k12, k22);
 
-      const impulse1 = K.solve(Vec2.neg(C1));
+      const impulse1 = matrix.vec2(0, 0);
+      matrix.solveMat22(impulse1, K, Vec2.neg(C1));
       impulse.x = impulse1.x;
       impulse.y = impulse1.y;
       impulse.z = 0.0;

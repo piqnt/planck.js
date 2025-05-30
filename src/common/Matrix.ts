@@ -11,10 +11,12 @@
 /** @internal */ const math_cos = Math.cos;
 /** @internal */ const math_sqrt = Math.sqrt;
 
-import { RotValue } from "./Rot";
-import { TransformValue } from "./Transform";
-import { Vec2Value } from "./Vec2";
-import { Vec3Value } from "./Vec3";
+import type { RotValue } from "./Rot";
+import type { TransformValue } from "./Transform";
+import type { Vec2Value } from "./Vec2";
+import type { Vec3Value } from "./Vec3";
+import type { Mat22Value } from "./Mat22";
+import type { Mat33Value } from "./Mat33";
 
 export function vec2(x: number, y: number): Vec2Value {
   return { x, y };
@@ -33,6 +35,12 @@ export function setVec2(out: Vec2Value, x: number, y: number): void {
   out.y = y;
 }
 
+export function setVec3(out: Vec3Value, x: number, y: number, z: number): void {
+  out.x = x;
+  out.y = y;
+  out.z = z;
+}
+
 export function copyVec2(out: Vec2Value, w: Vec2Value): void {
   out.x = w.x;
   out.y = w.y;
@@ -43,10 +51,21 @@ export function zeroVec2(out: Vec2Value): void {
   out.y = 0;
 }
 
+export function zeroVec3(out: Vec3Value): void {
+  out.x = 0;
+  out.y = 0;
+  out.z = 0;
+}
+
 export function negVec2(out: Vec2Value): void {
   out.x = -out.x;
   out.y = -out.y;
-  // return out;
+}
+
+export function negVec3(out: Vec3Value): void {
+  out.x = -out.x;
+  out.y = -out.y;
+  out.z = -out.z;
 }
 
 export function plusVec2(out: Vec2Value, w: Vec2Value): void {
@@ -277,4 +296,154 @@ export function detransformTransform(out: TransformValue, a: TransformValue, b: 
   out.q.s = s;
   out.p.x = x;
   out.p.y = y;
+}
+
+export function mat22(): Mat22Value {
+  return {
+    ex: vec2(0, 0),
+    ey: vec2(0, 0),
+  };
+}
+
+export function mat33() {
+  return {
+    ex: vec3(0, 0, 0),
+    ey: vec3(0, 0, 0),
+    ez: vec3(0, 0, 0),
+  };
+}
+
+export function zeroMat22(out: Mat22Value): void {
+  out.ex.x = 0;
+  out.ex.y = 0;
+  out.ey.x = 0;
+  out.ey.y = 0;
+}
+
+export function zeroMat33(out: Mat33Value): void {
+  out.ex.x = 0;
+  out.ex.y = 0;
+  out.ex.z = 0;
+  out.ey.x = 0;
+  out.ey.y = 0;
+  out.ey.z = 0;
+  out.ez.x = 0;
+  out.ez.y = 0;
+  out.ez.z = 0;
+}
+
+export function mulMat22Vec2(out: Vec2Value, m: Mat22Value, v: Vec2Value): void {
+  out.x = m.ex.x * v.x + m.ey.x * v.y;
+  out.y = m.ex.y * v.x + m.ey.y * v.y;
+}
+
+export function mulMat33Vec2(out: Vec2Value, m: Mat33Value, v: Vec2Value): void {
+  out.x = m.ex.x * v.x + m.ey.x * v.y;
+  out.y = m.ex.y * v.x + m.ey.y * v.y;
+}
+
+export function mulMat33Vec3(out: Vec3Value, m: Mat33Value, v: Vec3Value): void {
+  out.x = m.ex.x * v.x + m.ey.x * v.y + m.ez.x * v.z;
+  out.y = m.ex.y * v.x + m.ey.y * v.y + m.ez.y * v.z;
+  out.z = m.ex.z * v.x + m.ey.z * v.y + m.ez.z * v.z;
+}
+
+export function inverseMat22(out: Mat22Value, m: Mat22Value): void {
+  const a = m.ex.x;
+  const b = m.ey.x;
+  const c = m.ex.y;
+  const d = m.ey.y;
+  let det = a * d - b * c;
+  if (det !== 0.0) {
+    det = 1.0 / det;
+  }
+  out.ex.x = det * d;
+  out.ey.x = -det * b;
+  out.ex.y = -det * c;
+  out.ey.y = det * a;
+}
+
+/**
+ * Get the symmetric inverse of this matrix as a 3-by-3. Returns the zero matrix
+ * if singular.
+ */
+export function symInverseMat33(out: Mat33Value, m: Mat33Value): void {
+  // let det = Vec3.dot(m.ex, Vec3.cross(m.ey, m.ez));
+
+  let det =
+    m.ex.x * (m.ey.y * m.ez.z - m.ey.z * m.ez.y) +
+    m.ex.y * (m.ey.z * m.ez.x - m.ey.x * m.ez.z) +
+    m.ex.z * (m.ey.x * m.ez.y - m.ey.y * m.ez.x);
+
+  if (det !== 0.0) {
+    det = 1.0 / det;
+  }
+  const a11 = m.ex.x;
+  const a12 = m.ey.x;
+  const a13 = m.ez.x;
+  const a22 = m.ey.y;
+  const a23 = m.ez.y;
+  const a33 = m.ez.z;
+
+  out.ex.x = det * (a22 * a33 - a23 * a23);
+  out.ex.y = det * (a13 * a23 - a12 * a33);
+  out.ex.z = det * (a12 * a23 - a13 * a22);
+
+  out.ey.x = out.ex.y;
+  out.ey.y = det * (a11 * a33 - a13 * a13);
+  out.ey.z = det * (a13 * a12 - a11 * a23);
+
+  out.ez.x = out.ex.z;
+  out.ez.y = out.ey.z;
+  out.ez.z = det * (a11 * a22 - a12 * a12);
+}
+
+/**
+ * Solve A * x = b, where b is a column vector. This is more efficient than
+ * computing the inverse in one-shot cases.
+ */
+export function solveMat22(out: Vec2Value, m: Mat22Value, v: Vec2Value): void {
+  const a11 = m.ex.x;
+  const a12 = m.ey.x;
+  const a21 = m.ex.y;
+  const a22 = m.ey.y;
+  let det = a11 * a22 - a12 * a21;
+  if (det !== 0.0) {
+    det = 1.0 / det;
+  }
+  out.x = det * (a22 * v.x - a12 * v.y);
+  out.y = det * (a11 * v.y - a21 * v.x);
+}
+
+/**
+ * Solve A * x = b, where b is a column vector. This is more efficient than
+ * computing the inverse in one-shot cases.
+ */
+export function solveMat33(out: Vec3Value, m: Mat33Value, v: Vec3Value): void {
+  // let det = matrix.dotVec3(this.ex, matrix.newCrossVec3(this.ey, this.ez));
+  let cross_x = m.ey.y * m.ez.z - m.ey.z * m.ez.y;
+  let cross_y = m.ey.z * m.ez.x - m.ey.x * m.ez.z;
+  let cross_z = m.ey.x * m.ez.y - m.ey.y * m.ez.x;
+  let det = m.ex.x * cross_x + m.ex.y * cross_y + m.ex.z * cross_z;
+  if (det !== 0.0) {
+    det = 1.0 / det;
+  }
+
+  // r.x = det * matrix.dotVec3(v, matrix.newCrossVec3(this.ey, this.ez));
+  cross_x = m.ey.y * m.ez.z - m.ey.z * m.ez.y;
+  cross_y = m.ey.z * m.ez.x - m.ey.x * m.ez.z;
+  cross_z = m.ey.x * m.ez.y - m.ey.y * m.ez.x;
+  out.x = det * (v.x * cross_x + v.y * cross_y + v.z * cross_z);
+
+  // r.y = det * matrix.dotVec3(this.ex, matrix.newCrossVec3(v, this.ez));
+  cross_x = v.y * m.ez.z - v.z * m.ez.y;
+  cross_y = v.z * m.ez.x - v.x * m.ez.z;
+  cross_z = v.x * m.ez.y - v.y * m.ez.x;
+  out.y = det * (m.ex.x * cross_x + m.ex.y * cross_y + m.ex.z * cross_z);
+
+  // r.z = det * matrix.dotVec3(this.ex, matrix.newCrossVec3(this.ey, v));
+  cross_x = m.ey.y * v.z - m.ey.z * v.y;
+  cross_y = m.ey.z * v.x - m.ey.x * v.z;
+  cross_z = m.ey.x * v.y - m.ey.y * v.x;
+  out.z = det * (m.ex.x * cross_x + m.ex.y * cross_y + m.ex.z * cross_z);
 }

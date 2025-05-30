@@ -8,9 +8,10 @@
  */
 
 import { options } from "../../util/options";
+import * as matrix from "../../common/Matrix";
 import { clamp } from "../../common/Math";
 import { Vec2, Vec2Value } from "../../common/Vec2";
-import { Mat22 } from "../../common/Mat22";
+import { Mat22Value } from "../../common/Mat22";
 import { Rot } from "../../common/Rot";
 import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
@@ -94,7 +95,7 @@ export class MotorJoint extends Joint {
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
   /** @internal */ m_invIB: number;
-  /** @internal */ m_linearMass: Mat22;
+  /** @internal */ m_linearMass: Mat22Value;
   /** @internal */ m_angularMass: number;
 
   constructor(def: MotorJointDef);
@@ -327,13 +328,13 @@ export class MotorJoint extends Joint {
     const iB = this.m_invIB;
 
     // Upper 2 by 2 of K for point to point
-    const K = new Mat22();
+    const K = matrix.mat22();
     K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y * this.m_rB.y;
     K.ex.y = -iA * this.m_rA.x * this.m_rA.y - iB * this.m_rB.x * this.m_rB.y;
     K.ey.x = K.ex.y;
     K.ey.y = mA + mB + iA * this.m_rA.x * this.m_rA.x + iB * this.m_rB.x * this.m_rB.x;
 
-    this.m_linearMass = K.getInverse();
+    matrix.inverseMat22(this.m_linearMass, K);
 
     this.m_angularMass = iA + iB;
     if (this.m_angularMass > 0.0) {
@@ -404,7 +405,9 @@ export class MotorJoint extends Joint {
       Cdot.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
       Cdot.addMul(inv_h * this.m_correctionFactor, this.m_linearError);
 
-      let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
+      let impulse = matrix.vec2(0, 0);
+      matrix.mulMat22Vec2(impulse, this.m_linearMass, Cdot);
+      matrix.negVec2(impulse);
       const oldImpulse = Vec2.clone(this.m_linearImpulse);
       this.m_linearImpulse.add(impulse);
 

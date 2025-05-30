@@ -11,7 +11,7 @@ import * as matrix from "../common/Matrix";
 import { ShapeType } from "../collision/Shape";
 import { clamp } from "../common/Math";
 import { TransformValue } from "../common/Transform";
-import { Mat22 } from "../common/Mat22";
+import { Mat22Value } from "../common/Mat22";
 import { SettingsInternal as Settings } from "../Settings";
 import { Manifold, ManifoldType, WorldManifold } from "../collision/Manifold";
 import { testOverlap } from "../collision/Distance";
@@ -183,8 +183,8 @@ export class Contact {
   // VelocityConstraint
   /** @internal */ v_points = [new VelocityConstraintPoint(), new VelocityConstraintPoint()]; // [maxManifoldPoints];
   /** @internal */ v_normal = matrix.vec2(0, 0);
-  /** @internal */ v_normalMass: Mat22 = new Mat22();
-  /** @internal */ v_K: Mat22 = new Mat22();
+  /** @internal */ v_normalMass: Mat22Value = matrix.mat22();
+  /** @internal */ v_K: Mat22Value = matrix.mat22();
   /** @internal */ v_pointCount = 0;
   /** @internal */ v_tangentSpeed = 0;
   /** @internal */ v_friction = 0;
@@ -254,8 +254,8 @@ export class Contact {
       point.recycle();
     }
     matrix.zeroVec2(this.v_normal);
-    this.v_normalMass.setZero();
-    this.v_K.setZero();
+    matrix.zeroMat22(this.v_normalMass);
+    matrix.zeroMat22(this.v_K);
     this.v_pointCount = 0;
     this.v_tangentSpeed = 0;
     this.v_friction = 0;
@@ -310,8 +310,8 @@ export class Contact {
 
     this.v_pointCount = pointCount;
 
-    this.v_K.setZero();
-    this.v_normalMass.setZero();
+    matrix.zeroMat22(this.v_K);
+    matrix.zeroMat22(this.v_normalMass);
 
     this.p_invMassA = bodyA.m_invMass;
     this.p_invMassB = bodyB.m_invMass;
@@ -838,8 +838,8 @@ export class Contact {
       const k_maxConditionNumber = 1000.0;
       if (k11 * k11 < k_maxConditionNumber * (k11 * k22 - k12 * k12)) {
         // K is safe to invert.
-        this.v_K.ex.setNum(k11, k12);
-        this.v_K.ey.setNum(k12, k22);
+        matrix.setVec2(this.v_K.ex, k11, k12);
+        matrix.setVec2(this.v_K.ey, k12, k22);
         // this.v_normalMass.set(this.v_K.getInverse());
         const a = this.v_K.ex.x;
         const b = this.v_K.ey.x;
@@ -1101,7 +1101,6 @@ export class Contact {
         // x = - inv(A) * b'
         //
         // const x = Mat22.mulVec2(this.v_normalMass, b).neg();
-        matrix.zeroVec2(x);
         x.x = -(this.v_normalMass.ex.x * b.x + this.v_normalMass.ey.x * b.y);
         x.y = -(this.v_normalMass.ex.y * b.x + this.v_normalMass.ey.y * b.y);
 

@@ -8,11 +8,11 @@
  */
 
 import { SettingsInternal as Settings } from "../../Settings";
+import * as matrix from "../../common/Matrix";
 import { clamp } from "../../common/Math";
 import { Vec2, Vec2Value } from "../../common/Vec2";
 import { Vec3 } from "../../common/Vec3";
-import { Mat22 } from "../../common/Mat22";
-import { Mat33 } from "../../common/Mat33";
+import { Mat33Value } from "../../common/Mat33";
 import { Rot } from "../../common/Rot";
 import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
@@ -153,7 +153,7 @@ export class RevoluteJoint extends Joint {
   /** @internal */ m_invIA: number;
   /** @internal */ m_invIB: number;
   // effective mass for point-to-point constraint.
-  /** @internal */ m_mass: Mat33;
+  /** @internal */ m_mass: Mat33Value;
   // effective mass for motor/limit angular constraint.
   /** @internal */ m_motorMass: number;
   /** @internal */ m_limitState: number;
@@ -171,7 +171,7 @@ export class RevoluteJoint extends Joint {
     bodyA = this.m_bodyA;
     bodyB = this.m_bodyB;
 
-    this.m_mass = new Mat33();
+    this.m_mass = matrix.mat33();
     this.m_limitState = LimitState.inactiveLimit;
 
     this.m_type = RevoluteJoint.TYPE;
@@ -595,7 +595,9 @@ export class RevoluteJoint extends Joint {
       const Cdot2 = wB - wA;
       const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
 
-      const impulse = Vec3.neg(this.m_mass.solve33(Cdot));
+      const impulse = matrix.vec3(0, 0, 0);
+      matrix.solveMat33(impulse, this.m_mass, Cdot);
+      matrix.negVec3(impulse);
 
       if (this.m_limitState == LimitState.equalLimits) {
         this.m_impulse.add(impulse);
@@ -604,7 +606,8 @@ export class RevoluteJoint extends Joint {
 
         if (newImpulse < 0.0) {
           const rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y));
-          const reduced = this.m_mass.solve22(rhs);
+          const reduced = matrix.vec2(0, 0);
+          matrix.solveMat22(reduced, this.m_mass, rhs);
           impulse.x = reduced.x;
           impulse.y = reduced.y;
           impulse.z = -this.m_impulse.z;
@@ -619,7 +622,8 @@ export class RevoluteJoint extends Joint {
 
         if (newImpulse > 0.0) {
           const rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y));
-          const reduced = this.m_mass.solve22(rhs);
+          const reduced = matrix.vec2(0, 0);
+          matrix.solveMat22(reduced, this.m_mass, rhs);
           impulse.x = reduced.x;
           impulse.y = reduced.y;
           impulse.z = -this.m_impulse.z;
@@ -643,7 +647,8 @@ export class RevoluteJoint extends Joint {
       const Cdot = Vec2.zero();
       Cdot.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
       Cdot.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
-      const impulse = this.m_mass.solve22(Vec2.neg(Cdot));
+      const impulse = matrix.vec2(0, 0);
+      matrix.solveMat22(impulse, this.m_mass, Vec2.neg(Cdot));
 
       this.m_impulse.x += impulse.x;
       this.m_impulse.y += impulse.y;
@@ -725,13 +730,15 @@ export class RevoluteJoint extends Joint {
       const iA = this.m_invIA;
       const iB = this.m_invIB;
 
-      const K = new Mat22();
+      const K = matrix.mat22();
       K.ex.x = mA + mB + iA * rA.y * rA.y + iB * rB.y * rB.y;
       K.ex.y = -iA * rA.x * rA.y - iB * rB.x * rB.y;
       K.ey.x = K.ex.y;
       K.ey.y = mA + mB + iA * rA.x * rA.x + iB * rB.x * rB.x;
 
-      const impulse = Vec2.neg(K.solve(C));
+      const impulse = matrix.vec2(0, 0);
+      matrix.solveMat22(impulse, K, C);
+      matrix.negVec2(impulse);
 
       cA.subMul(mA, impulse);
       aA -= iA * Vec2.crossVec2Vec2(rA, impulse);

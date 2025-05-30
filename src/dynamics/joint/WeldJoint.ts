@@ -9,9 +9,10 @@
 
 import { options } from "../../util/options";
 import { SettingsInternal as Settings } from "../../Settings";
+import * as matrix from "../../common/Matrix";
 import { Vec2, Vec2Value } from "../../common/Vec2";
 import { Vec3 } from "../../common/Vec3";
-import { Mat33 } from "../../common/Mat33";
+import { Mat33Value } from "../../common/Mat33";
 import { Rot } from "../../common/Rot";
 import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
@@ -105,7 +106,7 @@ export class WeldJoint extends Joint {
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
   /** @internal */ m_invIB: number;
-  /** @internal */ m_mass: Mat33;
+  /** @internal */ m_mass: Mat33Value;
 
   constructor(def: WeldJointDef);
   constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
@@ -146,7 +147,7 @@ export class WeldJoint extends Joint {
     // this.m_invMassB;
     // this.m_invIA;
     // this.m_invIB;
-    this.m_mass = new Mat33();
+    this.m_mass = matrix.mat33();
 
     // Point-to-point constraint
     // C = p2 - p1
@@ -322,7 +323,7 @@ export class WeldJoint extends Joint {
     const iA = this.m_invIA;
     const iB = this.m_invIB;
 
-    const K = new Mat33();
+    const K = matrix.mat33();
     K.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y * this.m_rB.y * iB;
     K.ey.x = -this.m_rA.y * this.m_rA.x * iA - this.m_rB.y * this.m_rB.x * iB;
     K.ez.x = -this.m_rA.y * iA - this.m_rB.y * iB;
@@ -334,7 +335,7 @@ export class WeldJoint extends Joint {
     K.ez.z = iA + iB;
 
     if (this.m_frequencyHz > 0.0) {
-      K.getInverse22(this.m_mass);
+      matrix.inverseMat22(this.m_mass, K);
 
       let invM = iA + iB;
       const m = invM > 0.0 ? 1.0 / invM : 0.0;
@@ -359,11 +360,11 @@ export class WeldJoint extends Joint {
       invM += this.m_gamma;
       this.m_mass.ez.z = invM != 0.0 ? 1.0 / invM : 0.0;
     } else if (K.ez.z == 0.0) {
-      K.getInverse22(this.m_mass);
+      matrix.inverseMat22(this.m_mass, K);
       this.m_gamma = 0.0;
       this.m_bias = 0.0;
     } else {
-      K.getSymInverse33(this.m_mass);
+      matrix.symInverseMat33(this.m_mass, K);
       this.m_gamma = 0.0;
       this.m_bias = 0.0;
     }
@@ -413,7 +414,9 @@ export class WeldJoint extends Joint {
       Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
       Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
 
-      const impulse1 = Vec2.neg(Mat33.mulVec2(this.m_mass, Cdot1));
+      const impulse1 = matrix.vec2(0, 0);
+      matrix.mulMat33Vec2(impulse1, this.m_mass, Cdot1);
+      matrix.negVec2(impulse1);
       this.m_impulse.x += impulse1.x;
       this.m_impulse.y += impulse1.y;
 
@@ -431,7 +434,9 @@ export class WeldJoint extends Joint {
       const Cdot2 = wB - wA;
       const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
 
-      const impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot));
+      const impulse = matrix.vec3(0, 0, 0);
+      matrix.mulMat33Vec3(impulse, this.m_mass, Cdot);
+      matrix.negVec3(impulse);
       this.m_impulse.add(impulse);
 
       const P = Vec2.neo(impulse.x, impulse.y);
@@ -472,7 +477,7 @@ export class WeldJoint extends Joint {
     let positionError: number;
     let angularError: number;
 
-    const K = new Mat33();
+    const K = matrix.mat33();
     K.ex.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
     K.ey.x = -rA.y * rA.x * iA - rB.y * rB.x * iB;
     K.ez.x = -rA.y * iA - rB.y * iB;
@@ -491,7 +496,9 @@ export class WeldJoint extends Joint {
       positionError = C1.length();
       angularError = 0.0;
 
-      const P = Vec2.neg(K.solve22(C1));
+      const P = matrix.vec2(0, 0);
+      matrix.solveMat22(P, K, C1);
+      matrix.negVec2(P);
 
       cA.subMul(mA, P);
       aA -= iA * Vec2.crossVec2Vec2(rA, P);
@@ -510,11 +517,16 @@ export class WeldJoint extends Joint {
 
       const C = new Vec3(C1.x, C1.y, C2);
 
-      let impulse = new Vec3();
+      const impulse = new Vec3();
       if (K.ez.z > 0.0) {
-        impulse = Vec3.neg(K.solve33(C));
+        matrix.solveMat33(impulse, K, C);
+        matrix.negVec3(impulse);
+
       } else {
-        const impulse2 = Vec2.neg(K.solve22(C1));
+        const impulse2 = matrix.vec2(0, 0);
+        matrix.solveMat22(impulse2, K, C1);
+        matrix.negVec2(impulse2);
+
         impulse.set(impulse2.x, impulse2.y, 0.0);
       }
 

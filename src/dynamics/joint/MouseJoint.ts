@@ -8,9 +8,10 @@
  */
 
 import { options } from "../../util/options";
+import * as matrix from "../../common/Matrix";
 import { EPSILON } from "../../common/Math";
 import { Vec2, Vec2Value } from "../../common/Vec2";
-import { Mat22 } from "../../common/Mat22";
+import { Mat22Value } from "../../common/Mat22";
 import { Rot } from "../../common/Rot";
 import { Transform } from "../../common/Transform";
 import { Joint, JointOpt, JointDef } from "../Joint";
@@ -100,7 +101,7 @@ export class MouseJoint extends Joint {
   /** @internal */ m_localCenterB: Vec2;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIB: number;
-  /** @internal */ m_mass: Mat22;
+  /** @internal */ m_mass: Mat22Value;
   /** @internal */ m_C: Vec2;
 
   constructor(def: MouseJointDef);
@@ -146,7 +147,7 @@ export class MouseJoint extends Joint {
     this.m_localCenterB = Vec2.zero();
     this.m_invMassB = 0.0;
     this.m_invIB = 0.0;
-    this.m_mass = new Mat22();
+    this.m_mass = matrix.mat22();
     this.m_C = Vec2.zero();
 
     // p = attached point, m = mouse point
@@ -336,13 +337,13 @@ export class MouseJoint extends Joint {
     // = [1/m1+1/m2 0 ] + invI1 * [r1.y*r1.y -r1.x*r1.y] + invI2 * [r1.y*r1.y
     // -r1.x*r1.y]
     // [ 0 1/m1+1/m2] [-r1.x*r1.y r1.x*r1.x] [-r1.x*r1.y r1.x*r1.x]
-    const K = new Mat22();
+    const K = matrix.mat22();
     K.ex.x = this.m_invMassB + this.m_invIB * this.m_rB.y * this.m_rB.y + this.m_gamma;
     K.ex.y = -this.m_invIB * this.m_rB.x * this.m_rB.y;
     K.ey.x = K.ex.y;
     K.ey.y = this.m_invMassB + this.m_invIB * this.m_rB.x * this.m_rB.x + this.m_gamma;
 
-    this.m_mass = K.getInverse();
+    matrix.inverseMat22(this.m_mass, K);
 
     this.m_C.setVec2(cB);
     this.m_C.addCombine(1, this.m_rB, -1, this.m_targetA);
@@ -376,7 +377,8 @@ export class MouseJoint extends Joint {
     Cdot.addCombine(1, this.m_C, this.m_gamma, this.m_impulse);
     Cdot.neg();
 
-    let impulse = Mat22.mulVec2(this.m_mass, Cdot);
+    let impulse = matrix.vec2(0, 0);
+    matrix.mulMat22Vec2(impulse, this.m_mass, Cdot);
 
     const oldImpulse = Vec2.clone(this.m_impulse);
     this.m_impulse.add(impulse);
