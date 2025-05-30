@@ -46,6 +46,11 @@ export function copyVec2(out: Vec2Value, w: Vec2Value): void {
   out.y = w.y;
 }
 
+export function copyVec3(out: Vec2Value, w: Vec2Value): void {
+  out.x = w.x;
+  out.y = w.y;
+}
+
 export function zeroVec2(out: Vec2Value): void {
   out.x = 0;
   out.y = 0;
@@ -71,6 +76,12 @@ export function negVec3(out: Vec3Value): void {
 export function plusVec2(out: Vec2Value, w: Vec2Value): void {
   out.x += w.x;
   out.y += w.y;
+}
+
+export function plusVec3(out: Vec3Value, w: Vec3Value): void {
+  out.x += w.x;
+  out.y += w.y;
+  out.z += w.z;
 }
 
 export function addVec2(out: Vec2Value, v: Vec2Value, w: Vec2Value): void {
@@ -109,6 +120,12 @@ export function subVec2(out: Vec2Value, v: Vec2Value, w: Vec2Value): void {
 export function mulVec2(out: Vec2Value, m: number): void {
   out.x *= m;
   out.y *= m;
+}
+
+export function mulVec3(out: Vec3Value, m: number): void {
+  out.x *= m;
+  out.y *= m;
+  out.z *= m;
 }
 
 export function scaleVec2(out: Vec2Value, m: number, w: Vec2Value): void {
@@ -419,7 +436,7 @@ export function solveMat22(out: Vec2Value, m: Mat22Value, v: Vec2Value): void {
  * Solve A * x = b, where b is a column vector. This is more efficient than
  * computing the inverse in one-shot cases.
  */
-export function solveMat33(out: Vec3Value, m: Mat33Value, v: Vec3Value): void {
+export function solveMat33Num(out: Vec3Value, m: Mat33Value, x: number, y: number, z: number): void {
   // let det = matrix.dotVec3(this.ex, matrix.newCrossVec3(this.ey, this.ez));
   let cross_x = m.ey.y * m.ez.z - m.ey.z * m.ez.y;
   let cross_y = m.ey.z * m.ez.x - m.ey.x * m.ez.z;
@@ -433,17 +450,17 @@ export function solveMat33(out: Vec3Value, m: Mat33Value, v: Vec3Value): void {
   cross_x = m.ey.y * m.ez.z - m.ey.z * m.ez.y;
   cross_y = m.ey.z * m.ez.x - m.ey.x * m.ez.z;
   cross_z = m.ey.x * m.ez.y - m.ey.y * m.ez.x;
-  out.x = det * (v.x * cross_x + v.y * cross_y + v.z * cross_z);
+  out.x = det * (x * cross_x + y * cross_y + z * cross_z);
 
   // r.y = det * matrix.dotVec3(this.ex, matrix.newCrossVec3(v, this.ez));
-  cross_x = v.y * m.ez.z - v.z * m.ez.y;
-  cross_y = v.z * m.ez.x - v.x * m.ez.z;
-  cross_z = v.x * m.ez.y - v.y * m.ez.x;
+  cross_x = y * m.ez.z - z * m.ez.y;
+  cross_y = z * m.ez.x - x * m.ez.z;
+  cross_z = x * m.ez.y - y * m.ez.x;
   out.y = det * (m.ex.x * cross_x + m.ex.y * cross_y + m.ex.z * cross_z);
 
   // r.z = det * matrix.dotVec3(this.ex, matrix.newCrossVec3(this.ey, v));
-  cross_x = m.ey.y * v.z - m.ey.z * v.y;
-  cross_y = m.ey.z * v.x - m.ey.x * v.z;
-  cross_z = m.ey.x * v.y - m.ey.y * v.x;
+  cross_x = m.ey.y * z - m.ey.z * y;
+  cross_y = m.ey.z * x - m.ey.x * z;
+  cross_z = m.ey.x * y - m.ey.y * x;
   out.z = det * (m.ex.x * cross_x + m.ex.y * cross_y + m.ex.z * cross_z);
 }

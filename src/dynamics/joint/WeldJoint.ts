@@ -11,7 +11,7 @@ import { options } from "../../util/options";
 import { SettingsInternal as Settings } from "../../Settings";
 import * as matrix from "../../common/Matrix";
 import { Vec2, Vec2Value } from "../../common/Vec2";
-import { Vec3 } from "../../common/Vec3";
+import { Vec3Value } from "../../common/Vec3";
 import { Mat33Value } from "../../common/Mat33";
 import { Rot } from "../../common/Rot";
 import { Joint, JointOpt, JointDef } from "../Joint";
@@ -92,7 +92,7 @@ export class WeldJoint extends Joint {
   /** @internal */ m_frequencyHz: number;
   /** @internal */ m_dampingRatio: number;
 
-  /** @internal */ m_impulse: Vec3;
+  /** @internal */ m_impulse: Vec3Value;
 
   /** @internal */ m_bias: number;
   /** @internal */ m_gamma: number;
@@ -132,7 +132,7 @@ export class WeldJoint extends Joint {
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
 
-    this.m_impulse = new Vec3();
+    this.m_impulse = matrix.vec3(0, 0, 0);
 
     this.m_bias = 0.0;
     this.m_gamma = 0.0;
@@ -371,7 +371,7 @@ export class WeldJoint extends Joint {
 
     if (step.warmStarting) {
       // Scale impulses to support a variable time step.
-      this.m_impulse.mul(step.dtRatio);
+      matrix.mulVec3(this.m_impulse, step.dtRatio);
 
       const P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
 
@@ -381,7 +381,7 @@ export class WeldJoint extends Joint {
       vB.addMul(mB, P);
       wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_impulse.z);
     } else {
-      this.m_impulse.setZero();
+      matrix.zeroVec3(this.m_impulse);
     }
 
     this.m_bodyA.c_velocity.v = vA;
@@ -432,12 +432,12 @@ export class WeldJoint extends Joint {
       Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
       Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
       const Cdot2 = wB - wA;
-      const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
+      const Cdot = matrix.vec3(Cdot1.x, Cdot1.y, Cdot2);
 
       const impulse = matrix.vec3(0, 0, 0);
       matrix.mulMat33Vec3(impulse, this.m_mass, Cdot);
       matrix.negVec3(impulse);
-      this.m_impulse.add(impulse);
+      matrix.plusVec3(this.m_impulse, impulse);
 
       const P = Vec2.neo(impulse.x, impulse.y);
 
@@ -515,11 +515,9 @@ export class WeldJoint extends Joint {
       positionError = C1.length();
       angularError = math_abs(C2);
 
-      const C = new Vec3(C1.x, C1.y, C2);
-
-      const impulse = new Vec3();
+      const impulse = matrix.vec3(0, 0, 0);
       if (K.ez.z > 0.0) {
-        matrix.solveMat33(impulse, K, C);
+        matrix.solveMat33Num(impulse, K, C1.x, C1.y, C2);
         matrix.negVec3(impulse);
 
       } else {
@@ -527,7 +525,9 @@ export class WeldJoint extends Joint {
         matrix.solveMat22(impulse2, K, C1);
         matrix.negVec2(impulse2);
 
-        impulse.set(impulse2.x, impulse2.y, 0.0);
+        impulse.x = impulse2.x;
+        impulse.y = impulse2.y;
+        impulse.z = 0.0;
       }
 
       const P = Vec2.neo(impulse.x, impulse.y);

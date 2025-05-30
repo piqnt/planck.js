@@ -12,7 +12,7 @@ import { SettingsInternal as Settings } from "../../Settings";
 import * as matrix from "../../common/Matrix";
 import { clamp } from "../../common/Math";
 import { Vec2, Vec2Value } from "../../common/Vec2";
-import { Vec3 } from "../../common/Vec3";
+import { Vec3Value } from "../../common/Vec3";
 import { Mat33Value } from "../../common/Mat33";
 import { Rot } from "../../common/Rot";
 import { Joint, JointOpt, JointDef } from "../Joint";
@@ -138,7 +138,7 @@ export class PrismaticJoint extends Joint {
   /** @internal */ m_localXAxisA: Vec2;
   /** @internal */ m_localYAxisA: Vec2;
   /** @internal */ m_referenceAngle: number;
-  /** @internal */ m_impulse: Vec3;
+  /** @internal */ m_impulse: Vec3Value;
   /** @internal */ m_motorMass: number;
   /** @internal */ m_motorImpulse: number;
   /** @internal */ m_lowerTranslation: number;
@@ -187,7 +187,7 @@ export class PrismaticJoint extends Joint {
       ? def.referenceAngle
       : bodyB.getAngle() - bodyA.getAngle();
 
-    this.m_impulse = new Vec3();
+    this.m_impulse = matrix.vec3(0, 0, 0);
     this.m_motorMass = 0.0;
     this.m_motorImpulse = 0.0;
 
@@ -645,7 +645,7 @@ export class PrismaticJoint extends Joint {
 
     if (step.warmStarting) {
       // Account for variable time step.
-      this.m_impulse.mul(step.dtRatio);
+      matrix.mulVec3(this.m_impulse, step.dtRatio);
       this.m_motorImpulse *= step.dtRatio;
 
       const P = Vec2.combine(this.m_impulse.x, this.m_perp, this.m_motorImpulse + this.m_impulse.z, this.m_axis);
@@ -658,7 +658,7 @@ export class PrismaticJoint extends Joint {
       vB.addMul(mB, P);
       wB += iB * LB;
     } else {
-      this.m_impulse.setZero();
+      matrix.zeroVec3(this.m_impulse);
       this.m_motorImpulse = 0.0;
     }
 
@@ -710,12 +710,11 @@ export class PrismaticJoint extends Joint {
       Cdot2 += Vec2.dot(this.m_axis, vB) + this.m_a2 * wB;
       Cdot2 -= Vec2.dot(this.m_axis, vA) + this.m_a1 * wA;
 
-      const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
-
-      const f1 = Vec3.clone(this.m_impulse);
-      let df = matrix.vec3(0,0,0);
-      matrix.solveMat33(df, this.m_K, Vec3.neg(Cdot));
-      this.m_impulse.add(df);
+      const f1 = matrix.vec3(0, 0, 0);
+      matrix.copyVec3(f1, this.m_impulse);
+      const df = matrix.vec3(0, 0, 0);
+      matrix.solveMat33Num(df, this.m_K, -Cdot1.x, -Cdot1.y, -Cdot2);
+      matrix.plusVec3(this.m_impulse, df);
 
       if (this.m_limitState == LimitState.atLowerLimit) {
         this.m_impulse.z = math_max(this.m_impulse.z, 0.0);
@@ -723,8 +722,7 @@ export class PrismaticJoint extends Joint {
         this.m_impulse.z = math_min(this.m_impulse.z, 0.0);
       }
 
-      // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) +
-      // f1(1:2)
+      // f2(1:2) = invK(1:2,1:2) * (-Cdot(1:2) - K(1:2,3) * (f2(3) - f1(3))) + f1(1:2)
       const b = Vec2.combine(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2.neo(this.m_K.ez.x, this.m_K.ez.y));
       const f2r = matrix.vec2(0, 0);
       matrix.solveMat22(f2r, this.m_K, b);
@@ -732,7 +730,7 @@ export class PrismaticJoint extends Joint {
       this.m_impulse.x = f2r.x;
       this.m_impulse.y = f2r.y;
 
-      df = Vec3.sub(this.m_impulse, f1);
+      matrix.subVec2(df, this.m_impulse, f1);
 
       const P = Vec2.combine(df.x, this.m_perp, df.z, this.m_axis);
       const LA = df.x * this.m_s1 + df.y + df.z * this.m_a1;
@@ -847,12 +845,7 @@ export class PrismaticJoint extends Joint {
       matrix.setVec3(K.ey, k12, k22, k23);
       matrix.setVec3(K.ez, k13, k23, k33);
 
-      const C = new Vec3();
-      C.x = C1.x;
-      C.y = C1.y;
-      C.z = C2;
-
-      matrix.solveMat33(impulse, K, Vec3.neg(C));
+      matrix.solveMat33Num(impulse, K, -C1.x, -C1.y, -C2);
     } else {
       const k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2;
       const k12 = iA * s1 + iB * s2;
