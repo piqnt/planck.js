@@ -101,9 +101,19 @@ testbed.step = function () {
   const input = new ShapeCastInput();
   input.proxyA.setVertices(vAs, countA, radiusA);
   input.proxyB.setVertices(vBs, countB, radiusB);
-  input.transformA.set(transformA);
-  input.transformB.set(transformB);
-  input.translationB.set(translationB);
+
+  input.transformA.p.x = transformA.p.x;
+  input.transformA.p.y = transformA.p.y;
+  input.transformA.q.c = transformA.q.c;
+  input.transformA.q.s = transformA.q.s;
+
+  input.transformB.p.x = transformB.p.x;
+  input.transformB.p.y = transformB.p.y;
+  input.transformB.q.c = transformB.q.c;
+  input.transformB.q.s = transformB.q.s;
+
+  input.translationB.x = translationB.x;
+  input.translationB.y = translationB.y;
 
   const output = new ShapeCastOutput();
 
