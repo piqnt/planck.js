@@ -335,6 +335,7 @@ export class MotorJoint extends Joint {
     K.ey.x = K.ex.y;
     K.ey.y = mA + mB + iA * this.m_rA.x * this.m_rA.x + iB * this.m_rB.x * this.m_rB.x;
 
+    this.m_linearMass = matrix.mat22();
     matrix.inverseMat22(this.m_linearMass, K);
 
     this.m_angularMass = iA + iB;
