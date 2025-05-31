@@ -242,7 +242,8 @@ export const CollidePolygons = function (
   clipPoints2[1].recycle();
 
   // Clip to box side 1
-  matrix.setVec2(clipSegmentToLineNormal, -tangent.x, -tangent.y);
+  clipSegmentToLineNormal.x = -tangent.x;
+  clipSegmentToLineNormal.y = -tangent.y;
   const np1 = clipSegmentToLine(clipPoints1, incidentEdge, clipSegmentToLineNormal, sideOffset1, iv1);
 
   if (np1 < 2) {

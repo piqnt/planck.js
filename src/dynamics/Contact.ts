@@ -625,8 +625,8 @@ export class Contact {
     const bodyB = fixtureB.m_body;
     if (bodyA === null || bodyB === null) return minSeparation;
 
-    const velocityA = bodyA.c_velocity;
-    const velocityB = bodyB.c_velocity;
+    // const velocityA = bodyA.c_velocity;
+    // const velocityB = bodyB.c_velocity;
     const positionA = bodyA.c_position;
     const positionB = bodyB.c_position;
 
@@ -881,8 +881,8 @@ export class Contact {
 
     const velocityA = bodyA.c_velocity;
     const velocityB = bodyB.c_velocity;
-    const positionA = bodyA.c_position;
-    const positionB = bodyB.c_position;
+    // const positionA = bodyA.c_position;
+    // const positionB = bodyB.c_position;
 
     const mA = this.v_invMassA;
     const iA = this.v_invIA;
@@ -931,10 +931,10 @@ export class Contact {
     if (bodyA === null || bodyB === null) return;
 
     const velocityA = bodyA.c_velocity;
-    const positionA = bodyA.c_position;
+    // const positionA = bodyA.c_position;
 
     const velocityB = bodyB.c_velocity;
-    const positionB = bodyB.c_position;
+    // const positionB = bodyB.c_position;
 
     const mA = this.v_invMassA;
     const iA = this.v_invIA;
@@ -1080,7 +1080,8 @@ export class Contact {
       let vn1 = matrix.dotVec2(dv1, normal);
       let vn2 = matrix.dotVec2(dv2, normal);
 
-      matrix.setVec2(b, vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
+      b.x = vn1 - vcp1.velocityBias;
+      b.y = vn2 - vcp2.velocityBias;
 
       // Compute b'
       // b.sub(Mat22.mulVec2(this.v_K, a));

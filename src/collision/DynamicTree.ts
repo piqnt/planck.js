@@ -578,15 +578,18 @@ export class DynamicTree<T> {
     // if (_ASSERT) console.assert(0 <= child1 && child1 < this.m_nodeCapacity);
     // if (_ASSERT) console.assert(0 <= child2 && child2 < this.m_nodeCapacity);
 
-    const height1 = child1.height;
-    const height2 = child2.height;
-    const height = 1 + math_max(height1, height2);
-    if (_ASSERT) console.assert(node.height === height);
+    if (_ASSERT) {
+      const height1 = child1.height;
+      const height2 = child2.height;
+      const height = 1 + math_max(height1, height2);
+      console.assert(node.height === height);
+    }
 
-    const aabb = new AABB();
-    aabb.combine(child1.aabb, child2.aabb);
-
-    if (_ASSERT) console.assert(AABB.areEqual(aabb, node.aabb));
+    if (_ASSERT) {
+      const aabb = new AABB();
+      aabb.combine(child1.aabb, child2.aabb);
+      console.assert(AABB.areEqual(aabb, node.aabb));
+    }
 
     this.validateMetrics(child1);
     this.validateMetrics(child2);

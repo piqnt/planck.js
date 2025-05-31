@@ -454,7 +454,7 @@ class Simplex {
   getSearchDirection(): Vec2Value {
     const v1 = this.m_v1;
     const v2 = this.m_v2;
-    const v3 = this.m_v3;
+    // const v3 = this.m_v3;
     switch (this.m_count) {
       case 1:
         matrix.setVec2(searchDirection_reuse, -v1.w.x, -v1.w.y);
@@ -484,7 +484,7 @@ class Simplex {
   getClosestPoint(): Vec2Value {
     const v1 = this.m_v1;
     const v2 = this.m_v2;
-    const v3 = this.m_v3;
+    // const v3 = this.m_v3;
     switch (this.m_count) {
       case 0:
         if (_ASSERT) console.assert(false);
