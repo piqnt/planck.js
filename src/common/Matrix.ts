@@ -7,10 +7,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/** @internal */ const math_sin = Math.sin;
-/** @internal */ const math_cos = Math.cos;
-/** @internal */ const math_sqrt = Math.sqrt;
-
 import type { RotValue } from "./Rot";
 import type { TransformValue } from "./Transform";
 import type { Vec2Value } from "./Vec2";
@@ -19,24 +15,24 @@ import type { Mat22Value } from "./Mat22";
 import type { Mat33Value } from "./Mat33";
 
 /** Return a new Vec2 object with the given x and y. */
-export function vec2(x: number, y: number): Vec2Value {
-  return { x, y };
+export function vec2(inx: number, iny: number): Vec2Value {
+  return { x: inx, y: iny };
 }
 
 /** Return a new Vec3 object with the given x and y. */
-export function vec3(x: number, y: number, z: number): Vec3Value {
-  return { x, y, z };
+export function vec3(inx: number, iny: number, inz: number): Vec3Value {
+  return { x: inx, y: iny, z: inz };
 }
 
 /** Return a new Rot object with the given angle. */
 export function rotation(angle: number): RotValue {
-  return { s: math_sin(angle), c: math_cos(angle) };
+  return { s: Math.sin(angle), c: Math.cos(angle) };
 }
 
 /** Assigns the given x and y to the out Vec2Value. */
-export function setVec2(out: Vec2Value, x: number, y: number): void {
-  out.x = x;
-  out.y = y;
+export function setVec2(out: Vec2Value, inx: number, iny: number): void {
+  out.x = inx;
+  out.y = iny;
 }
 
 /** Assigns the given x, y and z to the out Vec3Value. */
@@ -104,7 +100,7 @@ export function addVec2(out: Vec2Value, v: Vec2Value, w: Vec2Value): void {
 export function clampVec2(out: Vec2Value, max: number): void {
   const lengthSqr = out.x * out.x + out.y * out.y;
   if (lengthSqr > max * max) {
-    const scale = max / math_sqrt(lengthSqr);
+    const scale = max / Math.sqrt(lengthSqr);
     out.x *= scale;
     out.y *= scale;
   }
@@ -175,8 +171,10 @@ export function plusScaleVec2(out: Vec2Value, m: number, w: Vec2Value): void {
 
 /** Multiplies w by m and subtracts the result from out, equivalent to out -= m * w */
 export function minusScaleVec2(out: Vec2Value, m: number, w: Vec2Value): void {
-  out.x -= m * w.x;
-  out.y -= m * w.y;
+  const ox = m * w.x;
+  const oy = m * w.y;
+  out.x -= ox;
+  out.y -= oy;
 }
 
 export function crossSubVec2Num(out: Vec2Value, a: Vec2Value, b: Vec2Value, w: number): void {
@@ -188,8 +186,10 @@ export function crossSubVec2Num(out: Vec2Value, a: Vec2Value, b: Vec2Value, w: n
 }
 
 export function combine2Vec2(out: Vec2Value, am: number, a: Vec2Value, bm: number, b: Vec2Value): void {
-  out.x = am * a.x + bm * b.x;
-  out.y = am * a.y + bm * b.y;
+  const ox = am * a.x + bm * b.x;
+  const oy = am * a.y + bm * b.y;
+  out.x = ox;
+  out.y = oy;
 }
 
 export function combine3Vec2(
@@ -201,12 +201,14 @@ export function combine3Vec2(
   cm: number,
   c: Vec2Value,
 ): void {
-  out.x = am * a.x + bm * b.x + cm * c.x;
-  out.y = am * a.y + bm * b.y + cm * c.y;
+  const ox = am * a.x + bm * b.x + cm * c.x;
+  const oy = am * a.y + bm * b.y + cm * c.y;
+  out.x = ox;
+  out.y = oy;
 }
 
 export function normalizeVec2Length(out: Vec2Value): number {
-  const length = math_sqrt(out.x * out.x + out.y * out.y);
+  const length = Math.sqrt(out.x * out.x + out.y * out.y);
   if (length !== 0) {
     const invLength = 1 / length;
     out.x *= invLength;
@@ -216,7 +218,7 @@ export function normalizeVec2Length(out: Vec2Value): number {
 }
 
 export function normalizeVec2(out: Vec2Value): void {
-  const length = math_sqrt(out.x * out.x + out.y * out.y);
+  const length = Math.sqrt(out.x * out.x + out.y * out.y);
   if (length > 0) {
     const invLength = 1 / length;
     out.x *= invLength;
@@ -249,7 +251,7 @@ export function dotVec2(a: Vec2Value, b: Vec2Value): number {
 }
 
 export function lengthVec2(a: Vec2Value): number {
-  return math_sqrt(a.x * a.x + a.y * a.y);
+  return Math.sqrt(a.x * a.x + a.y * a.y);
 }
 
 export function lengthSqrVec2(a: Vec2Value): number {
@@ -259,7 +261,7 @@ export function lengthSqrVec2(a: Vec2Value): number {
 export function distVec2(a: Vec2Value, b: Vec2Value): number {
   const dx = a.x - b.x;
   const dy = a.y - b.y;
-  return math_sqrt(dx * dx + dy * dy);
+  return Math.sqrt(dx * dx + dy * dy);
 }
 
 export function distSqrVec2(a: Vec2Value, b: Vec2Value): number {
@@ -273,13 +275,15 @@ export function dotVec3(v: Vec3Value, w: Vec3Value): number {
 }
 
 export function setRotAngle(out: RotValue, a: number): void {
-  out.c = math_cos(a);
-  out.s = math_sin(a);
+  out.c = Math.cos(a);
+  out.s = Math.sin(a);
 }
 
 export function rotVec2(out: Vec2Value, q: RotValue, v: Vec2Value): void {
-  out.x = q.c * v.x - q.s * v.y;
-  out.y = q.s * v.x + q.c * v.y;
+  const ox = q.c * v.x - q.s * v.y;
+  const oy = q.s * v.x + q.c * v.y;
+  out.x = ox;
+  out.y = oy;
 }
 
 export function derotVec2(out: Vec2Value, q: RotValue, v: Vec2Value): void {
@@ -305,8 +309,11 @@ export function rerotVec2(out: Vec2Value, before: RotValue, after: RotValue, v: 
   out.y = y;
 }
 
-export function transform(x: number, y: number, a: number): TransformValue {
-  return { p: vec2(x, y), q: rotation(a) };
+export function transform(inx: number, iny: number, ina: number): TransformValue {
+  return {
+    p: { x: inx, y: iny },
+    q: { s: Math.sin(ina), c: Math.cos(ina) },
+  };
 }
 
 export function copyTransform(out: TransformValue, transform: TransformValue): void {
@@ -356,16 +363,16 @@ export function detransformTransform(out: TransformValue, a: TransformValue, b: 
 
 export function mat22(): Mat22Value {
   return {
-    ex: vec2(0, 0),
-    ey: vec2(0, 0),
+    ex: { x: 0, y: 0 },
+    ey: { x: 0, y: 0 },
   };
 }
 
 export function mat33() {
   return {
-    ex: vec3(0, 0, 0),
-    ey: vec3(0, 0, 0),
-    ez: vec3(0, 0, 0),
+    ex: { x: 0, y: 0, z: 0 },
+    ey: { x: 0, y: 0, z: 0 },
+    ez: { x: 0, y: 0, z: 0 },
   };
 }
 
@@ -389,19 +396,26 @@ export function zeroMat33(out: Mat33Value): void {
 }
 
 export function mulMat22Vec2(out: Vec2Value, m: Mat22Value, v: Vec2Value): void {
-  out.x = m.ex.x * v.x + m.ey.x * v.y;
-  out.y = m.ex.y * v.x + m.ey.y * v.y;
+  const ox = m.ex.x * v.x + m.ey.x * v.y;
+  const oy = m.ex.y * v.x + m.ey.y * v.y;
+  out.x = ox;
+  out.y = oy;
 }
 
 export function mulMat33Vec2(out: Vec2Value, m: Mat33Value, v: Vec2Value): void {
-  out.x = m.ex.x * v.x + m.ey.x * v.y;
-  out.y = m.ex.y * v.x + m.ey.y * v.y;
+  const ox = m.ex.x * v.x + m.ey.x * v.y;
+  const oy = m.ex.y * v.x + m.ey.y * v.y;
+  out.x = ox;
+  out.y = oy;
 }
 
 export function mulMat33Vec3(out: Vec3Value, m: Mat33Value, v: Vec3Value): void {
-  out.x = m.ex.x * v.x + m.ey.x * v.y + m.ez.x * v.z;
-  out.y = m.ex.y * v.x + m.ey.y * v.y + m.ez.y * v.z;
-  out.z = m.ex.z * v.x + m.ey.z * v.y + m.ez.z * v.z;
+  const ox = m.ex.x * v.x + m.ey.x * v.y + m.ez.x * v.z;
+  const oy = m.ex.y * v.x + m.ey.y * v.y + m.ez.y * v.z;
+  const oz = m.ex.z * v.x + m.ey.z * v.y + m.ez.z * v.z;
+  out.x = ox;
+  out.y = oy;
+  out.z = oz;
 }
 
 export function inverseMat22(out: Mat22Value, m: Mat22Value): void {
@@ -410,8 +424,8 @@ export function inverseMat22(out: Mat22Value, m: Mat22Value): void {
   const c = m.ex.y;
   const d = m.ey.y;
   let det = a * d - b * c;
-  if (det !== 0.0) {
-    det = 1.0 / det;
+  if (det !== 0) {
+    det = 1 / det;
   }
   out.ex.x = det * d;
   out.ey.x = -det * b;
@@ -431,8 +445,8 @@ export function symInverseMat33(out: Mat33Value, m: Mat33Value): void {
     m.ex.y * (m.ey.z * m.ez.x - m.ey.x * m.ez.z) +
     m.ex.z * (m.ey.x * m.ez.y - m.ey.y * m.ez.x);
 
-  if (det !== 0.0) {
-    det = 1.0 / det;
+  if (det !== 0) {
+    det = 1 / det;
   }
   const a11 = m.ex.x;
   const a12 = m.ey.x;
@@ -464,8 +478,8 @@ export function solveMat22(out: Vec2Value, m: Mat22Value, v: Vec2Value): void {
   const a21 = m.ex.y;
   const a22 = m.ey.y;
   let det = a11 * a22 - a12 * a21;
-  if (det !== 0.0) {
-    det = 1.0 / det;
+  if (det !== 0) {
+    det = 1 / det;
   }
   out.x = det * (a22 * v.x - a12 * v.y);
   out.y = det * (a11 * v.y - a21 * v.x);
@@ -481,8 +495,8 @@ export function solveMat33Num(out: Vec3Value, m: Mat33Value, x: number, y: numbe
   let cross_y = m.ey.z * m.ez.x - m.ey.x * m.ez.z;
   let cross_z = m.ey.x * m.ez.y - m.ey.y * m.ez.x;
   let det = m.ex.x * cross_x + m.ex.y * cross_y + m.ex.z * cross_z;
-  if (det !== 0.0) {
-    det = 1.0 / det;
+  if (det !== 0) {
+    det = 1 / det;
   }
 
   // r.x = det * matrix.dotVec3(v, matrix.newCrossVec3(this.ey, this.ez));
