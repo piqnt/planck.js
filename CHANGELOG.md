@@ -1,5 +1,11 @@
 # planck
 
+## 1.4.2
+
+### Patch Changes
+
+- 9343ffc: Fix testbed drawing
+
 ## 1.4.1
 
 ### Patch Changes

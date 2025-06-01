@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.4.0
+ * Planck.js v1.4.2
  * @license The MIT license
  * @copyright Copyright (c) 2025 Erin Catto, Ali Shakiba
  *
@@ -1329,10 +1329,6 @@ var DynamicTree = (
       if (node.isLeaf()) {
         return;
       }
-      child1.height;
-      child2.height;
-      var aabb = new AABB();
-      aabb.combine(child1.aabb, child2.aabb);
       this.validateMetrics(child1);
       this.validateMetrics(child2);
     };
@@ -3445,7 +3441,6 @@ var Simplex = (
     Simplex2.prototype.getSearchDirection = function() {
       var v13 = this.m_v1;
       var v22 = this.m_v2;
-      this.m_v3;
       switch (this.m_count) {
         case 1:
           return setVec2(searchDirection_reuse, -v13.w.x, -v13.w.y);
@@ -3465,7 +3460,6 @@ var Simplex = (
     Simplex2.prototype.getClosestPoint = function() {
       var v13 = this.m_v1;
       var v22 = this.m_v2;
-      this.m_v3;
       switch (this.m_count) {
         case 0:
           return zeroVec2(closestPoint_reuse);
@@ -4464,8 +4458,6 @@ var Solver = (
             }
             var indexA = c_3.getChildIndexA();
             var indexB = c_3.getChildIndexB();
-            bA_1.m_sweep;
-            bB_1.m_sweep;
             input.proxyA.set(fA_1.getShape(), indexA);
             input.proxyB.set(fB_1.getShape(), indexB);
             input.sweepA.set(bA_1.m_sweep);
@@ -5474,8 +5466,6 @@ var Contact = (
       var bodyB = fixtureB.m_body;
       if (bodyA === null || bodyB === null)
         return minSeparation;
-      bodyA.c_velocity;
-      bodyB.c_velocity;
       var positionA = bodyA.c_position;
       var positionB = bodyB.c_position;
       var localCenterA = this.p_localCenterA;
@@ -5663,8 +5653,6 @@ var Contact = (
         return;
       var velocityA = bodyA.c_velocity;
       var velocityB = bodyB.c_velocity;
-      bodyA.c_position;
-      bodyB.c_position;
       var mA = this.v_invMassA;
       var iA = this.v_invIA;
       var mB = this.v_invMassB;
@@ -5705,9 +5693,7 @@ var Contact = (
       if (bodyA === null || bodyB === null)
         return;
       var velocityA = bodyA.c_velocity;
-      bodyA.c_position;
       var velocityB = bodyB.c_velocity;
-      bodyB.c_position;
       var mA = this.v_invMassA;
       var iA = this.v_invIA;
       var mB = this.v_invMassB;
@@ -6883,10 +6869,7 @@ var ChainShape = (
       if (vertices.length < 3) {
         return;
       }
-      for (var i = 1; i < vertices.length; ++i) {
-        vertices[i - 1];
-        vertices[i];
-      }
+      var i;
       this.m_vertices = [];
       this.m_count = vertices.length + 1;
       for (var i = 0; i < vertices.length; ++i) {
@@ -6900,10 +6883,7 @@ var ChainShape = (
       return this;
     };
     ChainShape2.prototype._createChain = function(vertices) {
-      for (var i = 1; i < vertices.length; ++i) {
-        vertices[i - 1];
-        vertices[i];
-      }
+      var i;
       this.m_vertices = [];
       this.m_count = vertices.length;
       for (var i = 0; i < vertices.length; ++i) {

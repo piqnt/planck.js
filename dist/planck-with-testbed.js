@@ -2,7 +2,7 @@
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define(["exports"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.planck = {}));
 })(this, function(exports2) {
   "use strict";/**
- * Planck.js v1.4.0
+ * Planck.js v1.4.2
  * @license The MIT license
  * @copyright Copyright (c) 2025 Erin Catto, Ali Shakiba
  *
@@ -1333,10 +1333,6 @@
         if (node.isLeaf()) {
           return;
         }
-        child1.height;
-        child2.height;
-        var aabb = new AABB();
-        aabb.combine(child1.aabb, child2.aabb);
         this.validateMetrics(child1);
         this.validateMetrics(child2);
       };
@@ -3449,7 +3445,6 @@
       Simplex2.prototype.getSearchDirection = function() {
         var v13 = this.m_v1;
         var v22 = this.m_v2;
-        this.m_v3;
         switch (this.m_count) {
           case 1:
             return setVec2(searchDirection_reuse, -v13.w.x, -v13.w.y);
@@ -3469,7 +3464,6 @@
       Simplex2.prototype.getClosestPoint = function() {
         var v13 = this.m_v1;
         var v22 = this.m_v2;
-        this.m_v3;
         switch (this.m_count) {
           case 0:
             return zeroVec2(closestPoint_reuse);
@@ -4468,8 +4462,6 @@
               }
               var indexA = c_3.getChildIndexA();
               var indexB = c_3.getChildIndexB();
-              bA_1.m_sweep;
-              bB_1.m_sweep;
               input.proxyA.set(fA_1.getShape(), indexA);
               input.proxyB.set(fB_1.getShape(), indexB);
               input.sweepA.set(bA_1.m_sweep);
@@ -5478,8 +5470,6 @@
         var bodyB = fixtureB.m_body;
         if (bodyA === null || bodyB === null)
           return minSeparation;
-        bodyA.c_velocity;
-        bodyB.c_velocity;
         var positionA = bodyA.c_position;
         var positionB = bodyB.c_position;
         var localCenterA = this.p_localCenterA;
@@ -5667,8 +5657,6 @@
           return;
         var velocityA = bodyA.c_velocity;
         var velocityB = bodyB.c_velocity;
-        bodyA.c_position;
-        bodyB.c_position;
         var mA = this.v_invMassA;
         var iA = this.v_invIA;
         var mB = this.v_invMassB;
@@ -5709,9 +5697,7 @@
         if (bodyA === null || bodyB === null)
           return;
         var velocityA = bodyA.c_velocity;
-        bodyA.c_position;
         var velocityB = bodyB.c_velocity;
-        bodyB.c_position;
         var mA = this.v_invMassA;
         var iA = this.v_invIA;
         var mB = this.v_invMassB;
@@ -6887,10 +6873,7 @@
         if (vertices.length < 3) {
           return;
         }
-        for (var i = 1; i < vertices.length; ++i) {
-          vertices[i - 1];
-          vertices[i];
-        }
+        var i;
         this.m_vertices = [];
         this.m_count = vertices.length + 1;
         for (var i = 0; i < vertices.length; ++i) {
@@ -6904,10 +6887,7 @@
         return this;
       };
       ChainShape2.prototype._createChain = function(vertices) {
-        for (var i = 1; i < vertices.length; ++i) {
-          vertices[i - 1];
-          vertices[i];
-        }
+        var i;
         this.m_vertices = [];
         this.m_count = vertices.length;
         for (var i = 0; i < vertices.length; ++i) {
@@ -16245,7 +16225,7 @@
         drawingTexture.draw = function(ctx) {
           var pixelRatio = drawingTexture.getDevicePixelRatio();
           ctx.save();
-          ctx.transform(1, 0, 0, 1, -_this.x, -_this.y);
+          ctx.transform(1, 0, 0, 1, 0, 0);
           ctx.lineWidth = 3 / pixelRatio;
           ctx.lineCap = "round";
           for (var drawing = _this.buffer.shift(); drawing; drawing = _this.buffer.shift()) {
@@ -16333,13 +16313,10 @@
         });
         worldNode.setWorld(world);
         stage.prepend(worldNode);
-        var lastX = 0;
-        var lastY = 0;
+        var viewboxMemo = Memo.init();
         stage.tick(function(dt, t) {
-          if (lastX !== _this.x || lastY !== _this.y) {
-            worldNode.offset(_this.x, _this.y);
-            lastX = _this.x;
-            lastY = _this.y;
+          if (viewboxMemo.update(_this.x, _this.y, _this.width, _this.height)) {
+            stage.viewbox(_this);
           }
         });
         worldNode.tick(function(dt, t) {
