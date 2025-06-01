@@ -16,7 +16,7 @@ let bullet: Body;
 let angularVelocity: number;
 
 const ground = world.createBody({
-  type: "dynamic",
+  type: "static",
   position: { x: 0.0, y: 0.0 },
 });
 
