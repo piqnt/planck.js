@@ -8,6 +8,7 @@ import type { AABBValue } from "../src/collision/AABB";
 import { ActiveKeys, Testbed, TestbedInterface } from "../src/util/Testbed";
 import { MouseJoint } from "../src/dynamics/joint/MouseJoint";
 import { WorldComponent, WorldDragEnd, WorldDragMove, WorldDragStart } from "./world-view";
+import { Memo } from "./Memo";
 
 const math_PI = Math.PI;
 
@@ -166,7 +167,7 @@ export class StageTestbed implements TestbedInterface {
     drawingTexture.draw = (ctx: CanvasRenderingContext2D) => {
       const pixelRatio = drawingTexture.getDevicePixelRatio();
       ctx.save();
-      ctx.transform(1, 0, 0, 1, -this.x, -this.y);
+      ctx.transform(1, 0, 0, 1, 0, 0);
       ctx.lineWidth = 3 / pixelRatio;
       ctx.lineCap = "round";
       for (let drawing = this.buffer.shift(); drawing; drawing = this.buffer.shift()) {
@@ -269,14 +270,10 @@ export class StageTestbed implements TestbedInterface {
     // stage.empty();
     stage.prepend(worldNode);
 
-    let lastX = 0;
-    let lastY = 0;
+    const viewboxMemo = Memo.init();
     stage.tick((dt: number, t: number) => {
-      // update camera position
-      if (lastX !== this.x || lastY !== this.y) {
-        worldNode.offset(this.x, this.y);
-        lastX = this.x;
-        lastY = this.y;
+      if (viewboxMemo.update(this.x, this.y, this.width, this.height)) {
+        stage.viewbox(this);
       }
     });
 
