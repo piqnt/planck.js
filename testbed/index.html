@@ -66,7 +66,7 @@
         const option = document.createElement('option');
         option.value = '?example=' + example;
         option.innerHTML = example;
-        option.selected = window.location.search.indexOf(example) > -1;
+        option.selected = window.location.search.indexOf("=" + example) > -1;
         listSelect.appendChild(option);
       }
 
