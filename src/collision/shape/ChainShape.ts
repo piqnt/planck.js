@@ -145,11 +145,13 @@ export class ChainShape extends Shape {
       return;
     }
 
-    for (let i = 1; i < vertices.length; ++i) {
-      const v1 = vertices[i - 1];
-      const v2 = vertices[i];
-      // If the code crashes here, it means your vertices are too close together.
-      if (_ASSERT) console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+    if (_ASSERT) {
+      for (let i = 1; i < vertices.length; ++i) {
+        const v1 = vertices[i - 1];
+        const v2 = vertices[i];
+        // If the code crashes here, it means your vertices are too close together.
+        console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+      }
     }
 
     this.m_vertices = [];
@@ -175,11 +177,13 @@ export class ChainShape extends Shape {
   _createChain(vertices: Vec2Value[]): ChainShape {
     if (_ASSERT) console.assert(this.m_vertices.length == 0 && this.m_count == 0);
     if (_ASSERT) console.assert(vertices.length >= 2);
-    for (let i = 1; i < vertices.length; ++i) {
-      const v1 = vertices[i - 1];
-      const v2 = vertices[i];
-      // If the code crashes here, it means your vertices are too close together.
-      if (_ASSERT) console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+    if (_ASSERT) {
+      for (let i = 1; i < vertices.length; ++i) {
+        const v1 = vertices[i - 1];
+        const v2 = vertices[i];
+        // If the code crashes here, it means your vertices are too close together.
+        console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+      }
     }
 
     this.m_vertices = [];
