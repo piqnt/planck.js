@@ -62,8 +62,10 @@ world.on("post-solve", function (contact, impulse) {
   }
 
   if (maxImpulse > 40.0) {
-    broke = true;
-    world.queueUpdate(breakIt);
+    setTimeout(() => {
+      broke = true;
+      breakIt();
+    });
   }
 });
 
