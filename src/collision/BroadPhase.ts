@@ -8,7 +8,8 @@
  */
 
 import { Vec2Value } from "../common/Vec2";
-import { AABB, AABBValue, RayCastCallback, RayCastInput } from "./AABB";
+import { AABB, AABBValue } from "./AABB";
+import { RayCastCallback, RayCastInput } from "./Raycast";
 import { DynamicTree, DynamicTreeQueryCallback } from "./DynamicTree";
 import { FixtureProxy } from "../dynamics/Fixture";
 

@@ -9,7 +9,8 @@
 
 import * as geo from "../../common/Geo";
 import type { MassData } from "../../dynamics/Body";
-import { AABBValue, RayCastOutput, RayCastInput, AABB } from "../AABB";
+import { AABBValue, AABB } from "../AABB";
+import { RayCastInput, RayCastOutput } from "../Raycast";
 import { DistanceProxy } from "../Distance";
 import { TransformValue } from "../../common/Transform";
 import { Vec2, Vec2Value } from "../../common/Vec2";

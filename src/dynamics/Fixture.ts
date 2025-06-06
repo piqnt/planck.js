@@ -10,7 +10,8 @@
 import * as geo from "../common/Geo";
 import { options } from "../util/options";
 import { Vec2Value } from "../common/Vec2";
-import { AABB, RayCastInput, RayCastOutput } from "../collision/AABB";
+import { AABB } from "../collision/AABB";
+import { RayCastInput, RayCastOutput } from "../collision/Raycast";
 import { Shape, ShapeType } from "../collision/Shape";
 import { Body, MassData } from "./Body";
 import { BroadPhase } from "../collision/BroadPhase";

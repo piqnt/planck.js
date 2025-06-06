@@ -12,7 +12,8 @@ import * as geo from "../../common/Geo";
 import { Shape } from "../Shape";
 import { TransformValue } from "../../common/Transform";
 import { Vec2Value } from "../../common/Vec2";
-import { AABB, AABBValue, RayCastInput, RayCastOutput } from "../AABB";
+import { AABB, AABBValue } from "../AABB";
+import { RayCastInput, RayCastOutput } from "../Raycast";
 import { MassData } from "../../dynamics/Body";
 import { DistanceProxy } from "../Distance";
 

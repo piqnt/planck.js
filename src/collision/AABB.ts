@@ -10,30 +10,11 @@
 import { EPSILON } from "../common/Math";
 import * as geo from "../common/Geo";
 import { Vec2Value } from "../common/Vec2";
+import { RayCastInput, RayCastOutput } from "./Raycast";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
-
-/**
- * Ray-cast input data. The ray extends from `p1` to `p1 + maxFraction * (p2 - p1)`.
- */
-export interface RayCastInput {
-  p1: Vec2Value;
-  p2: Vec2Value;
-  maxFraction: number;
-}
-
-export type RayCastCallback = (subInput: RayCastInput, id: number) => number;
-
-/**
- * Ray-cast output data. The ray hits at `p1 + fraction * (p2 - p1)`,
- * where `p1` and `p2` come from RayCastInput.
- */
-export interface RayCastOutput {
-  normal: Vec2Value;
-  fraction: number;
-}
 
 /** Axis-aligned bounding box */
 export interface AABBValue {

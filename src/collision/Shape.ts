@@ -8,7 +8,8 @@
  */
 
 import type { MassData } from "../dynamics/Body";
-import { RayCastOutput, RayCastInput, AABBValue } from "./AABB";
+import { AABBValue } from "./AABB";
+import { RayCastOutput, RayCastInput } from "./Raycast";
 import { DistanceProxy } from "./Distance";
 import type { TransformValue } from "../common/Transform";
 import type { Vec2Value } from "../common/Vec2";
