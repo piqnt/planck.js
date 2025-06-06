@@ -22,8 +22,8 @@ function buildConfig(configEnv: ConfigEnv, buildTestbed: boolean) {
     define: {
       ASSERT: "false",
       _ASSERT: "false",
-      CONSTRUCTOR_FACTORY: "true",
-      _CONSTRUCTOR_FACTORY: "true",
+      CONSTRUCTOR_FACTORY: "false",
+      _CONSTRUCTOR_FACTORY: "false",
     },
     build: {
       lib: {
