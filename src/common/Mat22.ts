@@ -11,6 +11,7 @@ import { Vec2, Vec2Value } from "./Vec2";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
+/** A 2-by-2 matrix. Stored in column-major order. */
 export interface Mat22Value {
   ex: Vec2Value;
   ey: Vec2Value;

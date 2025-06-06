@@ -14,6 +14,9 @@ import { Vec2, Vec2Value } from "./Vec2";
 /** @internal */ const math_cos = Math.cos;
 /** @internal */ const math_atan2 = Math.atan2;
 
+/**
+ * Rotation
+ */
 export interface RotValue {
   /** sin(angle) */
   s: number;

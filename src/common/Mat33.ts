@@ -12,6 +12,7 @@ import { Vec3, Vec3Value } from "./Vec3";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
+/** A 3-by-3 matrix. Stored in column-major order. */
 export interface Mat33Value {
   ex: Vec3Value;
   ey: Vec3Value;
