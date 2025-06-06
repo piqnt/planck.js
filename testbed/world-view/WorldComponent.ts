@@ -1,6 +1,6 @@
 import * as Stage from "stage-js";
 import {
-  Vec2,
+  geo,
   AABB,
   type Vec2Value,
   type World,
@@ -13,7 +13,6 @@ import {
   PulleyJoint,
   DistanceInput,
   CircleShape,
-  Transform,
   SimplexCache,
   DistanceOutput,
   Distance,
@@ -370,7 +369,7 @@ export function findFixture(world: World, point: Vec2Value, radius: number, filt
   const distanceInput = new DistanceInput();
   distanceInput.useRadii = true;
   distanceInput.proxyB.set(new CircleShape(0.00001), 0);
-  distanceInput.transformB.set(new Transform(point));
+  geo.setTransform(distanceInput.transformB, point.x, point.y, 0);
 
   world.queryAABB(aabb, function (fixture) {
     if (filter && !filter(fixture)) {
@@ -385,14 +384,14 @@ export function findFixture(world: World, point: Vec2Value, radius: number, filt
 
     for (let childIndex = fixture.getShape().getChildCount(); childIndex >= 0; childIndex--) {
       distanceInput.proxyA.set(fixture.getShape(), childIndex);
-      distanceInput.transformA.set(fixture.getBody().getTransform());
+      geo.copyTransform(distanceInput.transformA, fixture.getBody().getTransform());
 
       const cache = new SimplexCache();
       const output = new DistanceOutput();
 
       Distance(output, cache, distanceInput);
 
-      const distance = Vec2.distance(output.pointA, output.pointB);
+      const distance = geo.distVec2(output.pointA, point);
 
       if (distance < bestDistance) {
         bestFixture = fixture;

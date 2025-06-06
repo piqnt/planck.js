@@ -7,13 +7,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from "../../common/Matrix";
+import * as geo from "../../common/Geo";
 import { EPSILON } from "../../common/Math";
-import { Rot } from "../../common/Rot";
-import { Vec2, Vec2Value } from "../../common/Vec2";
+import { Vec2Value } from "../../common/Vec2";
 import { Shape } from "../Shape";
 import { AABBValue, RayCastInput, RayCastOutput } from "../AABB";
-import { Transform, TransformValue } from "../../common/Transform";
+import { TransformValue } from "../../common/Transform";
 import { MassData } from "../../dynamics/Body";
 import { DistanceProxy } from "../Distance";
 
@@ -21,7 +20,7 @@ import { DistanceProxy } from "../Distance";
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_PI = Math.PI;
 
-/** @internal */ const temp = matrix.vec2(0, 0);
+/** @internal */ const temp = geo.vec2(0, 0);
 
 declare module "./CircleShape" {
   /** @hidden @deprecated Use new keyword. */
@@ -38,7 +37,7 @@ export class CircleShape extends Shape {
   static TYPE = "circle" as const;
   /** @hidden */ m_type: "circle";
 
-  /** @hidden */ m_p: Vec2;
+  /** @hidden */ m_p: Vec2Value;
   /** @hidden */ m_radius: number;
 
   constructor(position: Vec2Value, radius?: number);
@@ -52,11 +51,11 @@ export class CircleShape extends Shape {
     super();
 
     this.m_type = CircleShape.TYPE;
-    this.m_p = Vec2.zero();
+    this.m_p = geo.vec2(0, 0);
     this.m_radius = 1;
 
-    if (typeof a === "object" && Vec2.isValid(a)) {
-      this.m_p.setVec2(a);
+    if (typeof a === "object" && geo.isVec2(a)) {
+      geo.copyVec2(this.m_p, a);
 
       if (typeof b === "number") {
         this.m_radius = b;
@@ -94,7 +93,7 @@ export class CircleShape extends Shape {
     return this.m_radius;
   }
 
-  getCenter(): Vec2 {
+  getCenter(): Vec2Value {
     return this.m_p;
   }
 
@@ -107,7 +106,7 @@ export class CircleShape extends Shape {
     const clone = new CircleShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
-    clone.m_p = this.m_p.clone();
+    clone.m_p = geo.vec2(this.m_p.x, this.m_p.y);
     return clone;
   }
 
@@ -126,8 +125,8 @@ export class CircleShape extends Shape {
    * @param p A point in world coordinates.
    */
   testPoint(xf: TransformValue, p: Vec2Value): boolean {
-    const center = matrix.transformVec2(temp, xf, this.m_p);
-    return matrix.distSqrVec2(p, center) <= this.m_radius * this.m_radius;
+    geo.transformVec2(temp, xf, this.m_p);
+    return geo.distSqrVec2(p, temp) <= this.m_radius * this.m_radius;
   }
 
   /**
@@ -138,20 +137,23 @@ export class CircleShape extends Shape {
    * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
-  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean {
+  rayCast(output: RayCastOutput, input: RayCastInput, xf: TransformValue, childIndex: number): boolean {
     // Collision Detection in Interactive 3D Environments by Gino van den Bergen
     // From Section 3.1.2
     // x = s + a * r
     // norm(x) = radius
 
-    const position = Vec2.add(xf.p, Rot.mulVec2(xf.q, this.m_p));
-    const s = Vec2.sub(input.p1, position);
-    const b = Vec2.dot(s, s) - this.m_radius * this.m_radius;
+    const position = geo.vec2(0, 0);
+    geo.transformVec2(position, xf, this.m_p);
+    const s = geo.vec2(0, 0);
+    geo.subVec2(s, input.p1, position);
+    const b = geo.dotVec2(s, s) - this.m_radius * this.m_radius;
 
     // Solve quadratic equation.
-    const r = Vec2.sub(input.p2, input.p1);
-    const c = Vec2.dot(s, r);
-    const rr = Vec2.dot(r, r);
+    const r = geo.vec2(0, 0);
+    geo.subVec2(r, input.p2, input.p1);
+    const c = geo.dotVec2(s, r);
+    const rr = geo.dotVec2(r, r);
     const sigma = c * c - rr * b;
 
     // Check for negative discriminant and short segment.
@@ -166,8 +168,9 @@ export class CircleShape extends Shape {
     if (0.0 <= a && a <= input.maxFraction * rr) {
       a /= rr;
       output.fraction = a;
-      output.normal = Vec2.add(s, Vec2.mulNumVec2(a, r));
-      output.normal.normalize();
+      output.normal = geo.vec2(0, 0);
+      geo.combine2Vec2(output.normal, 1, s, a, r);
+      geo.normalizeVec2(output.normal);
       return true;
     }
 
@@ -183,10 +186,10 @@ export class CircleShape extends Shape {
    * @param childIndex The child shape
    */
   computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
-    const p = matrix.transformVec2(temp, xf, this.m_p);
+    geo.transformVec2(temp, xf, this.m_p);
 
-    matrix.setVec2(aabb.lowerBound, p.x - this.m_radius, p.y - this.m_radius);
-    matrix.setVec2(aabb.upperBound, p.x + this.m_radius, p.y + this.m_radius);
+    geo.setVec2(aabb.lowerBound, temp.x - this.m_radius, temp.y - this.m_radius);
+    geo.setVec2(aabb.upperBound, temp.x + this.m_radius, temp.y + this.m_radius);
   }
 
   /**
@@ -198,9 +201,9 @@ export class CircleShape extends Shape {
    */
   computeMass(massData: MassData, density: number): void {
     massData.mass = density * math_PI * this.m_radius * this.m_radius;
-    matrix.copyVec2(massData.center, this.m_p);
+    geo.copyVec2(massData.center, this.m_p);
     // inertia about the local origin
-    massData.I = massData.mass * (0.5 * this.m_radius * this.m_radius + matrix.lengthSqrVec2(this.m_p));
+    massData.I = massData.mass * (0.5 * this.m_radius * this.m_radius + geo.lengthSqrVec2(this.m_p));
   }
 
   computeDistanceProxy(proxy: DistanceProxy): void {

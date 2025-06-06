@@ -9,9 +9,8 @@
 
 import { options } from "../../util/options";
 import { SettingsInternal as Settings } from "../../Settings";
-import {} from "../../common/Math";
-import { Vec2 } from "../../common/Vec2";
-import { Rot } from "../../common/Rot";
+import * as geo from "../../common/Geo";
+import { Vec2Value } from "../../common/Vec2";
 import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { RevoluteJoint } from "./RevoluteJoint";
@@ -88,24 +87,24 @@ export class GearJoint extends Joint {
   /** @internal */ m_type1: "revolute-joint" | "prismatic-joint";
   /** @internal */ m_type2: "revolute-joint" | "prismatic-joint";
   /** @internal */ m_bodyC: Body;
-  /** @internal */ m_localAnchorC: Vec2;
-  /** @internal */ m_localAnchorA: Vec2;
+  /** @internal */ m_localAnchorC: Vec2Value;
+  /** @internal */ m_localAnchorA: Vec2Value;
   /** @internal */ m_referenceAngleA: number;
-  /** @internal */ m_localAxisC: Vec2;
+  /** @internal */ m_localAxisC: Vec2Value;
   /** @internal */ m_bodyD: Body;
-  /** @internal */ m_localAnchorD: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localAnchorD: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_referenceAngleB: number;
-  /** @internal */ m_localAxisD: Vec2;
+  /** @internal */ m_localAxisD: Vec2Value;
   /** @internal */ m_ratio: number;
   /** @internal */ m_constant: number;
   /** @internal */ m_impulse: number;
 
   // Solver temp
-  /** @internal */ m_lcA: Vec2;
-  /** @internal */ m_lcB: Vec2;
-  /** @internal */ m_lcC: Vec2;
-  /** @internal */ m_lcD: Vec2;
+  /** @internal */ m_lcA: Vec2Value;
+  /** @internal */ m_lcB: Vec2Value;
+  /** @internal */ m_lcC: Vec2Value;
+  /** @internal */ m_lcD: Vec2Value;
   /** @internal */ m_mA: number;
   /** @internal */ m_mB: number;
   /** @internal */ m_mC: number;
@@ -114,8 +113,8 @@ export class GearJoint extends Joint {
   /** @internal */ m_iB: number;
   /** @internal */ m_iC: number;
   /** @internal */ m_iD: number;
-  /** @internal */ m_JvAC: Vec2;
-  /** @internal */ m_JvBD: Vec2;
+  /** @internal */ m_JvAC: Vec2Value;
+  /** @internal */ m_JvBD: Vec2Value;
   /** @internal */ m_JwA: number;
   /** @internal */ m_JwB: number;
   /** @internal */ m_JwC: number;
@@ -183,7 +182,7 @@ export class GearJoint extends Joint {
       this.m_localAnchorC = revolute.m_localAnchorA;
       this.m_localAnchorA = revolute.m_localAnchorB;
       this.m_referenceAngleA = revolute.m_referenceAngle;
-      this.m_localAxisC = Vec2.zero();
+      this.m_localAxisC = geo.vec2(0, 0);
 
       coordinateA = aA - aC - this.m_referenceAngleA;
     } else {
@@ -194,8 +193,11 @@ export class GearJoint extends Joint {
       this.m_localAxisC = prismatic.m_localXAxisA;
 
       const pC = this.m_localAnchorC;
-      const pA = Rot.mulTVec2(xfC.q, Vec2.add(Rot.mulVec2(xfA.q, this.m_localAnchorA), Vec2.sub(xfA.p, xfC.p)));
-      coordinateA = Vec2.dot(pA, this.m_localAxisC) - Vec2.dot(pC, this.m_localAxisC);
+      const pA = geo.vec2(0, 0);
+      geo.rotVec2(pA, xfA.q, this.m_localAnchorA);
+      geo.combine3Vec2(pA, 1, pA, 1, xfA.p, -1, xfC.p);
+      geo.derotVec2(pA, xfC.q, pA);
+      coordinateA = geo.dotVec2(pA, this.m_localAxisC) - geo.dotVec2(pC, this.m_localAxisC);
     }
 
     this.m_bodyD = this.m_joint2.getBodyA();
@@ -212,7 +214,7 @@ export class GearJoint extends Joint {
       this.m_localAnchorD = revolute.m_localAnchorA;
       this.m_localAnchorB = revolute.m_localAnchorB;
       this.m_referenceAngleB = revolute.m_referenceAngle;
-      this.m_localAxisD = Vec2.zero();
+      this.m_localAxisD = geo.vec2(0, 0);
 
       coordinateB = aB - aD - this.m_referenceAngleB;
     } else {
@@ -223,8 +225,11 @@ export class GearJoint extends Joint {
       this.m_localAxisD = prismatic.m_localXAxisA;
 
       const pD = this.m_localAnchorD;
-      const pB = Rot.mulTVec2(xfD.q, Vec2.add(Rot.mulVec2(xfB.q, this.m_localAnchorB), Vec2.sub(xfB.p, xfD.p)));
-      coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
+      const pB = geo.vec2(0, 0);
+      geo.rotVec2(pB, xfB.q, this.m_localAnchorB);
+      geo.combine3Vec2(pB, 1, pB, 1, xfB.p, -1, xfD.p);
+      geo.derotVec2(pB, xfD.q, pB);
+      coordinateB = geo.dotVec2(pB, this.m_localAxisD) - geo.dotVec2(pD, this.m_localAxisD);
     }
 
     this.m_constant = coordinateA + this.m_ratio * coordinateB;
@@ -319,22 +324,25 @@ export class GearJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mulNumVec2(this.m_impulse, this.m_JvAC).mul(inv_dt);
+  getReactionForce(inv_dt: number): Vec2Value {
+    const result = geo.vec2(0, 0);
+    geo.scaleVec2(result, this.m_impulse, this.m_JvAC);
+    geo.mulVec2(result, inv_dt);
+    return result;
   }
 
   /**
@@ -375,40 +383,47 @@ export class GearJoint extends Joint {
     const vD = this.m_bodyD.c_velocity.v;
     let wD = this.m_bodyD.c_velocity.w;
 
-    const qA = Rot.neo(aA);
-    const qB = Rot.neo(aB);
-    const qC = Rot.neo(aC);
-    const qD = Rot.neo(aD);
+    const qA = geo.rotation(aA);
+    const qB = geo.rotation(aB);
+    const qC = geo.rotation(aC);
+    const qD = geo.rotation(aD);
 
     this.m_mass = 0.0;
 
     if (this.m_type1 == RevoluteJoint.TYPE) {
-      this.m_JvAC = Vec2.zero();
+      this.m_JvAC = geo.vec2(0, 0);
       this.m_JwA = 1.0;
       this.m_JwC = 1.0;
       this.m_mass += this.m_iA + this.m_iC;
     } else {
-      const u = Rot.mulVec2(qC, this.m_localAxisC);
-      const rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC);
-      const rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA);
+      const u = geo.vec2(0, 0);
+      geo.rotVec2(u, qC, this.m_localAxisC);
+      const rC = geo.vec2(0, 0);
+      geo.rotSubVec2(rC, qC, this.m_localAnchorC, this.m_lcC);
+      const rA = geo.vec2(0, 0);
+      geo.rotSubVec2(rA, qA, this.m_localAnchorA, this.m_lcA);
       this.m_JvAC = u;
-      this.m_JwC = Vec2.crossVec2Vec2(rC, u);
-      this.m_JwA = Vec2.crossVec2Vec2(rA, u);
+      this.m_JwC = geo.crossVec2Vec2(rC, u);
+      this.m_JwA = geo.crossVec2Vec2(rA, u);
       this.m_mass += this.m_mC + this.m_mA + this.m_iC * this.m_JwC * this.m_JwC + this.m_iA * this.m_JwA * this.m_JwA;
     }
 
     if (this.m_type2 == RevoluteJoint.TYPE) {
-      this.m_JvBD = Vec2.zero();
+      this.m_JvBD = geo.vec2(0, 0);
       this.m_JwB = this.m_ratio;
       this.m_JwD = this.m_ratio;
       this.m_mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
     } else {
-      const u = Rot.mulVec2(qD, this.m_localAxisD);
-      const rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
-      const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
-      this.m_JvBD = Vec2.mulNumVec2(this.m_ratio, u);
-      this.m_JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
-      this.m_JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
+      const u = geo.vec2(0, 0);
+      geo.rotVec2(u, qD, this.m_localAxisD);
+      const rD = geo.vec2(0, 0);
+      geo.rotSubVec2(rD, qD, this.m_localAnchorD, this.m_lcD);
+      const rB = geo.vec2(0, 0);
+      geo.rotSubVec2(rB, qB, this.m_localAnchorB, this.m_lcB);
+      this.m_JvBD = geo.vec2(0, 0);
+      geo.scaleVec2(this.m_JvBD, this.m_ratio, u);
+      this.m_JwD = this.m_ratio * geo.crossVec2Vec2(rD, u);
+      this.m_JwB = this.m_ratio * geo.crossVec2Vec2(rB, u);
       this.m_mass +=
         this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) +
         this.m_iD * this.m_JwD * this.m_JwD +
@@ -419,28 +434,28 @@ export class GearJoint extends Joint {
     this.m_mass = this.m_mass > 0.0 ? 1.0 / this.m_mass : 0.0;
 
     if (step.warmStarting) {
-      vA.addMul(this.m_mA * this.m_impulse, this.m_JvAC);
+      geo.plusScaleVec2(vA, this.m_mA * this.m_impulse, this.m_JvAC);
       wA += this.m_iA * this.m_impulse * this.m_JwA;
 
-      vB.addMul(this.m_mB * this.m_impulse, this.m_JvBD);
+      geo.plusScaleVec2(vB, this.m_mB * this.m_impulse, this.m_JvBD);
       wB += this.m_iB * this.m_impulse * this.m_JwB;
 
-      vC.subMul(this.m_mC * this.m_impulse, this.m_JvAC);
+      geo.minusScaleVec2(vC, this.m_mC * this.m_impulse, this.m_JvAC);
       wC -= this.m_iC * this.m_impulse * this.m_JwC;
 
-      vD.subMul(this.m_mD * this.m_impulse, this.m_JvBD);
+      geo.minusScaleVec2(vD, this.m_mD * this.m_impulse, this.m_JvBD);
       wD -= this.m_iD * this.m_impulse * this.m_JwD;
     } else {
       this.m_impulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    geo.copyVec2(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    geo.copyVec2(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
-    this.m_bodyC.c_velocity.v.setVec2(vC);
+    geo.copyVec2(this.m_bodyC.c_velocity.v, vC);
     this.m_bodyC.c_velocity.w = wC;
-    this.m_bodyD.c_velocity.v.setVec2(vD);
+    geo.copyVec2(this.m_bodyD.c_velocity.v, vD);
     this.m_bodyD.c_velocity.w = wD;
   }
 
@@ -455,28 +470,31 @@ export class GearJoint extends Joint {
     let wD = this.m_bodyD.c_velocity.w;
 
     let Cdot =
-      Vec2.dot(this.m_JvAC, vA) - Vec2.dot(this.m_JvAC, vC) + Vec2.dot(this.m_JvBD, vB) - Vec2.dot(this.m_JvBD, vD);
+      geo.dotVec2(this.m_JvAC, vA) -
+      geo.dotVec2(this.m_JvAC, vC) +
+      geo.dotVec2(this.m_JvBD, vB) -
+      geo.dotVec2(this.m_JvBD, vD);
     Cdot += this.m_JwA * wA - this.m_JwC * wC + (this.m_JwB * wB - this.m_JwD * wD);
 
     const impulse = -this.m_mass * Cdot;
     this.m_impulse += impulse;
 
-    vA.addMul(this.m_mA * impulse, this.m_JvAC);
+    geo.plusScaleVec2(vA, this.m_mA * impulse, this.m_JvAC);
     wA += this.m_iA * impulse * this.m_JwA;
-    vB.addMul(this.m_mB * impulse, this.m_JvBD);
+    geo.plusScaleVec2(vB, this.m_mB * impulse, this.m_JvBD);
     wB += this.m_iB * impulse * this.m_JwB;
-    vC.subMul(this.m_mC * impulse, this.m_JvAC);
+    geo.minusScaleVec2(vC, this.m_mC * impulse, this.m_JvAC);
     wC -= this.m_iC * impulse * this.m_JwC;
-    vD.subMul(this.m_mD * impulse, this.m_JvBD);
+    geo.minusScaleVec2(vD, this.m_mD * impulse, this.m_JvBD);
     wD -= this.m_iD * impulse * this.m_JwD;
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    geo.copyVec2(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    geo.copyVec2(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
-    this.m_bodyC.c_velocity.v.setVec2(vC);
+    geo.copyVec2(this.m_bodyC.c_velocity.v, vC);
     this.m_bodyC.c_velocity.w = wC;
-    this.m_bodyD.c_velocity.v.setVec2(vD);
+    geo.copyVec2(this.m_bodyD.c_velocity.v, vD);
     this.m_bodyD.c_velocity.w = wD;
   }
 
@@ -493,18 +511,18 @@ export class GearJoint extends Joint {
     const cD = this.m_bodyD.c_position.c;
     let aD = this.m_bodyD.c_position.a;
 
-    const qA = Rot.neo(aA);
-    const qB = Rot.neo(aB);
-    const qC = Rot.neo(aC);
-    const qD = Rot.neo(aD);
+    const qA = geo.rotation(aA);
+    const qB = geo.rotation(aB);
+    const qC = geo.rotation(aC);
+    const qD = geo.rotation(aD);
 
     const linearError = 0.0;
 
     let coordinateA: number;
     let coordinateB: number;
 
-    let JvAC: Vec2;
-    let JvBD: Vec2;
+    let JvAC = geo.vec2(0, 0);
+    let JvBD = geo.vec2(0, 0);
     let JwA: number;
     let JwB: number;
     let JwC: number;
@@ -512,45 +530,57 @@ export class GearJoint extends Joint {
     let mass = 0.0;
 
     if (this.m_type1 == RevoluteJoint.TYPE) {
-      JvAC = Vec2.zero();
+      JvAC = geo.vec2(0, 0);
       JwA = 1.0;
       JwC = 1.0;
       mass += this.m_iA + this.m_iC;
 
       coordinateA = aA - aC - this.m_referenceAngleA;
     } else {
-      const u = Rot.mulVec2(qC, this.m_localAxisC);
-      const rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC);
-      const rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA);
+      const u = geo.vec2(0, 0);
+      geo.rotVec2(u, qC, this.m_localAxisC);
+      const rC = geo.vec2(0, 0);
+      geo.rotSubVec2(rC, qC, this.m_localAnchorC, this.m_lcC);
+      const rA = geo.vec2(0, 0);
+      geo.rotSubVec2(rA, qA, this.m_localAnchorA, this.m_lcA);
       JvAC = u;
-      JwC = Vec2.crossVec2Vec2(rC, u);
-      JwA = Vec2.crossVec2Vec2(rA, u);
+      JwC = geo.crossVec2Vec2(rC, u);
+      JwA = geo.crossVec2Vec2(rA, u);
       mass += this.m_mC + this.m_mA + this.m_iC * JwC * JwC + this.m_iA * JwA * JwA;
 
-      const pC = Vec2.sub(this.m_localAnchorC, this.m_lcC);
-      const pA = Rot.mulTVec2(qC, Vec2.add(rA, Vec2.sub(cA, cC)));
-      coordinateA = Vec2.dot(Vec2.sub(pA, pC), this.m_localAxisC);
+      const pC = geo.vec2(0, 0);
+      geo.subVec2(pC, this.m_localAnchorC, this.m_lcC);
+      const pA = geo.vec2(0, 0);
+      geo.combine3Vec2(pA, 1, rA, 1, cA, -1, cC);
+      geo.derotVec2(pA, qC, pA);
+      coordinateA = geo.dotVec2(pA, this.m_localAxisC) - geo.dotVec2(pC, this.m_localAxisC);
     }
 
     if (this.m_type2 == RevoluteJoint.TYPE) {
-      JvBD = Vec2.zero();
+      JvBD = geo.vec2(0, 0);
       JwB = this.m_ratio;
       JwD = this.m_ratio;
       mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
 
       coordinateB = aB - aD - this.m_referenceAngleB;
     } else {
-      const u = Rot.mulVec2(qD, this.m_localAxisD);
-      const rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
-      const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
-      JvBD = Vec2.mulNumVec2(this.m_ratio, u);
-      JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
-      JwB = this.m_ratio * Vec2.crossVec2Vec2(rB, u);
+      const u = geo.vec2(0, 0);
+      geo.rotVec2(u, qD, this.m_localAxisD);
+      const rD = geo.vec2(0, 0);
+      geo.rotSubVec2(rD, qD, this.m_localAnchorD, this.m_lcD);
+      const rB = geo.vec2(0, 0);
+      geo.rotSubVec2(rB, qB, this.m_localAnchorB, this.m_lcB);
+      geo.scaleVec2(JvBD, this.m_ratio, u);
+      JwD = this.m_ratio * geo.crossVec2Vec2(rD, u);
+      JwB = this.m_ratio * geo.crossVec2Vec2(rB, u);
       mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD * JwD * JwD + this.m_iB * JwB * JwB;
 
-      const pD = Vec2.sub(this.m_localAnchorD, this.m_lcD);
-      const pB = Rot.mulTVec2(qD, Vec2.add(rB, Vec2.sub(cB, cD)));
-      coordinateB = Vec2.dot(pB, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
+      const pD = geo.vec2(0, 0);
+      geo.subVec2(pD, this.m_localAnchorD, this.m_lcD);
+      const pB = geo.vec2(0, 0);
+      geo.combine3Vec2(pB, 1, rB, 1, cB, -1, cD);
+      geo.derotVec2(pB, qD, pB);
+      coordinateB = geo.dotVec2(pB, this.m_localAxisD) - geo.dotVec2(pD, this.m_localAxisD);
     }
 
     const C = coordinateA + this.m_ratio * coordinateB - this.m_constant;
@@ -560,22 +590,22 @@ export class GearJoint extends Joint {
       impulse = -C / mass;
     }
 
-    cA.addMul(this.m_mA * impulse, JvAC);
+    geo.plusScaleVec2(cA, this.m_mA * impulse, JvAC);
     aA += this.m_iA * impulse * JwA;
-    cB.addMul(this.m_mB * impulse, JvBD);
+    geo.plusScaleVec2(cB, this.m_mB * impulse, JvBD);
     aB += this.m_iB * impulse * JwB;
-    cC.subMul(this.m_mC * impulse, JvAC);
+    geo.minusScaleVec2(cC, this.m_mC * impulse, JvAC);
     aC -= this.m_iC * impulse * JwC;
-    cD.subMul(this.m_mD * impulse, JvBD);
+    geo.minusScaleVec2(cD, this.m_mD * impulse, JvBD);
     aD -= this.m_iD * impulse * JwD;
 
-    this.m_bodyA.c_position.c.setVec2(cA);
+    geo.copyVec2(this.m_bodyA.c_position.c, cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.setVec2(cB);
+    geo.copyVec2(this.m_bodyB.c_position.c, cB);
     this.m_bodyB.c_position.a = aB;
-    this.m_bodyC.c_position.c.setVec2(cC);
+    geo.copyVec2(this.m_bodyC.c_position.c, cC);
     this.m_bodyC.c_position.a = aC;
-    this.m_bodyD.c_position.c.setVec2(cD);
+    geo.copyVec2(this.m_bodyD.c_position.c, cD);
     this.m_bodyD.c_position.a = aD;
 
     // TODO_ERIN not implemented

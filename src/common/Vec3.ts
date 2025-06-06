@@ -29,7 +29,11 @@ declare module "./Vec3" {
   function Vec3(): Vec3;
 }
 
-/** 3D vector */
+/**
+ * 3D vector
+ *
+ * @deprecated Use Vec3Value and geo functions instead.
+ */
 // @ts-expect-error
 export class Vec3 {
   x: number;

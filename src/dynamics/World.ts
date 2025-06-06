@@ -8,7 +8,8 @@
  */
 
 import { options } from "../util/options";
-import { Vec2, Vec2Value } from "../common/Vec2";
+import * as geo from "../common/Geo";
+import { Vec2Value } from "../common/Vec2";
 import { BroadPhase } from "../collision/BroadPhase";
 import { Solver, ContactImpulse, TimeStep } from "./Solver";
 import { Body, BodyDef } from "./Body";
@@ -48,7 +49,7 @@ export interface WorldDef {
 }
 
 /** @internal */ const DEFAULTS: WorldDef = {
-  gravity: Vec2.zero(),
+  gravity: geo.vec2(0, 0),
   allowSleep: true,
   warmStarting: true,
   continuousPhysics: true,
@@ -77,7 +78,7 @@ export interface WorldDef {
  *
  * @returns A number to update the maxFraction
  */
-export type WorldRayCastCallback = (fixture: Fixture, point: Vec2, normal: Vec2, fraction: number) => number;
+export type WorldRayCastCallback = (fixture: Fixture, point: Vec2Value, normal: Vec2Value, fraction: number) => number;
 
 /**
  * Called for each fixture found in the query AABB. It may return `false` to terminate the query.
@@ -90,7 +91,7 @@ declare module "./World" {
   function World(deg: WorldDef): World;
   /** @hidden @deprecated Use new keyword. */
   // @ts-expect-error
-  function World(gravity: Vec2): World;
+  function World(gravity: Vec2Value): World;
   /** @hidden @deprecated Use new keyword. */
   // @ts-expect-error
   function World(): World;
@@ -114,7 +115,7 @@ export class World {
   /** @internal */ m_jointCount: number;
   /** @internal */ m_stepComplete: boolean;
   /** @internal */ m_allowSleep: boolean;
-  /** @internal */ m_gravity: Vec2;
+  /** @internal */ m_gravity: Vec2Value;
   /** @internal */ m_clearForces: boolean;
   /** @internal */ m_newFixture: boolean;
   /** @internal */ m_locked: boolean;
@@ -145,8 +146,8 @@ export class World {
 
     if (!def) {
       def = {};
-    } else if (Vec2.isValid(def)) {
-      def = { gravity: def as Vec2 };
+    } else if (geo.isVec2(def)) {
+      def = { gravity: def as Vec2Value };
     }
 
     def = options(def, DEFAULTS) as WorldDef;
@@ -167,7 +168,8 @@ export class World {
     this.m_stepComplete = true;
 
     this.m_allowSleep = def.allowSleep;
-    this.m_gravity = Vec2.clone(def.gravity);
+    this.m_gravity = geo.vec2(0, 0);
+    geo.copyVec2(this.m_gravity, def.gravity);
 
     this.m_clearForces = true;
     this.m_newFixture = false;
@@ -286,13 +288,13 @@ export class World {
    * Change the global gravity vector.
    */
   setGravity(gravity: Vec2Value): void {
-    this.m_gravity.set(gravity);
+    geo.copyVec2(this.m_gravity, gravity);
   }
 
   /**
    * Get the global gravity vector.
    */
-  getGravity(): Vec2 {
+  getGravity(): Vec2Value {
     return this.m_gravity;
   }
 
@@ -383,7 +385,7 @@ export class World {
    */
   clearForces(): void {
     for (let body = this.m_bodyList; body; body = body.getNext()) {
-      body.m_force.setZero();
+      geo.zeroVec2(body.m_force);
       body.m_torque = 0.0;
     }
   }
@@ -433,7 +435,8 @@ export class World {
         const hit = fixture.rayCast(output, input, index);
         if (hit) {
           const fraction = output.fraction;
-          const point = Vec2.add(Vec2.mulNumVec2(1.0 - fraction, input.p1), Vec2.mulNumVec2(fraction, input.p2));
+          const point = geo.vec2(0, 0);
+          geo.combine2Vec2(point, 1.0 - fraction, input.p1, fraction, input.p2);
           return callback(fixture, point, output.normal, fraction);
         }
         return input.maxFraction;
@@ -485,9 +488,9 @@ export class World {
     }
 
     for (let b = this.m_bodyList; b; b = b.m_next) {
-      b.m_xf.p.sub(newOrigin);
-      b.m_sweep.c0.sub(newOrigin);
-      b.m_sweep.c.sub(newOrigin);
+      geo.minusVec2(b.m_xf.p, newOrigin);
+      geo.minusVec2(b.m_sweep.c0, newOrigin);
+      geo.minusVec2(b.m_sweep.c, newOrigin);
     }
 
     for (let j = this.m_jointList; j; j = j.m_next) {
@@ -531,7 +534,7 @@ export class World {
 
     let def: BodyDef = {};
     if (!arg1) {
-    } else if (Vec2.isValid(arg1)) {
+    } else if (geo.isVec2(arg1)) {
       def = { position: arg1, angle: arg2 };
     } else if (typeof arg1 === "object") {
       def = arg1;
@@ -548,7 +551,7 @@ export class World {
   createDynamicBody(arg1?, arg2?) {
     let def: BodyDef = {};
     if (!arg1) {
-    } else if (Vec2.isValid(arg1)) {
+    } else if (geo.isVec2(arg1)) {
       def = { position: arg1, angle: arg2 };
     } else if (typeof arg1 === "object") {
       def = arg1;
@@ -563,7 +566,7 @@ export class World {
   createKinematicBody(arg1?, arg2?) {
     let def: BodyDef = {};
     if (!arg1) {
-    } else if (Vec2.isValid(arg1)) {
+    } else if (geo.isVec2(arg1)) {
       def = { position: arg1, angle: arg2 };
     } else if (typeof arg1 === "object") {
       def = arg1;

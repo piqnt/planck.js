@@ -7,7 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from "../common/Matrix";
+import * as geo from "../common/Geo";
 import { options } from "../util/options";
 import { Vec2Value } from "../common/Vec2";
 import { AABB, RayCastInput, RayCastOutput } from "../collision/AABB";
@@ -21,7 +21,7 @@ import { Style } from "../util/Testbed";
 
 /** @internal */ const synchronize_aabb1 = new AABB();
 /** @internal */ const synchronize_aabb2 = new AABB();
-/** @internal */ const displacement = matrix.vec2(0, 0);
+/** @internal */ const displacement = geo.vec2(0, 0);
 
 /**
  * A fixture definition is used to create a fixture. This class defines an
@@ -402,7 +402,7 @@ export class Fixture {
 
       proxy.aabb.combine(synchronize_aabb1, synchronize_aabb2);
 
-      matrix.subVec2(displacement, xf2.p, xf1.p);
+      geo.subVec2(displacement, xf2.p, xf1.p);
 
       broadPhase.moveProxy(proxy.proxyId, proxy.aabb, displacement);
     }

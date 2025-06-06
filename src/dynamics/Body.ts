@@ -7,12 +7,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from "../common/Matrix";
+import * as geo from "../common/Geo";
 import { options } from "../util/options";
-import { Vec2, Vec2Value } from "../common/Vec2";
-import { Rot } from "../common/Rot";
+import { Vec2Value } from "../common/Vec2";
 import { Sweep } from "../common/Sweep";
-import { Transform, TransformValue } from "../common/Transform";
+import { TransformValue } from "../common/Transform";
 import { Velocity } from "./Velocity";
 import { Position } from "./Position";
 import { Fixture, FixtureDef, FixtureOpt } from "./Fixture";
@@ -49,11 +48,10 @@ export type BodyType = "static" | "kinematic" | "dynamic";
 /** @internal */ const KINEMATIC = "kinematic";
 /** @internal */ const DYNAMIC = "dynamic";
 
-/** @internal */ const oldCenter = matrix.vec2(0, 0);
-/** @internal */ const localCenter = matrix.vec2(0, 0);
-/** @internal */ const shift = matrix.vec2(0, 0);
-/** @internal */ const temp = matrix.vec2(0, 0);
-/** @internal */ const xf = matrix.transform(0, 0, 0);
+/** @internal */ const oldCenter = geo.vec2(0, 0);
+/** @internal */ const localCenter = geo.vec2(0, 0);
+/** @internal */ const shift = geo.vec2(0, 0);
+/** @internal */ const xf = geo.transform(0, 0, 0);
 
 export interface BodyDef {
   /**
@@ -122,10 +120,10 @@ export interface BodyDef {
 
 /** @internal */ const BodyDefDefault: BodyDef = {
   type: STATIC,
-  position: Vec2.zero(),
+  position: geo.vec2(0, 0),
   angle: 0.0,
 
-  linearVelocity: Vec2.zero(),
+  linearVelocity: geo.vec2(0, 0),
   angularVelocity: 0.0,
 
   linearDamping: 0.0,
@@ -183,15 +181,15 @@ export class Body {
   m_I: number;
   /** @internal */ m_invI: number;
   /** @internal the body origin transform */
-  m_xf: Transform;
+  m_xf: TransformValue;
   /** @internal the swept motion for CCD */
   m_sweep: Sweep;
   // position and velocity correction
   /** @internal */ c_velocity: Velocity;
   /** @internal */ c_position: Position;
-  /** @internal */ m_force: Vec2;
+  /** @internal */ m_force: Vec2Value;
   /** @internal */ m_torque: number;
-  /** @internal */ m_linearVelocity: Vec2;
+  /** @internal */ m_linearVelocity: Vec2Value;
   /** @internal */ m_angularVelocity: number;
   /** @internal */ m_linearDamping: number;
   /** @internal */ m_angularDamping: number;
@@ -214,8 +212,8 @@ export class Body {
   constructor(world: World, def: BodyDef) {
     def = options(def, BodyDefDefault);
 
-    if (_ASSERT) console.assert(Vec2.isValid(def.position));
-    if (_ASSERT) console.assert(Vec2.isValid(def.linearVelocity));
+    if (_ASSERT) console.assert(geo.isVec2(def.position));
+    if (_ASSERT) console.assert(geo.isVec2(def.linearVelocity));
     if (_ASSERT) console.assert(Number.isFinite(def.angle));
     if (_ASSERT) console.assert(Number.isFinite(def.angularVelocity));
     if (_ASSERT) console.assert(Number.isFinite(def.angularDamping) && def.angularDamping >= 0.0);
@@ -248,9 +246,7 @@ export class Body {
     this.m_invI = 0.0;
 
     // the body origin transform
-    this.m_xf = Transform.identity();
-    this.m_xf.p.setVec2(def.position);
-    this.m_xf.q.setAngle(def.angle);
+    this.m_xf = geo.transform(def.position.x, def.position.y, def.angle);
 
     // the swept motion for CCD
     this.m_sweep = new Sweep();
@@ -260,10 +256,11 @@ export class Body {
     this.c_velocity = new Velocity();
     this.c_position = new Position();
 
-    this.m_force = Vec2.zero();
+    this.m_force = geo.vec2(0, 0);
     this.m_torque = 0.0;
 
-    this.m_linearVelocity = Vec2.clone(def.linearVelocity);
+    this.m_linearVelocity = geo.vec2(0, 0);
+    geo.copyVec2(this.m_linearVelocity, def.linearVelocity);
     this.m_angularVelocity = def.angularVelocity;
 
     this.m_linearDamping = def.linearDamping;
@@ -296,7 +293,7 @@ export class Body {
       type: this.m_type,
       bullet: this.m_bulletFlag,
       position: this.m_xf.p,
-      angle: this.m_xf.q.getAngle(),
+      angle: geo.getRotAngle(this.m_xf.q),
       linearVelocity: this.m_linearVelocity,
       angularVelocity: this.m_angularVelocity,
       fixtures,
@@ -412,7 +409,7 @@ export class Body {
     this.resetMassData();
 
     if (this.m_type == STATIC) {
-      this.m_linearVelocity.setZero();
+      geo.zeroVec2(this.m_linearVelocity);
       this.m_angularVelocity = 0.0;
       this.m_sweep.forward();
       this.synchronizeFixtures();
@@ -420,7 +417,7 @@ export class Body {
 
     this.setAwake(true);
 
-    this.m_force.setZero();
+    geo.zeroVec2(this.m_force);
     this.m_torque = 0.0;
 
     // Delete the attached contacts.
@@ -479,9 +476,9 @@ export class Body {
     } else {
       this.m_awakeFlag = false;
       this.m_sleepTime = 0.0;
-      this.m_linearVelocity.setZero();
+      geo.zeroVec2(this.m_linearVelocity);
       this.m_angularVelocity = 0.0;
-      this.m_force.setZero();
+      geo.zeroVec2(this.m_force);
       this.m_torque = 0.0;
     }
   }
@@ -562,7 +559,7 @@ export class Body {
   /**
    * Get the world transform for the body's origin.
    */
-  getTransform(): Transform {
+  getTransform(): TransformValue {
     return this.m_xf;
   }
 
@@ -584,16 +581,16 @@ export class Body {
    *
    * Warning: This function is locked when a world simulation step is in progress. Use queueUpdate to schedule a function to be called after the step.
    */
-  setTransform(xf: Transform): void;
-  setTransform(a: Vec2Value | Transform, b?: number): void {
+  setTransform(xf: TransformValue): void;
+  setTransform(a: Vec2Value | TransformValue, b?: number): void {
     if (_ASSERT) console.assert(this.isWorldLocked() == false);
     if (this.isWorldLocked() == true) {
       return;
     }
     if (typeof b === "number") {
-      this.m_xf.setNum(a as Vec2Value, b);
+      geo.setTransform(this.m_xf, (a as Vec2Value).x, (a as Vec2Value).y, b);
     } else {
-      this.m_xf.setTransform(a as TransformValue);
+      geo.copyTransform(this.m_xf, a as TransformValue);
     }
 
     this.m_sweep.setTransform(this.m_xf);
@@ -627,7 +624,7 @@ export class Body {
   advance(alpha: number): void {
     // Advance to the new safe time. This doesn't sync the broad-phase.
     this.m_sweep.advance(alpha);
-    matrix.copyVec2(this.m_sweep.c, this.m_sweep.c0);
+    geo.copyVec2(this.m_sweep.c, this.m_sweep.c0);
     this.m_sweep.a = this.m_sweep.a0;
     this.m_sweep.getTransform(this.m_xf, 1);
   }
@@ -635,7 +632,7 @@ export class Body {
   /**
    * Get the world position for the body's origin.
    */
-  getPosition(): Vec2 {
+  getPosition(): Vec2Value {
     return this.m_xf.p;
   }
 
@@ -657,14 +654,14 @@ export class Body {
   /**
    * Get the world position of the center of mass.
    */
-  getWorldCenter(): Vec2 {
+  getWorldCenter(): Vec2Value {
     return this.m_sweep.c;
   }
 
   /**
    * Get the local position of the center of mass.
    */
-  getLocalCenter(): Vec2 {
+  getLocalCenter(): Vec2Value {
     return this.m_sweep.localCenter;
   }
 
@@ -673,7 +670,7 @@ export class Body {
    *
    * @return the linear velocity of the center of mass.
    */
-  getLinearVelocity(): Vec2 {
+  getLinearVelocity(): Vec2Value {
     return this.m_linearVelocity;
   }
 
@@ -682,9 +679,13 @@ export class Body {
    *
    * @param worldPoint A point in world coordinates.
    */
-  getLinearVelocityFromWorldPoint(worldPoint: Vec2Value): Vec2 {
-    const localCenter = Vec2.sub(worldPoint, this.m_sweep.c);
-    return Vec2.add(this.m_linearVelocity, Vec2.crossNumVec2(this.m_angularVelocity, localCenter));
+  getLinearVelocityFromWorldPoint(worldPoint: Vec2Value): Vec2Value {
+    const localCenter = geo.vec2(0, 0);
+    geo.subVec2(localCenter, worldPoint, this.m_sweep.c);
+    const result = geo.vec2(0, 0);
+    geo.copyVec2(result, this.m_linearVelocity);
+    geo.plusCrossNumVec2(result, this.m_angularVelocity, localCenter);
+    return result;
   }
 
   /**
@@ -692,7 +693,7 @@ export class Body {
    *
    * @param localPoint A point in local coordinates.
    */
-  getLinearVelocityFromLocalPoint(localPoint: Vec2Value): Vec2 {
+  getLinearVelocityFromLocalPoint(localPoint: Vec2Value): Vec2Value {
     return this.getLinearVelocityFromWorldPoint(this.getWorldPoint(localPoint));
   }
 
@@ -705,10 +706,10 @@ export class Body {
     if (this.m_type == STATIC) {
       return;
     }
-    if (Vec2.dot(v, v) > 0.0) {
+    if (geo.lengthSqrVec2(v) > 0.0) {
       this.setAwake(true);
     }
-    this.m_linearVelocity.setVec2(v);
+    geo.copyVec2(this.m_linearVelocity, v);
   }
 
   /**
@@ -777,7 +778,7 @@ export class Body {
    * @return the rotational inertia, usually in kg-m^2.
    */
   getInertia(): number {
-    return this.m_I + this.m_mass * Vec2.dot(this.m_sweep.localCenter, this.m_sweep.localCenter);
+    return this.m_I + this.m_mass * geo.dotVec2(this.m_sweep.localCenter, this.m_sweep.localCenter);
   }
 
   /**
@@ -786,7 +787,7 @@ export class Body {
   getMassData(data: MassData): void {
     data.mass = this.m_mass;
     data.I = this.getInertia();
-    matrix.copyVec2(data.center, this.m_sweep.localCenter);
+    geo.copyVec2(data.center, this.m_sweep.localCenter);
   }
 
   /**
@@ -800,12 +801,12 @@ export class Body {
     this.m_invMass = 0.0;
     this.m_I = 0.0;
     this.m_invI = 0.0;
-    matrix.zeroVec2(this.m_sweep.localCenter);
+    geo.zeroVec2(this.m_sweep.localCenter);
 
     // Static and kinematic bodies have zero mass.
     if (this.isStatic() || this.isKinematic()) {
-      matrix.copyVec2(this.m_sweep.c0, this.m_xf.p);
-      matrix.copyVec2(this.m_sweep.c, this.m_xf.p);
+      geo.copyVec2(this.m_sweep.c0, this.m_xf.p);
+      geo.copyVec2(this.m_sweep.c, this.m_xf.p);
       this.m_sweep.a0 = this.m_sweep.a;
       return;
     }
@@ -813,7 +814,7 @@ export class Body {
     if (_ASSERT) console.assert(this.isDynamic());
 
     // Accumulate mass over all fixtures.
-    matrix.zeroVec2(localCenter);
+    geo.zeroVec2(localCenter);
     for (let f = this.m_fixtureList; f; f = f.m_next) {
       if (f.m_density == 0.0) {
         continue;
@@ -821,19 +822,19 @@ export class Body {
 
       const massData: MassData = {
         mass: 0,
-        center: matrix.vec2(0, 0),
+        center: geo.vec2(0, 0),
         I: 0,
       };
       f.getMassData(massData);
       this.m_mass += massData.mass;
-      matrix.plusScaleVec2(localCenter, massData.mass, massData.center);
+      geo.plusScaleVec2(localCenter, massData.mass, massData.center);
       this.m_I += massData.I;
     }
 
     // Compute center of mass.
     if (this.m_mass > 0.0) {
       this.m_invMass = 1.0 / this.m_mass;
-      matrix.scaleVec2(localCenter, this.m_invMass, localCenter);
+      geo.scaleVec2(localCenter, this.m_invMass, localCenter);
     } else {
       // Force all dynamic bodies to have a positive mass.
       this.m_mass = 1.0;
@@ -842,7 +843,7 @@ export class Body {
 
     if (this.m_I > 0.0 && this.m_fixedRotationFlag == false) {
       // Center the inertia about the center of mass.
-      this.m_I -= this.m_mass * matrix.dotVec2(localCenter, localCenter);
+      this.m_I -= this.m_mass * geo.dotVec2(localCenter, localCenter);
       if (_ASSERT) console.assert(this.m_I > 0.0);
       this.m_invI = 1.0 / this.m_I;
     } else {
@@ -851,13 +852,12 @@ export class Body {
     }
 
     // Move center of mass.
-    matrix.copyVec2(oldCenter, this.m_sweep.c);
+    geo.copyVec2(oldCenter, this.m_sweep.c);
     this.m_sweep.setLocalCenter(localCenter, this.m_xf);
 
     // Update center of mass velocity.
-    matrix.subVec2(shift, this.m_sweep.c, oldCenter);
-    matrix.crossNumVec2(temp, this.m_angularVelocity, shift);
-    matrix.plusVec2(this.m_linearVelocity, temp);
+    geo.subVec2(shift, this.m_sweep.c, oldCenter);
+    geo.plusCrossNumVec2(this.m_linearVelocity, this.m_angularVelocity, shift);
   }
 
   /**
@@ -892,19 +892,18 @@ export class Body {
     this.m_invMass = 1.0 / this.m_mass;
 
     if (massData.I > 0.0 && this.m_fixedRotationFlag == false) {
-      this.m_I = massData.I - this.m_mass * matrix.dotVec2(massData.center, massData.center);
+      this.m_I = massData.I - this.m_mass * geo.dotVec2(massData.center, massData.center);
       if (_ASSERT) console.assert(this.m_I > 0.0);
       this.m_invI = 1.0 / this.m_I;
     }
 
     // Move center of mass.
-    matrix.copyVec2(oldCenter, this.m_sweep.c);
+    geo.copyVec2(oldCenter, this.m_sweep.c);
     this.m_sweep.setLocalCenter(massData.center, this.m_xf);
 
     // Update center of mass velocity.
-    matrix.subVec2(shift, this.m_sweep.c, oldCenter);
-    matrix.crossNumVec2(temp, this.m_angularVelocity, shift);
-    matrix.plusVec2(this.m_linearVelocity, temp);
+    geo.subVec2(shift, this.m_sweep.c, oldCenter);
+    geo.plusCrossNumVec2(this.m_linearVelocity, this.m_angularVelocity, shift);
   }
 
   /**
@@ -925,8 +924,8 @@ export class Body {
     }
     // Don't accumulate a force if the body is sleeping.
     if (this.m_awakeFlag) {
-      this.m_force.add(force);
-      this.m_torque += Vec2.crossVec2Vec2(Vec2.sub(point, this.m_sweep.c), force);
+      geo.plusVec2(this.m_force, force);
+      this.m_torque += geo.crossVec2Vec2(point, force) - geo.crossVec2Vec2(this.m_sweep.c, force);
     }
   }
 
@@ -945,7 +944,7 @@ export class Body {
     }
     // Don't accumulate a force if the body is sleeping
     if (this.m_awakeFlag) {
-      this.m_force.add(force);
+      geo.plusVec2(this.m_force, force);
     }
   }
 
@@ -988,8 +987,9 @@ export class Body {
 
     // Don't accumulate velocity if the body is sleeping
     if (this.m_awakeFlag) {
-      this.m_linearVelocity.addMul(this.m_invMass, impulse);
-      this.m_angularVelocity += this.m_invI * Vec2.crossVec2Vec2(Vec2.sub(point, this.m_sweep.c), impulse);
+      geo.plusScaleVec2(this.m_linearVelocity, this.m_invMass, impulse);
+      this.m_angularVelocity +=
+        this.m_invI * (geo.crossVec2Vec2(point, impulse) - geo.crossVec2Vec2(this.m_sweep.c, impulse));
     }
   }
 
@@ -1163,28 +1163,36 @@ export class Body {
   /**
    * Get the corresponding world point of a local point.
    */
-  getWorldPoint(localPoint: Vec2Value): Vec2 {
-    return Transform.mulVec2(this.m_xf, localPoint);
+  getWorldPoint(localPoint: Vec2Value): Vec2Value {
+    const result = geo.vec2(0, 0);
+    geo.transformVec2(result, this.m_xf, localPoint);
+    return result;
   }
 
   /**
    * Get the corresponding world vector of a local vector.
    */
-  getWorldVector(localVector: Vec2Value): Vec2 {
-    return Rot.mulVec2(this.m_xf.q, localVector);
+  getWorldVector(localVector: Vec2Value): Vec2Value {
+    const result = geo.vec2(0, 0);
+    geo.rotVec2(result, this.m_xf.q, localVector);
+    return result;
   }
 
   /**
    * Gets the corresponding local point of a world point.
    */
-  getLocalPoint(worldPoint: Vec2Value): Vec2 {
-    return Transform.mulTVec2(this.m_xf, worldPoint);
+  getLocalPoint(worldPoint: Vec2Value): Vec2Value {
+    const result = geo.vec2(0, 0);
+    geo.detransformVec2(result, this.m_xf, worldPoint);
+    return result;
   }
 
   /**
    * Gets the corresponding local vector of a world vector.
    */
-  getLocalVector(worldVector: Vec2Value): Vec2 {
-    return Rot.mulTVec2(this.m_xf.q, worldVector);
+  getLocalVector(worldVector: Vec2Value): Vec2Value {
+    const result = geo.vec2(0, 0);
+    geo.derotVec2(result, this.m_xf.q, worldVector);
+    return result;
   }
 }

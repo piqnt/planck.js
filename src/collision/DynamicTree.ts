@@ -8,8 +8,9 @@
  */
 
 import { SettingsInternal as Settings } from "../Settings";
+import * as geo from "../common/Geo";
 import { Pool } from "../util/Pool";
-import { Vec2, Vec2Value } from "../common/Vec2";
+import { Vec2Value } from "../common/Vec2";
 import { AABB, AABBValue, RayCastCallback, RayCastInput } from "./AABB";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
@@ -167,7 +168,7 @@ export class DynamicTree<T> {
    */
   moveProxy(id: number, aabb: AABBValue, d: Vec2Value): boolean {
     if (_ASSERT) console.assert(AABB.isValid(aabb));
-    if (_ASSERT) console.assert(!d || Vec2.isValid(d));
+    if (_ASSERT) console.assert(!d || geo.isVec2(d));
 
     const node = this.m_nodes[id];
 
@@ -761,13 +762,16 @@ export class DynamicTree<T> {
     if (_ASSERT) console.assert(typeof rayCastCallback === "function");
     const p1 = input.p1;
     const p2 = input.p2;
-    const r = Vec2.sub(p2, p1);
-    if (_ASSERT) console.assert(r.lengthSquared() > 0.0);
-    r.normalize();
+    const r = geo.vec2(0, 0);
+    geo.subVec2(r, p2, p1);
+    if (_ASSERT) console.assert(geo.lengthSqrVec2(r) > 0.0);
+    geo.normalizeVec2(r);
 
     // v is perpendicular to the segment.
-    const v = Vec2.crossNumVec2(1.0, r);
-    const abs_v = Vec2.abs(v);
+    const v = geo.vec2(0, 0);
+    geo.crossNumVec2(v, 1.0, r);
+    const abs_v = geo.vec2(0, 0);
+    geo.absVec2(abs_v, v);
 
     // Separating axis for segment (Gino, p80).
     // |dot(v, p1 - c)| > dot(|v|, h)
@@ -776,7 +780,8 @@ export class DynamicTree<T> {
 
     // Build a bounding box for the segment.
     const segmentAABB = new AABB();
-    let t = Vec2.combine(1 - maxFraction, p1, maxFraction, p2);
+    const t = geo.vec2(0, 0);
+    geo.combine2Vec2(t, 1 - maxFraction, p1, maxFraction, p2);
     segmentAABB.combinePoints(p1, t);
 
     const stack = this.stackPool.allocate();
@@ -797,14 +802,16 @@ export class DynamicTree<T> {
       // |dot(v, p1 - c)| > dot(|v|, h)
       const c = node.aabb.getCenter();
       const h = node.aabb.getExtents();
-      const separation = math_abs(Vec2.dot(v, Vec2.sub(p1, c))) - Vec2.dot(abs_v, h);
+      const separation = math_abs(geo.dotVec2(v, p1) - geo.dotVec2(v, c)) - geo.dotVec2(abs_v, h);
       if (separation > 0.0) {
         continue;
       }
 
       if (node.isLeaf()) {
-        subInput.p1 = Vec2.clone(input.p1);
-        subInput.p2 = Vec2.clone(input.p2);
+        subInput.p1 = geo.vec2(0, 0);
+        subInput.p2 = geo.vec2(0, 0);
+        geo.copyVec2(subInput.p1, input.p1);
+        geo.copyVec2(subInput.p2, input.p2);
         subInput.maxFraction = maxFraction;
 
         const value = rayCastCallback(subInput, node.id);
@@ -815,7 +822,7 @@ export class DynamicTree<T> {
         } else if (value > 0.0) {
           // update segment bounding box.
           maxFraction = value;
-          t = Vec2.combine(1 - maxFraction, p1, maxFraction, p2);
+          geo.combine2Vec2(t, 1 - maxFraction, p1, maxFraction, p2);
           segmentAABB.combinePoints(p1, t);
         }
       } else {

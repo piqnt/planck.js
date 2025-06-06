@@ -28,6 +28,8 @@ declare module "./Transform" {
  * A transform contains translation and rotation. It is used to represent the
  * position and orientation of rigid frames. Initialize using a position vector
  * and a rotation.
+ * 
+ * @deprecated Use TransformValue and geo functions instead.
  */
 // @ts-expect-error
 export class Transform {

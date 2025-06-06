@@ -7,11 +7,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from "../common/Matrix";
+import * as geo from "../common/Geo";
 import { ShapeType } from "../collision/Shape";
 import { clamp } from "../common/Math";
 import { TransformValue } from "../common/Transform";
-import { Mat22 } from "../common/Mat22";
+import { Mat22Value } from "../common/Mat22";
 import { SettingsInternal as Settings } from "../Settings";
 import { Manifold, ManifoldType, WorldManifold } from "../collision/Manifold";
 import { testOverlap } from "../collision/Distance";
@@ -97,8 +97,8 @@ export function mixRestitution(restitution1: number, restitution2: number): numb
 
 // TODO: merge with ManifoldPoint?
 export class VelocityConstraintPoint {
-  rA = matrix.vec2(0, 0);
-  rB = matrix.vec2(0, 0);
+  rA = geo.vec2(0, 0);
+  rB = geo.vec2(0, 0);
   normalImpulse = 0;
   tangentImpulse = 0;
   normalMass = 0;
@@ -106,8 +106,8 @@ export class VelocityConstraintPoint {
   velocityBias = 0;
 
   recycle() {
-    matrix.zeroVec2(this.rA);
-    matrix.zeroVec2(this.rB);
+    geo.zeroVec2(this.rA);
+    geo.zeroVec2(this.rB);
     this.normalImpulse = 0;
     this.tangentImpulse = 0;
     this.normalMass = 0;
@@ -116,32 +116,31 @@ export class VelocityConstraintPoint {
   }
 }
 
-/** @internal */ const cA = matrix.vec2(0, 0);
-/** @internal */ const vA = matrix.vec2(0, 0);
-/** @internal */ const cB = matrix.vec2(0, 0);
-/** @internal */ const vB = matrix.vec2(0, 0);
-/** @internal */ const tangent = matrix.vec2(0, 0);
-/** @internal */ const xfA = matrix.transform(0, 0, 0);
-/** @internal */ const xfB = matrix.transform(0, 0, 0);
-/** @internal */ const pointA = matrix.vec2(0, 0);
-/** @internal */ const pointB = matrix.vec2(0, 0);
-/** @internal */ const clipPoint = matrix.vec2(0, 0);
-/** @internal */ const planePoint = matrix.vec2(0, 0);
-/** @internal */ const rA = matrix.vec2(0, 0);
-/** @internal */ const rB = matrix.vec2(0, 0);
-/** @internal */ const P = matrix.vec2(0, 0);
-/** @internal */ const normal = matrix.vec2(0, 0);
-/** @internal */ const point = matrix.vec2(0, 0);
-/** @internal */ const dv = matrix.vec2(0, 0);
-/** @internal */ const dv1 = matrix.vec2(0, 0);
-/** @internal */ const dv2 = matrix.vec2(0, 0);
-/** @internal */ const b = matrix.vec2(0, 0);
-/** @internal */ const a = matrix.vec2(0, 0);
-/** @internal */ const x = matrix.vec2(0, 0);
-/** @internal */ const d = matrix.vec2(0, 0);
-/** @internal */ const P1 = matrix.vec2(0, 0);
-/** @internal */ const P2 = matrix.vec2(0, 0);
-/** @internal */ const temp = matrix.vec2(0, 0);
+/** @internal */ const cA = geo.vec2(0, 0);
+/** @internal */ const vA = geo.vec2(0, 0);
+/** @internal */ const cB = geo.vec2(0, 0);
+/** @internal */ const vB = geo.vec2(0, 0);
+/** @internal */ const tangent = geo.vec2(0, 0);
+/** @internal */ const xfA = geo.transform(0, 0, 0);
+/** @internal */ const xfB = geo.transform(0, 0, 0);
+/** @internal */ const pointA = geo.vec2(0, 0);
+/** @internal */ const pointB = geo.vec2(0, 0);
+/** @internal */ const clipPoint = geo.vec2(0, 0);
+/** @internal */ const planePoint = geo.vec2(0, 0);
+/** @internal */ const rA = geo.vec2(0, 0);
+/** @internal */ const rB = geo.vec2(0, 0);
+/** @internal */ const P = geo.vec2(0, 0);
+/** @internal */ const normal = geo.vec2(0, 0);
+/** @internal */ const point = geo.vec2(0, 0);
+/** @internal */ const dv = geo.vec2(0, 0);
+/** @internal */ const dv1 = geo.vec2(0, 0);
+/** @internal */ const dv2 = geo.vec2(0, 0);
+/** @internal */ const b = geo.vec2(0, 0);
+/** @internal */ const a = geo.vec2(0, 0);
+/** @internal */ const x = geo.vec2(0, 0);
+/** @internal */ const d = geo.vec2(0, 0);
+/** @internal */ const P1 = geo.vec2(0, 0);
+/** @internal */ const P2 = geo.vec2(0, 0);
 
 /**
  * The class manages contact between two shapes. A contact exists for each
@@ -183,9 +182,9 @@ export class Contact {
 
   // VelocityConstraint
   /** @internal */ v_points = [new VelocityConstraintPoint(), new VelocityConstraintPoint()]; // [maxManifoldPoints];
-  /** @internal */ v_normal = matrix.vec2(0, 0);
-  /** @internal */ v_normalMass: Mat22 = new Mat22();
-  /** @internal */ v_K: Mat22 = new Mat22();
+  /** @internal */ v_normal = geo.vec2(0, 0);
+  /** @internal */ v_normalMass: Mat22Value = geo.mat22();
+  /** @internal */ v_K: Mat22Value = geo.mat22();
   /** @internal */ v_pointCount = 0;
   /** @internal */ v_tangentSpeed = 0;
   /** @internal */ v_friction = 0;
@@ -196,11 +195,11 @@ export class Contact {
   /** @internal */ v_invIB = 0;
 
   // PositionConstraint
-  /** @internal */ p_localPoints = [matrix.vec2(0, 0), matrix.vec2(0, 0)]; // [maxManifoldPoints];
-  /** @internal */ p_localNormal = matrix.vec2(0, 0);
-  /** @internal */ p_localPoint = matrix.vec2(0, 0);
-  /** @internal */ p_localCenterA = matrix.vec2(0, 0);
-  /** @internal */ p_localCenterB = matrix.vec2(0, 0);
+  /** @internal */ p_localPoints = [geo.vec2(0, 0), geo.vec2(0, 0)]; // [maxManifoldPoints];
+  /** @internal */ p_localNormal = geo.vec2(0, 0);
+  /** @internal */ p_localPoint = geo.vec2(0, 0);
+  /** @internal */ p_localCenterA = geo.vec2(0, 0);
+  /** @internal */ p_localCenterB = geo.vec2(0, 0);
   /** @internal */ p_type = ManifoldType.e_unset;
   /** @internal */ p_radiusA = 0;
   /** @internal */ p_radiusB = 0;
@@ -254,9 +253,9 @@ export class Contact {
     for (const point of this.v_points) {
       point.recycle();
     }
-    matrix.zeroVec2(this.v_normal);
-    this.v_normalMass.setZero();
-    this.v_K.setZero();
+    geo.zeroVec2(this.v_normal);
+    geo.zeroMat22(this.v_normalMass);
+    geo.zeroMat22(this.v_K);
     this.v_pointCount = 0;
     this.v_tangentSpeed = 0;
     this.v_friction = 0;
@@ -268,12 +267,12 @@ export class Contact {
 
     // PositionConstraint
     for (const point of this.p_localPoints) {
-      matrix.zeroVec2(point);
+      geo.zeroVec2(point);
     }
-    matrix.zeroVec2(this.p_localNormal);
-    matrix.zeroVec2(this.p_localPoint);
-    matrix.zeroVec2(this.p_localCenterA);
-    matrix.zeroVec2(this.p_localCenterB);
+    geo.zeroVec2(this.p_localNormal);
+    geo.zeroVec2(this.p_localPoint);
+    geo.zeroVec2(this.p_localCenterA);
+    geo.zeroVec2(this.p_localCenterB);
     this.p_type = ManifoldType.e_unset;
     this.p_radiusA = 0;
     this.p_radiusB = 0;
@@ -311,27 +310,27 @@ export class Contact {
 
     this.v_pointCount = pointCount;
 
-    this.v_K.setZero();
-    this.v_normalMass.setZero();
+    geo.zeroMat22(this.v_K);
+    geo.zeroMat22(this.v_normalMass);
 
     this.p_invMassA = bodyA.m_invMass;
     this.p_invMassB = bodyB.m_invMass;
     this.p_invIA = bodyA.m_invI;
     this.p_invIB = bodyB.m_invI;
-    matrix.copyVec2(this.p_localCenterA, bodyA.m_sweep.localCenter);
-    matrix.copyVec2(this.p_localCenterB, bodyB.m_sweep.localCenter);
+    geo.copyVec2(this.p_localCenterA, bodyA.m_sweep.localCenter);
+    geo.copyVec2(this.p_localCenterB, bodyB.m_sweep.localCenter);
 
     this.p_radiusA = shapeA.m_radius;
     this.p_radiusB = shapeB.m_radius;
 
     this.p_type = manifold.type;
-    matrix.copyVec2(this.p_localNormal, manifold.localNormal);
-    matrix.copyVec2(this.p_localPoint, manifold.localPoint);
+    geo.copyVec2(this.p_localNormal, manifold.localNormal);
+    geo.copyVec2(this.p_localPoint, manifold.localPoint);
     this.p_pointCount = pointCount;
 
     for (let j = 0; j < Settings.maxManifoldPoints; ++j) {
       this.v_points[j].recycle();
-      matrix.zeroVec2(this.p_localPoints[j]);
+      geo.zeroVec2(this.p_localPoints[j]);
     }
 
     for (let j = 0; j < pointCount; ++j) {
@@ -341,7 +340,7 @@ export class Contact {
         vcp.normalImpulse = step.dtRatio * cp.normalImpulse;
         vcp.tangentImpulse = step.dtRatio * cp.tangentImpulse;
       }
-      matrix.copyVec2(this.p_localPoints[j], cp.localPoint);
+      geo.copyVec2(this.p_localPoints[j], cp.localPoint);
     }
   }
 
@@ -648,10 +647,10 @@ export class Contact {
       iB = this.p_invIB;
     }
 
-    matrix.copyVec2(cA, positionA.c);
+    geo.copyVec2(cA, positionA.c);
     let aA = positionA.a;
 
-    matrix.copyVec2(cB, positionB.c);
+    geo.copyVec2(cB, positionB.c);
     let aB = positionB.a;
 
     // Solve normal constraints
@@ -663,37 +662,36 @@ export class Contact {
       let separation: number;
       switch (this.p_type) {
         case ManifoldType.e_circles: {
-          matrix.transformVec2(pointA, xfA, this.p_localPoint);
-          matrix.transformVec2(pointB, xfB, this.p_localPoints[0]);
-          matrix.subVec2(normal, pointB, pointA);
-          matrix.normalizeVec2(normal);
+          geo.transformVec2(pointA, xfA, this.p_localPoint);
+          geo.transformVec2(pointB, xfB, this.p_localPoints[0]);
+          geo.subVec2(normal, pointB, pointA);
+          geo.normalizeVec2(normal);
 
-          matrix.combine2Vec2(point, 0.5, pointA, 0.5, pointB);
-          separation =
-            matrix.dotVec2(pointB, normal) - matrix.dotVec2(pointA, normal) - this.p_radiusA - this.p_radiusB;
+          geo.combine2Vec2(point, 0.5, pointA, 0.5, pointB);
+          separation = geo.dotVec2(pointB, normal) - geo.dotVec2(pointA, normal) - this.p_radiusA - this.p_radiusB;
           break;
         }
 
         case ManifoldType.e_faceA: {
-          matrix.rotVec2(normal, xfA.q, this.p_localNormal);
-          matrix.transformVec2(planePoint, xfA, this.p_localPoint);
-          matrix.transformVec2(clipPoint, xfB, this.p_localPoints[j]);
+          geo.rotVec2(normal, xfA.q, this.p_localNormal);
+          geo.transformVec2(planePoint, xfA, this.p_localPoint);
+          geo.transformVec2(clipPoint, xfB, this.p_localPoints[j]);
           separation =
-            matrix.dotVec2(clipPoint, normal) - matrix.dotVec2(planePoint, normal) - this.p_radiusA - this.p_radiusB;
-          matrix.copyVec2(point, clipPoint);
+            geo.dotVec2(clipPoint, normal) - geo.dotVec2(planePoint, normal) - this.p_radiusA - this.p_radiusB;
+          geo.copyVec2(point, clipPoint);
           break;
         }
 
         case ManifoldType.e_faceB: {
-          matrix.rotVec2(normal, xfB.q, this.p_localNormal);
-          matrix.transformVec2(planePoint, xfB, this.p_localPoint);
-          matrix.transformVec2(clipPoint, xfA, this.p_localPoints[j]);
+          geo.rotVec2(normal, xfB.q, this.p_localNormal);
+          geo.transformVec2(planePoint, xfB, this.p_localPoint);
+          geo.transformVec2(clipPoint, xfA, this.p_localPoints[j]);
           separation =
-            matrix.dotVec2(clipPoint, normal) - matrix.dotVec2(planePoint, normal) - this.p_radiusA - this.p_radiusB;
-          matrix.copyVec2(point, clipPoint);
+            geo.dotVec2(clipPoint, normal) - geo.dotVec2(planePoint, normal) - this.p_radiusA - this.p_radiusB;
+          geo.copyVec2(point, clipPoint);
 
           // Ensure normal points from A to B
-          matrix.negVec2(normal);
+          geo.negVec2(normal);
           break;
         }
         // todo: what should we do here?
@@ -702,8 +700,8 @@ export class Contact {
         }
       }
 
-      matrix.subVec2(rA, point, cA);
-      matrix.subVec2(rB, point, cB);
+      geo.subVec2(rA, point, cA);
+      geo.subVec2(rB, point, cB);
 
       // Track max constraint error.
       minSeparation = math_min(minSeparation, separation);
@@ -716,26 +714,26 @@ export class Contact {
       const C = clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0.0);
 
       // Compute the effective mass.
-      const rnA = matrix.crossVec2Vec2(rA, normal);
-      const rnB = matrix.crossVec2Vec2(rB, normal);
+      const rnA = geo.crossVec2Vec2(rA, normal);
+      const rnB = geo.crossVec2Vec2(rB, normal);
       const K = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
 
       // Compute normal impulse
       const impulse = K > 0.0 ? -C / K : 0.0;
 
-      matrix.scaleVec2(P, impulse, normal);
+      geo.scaleVec2(P, impulse, normal);
 
-      matrix.minusScaleVec2(cA, mA, P);
-      aA -= iA * matrix.crossVec2Vec2(rA, P);
+      geo.minusScaleVec2(cA, mA, P);
+      aA -= iA * geo.crossVec2Vec2(rA, P);
 
-      matrix.plusScaleVec2(cB, mB, P);
-      aB += iB * matrix.crossVec2Vec2(rB, P);
+      geo.plusScaleVec2(cB, mB, P);
+      aB += iB * geo.crossVec2Vec2(rB, P);
     }
 
-    matrix.copyVec2(positionA.c, cA);
+    geo.copyVec2(positionA.c, cA);
     positionA.a = aA;
 
-    matrix.copyVec2(positionB.c, cB);
+    geo.copyVec2(positionB.c, cB);
     positionB.a = aB;
 
     return minSeparation;
@@ -766,14 +764,14 @@ export class Contact {
     const localCenterA = this.p_localCenterA;
     const localCenterB = this.p_localCenterB;
 
-    matrix.copyVec2(cA, positionA.c);
+    geo.copyVec2(cA, positionA.c);
     const aA = positionA.a;
-    matrix.copyVec2(vA, velocityA.v);
+    geo.copyVec2(vA, velocityA.v);
     const wA = velocityA.w;
 
-    matrix.copyVec2(cB, positionB.c);
+    geo.copyVec2(cB, positionB.c);
     const aB = positionB.a;
-    matrix.copyVec2(vB, velocityB.v);
+    geo.copyVec2(vB, velocityB.v);
     const wB = velocityB.w;
 
     if (_ASSERT) console.assert(manifold.pointCount > 0);
@@ -784,26 +782,26 @@ export class Contact {
     worldManifold.recycle();
     manifold.getWorldManifold(worldManifold, xfA, radiusA, xfB, radiusB);
 
-    matrix.copyVec2(this.v_normal, worldManifold.normal);
+    geo.copyVec2(this.v_normal, worldManifold.normal);
 
     for (let j = 0; j < this.v_pointCount; ++j) {
       const vcp = this.v_points[j]; // VelocityConstraintPoint
       const wmp = worldManifold.points[j];
 
-      matrix.subVec2(vcp.rA, wmp, cA);
-      matrix.subVec2(vcp.rB, wmp, cB);
+      geo.subVec2(vcp.rA, wmp, cA);
+      geo.subVec2(vcp.rB, wmp, cB);
 
-      const rnA = matrix.crossVec2Vec2(vcp.rA, this.v_normal);
-      const rnB = matrix.crossVec2Vec2(vcp.rB, this.v_normal);
+      const rnA = geo.crossVec2Vec2(vcp.rA, this.v_normal);
+      const rnB = geo.crossVec2Vec2(vcp.rB, this.v_normal);
 
       const kNormal = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
 
       vcp.normalMass = kNormal > 0.0 ? 1.0 / kNormal : 0.0;
 
-      matrix.crossVec2Num(tangent, this.v_normal, 1.0);
+      geo.crossVec2Num(tangent, this.v_normal, 1.0);
 
-      const rtA = matrix.crossVec2Vec2(vcp.rA, tangent);
-      const rtB = matrix.crossVec2Vec2(vcp.rB, tangent);
+      const rtA = geo.crossVec2Vec2(vcp.rA, tangent);
+      const rtB = geo.crossVec2Vec2(vcp.rB, tangent);
 
       const kTangent = mA + mB + iA * rtA * rtA + iB * rtB * rtB;
 
@@ -811,11 +809,8 @@ export class Contact {
 
       // Setup a velocity bias for restitution.
       vcp.velocityBias = 0.0;
-      let vRel = 0;
-      vRel += matrix.dotVec2(this.v_normal, vB);
-      vRel += matrix.dotVec2(this.v_normal, matrix.crossNumVec2(temp, wB, vcp.rB));
-      vRel -= matrix.dotVec2(this.v_normal, vA);
-      vRel -= matrix.dotVec2(this.v_normal, matrix.crossNumVec2(temp, wA, vcp.rA));
+      geo.dvp(dv, vB, wB, vcp.rB, vA, wA, vcp.rA);
+      const vRel = geo.dotVec2(this.v_normal, dv);
       if (vRel < -Settings.velocityThreshold) {
         vcp.velocityBias = -this.v_restitution * vRel;
       }
@@ -826,10 +821,10 @@ export class Contact {
       const vcp1 = this.v_points[0]; // VelocityConstraintPoint
       const vcp2 = this.v_points[1]; // VelocityConstraintPoint
 
-      const rn1A = matrix.crossVec2Vec2(vcp1.rA, this.v_normal);
-      const rn1B = matrix.crossVec2Vec2(vcp1.rB, this.v_normal);
-      const rn2A = matrix.crossVec2Vec2(vcp2.rA, this.v_normal);
-      const rn2B = matrix.crossVec2Vec2(vcp2.rB, this.v_normal);
+      const rn1A = geo.crossVec2Vec2(vcp1.rA, this.v_normal);
+      const rn1B = geo.crossVec2Vec2(vcp1.rB, this.v_normal);
+      const rn2A = geo.crossVec2Vec2(vcp2.rA, this.v_normal);
+      const rn2B = geo.crossVec2Vec2(vcp2.rB, this.v_normal);
 
       const k11 = mA + mB + iA * rn1A * rn1A + iB * rn1B * rn1B;
       const k22 = mA + mB + iA * rn2A * rn2A + iB * rn2B * rn2B;
@@ -839,8 +834,8 @@ export class Contact {
       const k_maxConditionNumber = 1000.0;
       if (k11 * k11 < k_maxConditionNumber * (k11 * k22 - k12 * k12)) {
         // K is safe to invert.
-        this.v_K.ex.setNum(k11, k12);
-        this.v_K.ey.setNum(k12, k22);
+        geo.setVec2(this.v_K.ex, k11, k12);
+        geo.setVec2(this.v_K.ey, k12, k22);
         // this.v_normalMass.set(this.v_K.getInverse());
         const a = this.v_K.ex.x;
         const b = this.v_K.ey.x;
@@ -861,14 +856,14 @@ export class Contact {
       }
     }
 
-    matrix.copyVec2(positionA.c, cA);
+    geo.copyVec2(positionA.c, cA);
     positionA.a = aA;
-    matrix.copyVec2(velocityA.v, vA);
+    geo.copyVec2(velocityA.v, vA);
     velocityA.w = wA;
 
-    matrix.copyVec2(positionB.c, cB);
+    geo.copyVec2(positionB.c, cB);
     positionB.a = aB;
-    matrix.copyVec2(velocityB.v, vB);
+    geo.copyVec2(velocityB.v, vB);
     velocityB.w = wB;
   }
 
@@ -890,28 +885,28 @@ export class Contact {
     const mB = this.v_invMassB;
     const iB = this.v_invIB;
 
-    matrix.copyVec2(vA, velocityA.v);
+    geo.copyVec2(vA, velocityA.v);
     let wA = velocityA.w;
-    matrix.copyVec2(vB, velocityB.v);
+    geo.copyVec2(vB, velocityB.v);
     let wB = velocityB.w;
 
-    matrix.copyVec2(normal, this.v_normal);
-    matrix.crossVec2Num(tangent, normal, 1.0);
+    geo.copyVec2(normal, this.v_normal);
+    geo.crossVec2Num(tangent, normal, 1.0);
 
     for (let j = 0; j < this.v_pointCount; ++j) {
       const vcp = this.v_points[j]; // VelocityConstraintPoint
 
-      matrix.combine2Vec2(P, vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
+      geo.combine2Vec2(P, vcp.normalImpulse, normal, vcp.tangentImpulse, tangent);
 
-      wA -= iA * matrix.crossVec2Vec2(vcp.rA, P);
-      matrix.minusScaleVec2(vA, mA, P);
-      wB += iB * matrix.crossVec2Vec2(vcp.rB, P);
-      matrix.plusScaleVec2(vB, mB, P);
+      wA -= iA * geo.crossVec2Vec2(vcp.rA, P);
+      geo.minusScaleVec2(vA, mA, P);
+      wB += iB * geo.crossVec2Vec2(vcp.rB, P);
+      geo.plusScaleVec2(vB, mB, P);
     }
 
-    matrix.copyVec2(velocityA.v, vA);
+    geo.copyVec2(velocityA.v, vA);
     velocityA.w = wA;
-    matrix.copyVec2(velocityB.v, vB);
+    geo.copyVec2(velocityB.v, vB);
     velocityB.w = wB;
   }
 
@@ -942,13 +937,13 @@ export class Contact {
     const mB = this.v_invMassB;
     const iB = this.v_invIB;
 
-    matrix.copyVec2(vA, velocityA.v);
+    geo.copyVec2(vA, velocityA.v);
     let wA = velocityA.w;
-    matrix.copyVec2(vB, velocityB.v);
+    geo.copyVec2(vB, velocityB.v);
     let wB = velocityB.w;
 
-    matrix.copyVec2(normal, this.v_normal);
-    matrix.crossVec2Num(tangent, normal, 1.0);
+    geo.copyVec2(normal, this.v_normal);
+    geo.crossVec2Num(tangent, normal, 1.0);
     const friction = this.v_friction;
 
     if (_ASSERT) console.assert(this.v_pointCount == 1 || this.v_pointCount == 2);
@@ -959,14 +954,10 @@ export class Contact {
       const vcp = this.v_points[j]; // VelocityConstraintPoint
 
       // Relative velocity at contact
-      matrix.zeroVec2(dv);
-      matrix.plusVec2(dv, vB);
-      matrix.plusVec2(dv, matrix.crossNumVec2(temp, wB, vcp.rB));
-      matrix.minusVec2(dv, vA);
-      matrix.minusVec2(dv, matrix.crossNumVec2(temp, wA, vcp.rA));
+      geo.dvp(dv, vB, wB, vcp.rB, vA, wA, vcp.rA);
 
       // Compute tangent force
-      const vt = matrix.dotVec2(dv, tangent) - this.v_tangentSpeed;
+      const vt = geo.dotVec2(dv, tangent) - this.v_tangentSpeed;
       let lambda = vcp.tangentMass * -vt;
 
       // Clamp the accumulated force
@@ -976,13 +967,13 @@ export class Contact {
       vcp.tangentImpulse = newImpulse;
 
       // Apply contact impulse
-      matrix.scaleVec2(P, lambda, tangent);
+      geo.scaleVec2(P, lambda, tangent);
 
-      matrix.minusScaleVec2(vA, mA, P);
-      wA -= iA * matrix.crossVec2Vec2(vcp.rA, P);
+      geo.minusScaleVec2(vA, mA, P);
+      wA -= iA * geo.crossVec2Vec2(vcp.rA, P);
 
-      matrix.plusScaleVec2(vB, mB, P);
-      wB += iB * matrix.crossVec2Vec2(vcp.rB, P);
+      geo.plusScaleVec2(vB, mB, P);
+      wB += iB * geo.crossVec2Vec2(vcp.rB, P);
     }
 
     // Solve normal constraints
@@ -991,14 +982,10 @@ export class Contact {
         const vcp = this.v_points[i]; // VelocityConstraintPoint
 
         // Relative velocity at contact
-        matrix.zeroVec2(dv);
-        matrix.plusVec2(dv, vB);
-        matrix.plusVec2(dv, matrix.crossNumVec2(temp, wB, vcp.rB));
-        matrix.minusVec2(dv, vA);
-        matrix.minusVec2(dv, matrix.crossNumVec2(temp, wA, vcp.rA));
+        geo.dvp(dv, vB, wB, vcp.rB, vA, wA, vcp.rA);
 
         // Compute normal impulse
-        const vn = matrix.dotVec2(dv, normal);
+        const vn = geo.dotVec2(dv, normal);
         let lambda = -vcp.normalMass * (vn - vcp.velocityBias);
 
         // Clamp the accumulated impulse
@@ -1007,13 +994,13 @@ export class Contact {
         vcp.normalImpulse = newImpulse;
 
         // Apply contact impulse
-        matrix.scaleVec2(P, lambda, normal);
+        geo.scaleVec2(P, lambda, normal);
 
-        matrix.minusScaleVec2(vA, mA, P);
-        wA -= iA * matrix.crossVec2Vec2(vcp.rA, P);
+        geo.minusScaleVec2(vA, mA, P);
+        wA -= iA * geo.crossVec2Vec2(vcp.rA, P);
 
-        matrix.plusScaleVec2(vB, mB, P);
-        wB += iB * matrix.crossVec2Vec2(vcp.rB, P);
+        geo.plusScaleVec2(vB, mB, P);
+        wB += iB * geo.crossVec2Vec2(vcp.rB, P);
       }
     } else {
       // Block solver developed in collaboration with Dirk Gregorius (back in
@@ -1059,29 +1046,18 @@ export class Contact {
       const vcp1 = this.v_points[0]; // VelocityConstraintPoint
       const vcp2 = this.v_points[1]; // VelocityConstraintPoint
 
-      matrix.setVec2(a, vcp1.normalImpulse, vcp2.normalImpulse);
+      geo.setVec2(a, vcp1.normalImpulse, vcp2.normalImpulse);
       if (_ASSERT) console.assert(a.x >= 0.0 && a.y >= 0.0);
 
       // Relative velocity at contact
-      // let dv1 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp1.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp1.rA));
-      matrix.zeroVec2(dv1);
-      matrix.plusVec2(dv1, vB);
-      matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
-      matrix.minusVec2(dv1, vA);
-      matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
-
-      // let dv2 = Vec2.zero().add(vB).add(Vec2.crossNumVec2(wB, vcp2.rB)).sub(vA).sub(Vec2.crossNumVec2(wA, vcp2.rA));
-      matrix.zeroVec2(dv2);
-      matrix.plusVec2(dv2, vB);
-      matrix.plusVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
-      matrix.minusVec2(dv2, vA);
-      matrix.minusVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
+      geo.dvp(dv1, vB, wB, vcp1.rB, vA, wA, vcp1.rA);
+      geo.dvp(dv2, vB, wB, vcp2.rB, vA, wA, vcp2.rA);
 
       // Compute normal velocity
-      let vn1 = matrix.dotVec2(dv1, normal);
-      let vn2 = matrix.dotVec2(dv2, normal);
+      let vn1 = geo.dotVec2(dv1, normal);
+      let vn2 = geo.dotVec2(dv2, normal);
 
-      matrix.setVec2(b, vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
+      geo.setVec2(b, vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
 
       // Compute b'
       // b.sub(Mat22.mulVec2(this.v_K, a));
@@ -1102,25 +1078,24 @@ export class Contact {
         // x = - inv(A) * b'
         //
         // const x = Mat22.mulVec2(this.v_normalMass, b).neg();
-        matrix.zeroVec2(x);
         x.x = -(this.v_normalMass.ex.x * b.x + this.v_normalMass.ey.x * b.y);
         x.y = -(this.v_normalMass.ex.y * b.x + this.v_normalMass.ey.y * b.y);
 
         if (x.x >= 0.0 && x.y >= 0.0) {
           // Get the incremental impulse
-          matrix.subVec2(d, x, a);
+          geo.subVec2(d, x, a);
 
           // Apply incremental impulse
-          matrix.scaleVec2(P1, d.x, normal);
-          matrix.scaleVec2(P2, d.y, normal);
+          geo.scaleVec2(P1, d.x, normal);
+          geo.scaleVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
-          matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
-          wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
+          geo.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
+          wA -= iA * (geo.crossVec2Vec2(vcp1.rA, P1) + geo.crossVec2Vec2(vcp2.rA, P2));
 
           // vB.addCombine(mB, P1, mB, P2);
-          matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
-          wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
+          geo.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
+          wB += iB * (geo.crossVec2Vec2(vcp1.rB, P1) + geo.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate
           vcp1.normalImpulse = x.x;
@@ -1128,21 +1103,12 @@ export class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            matrix.zeroVec2(dv1);
-            matrix.plusVec2(dv1, vB);
-            matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
-            matrix.minusVec2(dv1, vA);
-            matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
-
-            matrix.zeroVec2(dv2);
-            matrix.plusVec2(dv2, vB);
-            matrix.plusVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
-            matrix.minusVec2(dv2, vA);
-            matrix.minusVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
+            geo.dvp(dv1, vB, wB, vcp1.rB, vA, wA, vcp1.rA);
+            geo.dvp(dv2, vB, wB, vcp2.rB, vA, wA, vcp2.rA);
 
             // Compute normal velocity
-            vn1 = matrix.dotVec2(dv1, normal);
-            vn2 = matrix.dotVec2(dv2, normal);
+            vn1 = geo.dotVec2(dv1, normal);
+            vn2 = geo.dotVec2(dv2, normal);
 
             if (_ASSERT) console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
             if (_ASSERT) console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
@@ -1163,19 +1129,19 @@ export class Contact {
 
         if (x.x >= 0.0 && vn2 >= 0.0) {
           // Get the incremental impulse
-          matrix.subVec2(d, x, a);
+          geo.subVec2(d, x, a);
 
           // Apply incremental impulse
-          matrix.scaleVec2(P1, d.x, normal);
-          matrix.scaleVec2(P2, d.y, normal);
+          geo.scaleVec2(P1, d.x, normal);
+          geo.scaleVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
-          matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
-          wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
+          geo.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
+          wA -= iA * (geo.crossVec2Vec2(vcp1.rA, P1) + geo.crossVec2Vec2(vcp2.rA, P2));
 
           // vB.addCombine(mB, P1, mB, P2);
-          matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
-          wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
+          geo.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
+          wB += iB * (geo.crossVec2Vec2(vcp1.rB, P1) + geo.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate
           vcp1.normalImpulse = x.x;
@@ -1183,14 +1149,10 @@ export class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            matrix.zeroVec2(dv1);
-            matrix.plusVec2(dv1, vB);
-            matrix.plusVec2(dv1, matrix.crossNumVec2(temp, wB, vcp1.rB));
-            matrix.minusVec2(dv1, vA);
-            matrix.minusVec2(dv1, matrix.crossNumVec2(temp, wA, vcp1.rA));
+            geo.dvp(dv1, vB, wB, vcp1.rB, vA, wA, vcp1.rA);
 
             // Compute normal velocity
-            vn1 = matrix.dotVec2(dv1, normal);
+            vn1 = geo.dotVec2(dv1, normal);
 
             if (_ASSERT) console.assert(math_abs(vn1 - vcp1.velocityBias) < k_errorTol);
           }
@@ -1210,19 +1172,19 @@ export class Contact {
 
         if (x.y >= 0.0 && vn1 >= 0.0) {
           // Resubstitute for the incremental impulse
-          matrix.subVec2(d, x, a);
+          geo.subVec2(d, x, a);
 
           // Apply incremental impulse
-          matrix.scaleVec2(P1, d.x, normal);
-          matrix.scaleVec2(P2, d.y, normal);
+          geo.scaleVec2(P1, d.x, normal);
+          geo.scaleVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
-          matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
-          wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
+          geo.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
+          wA -= iA * (geo.crossVec2Vec2(vcp1.rA, P1) + geo.crossVec2Vec2(vcp2.rA, P2));
 
           // vB.addCombine(mB, P1, mB, P2);
-          matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
-          wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
+          geo.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
+          wB += iB * (geo.crossVec2Vec2(vcp1.rB, P1) + geo.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate
           vcp1.normalImpulse = x.x;
@@ -1230,14 +1192,10 @@ export class Contact {
 
           if (DEBUG_SOLVER) {
             // Postconditions
-            matrix.zeroVec2(dv2);
-            matrix.plusVec2(dv2, vB);
-            matrix.plusVec2(dv2, matrix.crossNumVec2(temp, wB, vcp2.rB));
-            matrix.minusVec2(dv2, vA);
-            matrix.minusVec2(dv2, matrix.crossNumVec2(temp, wA, vcp2.rA));
+            geo.dvp(dv2, vB, wB, vcp2.rB, vA, wA, vcp2.rA);
 
             // Compute normal velocity
-            vn2 = matrix.dotVec2(dv2, normal);
+            vn2 = geo.dotVec2(dv2, normal);
 
             if (_ASSERT) console.assert(math_abs(vn2 - vcp2.velocityBias) < k_errorTol);
           }
@@ -1257,19 +1215,19 @@ export class Contact {
 
         if (vn1 >= 0.0 && vn2 >= 0.0) {
           // Resubstitute for the incremental impulse
-          matrix.subVec2(d, x, a);
+          geo.subVec2(d, x, a);
 
           // Apply incremental impulse
-          matrix.scaleVec2(P1, d.x, normal);
-          matrix.scaleVec2(P2, d.y, normal);
+          geo.scaleVec2(P1, d.x, normal);
+          geo.scaleVec2(P2, d.y, normal);
 
           // vA.subCombine(mA, P1, mA, P2);
-          matrix.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
-          wA -= iA * (matrix.crossVec2Vec2(vcp1.rA, P1) + matrix.crossVec2Vec2(vcp2.rA, P2));
+          geo.combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
+          wA -= iA * (geo.crossVec2Vec2(vcp1.rA, P1) + geo.crossVec2Vec2(vcp2.rA, P2));
 
           // vB.addCombine(mB, P1, mB, P2);
-          matrix.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
-          wB += iB * (matrix.crossVec2Vec2(vcp1.rB, P1) + matrix.crossVec2Vec2(vcp2.rB, P2));
+          geo.combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
+          wB += iB * (geo.crossVec2Vec2(vcp1.rB, P1) + geo.crossVec2Vec2(vcp2.rB, P2));
 
           // Accumulate
           vcp1.normalImpulse = x.x;
@@ -1284,10 +1242,10 @@ export class Contact {
       }
     }
 
-    matrix.copyVec2(velocityA.v, vA);
+    geo.copyVec2(velocityA.v, vA);
     velocityA.w = wA;
 
-    matrix.copyVec2(velocityB.v, vB);
+    geo.copyVec2(velocityB.v, vB);
     velocityB.w = wB;
   }
 

@@ -8,19 +8,18 @@
  */
 
 import { SettingsInternal as Settings } from "../../Settings";
-import * as matrix from "../../common/Matrix";
+import * as geo from "../../common/Geo";
 import { Shape } from "../Shape";
-import { Transform, TransformValue } from "../../common/Transform";
-import { Rot } from "../../common/Rot";
-import { Vec2, Vec2Value } from "../../common/Vec2";
+import { TransformValue } from "../../common/Transform";
+import { Vec2Value } from "../../common/Vec2";
 import { AABB, AABBValue, RayCastInput, RayCastOutput } from "../AABB";
 import { MassData } from "../../dynamics/Body";
 import { DistanceProxy } from "../Distance";
 
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
-/** @internal */ const v1 = matrix.vec2(0, 0);
-/** @internal */ const v2 = matrix.vec2(0, 0);
+/** @internal */ const v1 = geo.vec2(0, 0);
+/** @internal */ const v2 = geo.vec2(0, 0);
 
 declare module "./EdgeShape" {
   /** @hidden @deprecated Use new keyword. */
@@ -41,13 +40,13 @@ export class EdgeShape extends Shape {
   /** @hidden */ m_radius: number;
 
   // These are the edge vertices
-  /** @hidden */ m_vertex1: Vec2;
-  /** @hidden */ m_vertex2: Vec2;
+  /** @hidden */ m_vertex1: Vec2Value;
+  /** @hidden */ m_vertex2: Vec2Value;
 
   // Optional adjacent vertices. These are used for smooth collision.
   // Used by chain shape.
-  /** @hidden */ m_vertex0: Vec2;
-  /** @hidden */ m_vertex3: Vec2;
+  /** @hidden */ m_vertex0: Vec2Value;
+  /** @hidden */ m_vertex3: Vec2Value;
   /** @hidden */ m_hasVertex0: boolean;
   /** @hidden */ m_hasVertex3: boolean;
 
@@ -62,11 +61,18 @@ export class EdgeShape extends Shape {
     this.m_type = EdgeShape.TYPE;
     this.m_radius = Settings.polygonRadius;
 
-    this.m_vertex1 = v1 ? Vec2.clone(v1) : Vec2.zero();
-    this.m_vertex2 = v2 ? Vec2.clone(v2) : Vec2.zero();
+    this.m_vertex1 = geo.vec2(0, 0);
+    if (v1) {
+      geo.copyVec2(this.m_vertex1, v1);
+    }
 
-    this.m_vertex0 = Vec2.zero();
-    this.m_vertex3 = Vec2.zero();
+    this.m_vertex2 = geo.vec2(0, 0);
+    if (v2) {
+      geo.copyVec2(this.m_vertex2, v2);
+    }
+
+    this.m_vertex0 = geo.vec2(0, 0);
+    this.m_vertex3 = geo.vec2(0, 0);
     this.m_hasVertex0 = false;
     this.m_hasVertex3 = false;
   }
@@ -121,10 +127,10 @@ export class EdgeShape extends Shape {
    */
   setNextVertex(v?: Vec2Value): EdgeShape {
     if (v) {
-      this.m_vertex3.setVec2(v);
+      geo.copyVec2(this.m_vertex3, v);
       this.m_hasVertex3 = true;
     } else {
-      this.m_vertex3.setZero();
+      geo.zeroVec2(this.m_vertex3);
       this.m_hasVertex3 = false;
     }
     return this;
@@ -133,7 +139,7 @@ export class EdgeShape extends Shape {
   /**
    * Optional next vertex, used for smooth collision.
    */
-  getNextVertex(): Vec2 {
+  getNextVertex(): Vec2Value {
     return this.m_vertex3;
   }
 
@@ -147,10 +153,10 @@ export class EdgeShape extends Shape {
    */
   setPrevVertex(v?: Vec2Value): EdgeShape {
     if (v) {
-      this.m_vertex0.setVec2(v);
+      geo.copyVec2(this.m_vertex0, v);
       this.m_hasVertex0 = true;
     } else {
-      this.m_vertex0.setZero();
+      geo.zeroVec2(this.m_vertex0);
       this.m_hasVertex0 = false;
     }
     return this;
@@ -159,7 +165,7 @@ export class EdgeShape extends Shape {
   /**
    * Optional prev vertex, used for smooth collision.
    */
-  getPrevVertex(): Vec2 {
+  getPrevVertex(): Vec2Value {
     return this.m_vertex0;
   }
 
@@ -167,8 +173,8 @@ export class EdgeShape extends Shape {
    * Set this as an isolated edge.
    */
   _set(v1: Vec2Value, v2: Vec2Value): EdgeShape {
-    this.m_vertex1.setVec2(v1);
-    this.m_vertex2.setVec2(v2);
+    geo.copyVec2(this.m_vertex1, v1);
+    geo.copyVec2(this.m_vertex2, v2);
     this.m_hasVertex0 = false;
     this.m_hasVertex3 = false;
     return this;
@@ -183,10 +189,10 @@ export class EdgeShape extends Shape {
     const clone = new EdgeShape();
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
-    clone.m_vertex1.setVec2(this.m_vertex1);
-    clone.m_vertex2.setVec2(this.m_vertex2);
-    clone.m_vertex0.setVec2(this.m_vertex0);
-    clone.m_vertex3.setVec2(this.m_vertex3);
+    geo.copyVec2(clone.m_vertex1, this.m_vertex1);
+    geo.copyVec2(clone.m_vertex2, this.m_vertex2);
+    geo.copyVec2(clone.m_vertex0, this.m_vertex0);
+    geo.copyVec2(clone.m_vertex3, this.m_vertex3);
     clone.m_hasVertex0 = this.m_hasVertex0;
     clone.m_hasVertex3 = this.m_hasVertex3;
     return clone;
@@ -218,7 +224,7 @@ export class EdgeShape extends Shape {
    * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
-  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean {
+  rayCast(output: RayCastOutput, input: RayCastInput, xf: TransformValue, childIndex: number): boolean {
     // p = p1 + t * d
     // v = v1 + s * e
     // p1 + t * d = v1 + s * e
@@ -227,21 +233,25 @@ export class EdgeShape extends Shape {
     // NOT_USED(childIndex);
 
     // Put the ray into the edge's frame of reference.
-    const p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
-    const p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
-    const d = Vec2.sub(p2, p1);
+    const p1 = geo.vec2(0, 0);
+    geo.detransformVec2(p1, xf, input.p1);
+    const p2 = geo.vec2(0, 0);
+    geo.detransformVec2(p2, xf, input.p2);
+    const d = geo.vec2(0, 0);
+    geo.subVec2(d, p2, p1);
 
     const v1 = this.m_vertex1;
     const v2 = this.m_vertex2;
-    const e = Vec2.sub(v2, v1);
-    const normal = Vec2.neo(e.y, -e.x);
-    normal.normalize();
+    const e = geo.vec2(0, 0);
+    geo.subVec2(e, v2, v1);
+    const normal = geo.vec2(e.y, -e.x);
+    geo.normalizeVec2(normal);
 
     // q = p1 + t * d
     // dot(normal, q - v1) = 0
     // dot(normal, p1 - v1) + t * dot(normal, d) = 0
-    const numerator = Vec2.dot(normal, Vec2.sub(v1, p1));
-    const denominator = Vec2.dot(normal, d);
+    const numerator = geo.dotSubVec2(v1, p1, normal);
+    const denominator = geo.dotVec2(normal, d);
 
     if (denominator == 0.0) {
       return false;
@@ -252,26 +262,28 @@ export class EdgeShape extends Shape {
       return false;
     }
 
-    const q = Vec2.add(p1, Vec2.mulNumVec2(t, d));
+    const q = geo.vec2(0, 0);
+    geo.combine2Vec2(q, 1, p1, t, d);
 
     // q = v1 + s * r
     // s = dot(q - v1, r) / dot(r, r)
-    const r = Vec2.sub(v2, v1);
-    const rr = Vec2.dot(r, r);
+    const r = geo.vec2(0, 0);
+    geo.subVec2(r, v2, v1);
+    const rr = geo.dotVec2(r, r);
     if (rr == 0.0) {
       return false;
     }
 
-    const s = Vec2.dot(Vec2.sub(q, v1), r) / rr;
+    const s = geo.dotSubVec2(q, v1, r) / rr;
     if (s < 0.0 || 1.0 < s) {
       return false;
     }
 
     output.fraction = t;
+    output.normal = geo.vec2(0, 0);
+    geo.rotVec2(output.normal, xf.q, normal);
     if (numerator > 0.0) {
-      output.normal = Rot.mulVec2(xf.q, normal).neg();
-    } else {
-      output.normal = Rot.mulVec2(xf.q, normal);
+      geo.negVec2(output.normal);
     }
     return true;
   }
@@ -285,8 +297,8 @@ export class EdgeShape extends Shape {
    * @param childIndex The child shape
    */
   computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
-    matrix.transformVec2(v1, xf, this.m_vertex1);
-    matrix.transformVec2(v2, xf, this.m_vertex2);
+    geo.transformVec2(v1, xf, this.m_vertex1);
+    geo.transformVec2(v2, xf, this.m_vertex2);
 
     AABB.combinePoints(aabb, v1, v2);
     AABB.extend(aabb, this.m_radius);
@@ -301,7 +313,7 @@ export class EdgeShape extends Shape {
    */
   computeMass(massData: MassData, density?: number): void {
     massData.mass = 0.0;
-    matrix.combine2Vec2(massData.center, 0.5, this.m_vertex1, 0.5, this.m_vertex2);
+    geo.combine2Vec2(massData.center, 0.5, this.m_vertex1, 0.5, this.m_vertex2);
     massData.I = 0.0;
   }
 

@@ -7,12 +7,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from "../common/Matrix";
+import * as geo from "../common/Geo";
 import { SettingsInternal as Settings } from "../Settings";
 import { stats } from "../util/stats";
 import Timer from "../util/Timer";
 import { Sweep } from "../common/Sweep";
-import { Transform } from "../common/Transform";
 import { Distance, DistanceInput, DistanceOutput, DistanceProxy, SimplexCache } from "./Distance";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
@@ -72,16 +71,15 @@ stats.toiMaxRootIters = 0;
 // this is passed to Distance and SeparationFunction
 /** @internal */ const cache = new SimplexCache();
 
-/** @internal */ const xfA = matrix.transform(0, 0, 0);
-/** @internal */ const xfB = matrix.transform(0, 0, 0);
-/** @internal */ const temp = matrix.vec2(0, 0);
-/** @internal */ const pointA = matrix.vec2(0, 0);
-/** @internal */ const pointB = matrix.vec2(0, 0);
-/** @internal */ const normal = matrix.vec2(0, 0);
-/** @internal */ const axisA = matrix.vec2(0, 0);
-/** @internal */ const axisB = matrix.vec2(0, 0);
-/** @internal */ const localPointA = matrix.vec2(0, 0);
-/** @internal */ const localPointB = matrix.vec2(0, 0);
+/** @internal */ const xfA = geo.transform(0, 0, 0);
+/** @internal */ const xfB = geo.transform(0, 0, 0);
+/** @internal */ const pointA = geo.vec2(0, 0);
+/** @internal */ const pointB = geo.vec2(0, 0);
+/** @internal */ const normal = geo.vec2(0, 0);
+/** @internal */ const axisA = geo.vec2(0, 0);
+/** @internal */ const axisB = geo.vec2(0, 0);
+/** @internal */ const localPointA = geo.vec2(0, 0);
+/** @internal */ const localPointB = geo.vec2(0, 0);
 
 /**
  * Compute the upper bound on time before two shapes penetrate. Time is
@@ -141,8 +139,8 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
 
     // Get the distance between shapes. We can also use the results
     // to get a separating axis.
-    matrix.copyTransform(distanceInput.transformA, xfA);
-    matrix.copyTransform(distanceInput.transformB, xfB);
+    geo.copyTransform(distanceInput.transformA, xfA);
+    geo.copyTransform(distanceInput.transformB, xfB);
     Distance(distanceOutput, cache, distanceInput);
 
     // If the shapes are overlapped, we give up on continuous collision.
@@ -318,8 +316,8 @@ class SeparationFunction {
 
   // initialize cache
   m_type = SeparationFunctionType.e_unset;
-  m_localPoint = matrix.vec2(0, 0);
-  m_axis = matrix.vec2(0, 0);
+  m_localPoint = geo.vec2(0, 0);
+  m_axis = geo.vec2(0, 0);
 
   // compute output
   indexA = -1;
@@ -332,8 +330,8 @@ class SeparationFunction {
     this.m_sweepB = null;
 
     this.m_type = SeparationFunctionType.e_unset;
-    matrix.zeroVec2(this.m_localPoint);
-    matrix.zeroVec2(this.m_axis);
+    geo.zeroVec2(this.m_localPoint);
+    geo.zeroVec2(this.m_axis);
 
     this.indexA = -1;
     this.indexB = -1;
@@ -364,10 +362,10 @@ class SeparationFunction {
       this.m_type = SeparationFunctionType.e_points;
       const localPointA = this.m_proxyA.getVertex(cache.indexA[0]);
       const localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
-      matrix.transformVec2(pointA, xfA, localPointA);
-      matrix.transformVec2(pointB, xfB, localPointB);
-      matrix.subVec2(this.m_axis, pointB, pointA);
-      const s = matrix.normalizeVec2Length(this.m_axis);
+      geo.transformVec2(pointA, xfA, localPointA);
+      geo.transformVec2(pointB, xfB, localPointB);
+      geo.subVec2(this.m_axis, pointB, pointA);
+      const s = geo.normalizeVec2Length(this.m_axis);
       return s;
     } else if (cache.indexA[0] === cache.indexA[1]) {
       // Two points on B and one on A.
@@ -375,19 +373,20 @@ class SeparationFunction {
       const localPointB1 = proxyB.getVertex(cache.indexB[0]);
       const localPointB2 = proxyB.getVertex(cache.indexB[1]);
 
-      matrix.crossVec2Num(this.m_axis, matrix.subVec2(temp, localPointB2, localPointB1), 1.0);
-      matrix.normalizeVec2(this.m_axis);
-      matrix.rotVec2(normal, xfB.q, this.m_axis);
+      geo.crossSubVec2Num(this.m_axis, localPointB2, localPointB1, 1.0);
+      geo.normalizeVec2(this.m_axis);
+      geo.rotVec2(normal, xfB.q, this.m_axis);
 
-      matrix.combine2Vec2(this.m_localPoint, 0.5, localPointB1, 0.5, localPointB2);
-      matrix.transformVec2(pointB, xfB, this.m_localPoint);
+      geo.combine2Vec2(this.m_localPoint, 0.5, localPointB1, 0.5, localPointB2);
+      geo.transformVec2(pointB, xfB, this.m_localPoint);
 
       const localPointA = proxyA.getVertex(cache.indexA[0]);
-      const pointA = Transform.mulVec2(xfA, localPointA);
+      const pointA = geo.vec2(0, 0);
+      geo.transformVec2(pointA, xfA, localPointA);
 
-      let s = matrix.dotVec2(pointA, normal) - matrix.dotVec2(pointB, normal);
+      let s = geo.dotVec2(pointA, normal) - geo.dotVec2(pointB, normal);
       if (s < 0.0) {
-        matrix.negVec2(this.m_axis);
+        geo.negVec2(this.m_axis);
         s = -s;
       }
       return s;
@@ -397,19 +396,19 @@ class SeparationFunction {
       const localPointA1 = this.m_proxyA.getVertex(cache.indexA[0]);
       const localPointA2 = this.m_proxyA.getVertex(cache.indexA[1]);
 
-      matrix.crossVec2Num(this.m_axis, matrix.subVec2(temp, localPointA2, localPointA1), 1.0);
-      matrix.normalizeVec2(this.m_axis);
-      matrix.rotVec2(normal, xfA.q, this.m_axis);
+      geo.crossSubVec2Num(this.m_axis, localPointA2, localPointA1, 1.0);
+      geo.normalizeVec2(this.m_axis);
+      geo.rotVec2(normal, xfA.q, this.m_axis);
 
-      matrix.combine2Vec2(this.m_localPoint, 0.5, localPointA1, 0.5, localPointA2);
-      matrix.transformVec2(pointA, xfA, this.m_localPoint);
+      geo.combine2Vec2(this.m_localPoint, 0.5, localPointA1, 0.5, localPointA2);
+      geo.transformVec2(pointA, xfA, this.m_localPoint);
 
       const localPointB = this.m_proxyB.getVertex(cache.indexB[0]);
-      matrix.transformVec2(pointB, xfB, localPointB);
+      geo.transformVec2(pointB, xfB, localPointB);
 
-      let s = matrix.dotVec2(pointB, normal) - matrix.dotVec2(pointA, normal);
+      let s = geo.dotVec2(pointB, normal) - geo.dotVec2(pointA, normal);
       if (s < 0.0) {
-        matrix.negVec2(this.m_axis);
+        geo.negVec2(this.m_axis);
         s = -s;
       }
       return s;
@@ -424,56 +423,56 @@ class SeparationFunction {
     switch (this.m_type) {
       case SeparationFunctionType.e_points: {
         if (find) {
-          matrix.derotVec2(axisA, xfA.q, this.m_axis);
-          matrix.derotVec2(axisB, xfB.q, matrix.scaleVec2(temp, -1, this.m_axis));
+          geo.derotVec2(axisA, xfA.q, this.m_axis);
+          geo.derotNegVec2(axisB, xfB.q, this.m_axis);
 
           this.indexA = this.m_proxyA.getSupport(axisA);
           this.indexB = this.m_proxyB.getSupport(axisB);
         }
 
-        matrix.copyVec2(localPointA, this.m_proxyA.getVertex(this.indexA));
-        matrix.copyVec2(localPointB, this.m_proxyB.getVertex(this.indexB));
+        geo.copyVec2(localPointA, this.m_proxyA.getVertex(this.indexA));
+        geo.copyVec2(localPointB, this.m_proxyB.getVertex(this.indexB));
 
-        matrix.transformVec2(pointA, xfA, localPointA);
-        matrix.transformVec2(pointB, xfB, localPointB);
+        geo.transformVec2(pointA, xfA, localPointA);
+        geo.transformVec2(pointB, xfB, localPointB);
 
-        const sep = matrix.dotVec2(pointB, this.m_axis) - matrix.dotVec2(pointA, this.m_axis);
+        const sep = geo.dotVec2(pointB, this.m_axis) - geo.dotVec2(pointA, this.m_axis);
         return sep;
       }
 
       case SeparationFunctionType.e_faceA: {
-        matrix.rotVec2(normal, xfA.q, this.m_axis);
-        matrix.transformVec2(pointA, xfA, this.m_localPoint);
+        geo.rotVec2(normal, xfA.q, this.m_axis);
+        geo.transformVec2(pointA, xfA, this.m_localPoint);
 
         if (find) {
-          matrix.derotVec2(axisB, xfB.q, matrix.scaleVec2(temp, -1, normal));
+          geo.derotNegVec2(axisB, xfB.q, normal);
 
           this.indexA = -1;
           this.indexB = this.m_proxyB.getSupport(axisB);
         }
 
-        matrix.copyVec2(localPointB, this.m_proxyB.getVertex(this.indexB));
-        matrix.transformVec2(pointB, xfB, localPointB);
+        geo.copyVec2(localPointB, this.m_proxyB.getVertex(this.indexB));
+        geo.transformVec2(pointB, xfB, localPointB);
 
-        const sep = matrix.dotVec2(pointB, normal) - matrix.dotVec2(pointA, normal);
+        const sep = geo.dotVec2(pointB, normal) - geo.dotVec2(pointA, normal);
         return sep;
       }
 
       case SeparationFunctionType.e_faceB: {
-        matrix.rotVec2(normal, xfB.q, this.m_axis);
-        matrix.transformVec2(pointB, xfB, this.m_localPoint);
+        geo.rotVec2(normal, xfB.q, this.m_axis);
+        geo.transformVec2(pointB, xfB, this.m_localPoint);
 
         if (find) {
-          matrix.derotVec2(axisA, xfA.q, matrix.scaleVec2(temp, -1, normal));
+          geo.derotNegVec2(axisA, xfA.q, normal);
 
           this.indexB = -1;
           this.indexA = this.m_proxyA.getSupport(axisA);
         }
 
-        matrix.copyVec2(localPointA, this.m_proxyA.getVertex(this.indexA));
-        matrix.transformVec2(pointA, xfA, localPointA);
+        geo.copyVec2(localPointA, this.m_proxyA.getVertex(this.indexA));
+        geo.transformVec2(pointA, xfA, localPointA);
 
-        const sep = matrix.dotVec2(pointA, normal) - matrix.dotVec2(pointB, normal);
+        const sep = geo.dotVec2(pointA, normal) - geo.dotVec2(pointB, normal);
         return sep;
       }
 

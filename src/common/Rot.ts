@@ -34,7 +34,11 @@ declare module "./Rot" {
   function Rot(): Rot;
 }
 
-/** Rotation */
+/**
+ * Rotation
+ * 
+ * @deprecated Use RotValue and geo functions instead.
+ * */
 // @ts-expect-error
 export class Rot {
   /** sin(angle) */

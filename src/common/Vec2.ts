@@ -34,7 +34,11 @@ declare module "./Vec2" {
   function Vec2(): Vec2;
 }
 
-/** 2D vector */
+/**
+ * 2D vector
+ * 
+ * @deprecated Use Vec2Value and geo functions instead.
+ */
 // @ts-expect-error
 export class Vec2 {
   x: number;
