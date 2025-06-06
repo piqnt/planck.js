@@ -17,7 +17,6 @@ import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 /**
  * Motor joint definition.
@@ -56,21 +55,11 @@ export interface MotorJointDef extends JointDef, MotorJointOpt {}
   correctionFactor: 0.3,
 };
 
-declare module "./MotorJoint" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function MotorJoint(def: MotorJointDef): MotorJoint;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function MotorJoint(def: MotorJointOpt, bodyA: Body, bodyB: Body): MotorJoint;
-}
-
 /**
  * A motor joint is used to control the relative motion between two bodies. A
  * typical usage is to control the movement of a dynamic body with respect to
  * the ground.
  */
-// @ts-expect-error
 export class MotorJoint extends Joint {
   static TYPE = "motor-joint" as const;
 
@@ -100,11 +89,6 @@ export class MotorJoint extends Joint {
   constructor(def: MotorJointDef);
   constructor(def: MotorJointOpt, bodyA: Body, bodyB: Body);
   constructor(def: MotorJointDef | MotorJointOpt, bodyA?: Body, bodyB?: Body) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof MotorJoint)) {
-      return new MotorJoint(def, bodyA, bodyB);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;

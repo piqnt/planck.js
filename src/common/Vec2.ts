@@ -10,7 +10,6 @@
 import { clamp, EPSILON } from "./Math";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_max = Math.max;
@@ -22,24 +21,11 @@ export interface Vec2Value {
   y: number;
 }
 
-declare module "./Vec2" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function Vec2(x: number, y: number): Vec2;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function Vec2(obj: Vec2Value): Vec2;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function Vec2(): Vec2;
-}
-
 /**
  * 2D vector
  * 
  * @deprecated Use Vec2Value and geo functions instead.
  */
-// @ts-expect-error
 export class Vec2 {
   x: number;
   y: number;
@@ -49,9 +35,6 @@ export class Vec2 {
   constructor();
   // tslint:disable-next-line:typedef
   constructor(x?, y?) {
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec2)) {
-      return new Vec2(x, y);
-    }
     if (typeof x === "undefined") {
       this.x = 0;
       this.y = 0;

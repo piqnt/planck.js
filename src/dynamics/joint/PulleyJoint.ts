@@ -17,7 +17,6 @@ import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 
 /**
@@ -69,24 +68,6 @@ export interface PulleyJointDef extends JointDef, PulleyJointOpt {
   collideConnected: true,
 };
 
-declare module "./PulleyJoint" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function PulleyJoint(def: PulleyJointDef): PulleyJoint;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function PulleyJoint(
-    def: PulleyJointOpt,
-    bodyA: Body,
-    bodyB: Body,
-    groundA: Vec2Value,
-    groundB: Vec2Value,
-    anchorA: Vec2Value,
-    anchorB: Vec2Value,
-    ratio: number,
-  ): PulleyJoint;
-}
-
 /**
  * The pulley joint is connected to two bodies and two fixed ground points. The
  * pulley supports a ratio such that: length1 + ratio * length2 <= constant
@@ -98,7 +79,6 @@ declare module "./PulleyJoint" {
  * anchor points with static shapes to prevent one side from going to zero
  * length.
  */
-// @ts-expect-error
 export class PulleyJoint extends Joint {
   static TYPE = "pulley-joint" as const;
   // static MIN_PULLEY_LENGTH: number = 2.0; // TODO where this is used?
@@ -148,11 +128,6 @@ export class PulleyJoint extends Joint {
     anchorB?: Vec2Value,
     ratio?: number,
   ) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof PulleyJoint)) {
-      return new PulleyJoint(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, ratio);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;

@@ -18,16 +18,9 @@ import { Shape } from "../Shape";
 import { EdgeShape } from "./EdgeShape";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 /** @internal */ const v1 = geo.vec2(0, 0);
 /** @internal */ const v2 = geo.vec2(0, 0);
-
-declare module "./ChainShape" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function ChainShape(vertices?: Vec2Value[], loop?: boolean): ChainShape;
-}
 
 /**
  * A chain shape is a free form sequence of line segments. The chain has
@@ -37,7 +30,6 @@ declare module "./ChainShape" {
  *
  * WARNING: The chain will not collide properly if there are self-intersections.
  */
-// @ts-expect-error
 export class ChainShape extends Shape {
   static TYPE = "chain" as const;
   /** @hidden */ m_type: "chain";
@@ -54,11 +46,6 @@ export class ChainShape extends Shape {
   /** @hidden */ m_isLoop: boolean;
 
   constructor(vertices?: Vec2Value[], loop?: boolean) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof ChainShape)) {
-      return new ChainShape(vertices, loop);
-    }
-
     super();
 
     this.m_type = ChainShape.TYPE;

@@ -16,7 +16,6 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_min = Math.min;
 
 /** @internal */ enum LimitState {
@@ -59,15 +58,6 @@ export interface RopeJointDef extends JointDef, RopeJointOpt {
   maxLength: 0.0,
 };
 
-declare module "./RopeJoint" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function RopeJoint(def: RopeJointDef): RopeJoint;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function RopeJoint(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): RopeJoint;
-}
-
 /**
  * A rope joint enforces a maximum distance between two points on two bodies. It
  * has no other effect.
@@ -79,7 +69,6 @@ declare module "./RopeJoint" {
  * sponginess, so I chose not to implement it that way. See {@link DistanceJoint} if you
  * want to dynamically control length.
  */
-// @ts-expect-error
 export class RopeJoint extends Joint {
   static TYPE = "rope-joint" as const;
 
@@ -108,11 +97,6 @@ export class RopeJoint extends Joint {
   constructor(def: RopeJointDef);
   constructor(def: RopeJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
   constructor(def: RopeJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof RopeJoint)) {
-      return new RopeJoint(def, bodyA, bodyB, anchor);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;

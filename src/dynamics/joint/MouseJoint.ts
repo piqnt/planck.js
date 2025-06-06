@@ -17,7 +17,6 @@ import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_PI = Math.PI;
 
 /**
@@ -60,15 +59,6 @@ export interface MouseJointDef extends JointDef, MouseJointOpt {
   dampingRatio: 0.7,
 };
 
-declare module "./MouseJoint" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function MouseJoint(def: MouseJointDef): MouseJoint;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function MouseJoint(def: MouseJointOpt, bodyA: Body, bodyB: Body, target: Vec2Value): MouseJoint;
-}
-
 /**
  * A mouse joint is used to make a point on a body track a specified world
  * point. This a soft constraint with a maximum force. This allows the
@@ -81,7 +71,6 @@ declare module "./MouseJoint" {
  * be used in the testbed. If you want to learn how to use the mouse joint, look
  * at the testbed.
  */
-// @ts-expect-error
 export class MouseJoint extends Joint {
   static TYPE = "mouse-joint" as const;
 
@@ -105,11 +94,6 @@ export class MouseJoint extends Joint {
   constructor(def: MouseJointDef);
   constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target?: Vec2Value);
   constructor(def: MouseJointDef, bodyA?: Body, bodyB?: Body, target?: Vec2Value) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof MouseJoint)) {
-      return new MouseJoint(def, bodyA, bodyB, target);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;

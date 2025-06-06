@@ -8,7 +8,6 @@
  */
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 /** 3D vector */
 export interface Vec3Value {
@@ -17,24 +16,11 @@ export interface Vec3Value {
   z: number;
 }
 
-declare module "./Vec3" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function Vec3(x: number, y: number, z: number): Vec3;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function Vec3(obj: Vec3Value): Vec3;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function Vec3(): Vec3;
-}
-
 /**
  * 3D vector
  *
  * @deprecated Use Vec3Value and geo functions instead.
  */
-// @ts-expect-error
 export class Vec3 {
   x: number;
   y: number;
@@ -44,9 +30,6 @@ export class Vec3 {
   constructor(obj: Vec3Value);
   constructor();
   constructor(x?, y?, z?) {
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof Vec3)) {
-      return new Vec3(x, y, z);
-    }
     if (typeof x === "undefined") {
       this.x = 0;
       this.y = 0;
