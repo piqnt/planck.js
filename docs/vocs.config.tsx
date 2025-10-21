@@ -1,15 +1,16 @@
 import { defineConfig } from "vocs";
 
 export default defineConfig({
+  aiCta: false,
   title: "Planck.js",
   rootDir: ".",
   basePath: "/planck.js/docs/",
   baseUrl: "/planck.js/docs/",
-  topNav: [ 
-    { text: "API Reference", link: "/api/"},
-    { text: "Playground", link: "https://piqnt.com/"},
-    { text: "GitHub", link: "https://github.com/piqnt/planck.js/"},
-    { text: "Discord", link: "https://discord.gg/znjh6J7"},
+  topNav: [
+    { text: "API Reference", link: "/api/" },
+    { text: "Playground", link: "https://piqnt.com/" },
+    { text: "GitHub", link: "https://github.com/piqnt/planck.js/" },
+    { text: "Discord", link: "https://discord.gg/znjh6J7" },
   ],
   sidebar: [
     { link: "/", text: "Introduction" },
@@ -86,4 +87,4 @@ export default defineConfig({
     { link: "/credits", text: "Credits & License" },
   ],
   head: () => <script src="/plank.js/docs/messenger.js" />,
-})
+});

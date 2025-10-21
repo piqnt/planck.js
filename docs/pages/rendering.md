@@ -119,5 +119,8 @@ stability.
 
  - [notchris/phaser3-planck](https://github.com/notchris/phaser3-planck) Phaser 3 Planck.js Plugin by Chris McGrane
  - [Phaser 3 with Planck.js](https://www.emanueleferonato.com/2019/10/12/use-box2d-physics-in-your-phaser-3-projects-with-planck-js-javascript-physics-engine/) by Emanuele Feronato
-- [P5.js integration](https://sites.google.com/site/professorcookga/planck-box2d-physics-for-javascript-p5) by Robert Cook
-- [RealPeha/planck-renderer](https://github.com/RealPeha/planck-renderer)
+- [P5Play](https://p5play.org/) - A game engine based on P5.js and Planck.js, by Quinton Ashley and Paolo Pedercini
+- [P5.js integration](https://sites.google.com/site/professorcookga/planck-box2d-physics-for-javascript-p5) by Professor Robert Cook
+- [Modd.io](https://www.modd.io/) - Online io game platform
+- [KaPlanck](https://github.com/KeSuave/KaPlanck) - Physics extension for KaPlay
+- [RealPeha/planck-renderer](https://github.com/RealPeha/planck-renderer) 
