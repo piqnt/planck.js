@@ -5,7 +5,7 @@
     "noImplicitAny": false,
     "lib": ["ES2015", "DOM"],
     "stripInternal": true,
-    "target": "ES5",
+    "target": "ES6",
     "esModuleInterop": true,
     "moduleResolution": "Node",
     "resolveJsonModule": true,
