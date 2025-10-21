@@ -8,10 +8,10 @@
  */
 
 import { options } from "../../util/options";
+import * as geo from "../../common/Geo";
 import { clamp } from "../../common/Math";
-import { Vec2, Vec2Value } from "../../common/Vec2";
-import { Mat22 } from "../../common/Mat22";
-import { Rot } from "../../common/Rot";
+import { Vec2Value } from "../../common/Vec2";
+import { Mat22Value } from "../../common/Mat22";
 import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
@@ -75,26 +75,26 @@ export class MotorJoint extends Joint {
   static TYPE = "motor-joint" as const;
 
   /** @internal */ m_type: "motor-joint";
-  /** @internal */ m_linearOffset: Vec2;
+  /** @internal */ m_linearOffset: Vec2Value;
   /** @internal */ m_angularOffset: number;
-  /** @internal */ m_linearImpulse: Vec2;
+  /** @internal */ m_linearImpulse: Vec2Value;
   /** @internal */ m_angularImpulse: number;
   /** @internal */ m_maxForce: number;
   /** @internal */ m_maxTorque: number;
   /** @internal */ m_correctionFactor: number;
 
   // Solver temp
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
-  /** @internal */ m_linearError: Vec2;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
+  /** @internal */ m_linearError: Vec2Value;
   /** @internal */ m_angularError: number;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
   /** @internal */ m_invIB: number;
-  /** @internal */ m_linearMass: Mat22;
+  /** @internal */ m_linearMass: Mat22Value;
   /** @internal */ m_angularMass: number;
 
   constructor(def: MotorJointDef);
@@ -112,12 +112,16 @@ export class MotorJoint extends Joint {
 
     this.m_type = MotorJoint.TYPE;
 
-    this.m_linearOffset = Vec2.isValid(def.linearOffset)
-      ? Vec2.clone(def.linearOffset)
-      : bodyA.getLocalPoint(bodyB.getPosition());
+    this.m_linearOffset = geo.vec2(0, 0);
+    if (geo.isVec2(def.linearOffset)) {
+      geo.copyVec2(this.m_linearOffset, def.linearOffset);
+    } else {
+      geo.copyVec2(this.m_linearOffset, bodyA.getLocalPoint(bodyB.getPosition()));
+    }
+
     this.m_angularOffset = Number.isFinite(def.angularOffset) ? def.angularOffset : bodyB.getAngle() - bodyA.getAngle();
 
-    this.m_linearImpulse = Vec2.zero();
+    this.m_linearImpulse = geo.vec2(0, 0);
     this.m_angularImpulse = 0.0;
 
     this.m_maxForce = def.maxForce;
@@ -180,8 +184,8 @@ export class MotorJoint extends Joint {
     if (Number.isFinite(def.correctionFactor)) {
       this.m_correctionFactor = def.correctionFactor;
     }
-    if (Vec2.isValid(def.linearOffset)) {
-      this.m_linearOffset.set(def.linearOffset);
+    if (geo.isVec2(def.linearOffset)) {
+      geo.copyVec2(this.m_linearOffset, def.linearOffset);
     }
   }
 
@@ -237,11 +241,11 @@ export class MotorJoint extends Joint {
     if (linearOffset.x != this.m_linearOffset.x || linearOffset.y != this.m_linearOffset.y) {
       this.m_bodyA.setAwake(true);
       this.m_bodyB.setAwake(true);
-      this.m_linearOffset.set(linearOffset);
+      geo.copyVec2(this.m_linearOffset, linearOffset);
     }
   }
 
-  getLinearOffset(): Vec2 {
+  getLinearOffset(): Vec2Value {
     return this.m_linearOffset;
   }
 
@@ -263,22 +267,24 @@ export class MotorJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getPosition();
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getPosition();
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mulNumVec2(inv_dt, this.m_linearImpulse);
+  getReactionForce(inv_dt: number): Vec2Value {
+    const result = geo.vec2(0, 0);
+    geo.scaleVec2(result, inv_dt, this.m_linearImpulse);
+    return result;
   }
 
   /**
@@ -306,12 +312,14 @@ export class MotorJoint extends Joint {
     const vB = this.m_bodyB.c_velocity.v;
     let wB = this.m_bodyB.c_velocity.w;
 
-    const qA = Rot.neo(aA);
-    const qB = Rot.neo(aB);
+    const qA = geo.rotation(aA);
+    const qB = geo.rotation(aB);
 
     // Compute the effective mass matrix.
-    this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_linearOffset, this.m_localCenterA));
-    this.m_rB = Rot.mulVec2(qB, Vec2.neg(this.m_localCenterB));
+    this.m_rA = geo.vec2(0, 0);
+    geo.rotSubVec2(this.m_rA, qA, this.m_linearOffset, this.m_localCenterA);
+    this.m_rB = geo.vec2(0, 0);
+    geo.rotNegVec2(this.m_rB, qB, this.m_localCenterB);
 
     // J = [-I -r1_skew I r2_skew]
     // r_skew = [-ry; rx]
@@ -327,39 +335,39 @@ export class MotorJoint extends Joint {
     const iB = this.m_invIB;
 
     // Upper 2 by 2 of K for point to point
-    const K = new Mat22();
+    const K = geo.mat22();
     K.ex.x = mA + mB + iA * this.m_rA.y * this.m_rA.y + iB * this.m_rB.y * this.m_rB.y;
     K.ex.y = -iA * this.m_rA.x * this.m_rA.y - iB * this.m_rB.x * this.m_rB.y;
     K.ey.x = K.ex.y;
     K.ey.y = mA + mB + iA * this.m_rA.x * this.m_rA.x + iB * this.m_rB.x * this.m_rB.x;
 
-    this.m_linearMass = K.getInverse();
+    this.m_linearMass = geo.mat22();
+    geo.inverseMat22(this.m_linearMass, K);
 
     this.m_angularMass = iA + iB;
     if (this.m_angularMass > 0.0) {
       this.m_angularMass = 1.0 / this.m_angularMass;
     }
 
-    this.m_linearError = Vec2.zero();
-    this.m_linearError.addCombine(1, cB, 1, this.m_rB);
-    this.m_linearError.subCombine(1, cA, 1, this.m_rA);
+    this.m_linearError = geo.vec2(0, 0);
+    geo.combine4Vec2(this.m_linearError, 1, cB, 1, this.m_rB, -1, cA, -1, this.m_rA);
 
     this.m_angularError = aB - aA - this.m_angularOffset;
 
     if (step.warmStarting) {
       // Scale impulses to support a variable time step.
-      this.m_linearImpulse.mul(step.dtRatio);
+      geo.mulVec2(this.m_linearImpulse, step.dtRatio);
       this.m_angularImpulse *= step.dtRatio;
 
-      const P = Vec2.neo(this.m_linearImpulse.x, this.m_linearImpulse.y);
+      const P = geo.vec2(this.m_linearImpulse.x, this.m_linearImpulse.y);
 
-      vA.subMul(mA, P);
-      wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_angularImpulse);
+      geo.minusScaleVec2(vA, mA, P);
+      wA -= iA * (geo.crossVec2Vec2(this.m_rA, P) + this.m_angularImpulse);
 
-      vB.addMul(mB, P);
-      wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
+      geo.plusScaleVec2(vB, mB, P);
+      wB += iB * (geo.crossVec2Vec2(this.m_rB, P) + this.m_angularImpulse);
     } else {
-      this.m_linearImpulse.setZero();
+      geo.zeroVec2(this.m_linearImpulse);
       this.m_angularImpulse = 0.0;
     }
 
@@ -399,26 +407,28 @@ export class MotorJoint extends Joint {
 
     // Solve linear friction
     {
-      const Cdot = Vec2.zero();
-      Cdot.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
-      Cdot.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
-      Cdot.addMul(inv_h * this.m_correctionFactor, this.m_linearError);
+      const Cdot = geo.vec2(0, 0);
+      geo.dvp(Cdot, vB, wB, this.m_rB, vA, wA, this.m_rA);
+      geo.plusScaleVec2(Cdot, inv_h * this.m_correctionFactor, this.m_linearError);
 
-      let impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
-      const oldImpulse = Vec2.clone(this.m_linearImpulse);
-      this.m_linearImpulse.add(impulse);
+      const impulse = geo.vec2(0, 0);
+      geo.mulMat22Vec2(impulse, this.m_linearMass, Cdot);
+      geo.negVec2(impulse);
+      const oldImpulse = geo.vec2(0, 0);
+      geo.copyVec2(oldImpulse, this.m_linearImpulse);
+      geo.plusVec2(this.m_linearImpulse, impulse);
 
       const maxImpulse = h * this.m_maxForce;
 
-      this.m_linearImpulse.clamp(maxImpulse);
+      geo.clampVec2(this.m_linearImpulse, maxImpulse);
 
-      impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
+      geo.subVec2(impulse, this.m_linearImpulse, oldImpulse);
 
-      vA.subMul(mA, impulse);
-      wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
+      geo.minusScaleVec2(vA, mA, impulse);
+      wA -= iA * geo.crossVec2Vec2(this.m_rA, impulse);
 
-      vB.addMul(mB, impulse);
-      wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
+      geo.plusScaleVec2(vB, mB, impulse);
+      wB += iB * geo.crossVec2Vec2(this.m_rB, impulse);
     }
 
     this.m_bodyA.c_velocity.v = vA;

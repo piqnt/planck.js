@@ -4,6 +4,7 @@
  */
 
 import {
+  geo,
   Vec2,
   Transform,
   World,
@@ -101,9 +102,9 @@ testbed.step = function () {
   const input = new ShapeCastInput();
   input.proxyA.setVertices(vAs, countA, radiusA);
   input.proxyB.setVertices(vBs, countB, radiusB);
-  input.transformA.set(transformA);
-  input.transformB.set(transformB);
-  input.translationB.set(translationB);
+  geo.copyTransform(input.transformA, transformA);
+  geo.copyTransform(input.transformB, transformB);
+  geo.copyVec2(input.translationB, translationB);
 
   const output = new ShapeCastOutput();
 
@@ -117,8 +118,8 @@ testbed.step = function () {
   const distanceInput = new DistanceInput();
   distanceInput.proxyA.setVertices(vAs, countA, radiusA);
   distanceInput.proxyB.setVertices(vBs, countB, radiusB);
-  distanceInput.transformA.set(transformA);
-  distanceInput.transformB.set(transformB2);
+  geo.copyTransform(distanceInput.transformA, transformA);
+  geo.copyTransform(distanceInput.transformB, transformB2);
   distanceInput.useRadii = false;
   const simplexCache = new SimplexCache();
   simplexCache.count = 0;

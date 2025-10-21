@@ -3,7 +3,7 @@
  * Licensed under the MIT license
  */
 
-import { World, Transform, Box, Distance, Testbed } from "planck";
+import { World, Transform, Box, Distance, Testbed, geo } from "planck";
 
 const DistanceInput = Distance.Input;
 const DistanceOutput = Distance.Output;
@@ -42,8 +42,8 @@ testbed.step = function () {
   const input = new DistanceInput();
   input.proxyA.set(polygonA, 0);
   input.proxyB.set(polygonB, 0);
-  input.transformA.set(transformA);
-  input.transformB.set(transformB);
+  geo.copyTransform(input.transformA, transformA);
+  geo.copyTransform(input.transformB, transformB);
   input.useRadii = true;
 
   const cache = new SimplexCache();

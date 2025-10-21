@@ -3,18 +3,7 @@
  * Licensed under the MIT license
  */
 
-import {
-  World,
-  Transform,
-  Box,
-  TimeOfImpact,
-  Sweep,
-  TOIInput,
-  TOIOutput,
-  stats,
-  Testbed,
-  Vec2Value,
-} from "planck";
+import { World, Transform, Box, TimeOfImpact, Sweep, TOIInput, TOIOutput, stats, Testbed, Vec2Value } from "planck";
 
 const world = new World();
 
@@ -27,19 +16,25 @@ testbed.start(world);
 
 const shapeA = new Box(25.0, 5.0);
 const sweepA = new Sweep();
-sweepA.c0.set(0, 0);
+sweepA.c0.x = 0.0;
+sweepA.c0.y = 0.0;
 sweepA.a0 = 0.1;
-sweepA.c.set(sweepA.c0);
+sweepA.c.x = sweepA.c0.x;
+sweepA.c.y = sweepA.c0.y;
 sweepA.a = sweepA.a0;
-sweepA.localCenter.setZero();
+sweepA.localCenter.x = 0.0;
+sweepA.localCenter.y = 0.0;
 
 const shapeB = new Box(2.5, 2.5);
 const sweepB = new Sweep();
-sweepB.c0.set(20, 20);
+sweepB.c0.x = 20;
+sweepB.c0.y = 20;
 sweepB.a0 = 0.1; // - 162.0 * Math.PI;
-sweepB.c.set(-20, -20);
+sweepB.c.x = -20;
+sweepB.c.y = -20;
 sweepB.a = 3.1; // - 162.0 * Math.PI;
-sweepB.localCenter.setZero();
+sweepB.localCenter.x = 0.0;
+sweepB.localCenter.y = 0.0;
 
 // sweepB.a0 -= 300.0 * Math.PI;
 // sweepB.a -= 300.0 * Math.PI;

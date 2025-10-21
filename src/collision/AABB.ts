@@ -8,7 +8,8 @@
  */
 
 import { EPSILON } from "../common/Math";
-import { Vec2, Vec2Value } from "../common/Vec2";
+import * as geo from "../common/Geo";
+import { Vec2Value } from "../common/Vec2";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
@@ -31,7 +32,7 @@ export type RayCastCallback = (subInput: RayCastInput, id: number) => number;
  * where `p1` and `p2` come from RayCastInput.
  */
 export interface RayCastOutput {
-  normal: Vec2;
+  normal: Vec2Value;
   fraction: number;
 }
 
@@ -50,24 +51,24 @@ declare module "./AABB" {
 /** Axis-aligned bounding box */
 // @ts-expect-error
 export class AABB {
-  lowerBound: Vec2;
-  upperBound: Vec2;
+  lowerBound: Vec2Value;
+  upperBound: Vec2Value;
 
   constructor(lower?: Vec2Value, upper?: Vec2Value) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof AABB)) {
       return new AABB(lower, upper);
     }
 
-    this.lowerBound = Vec2.zero();
-    this.upperBound = Vec2.zero();
+    this.lowerBound = geo.vec2(0, 0);
+    this.upperBound = geo.vec2(0, 0);
 
     if (typeof lower === "object") {
-      this.lowerBound.setVec2(lower);
+      geo.copyVec2(this.lowerBound, lower);
     }
     if (typeof upper === "object") {
-      this.upperBound.setVec2(upper);
+      geo.copyVec2(this.upperBound, upper);
     } else if (typeof lower === "object") {
-      this.upperBound.setVec2(lower);
+      geo.copyVec2(this.upperBound, lower);
     }
   }
 
@@ -79,14 +80,7 @@ export class AABB {
   }
 
   static isValid(obj: any): boolean {
-    if (obj === null || typeof obj === "undefined") {
-      return false;
-    }
-    return (
-      Vec2.isValid(obj.lowerBound) &&
-      Vec2.isValid(obj.upperBound) &&
-      Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() >= 0
-    );
+    return typeof obj === "object" && obj !== null && geo.isVec2(obj.lowerBound) && geo.isVec2(obj.upperBound);
   }
 
   static assert(o: any): void {
@@ -96,15 +90,15 @@ export class AABB {
   /**
    * Get the center of the AABB.
    */
-  getCenter(): Vec2 {
-    return Vec2.neo((this.lowerBound.x + this.upperBound.x) * 0.5, (this.lowerBound.y + this.upperBound.y) * 0.5);
+  getCenter(): Vec2Value {
+    return geo.vec2((this.lowerBound.x + this.upperBound.x) * 0.5, (this.lowerBound.y + this.upperBound.y) * 0.5);
   }
 
   /**
    * Get the extents of the AABB (half-widths).
    */
-  getExtents(): Vec2 {
-    return Vec2.neo((this.upperBound.x - this.lowerBound.x) * 0.5, (this.upperBound.y - this.lowerBound.y) * 0.5);
+  getExtents(): Vec2Value {
+    return geo.vec2((this.upperBound.x - this.lowerBound.x) * 0.5, (this.upperBound.y - this.lowerBound.y) * 0.5);
   }
 
   /**
@@ -130,18 +124,18 @@ export class AABB {
     const upperX = math_max(upperB.x, upperA.x);
     const upperY = math_max(upperB.y, upperA.y);
 
-    this.lowerBound.setNum(lowerX, lowerY);
-    this.upperBound.setNum(upperX, upperY);
+    geo.setVec2(this.lowerBound, lowerX, lowerY);
+    geo.setVec2(this.upperBound, upperX, upperY);
   }
 
   combinePoints(a: Vec2Value, b: Vec2Value): void {
-    this.lowerBound.setNum(math_min(a.x, b.x), math_min(a.y, b.y));
-    this.upperBound.setNum(math_max(a.x, b.x), math_max(a.y, b.y));
+    geo.setVec2(this.lowerBound, math_min(a.x, b.x), math_min(a.y, b.y));
+    geo.setVec2(this.upperBound, math_max(a.x, b.x), math_max(a.y, b.y));
   }
 
   set(aabb: AABBValue): void {
-    this.lowerBound.setNum(aabb.lowerBound.x, aabb.lowerBound.y);
-    this.upperBound.setNum(aabb.upperBound.x, aabb.upperBound.y);
+    geo.setVec2(this.lowerBound, aabb.lowerBound.x, aabb.lowerBound.y);
+    geo.setVec2(this.upperBound, aabb.upperBound.x, aabb.upperBound.y);
   }
 
   contains(aabb: AABBValue): boolean {
@@ -180,7 +174,12 @@ export class AABB {
   }
 
   static areEqual(a: AABBValue, b: AABBValue): boolean {
-    return Vec2.areEqual(a.lowerBound, b.lowerBound) && Vec2.areEqual(a.upperBound, b.upperBound);
+    return (
+      a.lowerBound.x === b.lowerBound.x &&
+      a.lowerBound.y === b.lowerBound.y &&
+      a.upperBound.x === b.upperBound.x &&
+      a.upperBound.y === b.upperBound.y
+    );
   }
 
   static diff(a: AABBValue, b: AABBValue): number {
@@ -203,10 +202,12 @@ export class AABB {
     let tmax = Infinity;
 
     const p = input.p1;
-    const d = Vec2.sub(input.p2, input.p1);
-    const absD = Vec2.abs(d);
+    const d = geo.vec2(0, 0);
+    geo.subVec2(d, input.p2, input.p1);
+    const absD = geo.vec2(0, 0);
+    geo.absVec2(absD, d);
 
-    const normal = Vec2.zero();
+    const normal = geo.vec2(0, 0);
 
     {
       if (absD.x < EPSILON) {
@@ -231,7 +232,7 @@ export class AABB {
 
         // Push the min up
         if (t1 > tmin) {
-          normal.setZero();
+          normal.y = 0;
           normal.x = s;
           tmin = t1;
         }
@@ -268,7 +269,7 @@ export class AABB {
 
         // Push the min up
         if (t1 > tmin) {
-          normal.setZero();
+          normal.x = 0;
           normal.y = s;
           tmin = t1;
         }

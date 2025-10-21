@@ -8,12 +8,11 @@
  */
 
 import { SettingsInternal as Settings } from "../../Settings";
+import * as geo from "../../common/Geo";
 import { clamp } from "../../common/Math";
-import { Vec2, Vec2Value } from "../../common/Vec2";
-import { Vec3 } from "../../common/Vec3";
-import { Mat22 } from "../../common/Mat22";
-import { Mat33 } from "../../common/Mat33";
-import { Rot } from "../../common/Rot";
+import { Vec2Value } from "../../common/Vec2";
+import { Vec3Value } from "../../common/Vec3";
+import { Mat33Value } from "../../common/Mat33";
 import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
@@ -131,10 +130,10 @@ export class RevoluteJoint extends Joint {
   static TYPE = "revolute-joint" as const;
 
   /** @internal */ m_type: "revolute-joint";
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_referenceAngle: number;
-  /** @internal */ m_impulse: Vec3;
+  /** @internal */ m_impulse: Vec3Value;
   /** @internal */ m_motorImpulse: number;
   /** @internal */ m_lowerAngle: number;
   /** @internal */ m_upperAngle: number;
@@ -144,16 +143,16 @@ export class RevoluteJoint extends Joint {
   /** @internal */ m_enableMotor: boolean;
 
   // Solver temp
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
   /** @internal */ m_invIB: number;
   // effective mass for point-to-point constraint.
-  /** @internal */ m_mass: Mat33;
+  /** @internal */ m_mass: Mat33Value;
   // effective mass for motor/limit angular constraint.
   /** @internal */ m_motorMass: number;
   /** @internal */ m_limitState: number;
@@ -171,25 +170,23 @@ export class RevoluteJoint extends Joint {
     bodyA = this.m_bodyA;
     bodyB = this.m_bodyB;
 
-    this.m_mass = new Mat33();
+    this.m_mass = geo.mat33();
     this.m_limitState = LimitState.inactiveLimit;
 
     this.m_type = RevoluteJoint.TYPE;
 
-    if (Vec2.isValid(anchor)) {
-      this.m_localAnchorA = bodyA.getLocalPoint(anchor);
-    } else if (Vec2.isValid(def.localAnchorA)) {
-      this.m_localAnchorA = Vec2.clone(def.localAnchorA);
-    } else {
-      this.m_localAnchorA = Vec2.zero();
+    this.m_localAnchorA = geo.vec2(0, 0);
+    if (geo.isVec2(anchor)) {
+      geo.copyVec2(this.m_localAnchorA, bodyA.getLocalPoint(anchor));
+    } else if (geo.isVec2(def.localAnchorA)) {
+      geo.copyVec2(this.m_localAnchorA, def.localAnchorA);
     }
 
-    if (Vec2.isValid(anchor)) {
+    this.m_localAnchorB = geo.vec2(0, 0);
+    if (geo.isVec2(anchor)) {
       this.m_localAnchorB = bodyB.getLocalPoint(anchor);
-    } else if (Vec2.isValid(def.localAnchorB)) {
-      this.m_localAnchorB = Vec2.clone(def.localAnchorB);
-    } else {
-      this.m_localAnchorB = Vec2.zero();
+    } else if (geo.isVec2(def.localAnchorB)) {
+      geo.copyVec2(this.m_localAnchorB, def.localAnchorB);
     }
 
     if (Number.isFinite(def.referenceAngle)) {
@@ -198,7 +195,7 @@ export class RevoluteJoint extends Joint {
       this.m_referenceAngle = bodyB.getAngle() - bodyA.getAngle();
     }
 
-    this.m_impulse = new Vec3();
+    this.m_impulse = geo.vec3(0, 0, 0);
     this.m_motorImpulse = 0.0;
 
     this.m_lowerAngle = def.lowerAngle ?? DEFAULTS.lowerAngle;
@@ -255,14 +252,14 @@ export class RevoluteJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<RevoluteJointDef>): void {
     if (def.anchorA) {
-      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
-    } else if (def.localAnchorA) {
-      this.m_localAnchorA.setVec2(def.localAnchorA);
+      geo.copyVec2(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
+    } else if (geo.isVec2(def.localAnchorA)) {
+      geo.copyVec2(this.m_localAnchorA, def.localAnchorA);
     }
     if (def.anchorB) {
-      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
-    } else if (def.localAnchorB) {
-      this.m_localAnchorB.setVec2(def.localAnchorB);
+      geo.copyVec2(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
+    } else if (geo.isVec2(def.localAnchorB)) {
+      geo.copyVec2(this.m_localAnchorB, def.localAnchorB);
     }
     if (Number.isFinite(def.referenceAngle)) {
       this.m_referenceAngle = def.referenceAngle;
@@ -290,14 +287,14 @@ export class RevoluteJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA(): Vec2 {
+  getLocalAnchorA(): Vec2Value {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB(): Vec2 {
+  getLocalAnchorB(): Vec2Value {
     return this.m_localAnchorB;
   }
 
@@ -432,22 +429,24 @@ export class RevoluteJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force given the inverse time step. Unit is N.
    */
-  getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
+  getReactionForce(inv_dt: number): Vec2Value {
+    const result = geo.vec2(this.m_impulse.x, this.m_impulse.y);
+    geo.mulVec2(result, inv_dt);
+    return result;
   }
 
   /**
@@ -474,11 +473,13 @@ export class RevoluteJoint extends Joint {
     const vB = this.m_bodyB.c_velocity.v;
     let wB = this.m_bodyB.c_velocity.w;
 
-    const qA = Rot.neo(aA);
-    const qB = Rot.neo(aB);
+    const qA = geo.rotation(aA);
+    const qB = geo.rotation(aB);
 
-    this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    this.m_rA = geo.vec2(0, 0);
+    geo.rotSubVec2(this.m_rA, qA, this.m_localAnchorA, this.m_localCenterA);
+    this.m_rB = geo.vec2(0, 0);
+    geo.rotSubVec2(this.m_rB, qB, this.m_localAnchorB, this.m_localCenterB);
 
     // J = [-I -r1_skew I r2_skew]
     // [ 0 -1 0 1]
@@ -540,18 +541,18 @@ export class RevoluteJoint extends Joint {
 
     if (step.warmStarting) {
       // Scale impulses to support a variable time step.
-      this.m_impulse.mul(step.dtRatio);
+      geo.mulVec3(this.m_impulse, step.dtRatio);
       this.m_motorImpulse *= step.dtRatio;
 
-      const P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
+      const P = geo.vec2(this.m_impulse.x, this.m_impulse.y);
 
-      vA.subMul(mA, P);
-      wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_motorImpulse + this.m_impulse.z);
+      geo.minusScaleVec2(vA, mA, P);
+      wA -= iA * (geo.crossVec2Vec2(this.m_rA, P) + this.m_motorImpulse + this.m_impulse.z);
 
-      vB.addMul(mB, P);
-      wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_motorImpulse + this.m_impulse.z);
+      geo.plusScaleVec2(vB, mB, P);
+      wB += iB * (geo.crossVec2Vec2(this.m_rB, P) + this.m_motorImpulse + this.m_impulse.z);
     } else {
-      this.m_impulse.setZero();
+      geo.zeroVec3(this.m_impulse);
       this.m_motorImpulse = 0.0;
     }
 
@@ -589,22 +590,26 @@ export class RevoluteJoint extends Joint {
 
     // Solve limit constraint.
     if (this.m_enableLimit && this.m_limitState != LimitState.inactiveLimit && fixedRotation == false) {
-      const Cdot1 = Vec2.zero();
-      Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
-      Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
-      const Cdot2 = wB - wA;
-      const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
+      const Cdot1 = geo.vec2(0, 0);
+      geo.dvp(Cdot1, vB, wB, this.m_rB, vA, wA, this.m_rA);
 
-      const impulse = Vec3.neg(this.m_mass.solve33(Cdot));
+      const Cdot2 = wB - wA;
+
+      const impulse = geo.vec3(0, 0, 0);
+      geo.solveMat33Num(impulse, this.m_mass, Cdot1.x, Cdot1.y, Cdot2);
+      geo.negVec3(impulse);
 
       if (this.m_limitState == LimitState.equalLimits) {
-        this.m_impulse.add(impulse);
+        geo.plusVec3(this.m_impulse, impulse);
       } else if (this.m_limitState == LimitState.atLowerLimit) {
         const newImpulse = this.m_impulse.z + impulse.z;
 
         if (newImpulse < 0.0) {
-          const rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y));
-          const reduced = this.m_mass.solve22(rhs);
+          const rhs = geo.vec2(this.m_mass.ez.x, this.m_mass.ez.y);
+          geo.mulVec2(rhs, this.m_impulse.z);
+          geo.minusVec2(rhs, Cdot1);
+          const reduced = geo.vec2(0, 0);
+          geo.solveMat22Num(reduced, this.m_mass, rhs.x, rhs.y);
           impulse.x = reduced.x;
           impulse.y = reduced.y;
           impulse.z = -this.m_impulse.z;
@@ -612,14 +617,17 @@ export class RevoluteJoint extends Joint {
           this.m_impulse.y += reduced.y;
           this.m_impulse.z = 0.0;
         } else {
-          this.m_impulse.add(impulse);
+          geo.plusVec3(this.m_impulse, impulse);
         }
       } else if (this.m_limitState == LimitState.atUpperLimit) {
         const newImpulse = this.m_impulse.z + impulse.z;
 
         if (newImpulse > 0.0) {
-          const rhs = Vec2.combine(-1, Cdot1, this.m_impulse.z, Vec2.neo(this.m_mass.ez.x, this.m_mass.ez.y));
-          const reduced = this.m_mass.solve22(rhs);
+          const rhs = geo.vec2(this.m_mass.ez.x, this.m_mass.ez.y);
+          geo.mulVec2(rhs, this.m_impulse.z);
+          geo.minusVec2(rhs, Cdot1);
+          const reduced = geo.vec2(0, 0);
+          geo.solveMat22Num(reduced, this.m_mass, rhs.x, rhs.y);
           impulse.x = reduced.x;
           impulse.y = reduced.y;
           impulse.z = -this.m_impulse.z;
@@ -627,32 +635,33 @@ export class RevoluteJoint extends Joint {
           this.m_impulse.y += reduced.y;
           this.m_impulse.z = 0.0;
         } else {
-          this.m_impulse.add(impulse);
+          geo.plusVec3(this.m_impulse, impulse);
         }
       }
 
-      const P = Vec2.neo(impulse.x, impulse.y);
+      const P = geo.vec2(impulse.x, impulse.y);
 
-      vA.subMul(mA, P);
-      wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + impulse.z);
+      geo.minusScaleVec2(vA, mA, P);
+      wA -= iA * (geo.crossVec2Vec2(this.m_rA, P) + impulse.z);
 
-      vB.addMul(mB, P);
-      wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + impulse.z);
+      geo.plusScaleVec2(vB, mB, P);
+      wB += iB * (geo.crossVec2Vec2(this.m_rB, P) + impulse.z);
     } else {
       // Solve point-to-point constraint
-      const Cdot = Vec2.zero();
-      Cdot.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
-      Cdot.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
-      const impulse = this.m_mass.solve22(Vec2.neg(Cdot));
+      const Cdot = geo.vec2(0, 0);
+      geo.dvp(Cdot, vB, wB, this.m_rB, vA, wA, this.m_rA);
+
+      const impulse = geo.vec2(0, 0);
+      geo.solveMat22Num(impulse, this.m_mass, -Cdot.x, -Cdot.y);
 
       this.m_impulse.x += impulse.x;
       this.m_impulse.y += impulse.y;
 
-      vA.subMul(mA, impulse);
-      wA -= iA * Vec2.crossVec2Vec2(this.m_rA, impulse);
+      geo.minusScaleVec2(vA, mA, impulse);
+      wA -= iA * geo.crossVec2Vec2(this.m_rA, impulse);
 
-      vB.addMul(mB, impulse);
-      wB += iB * Vec2.crossVec2Vec2(this.m_rB, impulse);
+      geo.plusScaleVec2(vB, mB, impulse);
+      wB += iB * geo.crossVec2Vec2(this.m_rB, impulse);
     }
 
     this.m_bodyA.c_velocity.v = vA;
@@ -670,8 +679,8 @@ export class RevoluteJoint extends Joint {
     const cB = this.m_bodyB.c_position.c;
     let aB = this.m_bodyB.c_position.a;
 
-    const qA = Rot.neo(aA);
-    const qB = Rot.neo(aB);
+    const qA = geo.rotation(aA);
+    const qB = geo.rotation(aB);
 
     let angularError = 0.0;
     let positionError = 0.0;
@@ -710,39 +719,41 @@ export class RevoluteJoint extends Joint {
 
     // Solve point-to-point constraint.
     {
-      qA.setAngle(aA);
-      qB.setAngle(aB);
-      const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-      const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+      geo.setRotAngle(qA, aA);
+      geo.setRotAngle(qB, aB);
+      const rA = geo.vec2(0, 0);
+      geo.rotSubVec2(rA, qA, this.m_localAnchorA, this.m_localCenterA);
+      const rB = geo.vec2(0, 0);
+      geo.rotSubVec2(rB, qB, this.m_localAnchorB, this.m_localCenterB);
 
-      const C = Vec2.zero();
-      C.addCombine(1, cB, 1, rB);
-      C.subCombine(1, cA, 1, rA);
-      positionError = C.length();
+      const C = geo.vec2(0, 0);
+      geo.combine4Vec2(C, 1, cB, 1, rB, -1, cA, -1, rA);
+      positionError = geo.lengthVec2(C);
 
       const mA = this.m_invMassA;
       const mB = this.m_invMassB;
       const iA = this.m_invIA;
       const iB = this.m_invIB;
 
-      const K = new Mat22();
+      const K = geo.mat22();
       K.ex.x = mA + mB + iA * rA.y * rA.y + iB * rB.y * rB.y;
       K.ex.y = -iA * rA.x * rA.y - iB * rB.x * rB.y;
       K.ey.x = K.ex.y;
       K.ey.y = mA + mB + iA * rA.x * rA.x + iB * rB.x * rB.x;
 
-      const impulse = Vec2.neg(K.solve(C));
+      const impulse = geo.vec2(0, 0);
+      geo.solveMat22Num(impulse, K, -C.x, -C.y);
 
-      cA.subMul(mA, impulse);
-      aA -= iA * Vec2.crossVec2Vec2(rA, impulse);
+      geo.minusScaleVec2(cA, mA, impulse);
+      aA -= iA * geo.crossVec2Vec2(rA, impulse);
 
-      cB.addMul(mB, impulse);
-      aB += iB * Vec2.crossVec2Vec2(rB, impulse);
+      geo.plusScaleVec2(cB, mB, impulse);
+      aB += iB * geo.crossVec2Vec2(rB, impulse);
     }
 
-    this.m_bodyA.c_position.c.setVec2(cA);
+    geo.copyVec2(this.m_bodyA.c_position.c, cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.setVec2(cB);
+    geo.copyVec2(this.m_bodyB.c_position.c, cB);
     this.m_bodyB.c_position.a = aB;
 
     return positionError <= Settings.linearSlop && angularError <= Settings.angularSlop;

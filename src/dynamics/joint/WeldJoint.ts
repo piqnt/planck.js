@@ -9,10 +9,10 @@
 
 import { options } from "../../util/options";
 import { SettingsInternal as Settings } from "../../Settings";
-import { Vec2, Vec2Value } from "../../common/Vec2";
-import { Vec3 } from "../../common/Vec3";
-import { Mat33 } from "../../common/Mat33";
-import { Rot } from "../../common/Rot";
+import * as geo from "../../common/Geo";
+import { Vec2Value } from "../../common/Vec2";
+import { Vec3Value } from "../../common/Vec3";
+import { Mat33Value } from "../../common/Mat33";
 import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
@@ -84,28 +84,28 @@ export class WeldJoint extends Joint {
   static TYPE = "weld-joint" as const;
 
   /** @internal */ m_type: "weld-joint";
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_referenceAngle: number;
 
   /** @internal */ m_frequencyHz: number;
   /** @internal */ m_dampingRatio: number;
 
-  /** @internal */ m_impulse: Vec3;
+  /** @internal */ m_impulse: Vec3Value;
 
   /** @internal */ m_bias: number;
   /** @internal */ m_gamma: number;
 
   // Solver temp
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
   /** @internal */ m_invIB: number;
-  /** @internal */ m_mass: Mat33;
+  /** @internal */ m_mass: Mat33Value;
 
   constructor(def: WeldJointDef);
   constructor(def: WeldJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
@@ -122,8 +122,20 @@ export class WeldJoint extends Joint {
 
     this.m_type = WeldJoint.TYPE;
 
-    this.m_localAnchorA = Vec2.clone(anchor ? bodyA.getLocalPoint(anchor) : def.localAnchorA || Vec2.zero());
-    this.m_localAnchorB = Vec2.clone(anchor ? bodyB.getLocalPoint(anchor) : def.localAnchorB || Vec2.zero());
+    this.m_localAnchorA = geo.vec2(0, 0);
+    if (anchor) {
+      geo.copyVec2(this.m_localAnchorA, bodyA.getLocalPoint(anchor));
+    } else if (geo.isVec2(def.localAnchorA)) {
+      geo.copyVec2(this.m_localAnchorA, def.localAnchorA);
+    }
+
+    this.m_localAnchorB = geo.vec2(0, 0);
+    if (anchor) {
+      geo.copyVec2(this.m_localAnchorB, bodyB.getLocalPoint(anchor));
+    } else if (geo.isVec2(def.localAnchorB)) {
+      geo.copyVec2(this.m_localAnchorB, def.localAnchorB);
+    }
+
     this.m_referenceAngle = Number.isFinite(def.referenceAngle)
       ? def.referenceAngle
       : bodyB.getAngle() - bodyA.getAngle();
@@ -131,7 +143,7 @@ export class WeldJoint extends Joint {
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
 
-    this.m_impulse = new Vec3();
+    this.m_impulse = geo.vec3(0, 0, 0);
 
     this.m_bias = 0.0;
     this.m_gamma = 0.0;
@@ -146,7 +158,7 @@ export class WeldJoint extends Joint {
     // this.m_invMassB;
     // this.m_invIA;
     // this.m_invIB;
-    this.m_mass = new Mat33();
+    this.m_mass = geo.mat33();
 
     // Point-to-point constraint
     // C = p2 - p1
@@ -192,14 +204,14 @@ export class WeldJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<WeldJointDef>): void {
     if (def.anchorA) {
-      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
-    } else if (def.localAnchorA) {
-      this.m_localAnchorA.setVec2(def.localAnchorA);
+      geo.copyVec2(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
+    } else if (geo.isVec2(def.localAnchorA)) {
+      geo.copyVec2(this.m_localAnchorA, def.localAnchorA);
     }
     if (def.anchorB) {
-      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
-    } else if (def.localAnchorB) {
-      this.m_localAnchorB.setVec2(def.localAnchorB);
+      geo.copyVec2(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
+    } else if (geo.isVec2(def.localAnchorB)) {
+      geo.copyVec2(this.m_localAnchorB, def.localAnchorB);
     }
     if (Number.isFinite(def.frequencyHz)) {
       this.m_frequencyHz = def.frequencyHz;
@@ -212,14 +224,14 @@ export class WeldJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA(): Vec2 {
+  getLocalAnchorA(): Vec2Value {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB(): Vec2 {
+  getLocalAnchorB(): Vec2Value {
     return this.m_localAnchorB;
   }
 
@@ -261,22 +273,24 @@ export class WeldJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.neo(this.m_impulse.x, this.m_impulse.y).mul(inv_dt);
+  getReactionForce(inv_dt: number): Vec2Value {
+    const result = geo.vec2(this.m_impulse.x, this.m_impulse.y);
+    geo.mulVec2(result, inv_dt);
+    return result;
   }
 
   /**
@@ -302,11 +316,13 @@ export class WeldJoint extends Joint {
     const vB = this.m_bodyB.c_velocity.v;
     let wB = this.m_bodyB.c_velocity.w;
 
-    const qA = Rot.neo(aA);
-    const qB = Rot.neo(aB);
+    const qA = geo.rotation(aA);
+    const qB = geo.rotation(aB);
 
-    this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    this.m_rA = geo.vec2(0, 0);
+    geo.rotSubVec2(this.m_rA, qA, this.m_localAnchorA, this.m_localCenterA);
+    this.m_rB = geo.vec2(0, 0);
+    geo.rotSubVec2(this.m_rB, qB, this.m_localAnchorB, this.m_localCenterB);
 
     // J = [-I -r1_skew I r2_skew]
     // [ 0 -1 0 1]
@@ -322,7 +338,7 @@ export class WeldJoint extends Joint {
     const iA = this.m_invIA;
     const iB = this.m_invIB;
 
-    const K = new Mat33();
+    const K = geo.mat33();
     K.ex.x = mA + mB + this.m_rA.y * this.m_rA.y * iA + this.m_rB.y * this.m_rB.y * iB;
     K.ey.x = -this.m_rA.y * this.m_rA.x * iA - this.m_rB.y * this.m_rB.x * iB;
     K.ez.x = -this.m_rA.y * iA - this.m_rB.y * iB;
@@ -334,7 +350,7 @@ export class WeldJoint extends Joint {
     K.ez.z = iA + iB;
 
     if (this.m_frequencyHz > 0.0) {
-      K.getInverse22(this.m_mass);
+      geo.inverseMat22(this.m_mass, K);
 
       let invM = iA + iB;
       const m = invM > 0.0 ? 1.0 / invM : 0.0;
@@ -359,28 +375,28 @@ export class WeldJoint extends Joint {
       invM += this.m_gamma;
       this.m_mass.ez.z = invM != 0.0 ? 1.0 / invM : 0.0;
     } else if (K.ez.z == 0.0) {
-      K.getInverse22(this.m_mass);
+      geo.inverseMat22(this.m_mass, K);
       this.m_gamma = 0.0;
       this.m_bias = 0.0;
     } else {
-      K.getSymInverse33(this.m_mass);
+      geo.symInverseMat33(this.m_mass, K);
       this.m_gamma = 0.0;
       this.m_bias = 0.0;
     }
 
     if (step.warmStarting) {
       // Scale impulses to support a variable time step.
-      this.m_impulse.mul(step.dtRatio);
+      geo.mulVec3(this.m_impulse, step.dtRatio);
 
-      const P = Vec2.neo(this.m_impulse.x, this.m_impulse.y);
+      const P = geo.vec2(this.m_impulse.x, this.m_impulse.y);
 
-      vA.subMul(mA, P);
-      wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + this.m_impulse.z);
+      geo.minusScaleVec2(vA, mA, P);
+      wA -= iA * (geo.crossVec2Vec2(this.m_rA, P) + this.m_impulse.z);
 
-      vB.addMul(mB, P);
-      wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + this.m_impulse.z);
+      geo.plusScaleVec2(vB, mB, P);
+      wB += iB * (geo.crossVec2Vec2(this.m_rB, P) + this.m_impulse.z);
     } else {
-      this.m_impulse.setZero();
+      geo.zeroVec3(this.m_impulse);
     }
 
     this.m_bodyA.c_velocity.v = vA;
@@ -409,38 +425,41 @@ export class WeldJoint extends Joint {
       wA -= iA * impulse2;
       wB += iB * impulse2;
 
-      const Cdot1 = Vec2.zero();
-      Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
-      Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
+      const Cdot1 = geo.vec2(0, 0);
+      geo.dvp(Cdot1, vB, wB, this.m_rB, vA, wA, this.m_rA);
 
-      const impulse1 = Vec2.neg(Mat33.mulVec2(this.m_mass, Cdot1));
+      const impulse1 = geo.vec2(0, 0);
+      geo.mulMat33Vec2(impulse1, this.m_mass, Cdot1);
+      geo.negVec2(impulse1);
       this.m_impulse.x += impulse1.x;
       this.m_impulse.y += impulse1.y;
 
-      const P = Vec2.clone(impulse1);
+      const P = geo.vec2(impulse1.x, impulse1.y);
 
-      vA.subMul(mA, P);
-      wA -= iA * Vec2.crossVec2Vec2(this.m_rA, P);
+      geo.minusScaleVec2(vA, mA, P);
+      wA -= iA * geo.crossVec2Vec2(this.m_rA, P);
 
-      vB.addMul(mB, P);
-      wB += iB * Vec2.crossVec2Vec2(this.m_rB, P);
+      geo.plusScaleVec2(vB, mB, P);
+      wB += iB * geo.crossVec2Vec2(this.m_rB, P);
     } else {
-      const Cdot1 = Vec2.zero();
-      Cdot1.addCombine(1, vB, 1, Vec2.crossNumVec2(wB, this.m_rB));
-      Cdot1.subCombine(1, vA, 1, Vec2.crossNumVec2(wA, this.m_rA));
+      const Cdot1 = geo.vec2(0, 0);
+      geo.dvp(Cdot1, vB, wB, this.m_rB, vA, wA, this.m_rA);
+
       const Cdot2 = wB - wA;
-      const Cdot = new Vec3(Cdot1.x, Cdot1.y, Cdot2);
+      const Cdot = geo.vec3(Cdot1.x, Cdot1.y, Cdot2);
 
-      const impulse = Vec3.neg(Mat33.mulVec3(this.m_mass, Cdot));
-      this.m_impulse.add(impulse);
+      const impulse = geo.vec3(0, 0, 0);
+      geo.mulMat33Vec3(impulse, this.m_mass, Cdot);
+      geo.negVec3(impulse);
+      geo.plusVec3(this.m_impulse, impulse);
 
-      const P = Vec2.neo(impulse.x, impulse.y);
+      const P = geo.vec2(impulse.x, impulse.y);
 
-      vA.subMul(mA, P);
-      wA -= iA * (Vec2.crossVec2Vec2(this.m_rA, P) + impulse.z);
+      geo.minusScaleVec2(vA, mA, P);
+      wA -= iA * (geo.crossVec2Vec2(this.m_rA, P) + impulse.z);
 
-      vB.addMul(mB, P);
-      wB += iB * (Vec2.crossVec2Vec2(this.m_rB, P) + impulse.z);
+      geo.plusScaleVec2(vB, mB, P);
+      wB += iB * (geo.crossVec2Vec2(this.m_rB, P) + impulse.z);
     }
 
     this.m_bodyA.c_velocity.v = vA;
@@ -458,21 +477,23 @@ export class WeldJoint extends Joint {
     const cB = this.m_bodyB.c_position.c;
     let aB = this.m_bodyB.c_position.a;
 
-    const qA = Rot.neo(aA);
-    const qB = Rot.neo(aB);
+    const qA = geo.rotation(aA);
+    const qB = geo.rotation(aB);
 
     const mA = this.m_invMassA;
     const mB = this.m_invMassB;
     const iA = this.m_invIA;
     const iB = this.m_invIB;
 
-    const rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    const rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    const rA = geo.vec2(0, 0);
+    geo.rotSubVec2(rA, qA, this.m_localAnchorA, this.m_localCenterA);
+    const rB = geo.vec2(0, 0);
+    geo.rotSubVec2(rB, qB, this.m_localAnchorB, this.m_localCenterB);
 
     let positionError: number;
     let angularError: number;
 
-    const K = new Mat33();
+    const K = geo.mat33();
     K.ex.x = mA + mB + rA.y * rA.y * iA + rB.y * rB.y * iB;
     K.ey.x = -rA.y * rA.x * iA - rB.y * rB.x * iB;
     K.ez.x = -rA.y * iA - rB.y * iB;
@@ -484,47 +505,49 @@ export class WeldJoint extends Joint {
     K.ez.z = iA + iB;
 
     if (this.m_frequencyHz > 0.0) {
-      const C1 = Vec2.zero();
-      C1.addCombine(1, cB, 1, rB);
-      C1.subCombine(1, cA, 1, rA);
+      const C1 = geo.vec2(0, 0);
+      geo.combine4Vec2(C1, 1, cB, 1, rB, -1, cA, -1, rA);
 
-      positionError = C1.length();
+      positionError = geo.lengthVec2(C1);
       angularError = 0.0;
 
-      const P = Vec2.neg(K.solve22(C1));
+      const P = geo.vec2(0, 0);
+      geo.solveMat22Num(P, K, -C1.x, -C1.y);
 
-      cA.subMul(mA, P);
-      aA -= iA * Vec2.crossVec2Vec2(rA, P);
+      geo.minusScaleVec2(cA, mA, P);
+      aA -= iA * geo.crossVec2Vec2(rA, P);
 
-      cB.addMul(mB, P);
-      aB += iB * Vec2.crossVec2Vec2(rB, P);
+      geo.plusScaleVec2(cB, mB, P);
+      aB += iB * geo.crossVec2Vec2(rB, P);
     } else {
-      const C1 = Vec2.zero();
-      C1.addCombine(1, cB, 1, rB);
-      C1.subCombine(1, cA, 1, rA);
+      const C1 = geo.vec2(0, 0);
+      geo.combine4Vec2(C1, 1, cB, 1, rB, -1, cA, -1, rA);
 
       const C2 = aB - aA - this.m_referenceAngle;
 
-      positionError = C1.length();
+      positionError = geo.lengthVec2(C1);
       angularError = math_abs(C2);
 
-      const C = new Vec3(C1.x, C1.y, C2);
-
-      let impulse = new Vec3();
+      const impulse = geo.vec3(0, 0, 0);
       if (K.ez.z > 0.0) {
-        impulse = Vec3.neg(K.solve33(C));
+        geo.solveMat33Num(impulse, K, C1.x, C1.y, C2);
+        geo.negVec3(impulse);
       } else {
-        const impulse2 = Vec2.neg(K.solve22(C1));
-        impulse.set(impulse2.x, impulse2.y, 0.0);
+        const impulse2 = geo.vec2(0, 0);
+        geo.solveMat22Num(impulse2, K, -C1.x, -C1.y);
+
+        impulse.x = impulse2.x;
+        impulse.y = impulse2.y;
+        impulse.z = 0.0;
       }
 
-      const P = Vec2.neo(impulse.x, impulse.y);
+      const P = geo.vec2(impulse.x, impulse.y);
 
-      cA.subMul(mA, P);
-      aA -= iA * (Vec2.crossVec2Vec2(rA, P) + impulse.z);
+      geo.minusScaleVec2(cA, mA, P);
+      aA -= iA * (geo.crossVec2Vec2(rA, P) + impulse.z);
 
-      cB.addMul(mB, P);
-      aB += iB * (Vec2.crossVec2Vec2(rB, P) + impulse.z);
+      geo.plusScaleVec2(cB, mB, P);
+      aB += iB * (geo.crossVec2Vec2(rB, P) + impulse.z);
     }
 
     this.m_bodyA.c_position.c = cA;
