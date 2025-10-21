@@ -39,6 +39,8 @@ Contact.addType(ChainShape.TYPE, CircleShape.TYPE, ChainCircleContact);
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);
 }
 
+/** @internal */ const edge_reuse = new EdgeShape();
+
 function ChainCircleContact(
   manifold: Manifold,
   xfA: TransformValue,
@@ -52,10 +54,9 @@ function ChainCircleContact(
   if (_ASSERT) console.assert(fixtureB.getType() == CircleShape.TYPE);
 
   const chain = fixtureA.getShape() as ChainShape;
-  const edge = new EdgeShape();
-  chain.getChildEdge(edge, indexA);
+  chain.getChildEdge(edge_reuse, indexA);
 
-  const shapeA = edge;
+  const shapeA = edge_reuse;
   const shapeB = fixtureB.getShape() as CircleShape;
 
   CollideEdgeCircle(manifold, shapeA, xfA, shapeB, xfB);

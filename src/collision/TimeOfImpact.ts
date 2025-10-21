@@ -381,7 +381,7 @@ class SeparationFunction {
       geo.transformVec2(pointB, xfB, this.m_localPoint);
 
       const localPointA = proxyA.getVertex(cache.indexA[0]);
-      const pointA = geo.vec2(0, 0);
+      
       geo.transformVec2(pointA, xfA, localPointA);
 
       let s = geo.dotVec2(pointA, normal) - geo.dotVec2(pointB, normal);
