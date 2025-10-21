@@ -12,7 +12,6 @@ import * as geo from "../common/Geo";
 import { Vec2Value } from "../common/Vec2";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
 
@@ -42,23 +41,12 @@ export interface AABBValue {
   upperBound: Vec2Value;
 }
 
-declare module "./AABB" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function AABB(lower?: Vec2Value, upper?: Vec2Value): AABB;
-}
-
 /** Axis-aligned bounding box */
-// @ts-expect-error
 export class AABB {
   lowerBound: Vec2Value;
   upperBound: Vec2Value;
 
   constructor(lower?: Vec2Value, upper?: Vec2Value) {
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof AABB)) {
-      return new AABB(lower, upper);
-    }
-
     this.lowerBound = geo.vec2(0, 0);
     this.upperBound = geo.vec2(0, 0);
 

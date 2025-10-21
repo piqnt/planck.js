@@ -18,7 +18,6 @@ import { PrismaticJoint } from "./PrismaticJoint";
 import { TimeStep } from "../Solver";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 /**
  * Gear joint definition.
@@ -48,22 +47,6 @@ export interface GearJointDef extends JointDef, GearJointOpt {
   ratio: 1.0,
 };
 
-declare module "./GearJoint" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function GearJoint(def: GearJointDef): GearJoint;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function GearJoint(
-    def: GearJointOpt,
-    bodyA: Body,
-    bodyB: Body,
-    joint1: RevoluteJoint | PrismaticJoint,
-    joint2: RevoluteJoint | PrismaticJoint,
-    ratio?: number,
-  ): GearJoint;
-}
-
 /**
  * A gear joint is used to connect two joints together. Either joint can be a
  * revolute or prismatic joint. You specify a gear ratio to bind the motions
@@ -77,7 +60,6 @@ declare module "./GearJoint" {
  * This definition requires two existing revolute or prismatic joints (any
  * combination will work).
  */
-// @ts-expect-error
 export class GearJoint extends Joint {
   static TYPE = "gear-joint" as const;
 
@@ -138,11 +120,6 @@ export class GearJoint extends Joint {
     joint2?: RevoluteJoint | PrismaticJoint,
     ratio?: number,
   ) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof GearJoint)) {
-      return new GearJoint(def, bodyA, bodyB, joint1, joint2, ratio);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;
