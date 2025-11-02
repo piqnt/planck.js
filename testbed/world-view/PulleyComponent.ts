@@ -1,41 +1,37 @@
+import { Memo } from "polymatic";
 import * as Stage from "stage-js";
-import type { PolygonShape } from "../";
 
+import type { PulleyJoint } from "../";
 import { ComputedStyle } from "./ComputedStyle";
-import { Memo } from "../Memo";
 
 const math_max = Math.max;
 const math_min = Math.min;
 
-export class PolygonShapeComponent extends Stage.Sprite {
+export class PulleyJointComponent extends Stage.Node {
   style: ComputedStyle;
-  shape: PolygonShape;
+  joint: PulleyJoint;
+  memo = Memo.init();
 
-  textureOffset = { x: 0, y: 0, a: 0 };
-
-  constructor(shape: PolygonShape, style: ComputedStyle) {
+  constructor(joint: PulleyJoint, style: ComputedStyle) {
     super();
 
     this.style = style;
-    this.shape = shape;
+    this.joint = joint;
 
-    const textureOffset = this.textureOffset;
+    const vertices = [];
+
+    let offsetX = 0;
+    let offsetY = 0;
+    const offsetMemo = Memo.init();
 
     const texture = Stage.canvas();
     texture.setMemoizer(() => {
-      let key = "";
-
-      const vertices = shape.m_vertices;
-      for (let i = 0; i < vertices.length; ++i) {
-        const v = vertices[i];
-        key += v.x + "," + v.y + ";";
-      }
-
-      key += style.lineWidth + ";";
-      key += style.stroke + ";";
-      key += style.fill + ";";
-
-      return key;
+      const v1 = joint.getAnchorA();
+      const v2 = joint.getGroundAnchorA();
+      const v3 = joint.getGroundAnchorB();
+      const v4 = joint.getAnchorB();
+      const token = v1.x + "." + v1.y + "." + v2.x + "." + v2.y + "." + v3.x + "." + v3.y + "." + v4.x + "." + v4.y;
+      return token;
     });
     texture.setDrawer(function () {
       const lineWidth = style.lineWidth;
@@ -46,7 +42,10 @@ export class PolygonShapeComponent extends Stage.Sprite {
       const ratio = this.getDevicePixelRatio();
       const lw = lineWidth / ratio;
 
-      const vertices = shape.m_vertices;
+      vertices[0] = joint.getAnchorA();
+      vertices[1] = joint.getGroundAnchorA();
+      vertices[2] = joint.getGroundAnchorB();
+      vertices[3] = joint.getAnchorB();
 
       if (!vertices.length) {
         return;
@@ -64,10 +63,13 @@ export class PolygonShapeComponent extends Stage.Sprite {
         maxY = math_max(maxY, v.y);
       }
 
-      textureOffset.x = minX;
-      textureOffset.y = minY;
+      const width = maxX - minX;
+      const height = maxY - minY;
 
-      this.setSize(maxX - minX + lw, maxY - minY + lw, ratio);
+      offsetX = minX;
+      offsetY = minY;
+
+      this.setSize(width + lw, height + lw, ratio);
       this.setPadding(-lw / 2);
 
       ctx.scale(ratio, ratio);
@@ -80,36 +82,18 @@ export class PolygonShapeComponent extends Stage.Sprite {
         else ctx.lineTo(x, y);
       }
 
-      if (vertices.length > 2) {
-        if (fill) {
-          ctx.fillStyle = fill;
-          ctx.fill();
-        }
-        ctx.closePath();
-      }
-
       ctx.lineCap = "round";
-      ctx.lineJoin = "round";
       ctx.lineWidth = lw;
       ctx.strokeStyle = stroke ?? "";
       ctx.stroke();
     });
 
-    this.texture(texture);
-
-    this.tick(this.handleTick);
+    const sprite = Stage.sprite(texture);
+    sprite.tick(() => {
+      if (offsetMemo.update(offsetX, offsetY)) {
+        sprite.offset(offsetX, offsetY);
+      }
+    });
+    this.append(sprite);
   }
-
-  __memo = Memo.init();
-
-  handleTick = () => {
-    const x = this.textureOffset.x;
-    const y = this.textureOffset.y;
-    const a = this.textureOffset.a;
-    if (!this.__memo.update(x, y, a)) {
-      return true;
-    }
-    this.offset(x, y);
-    this.rotate(a);
-  };
 }

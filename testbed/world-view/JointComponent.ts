@@ -1,8 +1,7 @@
+import { Memo } from "polymatic";
 import * as Stage from "stage-js";
+
 import type { Joint } from "../";
-
-import { Memo } from "../Memo";
-
 import { ComputedStyle } from "./ComputedStyle";
 
 const math_atan2 = Math.atan2;
