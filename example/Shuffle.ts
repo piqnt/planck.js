@@ -1,14 +1,9 @@
-import {
-  World,
-  Vec2Value,
-  Circle,
-  Chain,
-  Settings,
-  Testbed,
-  Contact,
-  Body,
-  DataDriver,
-} from "planck";
+import { World, Vec2Value, Circle, Chain, Settings, Contact, Body } from "../testbed";
+
+import { Binder, Driver, Middleware, Runtime } from "polymatic";
+
+import { DefaultTestbedContext } from "../testbed/testbed/TestbedContext";
+import { TestbedMain } from "../testbed/testbed/TestbedMain";
 
 type Color = "red" | "blue";
 
@@ -28,53 +23,52 @@ interface WallData {
 
 type UserData = PuckData | WallData;
 
-class ShuffleGame {
-  physics = new ShufflePhysics();
-  terminal = new TestbedTerminal();
-
-  redPucks: PuckData[] = [];
-  bluePucks: PuckData[] = [];
-
-  width = 10.0;
-  height = 10.0;
-
+class ShuffleState {
+  boardWidth = 10.0;
+  boardHeight = 10.0;
   puckRadius = 0.3;
   puckSpace = 1;
+  pucks: PuckData[] = [];
+}
 
-  setup() {
-    this.physics.setup(this);
-    this.terminal.setup(this);
+class ShuffleContext extends DefaultTestbedContext {
+  shuffle = new ShuffleState();
+}
+
+class ShuffleGame extends Middleware<ShuffleContext> {
+  constructor() {
+    super();
+    this.on("game-puck-out", this.handlePuckOut);
+    this.on("game-start", this.handleGameStart);
+
+    this.use(new ShufflePhysics());
+    this.use(new TestbedTerminal());
   }
 
-  update() {
-    this.physics.update(this);
-    this.terminal.update(this);
-  }
+  handleGameStart() {
+    const { boardWidth: width, boardHeight: height, puckRadius, puckSpace } = this.context.shuffle;
 
-  start() {
-    this.physics.start();
+    this.context.shuffle.pucks.push(
+      ...this.team(1, 8, puckRadius, puckSpace).map((v) => ({
+        key: "red-puck-" + v.x + "-" + v.y,
+        x: v.x + height * 0.4,
+        y: v.y + 0,
+        color: "red" as const,
+        type: "puck" as const,
+        radius: puckRadius,
+      })),
+    );
 
-    this.physics.createBoard(this.width, this.height);
-
-    this.redPucks = this.team(1, 8, this.puckRadius, this.puckSpace).map((v) => ({
-      key: "red-puck-" + v.x + "-" + v.y,
-      x: v.x + this.height * 0.4,
-      y: v.y + 0,
-      color: "red",
-      type: "puck",
-      radius: this.puckRadius,
-    }));
-
-    this.bluePucks = this.team(1, 8, this.puckRadius, this.puckSpace).map((v) => ({
-      key: "blue-puck-" + v.x + "-" + v.y,
-      x: v.x + -this.height * 0.4,
-      y: v.y + 0,
-      color: "blue",
-      type: "puck",
-      radius: this.puckRadius,
-    }));
-
-    this.update();
+    this.context.shuffle.pucks.push(
+      ...this.team(1, 8, puckRadius, puckSpace).map((v) => ({
+        key: "blue-puck-" + v.x + "-" + v.y,
+        x: v.x + -height * 0.4,
+        y: v.y + 0,
+        color: "blue" as const,
+        type: "puck" as const,
+        radius: puckRadius,
+      })),
+    );
   }
 
   team(n: number, m: number, r: number, l: number) {
@@ -87,38 +81,36 @@ class ShuffleGame {
         });
       }
     }
+
     return pucks;
   }
 
-  onPuckOut(data: PuckData) {
-    if (data.color == "red") {
-      const index = this.redPucks.indexOf(data);
-      if (index >= 0) this.redPucks.splice(index, 1);
-    } else if (data.color == "blue") {
-      const index = this.bluePucks.indexOf(data);
-      if (index >= 0) this.bluePucks.splice(index, 1);
-    }
-
-    this.update();
+  handlePuckOut(ev: { data: PuckData }) {
+    const index = this.context.shuffle.pucks.indexOf(ev.data);
+    if (index >= 0) this.context.shuffle.pucks.splice(index, 1);
   }
 }
 
-class TestbedTerminal {
-  testbed: Testbed;
+class TestbedTerminal extends Middleware<ShuffleContext> {
+  constructor() {
+    super();
+    this.use(new TestbedMain());
 
-  setup(game: ShuffleGame) {
-    this.testbed = Testbed.mount();
-    this.testbed.x = 0;
-    this.testbed.y = 0;
-    this.testbed.width = game.width * 1.5;
-    this.testbed.height = game.height * 1.5;
-    this.testbed.mouseForce = -100;
-    this.testbed.start(game.physics.world);
+    this.on("activate", this.handleActivate);
+    this.on("frame-loop", this.handleFrameLoop);
   }
 
-  update(game: ShuffleGame) {
-    this.testbed.status("Red", game.redPucks.length);
-    this.testbed.status("Blue", game.bluePucks.length);
+  handleActivate() {
+    const { boardWidth: width, boardHeight: height } = this.context.shuffle;
+    this.context.camera.x = 0;
+    this.context.camera.y = 0;
+    this.context.camera.width = width * 1.5;
+    this.context.camera.height = height * 1.5;
+  }
+
+  handleFrameLoop() {
+    // this.testbed.status("Red", game.redPucks.length);
+    // this.testbed.status("Blue", game.bluePucks.length);
   }
 }
 
@@ -127,42 +119,49 @@ const STYLES = {
   blue: { fill: "#0077ff", stroke: "black" },
 };
 
-interface ShufflePhysicsListener {
-  onPuckOut(data: PuckData, body: Body): void;
-}
+class ShufflePhysics extends Middleware<ShuffleContext> {
+  constructor() {
+    super();
+    this.on("activate", this.handleActivate);
+    this.on("frame-update", this.handleFrameUpdate);
+    this.on("game-start", this.handleGameStart);
+  }
 
-class ShufflePhysics {
-  listener: ShufflePhysicsListener;
-
-  world: World;
-
-  driver = new DataDriver<UserData, Body>((data: UserData) => data.key, {
-    enter: (data: UserData) => {
-      if (data.type === "puck") return this.createPuck(data);
-      return null;
-    },
-    update: (data: UserData, body: Body) => {},
-    exit: (data: UserData, body: Body) => {
-      if (body) {
-        this.world.destroyBody(body);
-      }
-    },
+  binder = Binder.create<UserData>({
+    key: (data: UserData) => data.key,
+    drivers: [
+      Driver.create<PuckData, Body>({
+        filter: (data) => data.type === "puck",
+        enter: (data) => {
+          return this.createPuck(data);
+        },
+        update: (data, body) => {},
+        exit: (data, body) => {
+          if (body) {
+            this.context.world.destroyBody(body);
+          }
+        },
+      }),
+    ],
   });
 
-  setup(client: ShufflePhysicsListener) {
-    this.listener = client;
+  handleActivate() {
     Settings.velocityThreshold = 0;
-    this.world = new World();
-    this.world.on("begin-contact", this.handleBeginContact.bind(this));
+    this.context.world = new World();
+    this.context.world.on("begin-contact", this.handleBeginContact.bind(this));
   }
 
-  update(game: ShuffleGame) {
-    this.driver.update([...game.redPucks, ...game.bluePucks]);
+  handleFrameUpdate() {
+    this.binder.data(this.context.shuffle.pucks);
   }
 
-  start() {}
+  handleGameStart() {
+    this.createBoard();
+  }
 
-  createBoard(width: number, height: number) {
+  createBoard() {
+    const { boardWidth: width, boardHeight: height } = this.context.shuffle;
+
     const userData = {
       type: "wall",
     };
@@ -177,7 +176,7 @@ class ShufflePhysics {
       true,
     );
 
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "static",
       userData,
     });
@@ -191,7 +190,7 @@ class ShufflePhysics {
 
   createPuck(data: PuckData) {
     const style = data.color ? STYLES[data.color] : undefined;
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "dynamic",
       bullet: true,
       position: data as Vec2Value,
@@ -227,15 +226,18 @@ class ShufflePhysics {
     const puck = dataA.type === "puck" ? bA : dataB.type === "puck" ? bB : null;
 
     if (puck && wall) {
-      this.world.queueUpdate(() => {
-        this.listener.onPuckOut(puck.getUserData() as PuckData, puck);
+      this.context.world.queueUpdate(() => {
+        this.emit("game-puck-out", {
+          data: puck.getUserData() as PuckData,
+          body: puck,
+        });
       });
     }
   };
 }
 
-{
-  const game = new ShuffleGame();
-  game.setup();
-  game.start();
-}
+const main = new ShuffleGame();
+const context = new ShuffleContext();
+Runtime.activate(main, context);
+main.emit("game-start");
+main.emit("tool-switch", { name: "interact-impulse", maxForce: 100 });

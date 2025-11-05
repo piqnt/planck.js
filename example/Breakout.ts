@@ -1,15 +1,9 @@
-import {
-  World,
-  CircleShape,
-  BoxShape,
-  EdgeShape,
-  PolygonShape,
-  Testbed,
-  Body,
-  Contact,
-  DataDriver,
-  Vec2Value,
-} from "planck";
+import { World, CircleShape, BoxShape, EdgeShape, PolygonShape, Body, Contact, Vec2Value } from "../testbed";
+
+import { Binder, Driver, Middleware, Runtime } from "polymatic";
+
+import { DefaultTestbedContext } from "../testbed/testbed/TestbedContext";
+import { TestbedMain } from "../testbed/testbed/TestbedMain";
 
 interface BallData {
   key: string;
@@ -52,17 +46,14 @@ interface WallData {
 
 type UserData = BallData | BrickData | DropData | PaddleData | WallData;
 
-class BreakoutGame {
-  physics = new BreakoutPhysics();
-  terminal = new TestbedTerminal();
-
+class BreakoutState {
   boardWidth = 20;
   boardHeight = 26;
 
   boardRows = 10;
   boardColumns = 7;
 
-  state: string;
+  state: string = "gameover";
   score = 0;
   combo = 1;
 
@@ -75,6 +66,27 @@ class BreakoutGame {
   drops: DropData[] = [];
   paddle: PaddleData | null = null;
   board: WallData = { key: "board", type: "wall" };
+}
+
+class BreakoutContext extends DefaultTestbedContext {
+  game = new BreakoutState();
+}
+
+class BreakoutGame extends Middleware<BreakoutContext> {
+  constructor() {
+    super();
+    this.use(new BreakoutPhysics());
+    this.use(new TestbedTerminal());
+
+    this.on("frame-update", this.step);
+    this.on("gamepad-keydown", this.keydown);
+
+    this.on("collideBallBrick", this.collideBallBrick);
+    this.on("collideBallPaddle", this.collideBallPaddle);
+    this.on("collideBallBottom", this.collideBallBottom);
+    this.on("collideDropPaddle", this.collideDropPaddle);
+    this.on("collideDropBottom", this.collideDropBottom);
+  }
 
   getPaddleSpeed() {
     return 18;
@@ -85,113 +97,105 @@ class BreakoutGame {
   }
 
   getBallSpeed() {
-    return (13 + this.score * 0.05) * 0.7;
+    const { game } = this.context;
+    return (13 + game.score * 0.05) * 0.7;
   }
 
   getNextRowTime() {
-    return Math.max(8000 - 20 * this.score, 1000);
+    const { game } = this.context;
+    return Math.max(8000 - 20 * game.score, 1000);
   }
 
   getResetPaddleTime() {
     return 7500;
   }
 
-  setup() {
-    this.physics.setup(this);
-    this.terminal.setup(this);
-  }
-
-  update() {
-    this.physics.update(this);
-    this.terminal.update(this);
-  }
-
   ready() {
-    if (this.state == "ready") return;
-    this.state = "ready";
-    this.score = 0;
-    this.combo = 1;
-    this.nextRowTime = 0;
-    this.resetPaddleTime = 0;
+    const { game } = this.context;
+    if (game.state == "ready") return;
+    game.state = "ready";
+    game.score = 0;
+    game.combo = 1;
+    game.nextRowTime = 0;
+    game.resetPaddleTime = 0;
 
-    this.bricks.length = 0;
-    this.balls.length = 0;
-    this.drops.length = 0;
+    game.bricks.length = 0;
+    game.balls.length = 0;
+    game.drops.length = 0;
 
     this.setPaddle("full");
     this.addBall();
     this.addRow();
     this.addRow();
     this.addRow();
-
-    this.update();
   }
 
   play() {
+    const { game } = this.context;
     this.ready();
-
-    this.state = "playing";
-
-    this.update();
+    game.state = "playing";
   }
 
   end() {
-    this.state = "gameover";
-    this.paddle = null;
-
-    this.update();
+    const { game } = this.context;
+    game.state = "gameover";
+    game.paddle = null;
   }
 
-  keydown(activeKeys: { left?: boolean; right?: boolean; fire?: boolean }) {
-    if (activeKeys.fire) {
-      if (this.state == "gameover") {
+  keydown() {
+    const { game, gamepad } = this.context;
+
+    if (gamepad.activeKeys.fire) {
+      if (game.state == "gameover") {
         this.ready();
-      } else if (this.state == "ready") {
+      } else if (game.state == "ready") {
         this.play();
       }
     }
   }
 
-  step(dt: number) {
+  step({ dt }: { dt: number }) {
+    const { game } = this.context;
     dt = Math.min(dt, 50);
-    const isPlaying = this.state === "playing";
+    const isPlaying = game.state === "playing";
     if (isPlaying) {
-      this.globalTime += dt;
-      if (this.nextRowTime && this.globalTime > this.nextRowTime) {
-        this.nextRowTime = 0;
+      game.globalTime += dt;
+      if (game.nextRowTime && game.globalTime > game.nextRowTime) {
+        game.nextRowTime = 0;
         this.addRow();
       }
-      if (this.resetPaddleTime && this.globalTime > this.resetPaddleTime) {
-        this.resetPaddleTime = 0;
+      if (game.resetPaddleTime && game.globalTime > game.resetPaddleTime) {
+        game.resetPaddleTime = 0;
         this.setPaddle("full");
       }
     }
     this.movePaddle();
-    this.update();
   }
 
   movePaddle() {
-    const isPlaying = this.state === "playing";
-    const isReady = this.state === "ready";
+    const { game, gamepad } = this.context;
+    const isPlaying = game.state === "playing";
+    const isReady = game.state === "ready";
     if (!isPlaying && !isReady) return;
-    if (!this.paddle) return;
+    if (!game.paddle) return;
 
-    const isLeftPressed = this.terminal.activeKeys.left;
-    const isRightPressed = this.terminal.activeKeys.right;
+    const isLeftPressed = gamepad.activeKeys.left;
+    const isRightPressed = gamepad.activeKeys.right;
     if (isLeftPressed && !isRightPressed) {
-      this.paddle.speed = -this.getPaddleSpeed();
+      game.paddle.speed = -this.getPaddleSpeed();
     } else if (isRightPressed && !isLeftPressed) {
-      this.paddle.speed = +this.getPaddleSpeed();
+      game.paddle.speed = +this.getPaddleSpeed();
     } else {
-      this.paddle.speed = 0;
+      game.paddle.speed = 0;
     }
   }
 
   setPaddle(size: "mini" | "full") {
-    const position = this.paddle?.position ?? { x: 0, y: -10.5 };
-    const speed = this.paddle?.speed ?? 0;
+    const { game } = this.context;
+    const position = game.paddle?.position ?? { x: 0, y: -10.5 };
+    const speed = game.paddle?.speed ?? 0;
 
-    this.paddle = {
+    game.paddle = {
       key: "paddle-" + performance.now(),
       type: "paddle",
       size: size,
@@ -200,16 +204,15 @@ class BreakoutGame {
     };
 
     if (size == "mini") {
-      this.resetPaddleTime = this.globalTime + this.getResetPaddleTime();
+      game.resetPaddleTime = game.globalTime + this.getResetPaddleTime();
     }
-
-    this.update();
   }
 
   addBall() {
+    const { game } = this.context;
     const speed = this.getBallSpeed();
 
-    const ball = this.balls[this.balls.length - 1];
+    const ball = game.balls[game.balls.length - 1];
     const position = ball?.position ?? { x: 0, y: -5 };
     let velocity = ball?.velocity;
 
@@ -219,20 +222,19 @@ class BreakoutGame {
       const a = Math.PI * Math.random() * 0.4 - 0.2;
       velocity = { x: speed * Math.sin(a), y: speed * Math.cos(a) };
     }
-    this.balls.push({
+    game.balls.push({
       key: "ball-" + Math.random(),
       type: "ball",
       speed: this.getBallSpeed(),
       position: position,
       velocity: velocity,
     });
-
-    this.update();
   }
 
   addDrop(i: number, j: number) {
+    const { game } = this.context;
     const type = Math.random() < 0.6 ? "+" : "-";
-    this.drops.push({
+    game.drops.push({
       key: "drop-" + Math.random(),
       type: "drop",
       value: type,
@@ -240,36 +242,35 @@ class BreakoutGame {
       j,
       speed: this.getDropSpeed(),
     });
-
-    this.update();
   }
 
   addBrick(type: "normal" | "small", i: number, j: number) {
-    this.bricks.push({
+    const { game } = this.context;
+
+    game.bricks.push({
       key: "brick-" + Math.random(),
       type: "brick",
       size: type,
       i,
       j,
     });
-
-    this.update();
   }
 
   addRow() {
-    this.nextRowTime = this.globalTime + this.getNextRowTime();
+    const { game } = this.context;
+    game.nextRowTime = game.globalTime + this.getNextRowTime();
 
-    for (let i = 0; i < this.bricks.length; i++) {
-      const brick = this.bricks[i];
+    for (let i = 0; i < game.bricks.length; i++) {
+      const brick = game.bricks[i];
       brick.j++;
     }
 
-    for (let i = 0; i < this.boardColumns; i++) {
+    for (let i = 0; i < game.boardColumns; i++) {
       if (Math.random() < 0.1) {
         continue;
       }
-      const oneChance = this.score + 1;
-      const fourChance = Math.max(0, this.score * 1.1 - 60);
+      const oneChance = game.score + 1;
+      const fourChance = Math.max(0, game.score * 1.1 - 60);
       if (Math.random() < oneChance / (fourChance + oneChance)) {
         this.addBrick("normal", i, 0);
       } else {
@@ -280,99 +281,85 @@ class BreakoutGame {
       }
     }
 
-    for (let i = 0; i < this.bricks.length; i++) {
-      const brick = this.bricks[i];
-      if (brick.j >= this.boardRows) {
+    for (let i = 0; i < game.bricks.length; i++) {
+      const brick = game.bricks[i];
+      if (brick.j >= game.boardRows) {
         this.end();
         continue;
       }
     }
   }
 
-  collideBallBrick(ball: BallData, brick: BrickData) {
-    if (!Util.removeFromArray(this.bricks, brick)) return;
+  collideBallBrick({ ball, brick }: { ball: BallData; brick: BrickData }) {
+    const { game } = this.context;
+    if (!Util.removeFromArray(game.bricks, brick)) return;
 
-    if (!this.bricks.length) {
+    if (!game.bricks.length) {
       this.addRow();
     }
     this.addDrop(brick.i, brick.j);
 
-    this.score += this.combo;
-    this.combo++;
-
-    this.update();
+    game.score += game.combo;
+    game.combo++;
   }
 
-  collideBallPaddle(ball: BallData) {
-    this.combo = 1;
+  collideBallPaddle({ ball }: { ball: BallData }) {
+    const { game } = this.context;
+    game.combo = 1;
   }
 
-  collideBallBottom(ball: BallData) {
-    if (!Util.removeFromArray(this.balls, ball)) return;
+  collideBallBottom({ ball }: { ball: BallData }) {
+    const { game } = this.context;
+    if (!Util.removeFromArray(game.balls, ball)) return;
 
-    if (!this.balls.length) {
+    if (!game.balls.length) {
       this.end();
     }
-
-    this.update();
   }
 
-  collideDropPaddle(drop: DropData) {
-    if (!Util.removeFromArray(this.drops, drop)) return;
+  collideDropPaddle({ drop }: { drop: DropData }) {
+    const { game } = this.context;
+    if (!Util.removeFromArray(game.drops, drop)) return;
 
     if (drop.value == "+") {
       this.addBall();
     } else if (drop.value == "-") {
       this.setPaddle("mini");
     }
-
-    this.update();
   }
 
-  collideDropBottom(drop: DropData) {
-    if (!Util.removeFromArray(this.drops, drop)) return;
-
-    this.update();
+  collideDropBottom({ drop }: { drop: DropData }) {
+    const { game } = this.context;
+    if (!Util.removeFromArray(game.drops, drop)) return;
   }
 }
 
-class TestbedTerminal {
-  testbed: Testbed;
-
-  get activeKeys() {
-    return this.testbed.activeKeys;
+class TestbedTerminal extends Middleware<BreakoutContext> {
+  constructor() {
+    super();
+    this.use(new TestbedMain());
+    this.on("activate", this.setup);
+    this.on("frame-update", this.update);
   }
 
-  setup(game: BreakoutGame) {
-    if (this.testbed) return;
-
-    this.testbed = Testbed.mount();
-    this.testbed.width = game.boardWidth;
-    this.testbed.height = game.boardHeight * 1.12;
-    this.testbed.y = 0;
-
-    this.testbed.keydown = () => {
-      game.keydown(this.testbed.activeKeys);
-    };
-
-    this.testbed.step = (dt) => {
-      game.step(dt);
-    };
-
-    this.testbed.start(game.physics.world);
+  setup() {
+    this.context.camera.width = context.game.boardWidth;
+    this.context.camera.height = context.game.boardHeight * 1.12;
+    this.context.camera.x = 0;
+    this.context.camera.y = 0;
   }
 
-  update(game: BreakoutGame) {
-    if (game.state == "gameover") {
-      this.testbed.status("Gameover!");
-      this.testbed.status("Score", game.score);
-    } else if (game.state == "ready") {
-      this.testbed.status("Ready!");
-      this.testbed.status("Score", game.score);
-    } else {
-      this.testbed.status("");
-      this.testbed.status("Score", game.score);
-    }
+  update() {
+    // if (game.state == "gameover") {
+    //   this.testbed.status("Gameover!");
+    //   this.testbed.status("Score", game.score);
+    // } else if (game.state == "ready") {
+    //   this.testbed.status("Ready!");
+    //   this.testbed.status("Score", game.score);
+    // } else {
+    //   this.testbed.status("");
+    //   this.testbed.status("Score", game.score);
+    // }
   }
 }
 
@@ -438,63 +425,88 @@ const paddleShapes = {
   full: fullPaddleShape,
 };
 
-interface BreakoutPhysicsListener {
-  collideBallBrick(ball: BallData, brick: BrickData): void;
-  collideBallPaddle(ball: BallData): void;
-  collideBallBottom(ball: BallData): void;
-  collideDropPaddle(drop: DropData): void;
-  collideDropBottom(drop: DropData): void;
-}
-
-class BreakoutPhysics {
-  listener: BreakoutPhysicsListener;
-
-  world: World;
-
-  driver = new DataDriver<UserData, Body>((data) => data.key, {
-    enter: (data) => {
-      if (data.type === "ball") {
-        return this.createBall(data);
-      } else if (data.type === "brick") {
-        return this.createBrick(data);
-      } else if (data.type === "drop") {
-        return this.createDrop(data);
-      } else if (data.type === "paddle") {
-        return this.createPaddle(data);
-      } else if (data.type === "wall") {
-        return this.createBoard(data);
-      }
-      return null;
-    },
-    update: (data, body) => {
-      if (data.type === "brick") {
-        this.updateBrick(data, body);
-      } else if (data.type === "ball") {
-        this.updateBall(data, body);
-      } else if (data.type === "paddle") {
-        this.updatePaddle(data, body);
-      }
-    },
-    exit: (data, body) => {
-      this.world.destroyBody(body);
-    },
-  });
-
-  setup(listener: BreakoutPhysicsListener) {
-    this.listener = listener;
-
-    if (this.world) return;
-    this.world = new World();
-    this.world.on("pre-solve", this.collidePhysics);
+class BreakoutPhysics extends Middleware<BreakoutContext> {
+  constructor() {
+    super();
+    this.on("activate", this.handleActivate);
+    this.on("frame-update", this.handleFrameUpdate);
   }
 
-  update(game: BreakoutGame) {
-    this.driver.update([...game.balls, ...game.bricks, ...game.drops, game.paddle, game.board]);
+  binder = Binder.create<UserData>({
+    key: (data) => data.key,
+    drivers: [
+      Driver.create<BallData, Body>({
+        filter: (data) => data.type === "ball",
+        enter: (data) => {
+          return this.createBall(data);
+        },
+        update: (data, body) => {
+          this.updateBall(data, body);
+        },
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+      Driver.create<BrickData, Body>({
+        filter: (data) => data.type === "brick",
+        enter: (data) => {
+          return this.createBrick(data);
+        },
+        update: (data, body) => {
+          this.updateBrick(data, body);
+        },
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+      Driver.create<DropData, Body>({
+        filter: (data) => data.type === "drop",
+        enter: (data) => {
+          return this.createDrop(data);
+        },
+        update: (data, body) => {},
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+      Driver.create<PaddleData, Body>({
+        filter: (data) => data.type === "paddle",
+        enter: (data) => {
+          return this.createPaddle(data);
+        },
+        update: (data, body) => {
+          this.updatePaddle(data, body);
+        },
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+      Driver.create<WallData, Body>({
+        filter: (data) => data.type === "wall",
+        enter: (data) => {
+          return this.createBoard(data);
+        },
+        update: (data, body) => {},
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+    ],
+  });
+
+  handleActivate() {
+    this.context.world = new World();
+    this.context.world.on("pre-solve", this.collidePhysics);
+  }
+
+  handleFrameUpdate() {
+    const { game } = this.context;
+    this.binder.data([...game.balls, ...game.bricks, ...game.drops, game.paddle, game.board]);
   }
 
   createBoard(data: WallData) {
     {
-      const wall = this.world.createBody({
+      const wall = this.context.world.createBody({
         type: "static",
         position: { x: +9, y: -0.5 },
         userData: data,
@@ -505,7 +517,7 @@ class BreakoutPhysics {
       });
     }
     {
-      const wall = this.world.createBody({
+      const wall = this.context.world.createBody({
         type: "static",
         position: { x: -9, y: -0.5 },
         userData: data,
@@ -516,7 +528,7 @@ class BreakoutPhysics {
       });
     }
     {
-      const wall = this.world.createBody({
+      const wall = this.context.world.createBody({
         type: "static",
         position: { x: 0, y: +12 },
         userData: data,
@@ -527,7 +539,7 @@ class BreakoutPhysics {
       });
     }
     {
-      const wall = this.world.createBody({
+      const wall = this.context.world.createBody({
         type: "static",
         position: { x: 9, y: 12 },
         userData: data,
@@ -538,7 +550,7 @@ class BreakoutPhysics {
       });
     }
     {
-      const wall = this.world.createBody({
+      const wall = this.context.world.createBody({
         type: "static",
         position: { x: -9, y: 12 },
         userData: data,
@@ -549,7 +561,7 @@ class BreakoutPhysics {
       });
     }
     {
-      const wall = this.world.createBody({
+      const wall = this.context.world.createBody({
         type: "static",
         position: { x: 0, y: -13 },
         userData: {
@@ -567,7 +579,7 @@ class BreakoutPhysics {
   }
 
   createPaddle(data: PaddleData) {
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "kinematic",
       position: data.position,
       userData: data,
@@ -595,7 +607,7 @@ class BreakoutPhysics {
   }
 
   createBall(data: BallData) {
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "dynamic",
       bullet: true,
       position: data.position,
@@ -622,7 +634,7 @@ class BreakoutPhysics {
   createBrick(data: BrickData) {
     const shape = data.size == "small" ? smallBrickShape : normalBrickShape;
     const pos = { x: (data.i - 3) * 2, y: 9 - data.j * 2 };
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "static",
       position: pos,
       userData: data,
@@ -643,7 +655,7 @@ class BreakoutPhysics {
   }
 
   createDrop(drop: DropData) {
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "dynamic",
       position: {
         x: (drop.i - 3) * 2,
@@ -701,24 +713,24 @@ class BreakoutPhysics {
 
     // do not change world immediately
     if (ball && brick) {
-      this.world.queueUpdate(() => {
-        this.listener.collideBallBrick(ball as BallData, brick as BrickData);
+      this.context.world.queueUpdate(() => {
+        this.emit("collideBallBrick", { ball, brick });
       });
     } else if (ball && bottom) {
-      this.world.queueUpdate(() => {
-        this.listener.collideBallBottom(ball as BallData);
+      this.context.world.queueUpdate(() => {
+        this.emit("collideBallBottom", { ball });
       });
     } else if (ball && paddle) {
-      this.world.queueUpdate(() => {
-        this.listener.collideBallPaddle(ball as BallData);
+      this.context.world.queueUpdate(() => {
+        this.emit("collideBallPaddle", { ball });
       });
     } else if (drop && paddle) {
-      this.world.queueUpdate(() => {
-        this.listener.collideDropPaddle(drop as DropData);
+      this.context.world.queueUpdate(() => {
+        this.emit("collideDropPaddle", { drop });
       });
     } else if (drop && bottom) {
-      this.world.queueUpdate(() => {
-        this.listener.collideDropBottom(drop as DropData);
+      this.context.world.queueUpdate(() => {
+        this.emit("collideDropBottom", { drop });
       });
     }
   };
@@ -736,8 +748,7 @@ class Util {
   }
 }
 
-{
-  const game = new BreakoutGame();
-  game.setup();
-  game.play();
-}
+const main = new BreakoutGame();
+const context = new BreakoutContext();
+Runtime.activate(main, context);
+main.emit("game-start");

@@ -1,4 +1,9 @@
-import { World, Circle, Polygon, Testbed, Body, Contact, Vec2Value, DataDriver } from "planck";
+import { World, Circle, Polygon, Body, Contact, Vec2Value, PolygonShape } from "../testbed";
+
+import { Binder, Driver, Middleware, Runtime } from "polymatic";
+
+import { DefaultTestbedContext } from "../testbed/testbed/TestbedContext";
+import { TestbedMain } from "../testbed/testbed/TestbedMain";
 
 const SPACE_WIDTH = 16;
 const SPACE_HEIGHT = 9;
@@ -36,13 +41,10 @@ interface AsteroidData {
 
 type UserData = ShipData | BulletData | AsteroidData;
 
-class AsteroidGame {
-  terminal = new TestbedTerminal();
-  physics = new AsteroidPhysics();
-
-  level: number;
-  lives: number;
-  gameover: boolean;
+class AsteroidState {
+  level: number = 0;
+  lives: number = 0;
+  gameover: boolean = false;
 
   globalTime = 0;
   allowCrashTime = 0;
@@ -51,92 +53,95 @@ class AsteroidGame {
   bullets: BulletData[] = [];
   asteroids: AsteroidData[] = [];
   ship: ShipData | null = null;
+}
 
-  setup() {
-    this.physics.setup(this);
-    this.terminal.setup(this);
+class AsteroidContext extends DefaultTestbedContext {
+  game = new AsteroidState();
+}
+
+class AsteroidGame extends Middleware<AsteroidContext> {
+  constructor() {
+    super();
+    this.use(new TestbedTerminal());
+    this.use(new AsteroidPhysics());
+
+    this.on("game-start", this.handleGameStart);
+    this.on("game-end", this.handleGameEnd);
+    this.on("frame-update", this.handleFrameUpdate);
+
+    this.on("collide-bullet-asteroid", this.collideBulletAsteroid);
+    this.on("collide-ship-asteroid", this.collideShipAsteroid);
   }
 
-  update() {
-    this.physics.update(this);
-    this.terminal.update(this);
-  }
-
-  start() {
-    this.gameover = false;
-    this.level = 1;
-    this.lives = 3;
+  handleGameStart() {
+    this.context.game.gameover = false;
+    this.context.game.level = 1;
+    this.context.game.lives = 3;
 
     this.setupShip();
     this.initAsteroids(4);
-
-    this.update();
   }
 
-  end() {
-    this.gameover = true;
-
-    this.update();
+  handleGameEnd() {
+    this.context.game.gameover = true;
   }
 
   setupShip() {
-    this.ship = {
+    this.context.game.ship = {
       key: "ship",
       type: "ship",
       x: 0,
       y: 0,
     };
-    this.allowCrashTime = this.globalTime + 2000;
-    this.update();
+    this.context.game.allowCrashTime = this.context.game.globalTime + 2000;
   }
 
-  step = (dt: number) => {
-    this.globalTime += dt;
+  handleFrameUpdate = (ev: { dt: number }) => {
+    const { game, gamepad } = this.context;
+    game.globalTime += ev.dt;
 
-    if (this.ship) {
-      this.ship.left = this.terminal.activeKeys.left && !this.terminal.activeKeys.right;
-      this.ship.right = this.terminal.activeKeys.right && !this.terminal.activeKeys.left;
-      this.ship.forward = this.terminal.activeKeys.up;
-      if (this.terminal.activeKeys.fire) {
-        this.fireBullet(this.ship);
+    if (game.ship) {
+      game.ship.left = gamepad.activeKeys.left && !gamepad.activeKeys.right;
+      game.ship.right = gamepad.activeKeys.right && !gamepad.activeKeys.left;
+      game.ship.forward = gamepad.activeKeys.up;
+      if (gamepad.activeKeys.fire) {
+        this.fireBullet(game.ship);
       }
     }
 
-    for (let i = this.bullets.length - 1; i >= 0; i--) {
-      const bullet = this.bullets[i];
-      if ((bullet.bulletTime ?? 0) <= this.globalTime) {
+    for (let i = game.bullets.length - 1; i >= 0; i--) {
+      const bullet = game.bullets[i];
+      if ((bullet.bulletTime ?? 0) <= game.globalTime) {
         this.deleteBullet(bullet);
       }
     }
-
-    this.update();
-    this.physics.step(dt);
   };
 
   fireBullet(ship: ShipData) {
-    if (this.allowFireTime > this.globalTime || !this.ship) {
+    const { game } = this.context;
+
+    if (game.allowFireTime > game.globalTime || !game.ship) {
       return false;
     }
-    this.allowFireTime = this.globalTime + FIRE_RELOAD_TIME;
-    this.bullets.push({
+    game.allowFireTime = game.globalTime + FIRE_RELOAD_TIME;
+    game.bullets.push({
       key: "bullet-" + Math.random(),
       type: "bullet",
-      bulletTime: this.globalTime + BULLET_LIFE_TIME,
+      bulletTime: game.globalTime + BULLET_LIFE_TIME,
 
-      ship: this.ship,
+      ship: game.ship,
     });
-
-    this.update();
   }
 
   initAsteroids(count: number) {
-    this.asteroids.length = 0;
+    const { game } = this.context;
+    game.asteroids.length = 0;
 
     for (let i = 0; i < count; i++) {
       const x = Calc.random(SPACE_WIDTH);
       const y = Calc.random(SPACE_HEIGHT);
 
-      this.asteroids.push({
+      game.asteroids.push({
         key: "asteroid-" + Math.random(),
         type: "asteroid",
         size: 4,
@@ -144,11 +149,10 @@ class AsteroidGame {
         y: y,
       });
     }
-
-    this.update();
   }
 
   splitAsteroid(parentData: AsteroidData, parentBody: Body) {
+    const { game } = this.context;
     const parentSize = parentData.size ?? 4;
     const splitSize = parentSize - 1;
     if (splitSize == 0) {
@@ -166,7 +170,7 @@ class AsteroidGame {
       };
       const sp = parentBody.getWorldPoint(d);
 
-      this.asteroids.push({
+      game.asteroids.push({
         key: "asteroid-" + Math.random(),
         type: "asteroid",
         size: splitSize,
@@ -174,23 +178,20 @@ class AsteroidGame {
         y: sp.y,
       });
     }
-
-    this.update();
   }
 
   deleteShip(): boolean {
-    if (!this.ship) return false;
-    this.ship = null;
-
-    this.update();
+    const { game } = this.context;
+    if (!game.ship) return false;
+    game.ship = null;
     return true;
   }
 
   deleteBullet(data: BulletData): boolean {
-    const index = this.bullets.indexOf(data);
+    const { game } = this.context;
+    const index = game.bullets.indexOf(data);
     if (index != -1) {
-      this.bullets.splice(index, 1);
-      this.update();
+      game.bullets.splice(index, 1);
       return true;
     }
 
@@ -198,10 +199,10 @@ class AsteroidGame {
   }
 
   deleteAsteroid(data: AsteroidData): boolean {
-    const index = this.asteroids.indexOf(data);
+    const { game } = this.context;
+    const index = game.asteroids.indexOf(data);
     if (index != -1) {
-      this.asteroids.splice(index, 1);
-      this.update();
+      game.asteroids.splice(index, 1);
       return true;
     }
 
@@ -209,26 +210,27 @@ class AsteroidGame {
   }
 
   collideShipAsteroid() {
-    if (this.allowCrashTime > this.globalTime) {
+    const { game } = this.context;
+    if (game.allowCrashTime > game.globalTime) {
       return;
     }
 
-    this.lives--;
+    game.lives--;
 
     this.deleteShip();
 
-    if (this.lives <= 0) {
-      this.end();
+    if (game.lives <= 0) {
+      this.handleGameEnd();
     } else {
       setTimeout(() => {
         this.setupShip();
       }, 1000);
     }
-
-    this.update();
   }
 
-  collideBulletAsteroid(bullet: Body, asteroid: Body) {
+  collideBulletAsteroid({ bullet, asteroid }: { bullet: Body; asteroid: Body }) {
+    const { game } = this.context;
+
     const deletedAsteroid = this.deleteAsteroid(asteroid.getUserData() as AsteroidData);
     const deletedBullet = this.deleteBullet(bullet.getUserData() as BulletData);
 
@@ -236,110 +238,122 @@ class AsteroidGame {
       this.splitAsteroid(asteroid.getUserData() as AsteroidData, asteroid);
     }
 
-    if (this.asteroids.length == 0) {
-      this.level++;
-      this.initAsteroids(this.level);
+    if (game.asteroids.length == 0) {
+      game.level++;
+      this.initAsteroids(game.level);
     }
   }
 }
 
-class TestbedTerminal {
-  testbed: Testbed;
+class TestbedTerminal extends Middleware<AsteroidContext> {
+  constructor() {
+    super();
+    this.use(new TestbedMain());
 
-  get activeKeys() {
-    return this.testbed.activeKeys;
+    this.on("activate", this.handleActivate);
+    this.on("gamepad-keydown", this.handleKeydown);
+    this.on("frame-render", this.handleFrameRender);
   }
 
-  setup(game: AsteroidGame) {
-    if (this.testbed) return;
-
-    this.testbed = Testbed.mount();
-    this.testbed.width = SPACE_WIDTH;
-    this.testbed.height = SPACE_HEIGHT;
-    this.testbed.y = 0;
-
-    this.testbed.keydown = () => {
-      if (this.testbed.activeKeys.fire && game.gameover) {
-        game.start();
-      }
-    };
-
-    this.testbed.step = (dt) => {
-      game.step(dt);
-    };
-
-    this.testbed.start(game.physics.world);
+  handleActivate() {
+    this.context.camera.width = SPACE_WIDTH;
+    this.context.camera.height = SPACE_HEIGHT;
+    this.context.camera.x = 0;
+    this.context.camera.y = 0;
   }
 
-  update(game: AsteroidGame) {
-    if (game.lives > 0) {
-      this.testbed.status("");
-    } else {
-      this.testbed.status("Game Over!");
+  handleKeydown() {
+    const { game, gamepad } = this.context;
+
+    if (gamepad.activeKeys.fire && game.gameover) {
+      this.emit("game-start");
     }
-    this.testbed.status("Level", game.level);
-    this.testbed.status("Lives", game.lives);
+  }
+
+  handleFrameRender() {
+    const { game, gamepad } = this.context;
+    // if (game.lives > 0) {
+    //   this.testbed.status("");
+    // } else {
+    //   this.testbed.status("Game Over!");
+    // }
+    // this.testbed.status("Level", game.level);
+    // this.testbed.status("Lives", game.lives);
   }
 }
 
-interface AsteroidPhysicsListener {
-  collideShipAsteroid(ship: Body, asteroid: Body): void;
-  collideBulletAsteroid(asteroidBody: Body, bulletBody: Body): void;
-}
-
-class AsteroidPhysics {
+class AsteroidPhysics extends Middleware<AsteroidContext> {
+  constructor() {
+    super();
+    this.on("game-start", this.handleActivate);
+    this.on("frame-update", this.handleFrameUpdate);
+  }
 
   static SHIP_BITS = 2;
   static BULLET_BITS = 4;
   static ASTEROID_BITS = 4;
-  
 
-  listener: AsteroidPhysicsListener;
-
-  world: World;
-
-  driver = new DataDriver<UserData, Body>((data: UserData) => data.key, {
-    enter: (data: UserData) => {
-      if (data.type == "ship") return this.createShip(data);
-      if (data.type == "asteroid") return this.createAsteroid(data);
-      if (data.type == "bullet") return this.createBullet(data);
-      return null;
+  shipDriver = Driver.create<ShipData, Body>({
+    filter: (data) => data.type == "ship",
+    enter: (data) => {
+      return this.createShip(data);
     },
-    update: (data: UserData, body: Body) => {
-      if (data.type == "ship" && body) {
-        if (data.left) {
-          body.applyAngularImpulse(0.1, true);
-        }
-        if (data.right) {
-          body.applyAngularImpulse(-0.1, true);
-        }
-        if (data.forward) {
-          const f = body.getWorldVector({ x: 0.0, y: 1.0 });
-          const p = body.getWorldPoint({ x: 0.0, y: 2.0 });
-          body.applyLinearImpulse(f, p, true);
-        }
+    update: (data, body) => {
+      if (data.left) {
+        body.applyAngularImpulse(0.1, true);
+      }
+      if (data.right) {
+        body.applyAngularImpulse(-0.1, true);
+      }
+      if (data.forward) {
+        const f = body.getWorldVector({ x: 0.0, y: 1.0 });
+        const p = body.getWorldPoint({ x: 0.0, y: 2.0 });
+        body.applyLinearImpulse(f, p, true);
       }
     },
-    exit: (data: UserData, body: Body) => {
-      this.world.destroyBody(body);
+    exit: (data, body) => {
+      this.context.world.destroyBody(body);
     },
   });
 
-  setup(listener: AsteroidPhysicsListener) {
-    this.listener = listener;
+  asteroidDriver = Driver.create<AsteroidData, Body>({
+    filter: (data) => data.type == "asteroid",
+    enter: (data) => {
+      return this.createAsteroid(data);
+    },
+    update: (data, body) => {},
+    exit: (data, body) => {
+      this.context.world.destroyBody(body);
+    },
+  });
 
-    if (this.world) return;
-    this.world = new World();
-    this.world.on("pre-solve", this.collide.bind(this));
+  bulletDriver = Driver.create<BulletData, Body>({
+    filter: (data) => data.type == "bullet",
+    enter: (data) => {
+      return this.createBullet(data);
+    },
+    update: (data, body) => {},
+    exit: (data, body) => {
+      this.context.world.destroyBody(body);
+    },
+  });
+
+  binder = Binder.create<UserData>({
+    key: (data: UserData) => data.key,
+    drivers: [this.shipDriver, this.bulletDriver, this.asteroidDriver],
+  });
+
+  handleActivate() {
+    this.context.world = new World();
+    this.context.world.on("pre-solve", this.collide.bind(this));
   }
 
-  update(game: AsteroidGame) {
-    this.driver.update([...game.asteroids, ...game.bullets, game.ship]);
-  }
+  handleFrameUpdate = ({ dt }: { dt: number }) => {
+    const { game } = this.context;
+    this.binder.data([...game.asteroids, ...game.bullets, game.ship]);
 
-  step = (dt: number) => {
     // wrap objects around the screen
-    let body = this.world.getBodyList();
+    let body = this.context.world.getBodyList();
     while (body) {
       if (body.getType() !== "static") {
         const p = body.getPosition();
@@ -352,7 +366,7 @@ class AsteroidPhysics {
   };
 
   createShip(data: ShipData) {
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "dynamic",
       angularDamping: 2.0,
       linearDamping: 0.5,
@@ -377,24 +391,24 @@ class AsteroidPhysics {
 
   createBullet(data: BulletData): Body | null {
     const speed = 5;
-    const ship = this.driver.ref(data.ship);
-    if (!ship) return null;
-    const body = this.world.createBody({
+    const shipBody = this.shipDriver.ref(data.ship.key);
+    if (!shipBody) return null;
+    const bulletBody = this.context.world.createBody({
       type: "dynamic",
       // mass : 0.05,
-      position: ship.getWorldPoint({ x: 0, y: 0 }),
-      linearVelocity: ship.getWorldVector({ x: 0, y: speed }),
+      position: shipBody.getWorldPoint({ x: 0, y: 0 }),
+      linearVelocity: shipBody.getWorldVector({ x: 0, y: speed }),
       bullet: true,
       userData: data,
     });
 
-    body.createFixture({
+    bulletBody.createFixture({
       shape: new Circle(0.05),
       filterCategoryBits: AsteroidPhysics.BULLET_BITS,
       filterMaskBits: AsteroidPhysics.ASTEROID_BITS,
     });
 
-    return body;
+    return bulletBody;
   }
 
   createAsteroid(data: AsteroidData) {
@@ -412,7 +426,7 @@ class AsteroidPhysics {
     const vx = Calc.random(ASTEROID_SPEED);
     const vy = Calc.random(ASTEROID_SPEED);
     const va = Calc.random(ASTEROID_SPEED);
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       // mass : 10,
       type: "kinematic",
       position: { x: data.x, y: data.y },
@@ -423,7 +437,7 @@ class AsteroidPhysics {
     });
 
     body.createFixture({
-      shape: new Polygon(path),
+      shape: new PolygonShape(path),
       filterCategoryBits: AsteroidPhysics.ASTEROID_BITS,
       filterMaskBits: AsteroidPhysics.BULLET_BITS | AsteroidPhysics.SHIP_BITS,
     });
@@ -449,15 +463,15 @@ class AsteroidPhysics {
 
     if (ship && asteroid) {
       // do not change world immediately
-      this.world.queueUpdate(() => {
-        this.listener.collideShipAsteroid(ship, asteroid);
+      this.context.world.queueUpdate(() => {
+        this.emit("collide-ship-asteroid", { ship, asteroid });
       });
     }
 
     if (bullet && asteroid) {
       // do not change world immediately
-      this.world.queueUpdate(() => {
-        this.listener.collideBulletAsteroid(bullet, asteroid);
+      this.context.world.queueUpdate(() => {
+        this.emit("collide-bullet-asteroid", { bullet, asteroid });
       });
     }
   }
@@ -486,8 +500,7 @@ class Calc {
   }
 }
 
-{
-  const game = new AsteroidGame();
-  game.setup();
-  game.start();
-}
+const main = new AsteroidGame();
+const context = new AsteroidContext();
+Runtime.activate(main, context);
+main.emit("game-start");
