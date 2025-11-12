@@ -18,7 +18,8 @@ import { TestbedLoader } from "./Testbed";
 import { ContainerLoader } from "../common/ContainerLoader";
 import { FrameLoop } from "../common/FrameLoop";
 import { WorldStep } from "../world-view/WorldStep";
-import { ParticleViewOffCanvas } from "../particle-view/ParticleViewOffCanvas";
+import { ParticleViewTexture } from "../particle-view/ParticleViewOffCanvas";
+import { ParticleViewImageData } from "../particle-view/ParticleViewImageData";
 
 /**
  * Preset middlewares for planck testbed.
@@ -37,7 +38,8 @@ export class TestbedMain extends Middleware<TestbedContext> {
     this.use(new Magicboard());
     this.use(new TestbedLoader());
     this.use(new ZoomPanProvider());
-    this.use(new ParticleViewOffCanvas());
+    // this.use(new ParticleViewTexture());
+    this.use(new ParticleViewImageData());
 
     this.use(new ToolSwitch("interact-pull", new PullTool()));
     this.use(new ToolSwitch("interact-impulse", new ImpulseTool()));

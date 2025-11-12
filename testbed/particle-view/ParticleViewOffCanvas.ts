@@ -4,12 +4,12 @@ import { World } from "../../src/";
 
 const math_PI = Math.PI;
 
-interface ParticleViewOffCanvasContext {
+interface ParticleViewTextureContext {
   world: World;
   stage: Stage.Root;
 }
 
-export class ParticleViewOffCanvas extends Middleware<ParticleViewOffCanvasContext> {
+export class ParticleViewTexture extends Middleware<ParticleViewTextureContext> {
   private component: Stage.Node;
 
   private setupMemo = Memo.init();

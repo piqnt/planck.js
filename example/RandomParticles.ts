@@ -3,12 +3,12 @@ import { World, Box, Testbed } from "planck";
 const world = new World();
 
 const particles: any[] = [];
-for (let i = 0; i < 10000; i++) {
+for (let i = 0; i < 100000; i++) {
   particles.push({
-    x: (Math.random() - 0.5) * 5,
-    y: (Math.random() - 0.5) * 5,
-    vx: (Math.random() - 0.5) * 0.01,
-    vy: (Math.random() - 0.5) * 0.01,
+    x: (Math.random() - 0.5) * 20,
+    y: (Math.random() - 0.5) * 20,
+    vx: (Math.random() - 0.5) * 0.001,
+    vy: (Math.random() - 0.5) * 0.001,
     r: 255, //(Math.random() * 255) | 0,
     g: 255, //(Math.random() * 255) | 0,
     b: 255, //(Math.random() * 255) | 0,
