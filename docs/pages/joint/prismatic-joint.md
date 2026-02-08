@@ -4,7 +4,7 @@ A prismatic joint allows for relative translation of two bodies along a
 specified axis. A prismatic joint prevents relative rotation. Therefore,
 a prismatic joint has a single degree of freedom.
 
-![Prismatic Joint](/planck.js/docs/images/prismatic_joint.gif)
+![Prismatic Joint](../images/prismatic_joint.gif)
 
 The prismatic joint definition is similar to the revolute joint
 description; just substitute translation for angle, and force for torque.

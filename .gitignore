@@ -1,3 +1,11 @@
+# typedoc
+docs/pages/api/
+
+# vitepress
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+docs/.vitepress/.temp/
+
 # misc
 .DS_Store
 *.pem

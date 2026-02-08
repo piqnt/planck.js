@@ -5,7 +5,7 @@ line segments connecting two points in the interior do not cross any
 edge of the polygon. Polygons are solid and never hollow. A polygon must
 have 3 or more vertices.
 
-![Convex and Concave Polygons](/planck.js/docs/images/convex_concave.gif)
+![Convex and Concave Polygons](../images/convex_concave.gif)
 
 Polygon vertices are stored with a counter-clockwise winding (CCW). We
 must be careful because the notion of CCW is with respect to a
@@ -13,7 +13,7 @@ right-handed coordinate system with the z-axis pointing out of the
 plane. This might turn out to be clockwise on your screen, depending on
 your coordinate system conventions.
 
-![Polygon Winding Order](/planck.js/docs/images/winding.svg)
+![Polygon Winding Order](../images/winding.svg)
 
 The initialization functions create normal vectors and perform validation. 
 So you should use initialization functions to create a polygon.
@@ -54,10 +54,10 @@ the polygon. The skin is used in stacking scenarios to keep polygons
 slightly separated. This allows continuous collision to work against the
 core polygon.
 
-![Polygon Skin](/planck.js/docs/images/skinned_polygon.svg)
+![Polygon Skin](../images/skinned_polygon.svg)
 
 The polygon skin helps prevent tunneling by keeping the polygons
 separated. This results in small gaps between the shapes. Your visual
 representation can be larger than the polygon to hide any gaps.
 
-![Skin Collision](/planck.js/docs/images/skin_collision.svg)
+![Skin Collision](../images/skin_collision.svg)

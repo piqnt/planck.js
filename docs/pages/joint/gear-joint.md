@@ -7,7 +7,7 @@ might be tedious to author. You also have to be careful to line up the
 gears so the teeth mesh smoothly. Planck.js has a simpler method of creating
 gears: the gear joint.
 
-![Gear Joint](/planck.js/docs/images/gear_joint.gif)
+![Gear Joint](../images/gear_joint.gif)
 
 The gear joint can only connect revolute and/or prismatic joints.
 

@@ -19,7 +19,7 @@ see a box colliding with an internal vertex. These *ghost* collisions
 are caused when the polygon collides with an internal vertex generating
 an internal collision normal.
 
-![Ghost Collision](/planck.js/docs/images/ghost_collision.svg)
+![Ghost Collision](../images/ghost_collision.svg)
 
 If edge1 did not exist this collision would seem fine. With edge1
 present, the internal collision seems like a bug. But normally when
@@ -29,7 +29,7 @@ Fortunately, the edge shape provides a mechanism for eliminating ghost
 collisions by storing the adjacent *ghost* vertices. Planck.js uses these
 ghost vertices to prevent internal collisions.
 
-![Ghost Vertices](/planck.js/docs/images/ghost_vertices.svg)
+![Ghost Vertices](../images/ghost_vertices.svg)
 
 ```js
 // This is an edge shape with ghost vertices.

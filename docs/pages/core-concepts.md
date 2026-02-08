@@ -45,7 +45,7 @@ The Planck.js solver is a high-performance iterative solver that operates in ord
 ### Continuous Collision
 The solver advances bodies in time using discrete time steps. Without intervention this can lead to tunneling.
 
-![Tunneling Effect](/planck.js/docs/images/tunneling1.svg)
+![Tunneling Effect](./images/tunneling1.svg)
 
 Planck.js contains specialized algorithms to deal with tunneling. First, the collision algorithms can interpolate the motion of two bodies to find the first time of impact (TOI).
 Second, there is a sub-stepping solver that moves bodies to their first time of impact and then resolves the collision.
