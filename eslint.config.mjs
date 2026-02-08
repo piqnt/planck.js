@@ -1,46 +1,50 @@
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import tseslint from "typescript-eslint";
+import { defineConfig } from "eslint/config";
+import prettierConfig from "eslint-config-prettier";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
+export default defineConfig([
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  // ...tseslint.configs.recommendedTypeChecked,
+  // ...tseslint.configs.stylisticTypeChecked,
 
-export default [...compat.extends("plugin:@typescript-eslint/recommended"), {
-    plugins: {
-        "@typescript-eslint": typescriptEslint,
-    },
+  {
+    files: ["**/*.ts"],
 
     languageOptions: {
-        parser: tsParser,
+      parser: tseslint.parser,
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
-
     rules: {
-        "no-var": "off",
-        "prefer-rest-params": "off",
-        "prefer-spread": "off",
-        quotes: ["warn", "double"],
-        semi: ["warn", "always"],
-        "one-var-declaration-per-line": "warn",
-        "@typescript-eslint/ban-ts-comment": "off",
-        "@typescript-eslint/ban-types": "off",
-        "@typescript-eslint/no-empty-function": "off",
-        "@typescript-eslint/no-empty-interface": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-inferrable-types": "off",
-        "@typescript-eslint/no-non-null-assertion": "off",
-        "@typescript-eslint/no-unused-vars": "off",
-        "@typescript-eslint/no-var-requires": "off",
-
-        "@typescript-eslint/typedef": ["error", {
-            propertyDeclaration: true,
-        }],
+      "no-var": "off",
+      "prefer-rest-params": "off",
+      "prefer-spread": "off",
+      "quotes": ["warn", "double"],
+      "semi": ["warn", "always"],
+      "one-var-declaration-per-line": "warn",
+      "no-constant-condition": "warn",
+      "no-empty": "warn",
+      "no-prototype-builtins": "warn",
+      "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/ban-types": "off",
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/no-empty-interface": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-inferrable-types": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/typedef": [
+        "error",
+        {
+          propertyDeclaration: true,
+        },
+      ],
     },
-}];
+  },
+  prettierConfig,
+]);
