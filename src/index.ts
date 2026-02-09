@@ -4,6 +4,8 @@ export * from "./util/Testbed";
 /** @hidden @deprecated */
 export { math as Math } from "./common/Math";
 
+export * as geo from "./common/Geo";
+
 export * from "./common/Vec2";
 export * from "./common/Vec3";
 export * from "./common/Mat22";

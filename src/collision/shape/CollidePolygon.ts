@@ -8,7 +8,7 @@
  */
 
 import { TransformValue } from "../../common/Transform";
-import * as matrix from "../../common/Matrix";
+import * as geo from "../../common/Geo";
 import { SettingsInternal as Settings } from "../../Settings";
 import { Manifold, clipSegmentToLine, ClipVertex, ContactFeatureType, ManifoldType } from "../Manifold";
 import { Contact } from "../../dynamics/Contact";
@@ -20,19 +20,18 @@ import { Fixture } from "../../dynamics/Fixture";
 /** @internal */ const incidentEdge = [new ClipVertex(), new ClipVertex()];
 /** @internal */ const clipPoints1 = [new ClipVertex(), new ClipVertex()];
 /** @internal */ const clipPoints2 = [new ClipVertex(), new ClipVertex()];
-/** @internal */ const clipSegmentToLineNormal = matrix.vec2(0, 0);
-/** @internal */ const v1 = matrix.vec2(0, 0);
-/** @internal */ const n = matrix.vec2(0, 0);
-/** @internal */ const xf = matrix.transform(0, 0, 0);
-/** @internal */ const temp = matrix.vec2(0, 0);
-/** @internal */ const v11 = matrix.vec2(0, 0);
-/** @internal */ const v12 = matrix.vec2(0, 0);
-/** @internal */ const localTangent = matrix.vec2(0, 0);
-/** @internal */ const localNormal = matrix.vec2(0, 0);
-/** @internal */ const planePoint = matrix.vec2(0, 0);
-/** @internal */ const tangent = matrix.vec2(0, 0);
-/** @internal */ const normal = matrix.vec2(0, 0);
-/** @internal */ const normal1 = matrix.vec2(0, 0);
+/** @internal */ const clipSegmentToLineNormal = geo.vec2(0, 0);
+/** @internal */ const v1 = geo.vec2(0, 0);
+/** @internal */ const n = geo.vec2(0, 0);
+/** @internal */ const xf = geo.transform(0, 0, 0);
+/** @internal */ const v11 = geo.vec2(0, 0);
+/** @internal */ const v12 = geo.vec2(0, 0);
+/** @internal */ const localTangent = geo.vec2(0, 0);
+/** @internal */ const localNormal = geo.vec2(0, 0);
+/** @internal */ const planePoint = geo.vec2(0, 0);
+/** @internal */ const tangent = geo.vec2(0, 0);
+/** @internal */ const normal = geo.vec2(0, 0);
+/** @internal */ const normal1 = geo.vec2(0, 0);
 
 Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
 
@@ -72,19 +71,19 @@ Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
   const v1s = poly1.m_vertices;
   const v2s = poly2.m_vertices;
 
-  matrix.detransformTransform(xf, xf2, xf1);
+  geo.detransformTransform(xf, xf2, xf1);
 
   let bestIndex = 0;
   let maxSeparation = -Infinity;
   for (let i = 0; i < count1; ++i) {
     // Get poly1 normal in frame2.
-    matrix.rotVec2(n, xf.q, n1s[i]);
-    matrix.transformVec2(v1, xf, v1s[i]);
+    geo.rotVec2(n, xf.q, n1s[i]);
+    geo.transformVec2(v1, xf, v1s[i]);
 
     // Find deepest point for normal i.
     let si = Infinity;
     for (let j = 0; j < count2; ++j) {
-      const sij = matrix.dotVec2(n, v2s[j]) - matrix.dotVec2(n, v1);
+      const sij = geo.dotVec2(n, v2s[j]) - geo.dotVec2(n, v1);
       if (sij < si) {
         si = sij;
       }
@@ -118,13 +117,13 @@ Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
   if (_ASSERT) console.assert(0 <= edge1 && edge1 < poly1.m_count);
 
   // Get the normal of the reference edge in poly2's frame.
-  matrix.rerotVec2(normal1, xf2.q, xf1.q, normals1[edge1]);
+  geo.rerotVec2(normal1, xf2.q, xf1.q, normals1[edge1]);
 
   // Find the incident edge on poly2.
   let index = 0;
   let minDot = Infinity;
   for (let i = 0; i < count2; ++i) {
-    const dot = matrix.dotVec2(normal1, normals2[i]);
+    const dot = geo.dotVec2(normal1, normals2[i]);
     if (dot < minDot) {
       minDot = dot;
       index = i;
@@ -135,10 +134,10 @@ Contact.addType(PolygonShape.TYPE, PolygonShape.TYPE, PolygonContact);
   const i1 = index;
   const i2 = i1 + 1 < count2 ? i1 + 1 : 0;
 
-  matrix.transformVec2(clipVertex[0].v, xf2, vertices2[i1]);
+  geo.transformVec2(clipVertex[0].v, xf2, vertices2[i1]);
   clipVertex[0].id.setFeatures(edge1, ContactFeatureType.e_face, i1, ContactFeatureType.e_vertex);
 
-  matrix.transformVec2(clipVertex[1].v, xf2, vertices2[i2]);
+  geo.transformVec2(clipVertex[1].v, xf2, vertices2[i2]);
   clipVertex[1].id.setFeatures(edge1, ContactFeatureType.e_face, i2, ContactFeatureType.e_vertex);
 }
 
@@ -213,27 +212,27 @@ export const CollidePolygons = function (
   const iv1 = edge1;
   const iv2 = edge1 + 1 < count1 ? edge1 + 1 : 0;
 
-  matrix.copyVec2(v11, vertices1[iv1]);
-  matrix.copyVec2(v12, vertices1[iv2]);
+  geo.copyVec2(v11, vertices1[iv1]);
+  geo.copyVec2(v12, vertices1[iv2]);
 
-  matrix.subVec2(localTangent, v12, v11);
-  matrix.normalizeVec2(localTangent);
+  geo.subVec2(localTangent, v12, v11);
+  geo.normalizeVec2(localTangent);
 
-  matrix.crossVec2Num(localNormal, localTangent, 1.0);
-  matrix.combine2Vec2(planePoint, 0.5, v11, 0.5, v12);
+  geo.crossVec2Num(localNormal, localTangent, 1.0);
+  geo.combine2Vec2(planePoint, 0.5, v11, 0.5, v12);
 
-  matrix.rotVec2(tangent, xf1.q, localTangent);
-  matrix.crossVec2Num(normal, tangent, 1.0);
+  geo.rotVec2(tangent, xf1.q, localTangent);
+  geo.crossVec2Num(normal, tangent, 1.0);
 
-  matrix.transformVec2(v11, xf1, v11);
-  matrix.transformVec2(v12, xf1, v12);
+  geo.transformVec2(v11, xf1, v11);
+  geo.transformVec2(v12, xf1, v12);
 
   // Face offset.
-  const frontOffset = matrix.dotVec2(normal, v11);
+  const frontOffset = geo.dotVec2(normal, v11);
 
   // Side offsets, extended by polytope skin thickness.
-  const sideOffset1 = -matrix.dotVec2(tangent, v11) + totalRadius;
-  const sideOffset2 = matrix.dotVec2(tangent, v12) + totalRadius;
+  const sideOffset1 = -geo.dotVec2(tangent, v11) + totalRadius;
+  const sideOffset2 = geo.dotVec2(tangent, v12) + totalRadius;
 
   // Clip incident edge against extruded edge1 side edges.
   clipPoints1[0].recycle();
@@ -242,7 +241,7 @@ export const CollidePolygons = function (
   clipPoints2[1].recycle();
 
   // Clip to box side 1
-  matrix.setVec2(clipSegmentToLineNormal, -tangent.x, -tangent.y);
+  geo.setVec2(clipSegmentToLineNormal, -tangent.x, -tangent.y);
   const np1 = clipSegmentToLine(clipPoints1, incidentEdge, clipSegmentToLineNormal, sideOffset1, iv1);
 
   if (np1 < 2) {
@@ -250,7 +249,7 @@ export const CollidePolygons = function (
   }
 
   // Clip to negative box side 1
-  matrix.setVec2(clipSegmentToLineNormal, tangent.x, tangent.y);
+  geo.setVec2(clipSegmentToLineNormal, tangent.x, tangent.y);
   const np2 = clipSegmentToLine(clipPoints2, clipPoints1, clipSegmentToLineNormal, sideOffset2, iv2);
 
   if (np2 < 2) {
@@ -258,16 +257,16 @@ export const CollidePolygons = function (
   }
 
   // Now clipPoints2 contains the clipped points.
-  matrix.copyVec2(manifold.localNormal, localNormal);
-  matrix.copyVec2(manifold.localPoint, planePoint);
+  geo.copyVec2(manifold.localNormal, localNormal);
+  geo.copyVec2(manifold.localPoint, planePoint);
 
   let pointCount = 0;
   for (let i = 0; i < clipPoints2.length /* maxManifoldPoints */; ++i) {
-    const separation = matrix.dotVec2(normal, clipPoints2[i].v) - frontOffset;
+    const separation = geo.dotVec2(normal, clipPoints2[i].v) - frontOffset;
 
     if (separation <= totalRadius) {
       const cp = manifold.points[pointCount];
-      matrix.detransformVec2(cp.localPoint, xf2, clipPoints2[i].v);
+      geo.detransformVec2(cp.localPoint, xf2, clipPoints2[i].v);
       cp.id.set(clipPoints2[i].id);
       if (flip) {
         // Swap features

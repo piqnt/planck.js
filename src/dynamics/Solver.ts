@@ -7,7 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from "../common/Matrix";
+import * as geo from "../common/Geo";
 import { SettingsInternal as Settings } from "../Settings";
 import { EPSILON } from "../common/Math";
 import { Body } from "./Body";
@@ -50,9 +50,9 @@ export class TimeStep {
 
 // reuse
 /** @internal */ const s_subStep = new TimeStep();
-/** @internal */ const c = matrix.vec2(0, 0);
-/** @internal */ const v = matrix.vec2(0, 0);
-/** @internal */ const translation = matrix.vec2(0, 0);
+/** @internal */ const c = geo.vec2(0, 0);
+/** @internal */ const v = geo.vec2(0, 0);
+/** @internal */ const translation = geo.vec2(0, 0);
 /** @internal */ const input = new TOIInput();
 /** @internal */ const output = new TOIOutput();
 /** @internal */ const backup = new Sweep();
@@ -291,19 +291,19 @@ export class Solver {
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
 
-      matrix.copyVec2(c, body.m_sweep.c);
+      geo.copyVec2(c, body.m_sweep.c);
       const a = body.m_sweep.a;
-      matrix.copyVec2(v, body.m_linearVelocity);
+      geo.copyVec2(v, body.m_linearVelocity);
       let w = body.m_angularVelocity;
 
       // Store positions for continuous collision.
-      matrix.copyVec2(body.m_sweep.c0, body.m_sweep.c);
+      geo.copyVec2(body.m_sweep.c0, body.m_sweep.c);
       body.m_sweep.a0 = body.m_sweep.a;
 
       if (body.isDynamic()) {
         // Integrate velocities.
-        matrix.plusScaleVec2(v, h * body.m_gravityScale, gravity);
-        matrix.plusScaleVec2(v, h * body.m_invMass, body.m_force);
+        geo.plusScaleVec2(v, h * body.m_gravityScale, gravity);
+        geo.plusScaleVec2(v, h * body.m_invMass, body.m_force);
         w += h * body.m_invI * body.m_torque;
         /**
          * <pre>
@@ -316,13 +316,13 @@ export class Solver {
          * v2 = v1 * 1 / (1 + c * dt)
          * </pre>
          */
-        matrix.scaleVec2(v, 1.0 / (1.0 + h * body.m_linearDamping), v);
+        geo.scaleVec2(v, 1.0 / (1.0 + h * body.m_linearDamping), v);
         w *= 1.0 / (1.0 + h * body.m_angularDamping);
       }
 
-      matrix.copyVec2(body.c_position.c, c);
+      geo.copyVec2(body.c_position.c, c);
       body.c_position.a = a;
-      matrix.copyVec2(body.c_velocity.v, v);
+      geo.copyVec2(body.c_velocity.v, v);
       body.c_velocity.w = w;
     }
 
@@ -372,17 +372,17 @@ export class Solver {
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
 
-      matrix.copyVec2(c, body.c_position.c);
+      geo.copyVec2(c, body.c_position.c);
       let a = body.c_position.a;
-      matrix.copyVec2(v, body.c_velocity.v);
+      geo.copyVec2(v, body.c_velocity.v);
       let w = body.c_velocity.w;
 
       // Check for large velocities
-      matrix.scaleVec2(translation, h, v);
-      const translationLengthSqr = matrix.lengthSqrVec2(translation);
+      geo.scaleVec2(translation, h, v);
+      const translationLengthSqr = geo.lengthSqrVec2(translation);
       if (translationLengthSqr > Settings.maxTranslationSquared) {
         const ratio = Settings.maxTranslation / math_sqrt(translationLengthSqr);
-        matrix.mulVec2(v, ratio);
+        geo.mulVec2(v, ratio);
       }
 
       const rotation = h * w;
@@ -392,12 +392,12 @@ export class Solver {
       }
 
       // Integrate
-      matrix.plusScaleVec2(c, h, v);
+      geo.plusScaleVec2(c, h, v);
       a += h * w;
 
-      matrix.copyVec2(body.c_position.c, c);
+      geo.copyVec2(body.c_position.c, c);
       body.c_position.a = a;
-      matrix.copyVec2(body.c_velocity.v, v);
+      geo.copyVec2(body.c_velocity.v, v);
       body.c_velocity.w = w;
     }
 
@@ -432,9 +432,9 @@ export class Solver {
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
 
-      matrix.copyVec2(body.m_sweep.c, body.c_position.c);
+      geo.copyVec2(body.m_sweep.c, body.c_position.c);
       body.m_sweep.a = body.c_position.a;
-      matrix.copyVec2(body.m_linearVelocity, body.c_velocity.v);
+      geo.copyVec2(body.m_linearVelocity, body.c_velocity.v);
       body.m_angularVelocity = body.c_velocity.w;
       body.synchronizeTransform();
     }
@@ -456,7 +456,7 @@ export class Solver {
         if (
           body.m_autoSleepFlag == false ||
           body.m_angularVelocity * body.m_angularVelocity > angTolSqr ||
-          matrix.lengthSqrVec2(body.m_linearVelocity) > linTolSqr
+          geo.lengthSqrVec2(body.m_linearVelocity) > linTolSqr
         ) {
           body.m_sleepTime = 0.0;
           minSleepTime = 0.0;
@@ -751,9 +751,9 @@ export class Solver {
     // Initialize the body state.
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
-      matrix.copyVec2(body.c_position.c, body.m_sweep.c);
+      geo.copyVec2(body.c_position.c, body.m_sweep.c);
       body.c_position.a = body.m_sweep.a;
-      matrix.copyVec2(body.c_velocity.v, body.m_linearVelocity);
+      geo.copyVec2(body.c_velocity.v, body.m_linearVelocity);
       body.c_velocity.w = body.m_angularVelocity;
     }
 
@@ -794,8 +794,8 @@ export class Solver {
         const input = new DistanceInput();
         input.proxyA.set(fA.getShape(), indexA);
         input.proxyB.set(fB.getShape(), indexB);
-        input.transformA.set(bA.getTransform());
-        input.transformB.set(bB.getTransform());
+        geo.copyTransform(input.transformA, bA.getTransform());
+        geo.copyTransform(input.transformB, bB.getTransform());
         input.useRadii = false;
 
         const output = new DistanceOutput();
@@ -809,9 +809,9 @@ export class Solver {
     }
 
     // Leap of faith to new safe state.
-    matrix.copyVec2(toiA.m_sweep.c0, toiA.c_position.c);
+    geo.copyVec2(toiA.m_sweep.c0, toiA.c_position.c);
     toiA.m_sweep.a0 = toiA.c_position.a;
-    matrix.copyVec2(toiB.m_sweep.c0, toiB.c_position.c);
+    geo.copyVec2(toiB.m_sweep.c0, toiB.c_position.c);
     toiB.m_sweep.a0 = toiB.c_position.a;
 
     // No warm starting is needed for TOI events because warm
@@ -838,17 +838,17 @@ export class Solver {
     for (let i = 0; i < this.m_bodies.length; ++i) {
       const body = this.m_bodies[i];
 
-      matrix.copyVec2(c, body.c_position.c);
+      geo.copyVec2(c, body.c_position.c);
       let a = body.c_position.a;
-      matrix.copyVec2(v, body.c_velocity.v);
+      geo.copyVec2(v, body.c_velocity.v);
       let w = body.c_velocity.w;
 
       // Check for large velocities
-      matrix.scaleVec2(translation, h, v);
-      const translationLengthSqr = matrix.lengthSqrVec2(translation);
+      geo.scaleVec2(translation, h, v);
+      const translationLengthSqr = geo.lengthSqrVec2(translation);
       if (translationLengthSqr > Settings.maxTranslationSquared) {
         const ratio = Settings.maxTranslation / math_sqrt(translationLengthSqr);
-        matrix.mulVec2(v, ratio);
+        geo.mulVec2(v, ratio);
       }
 
       const rotation = h * w;
@@ -858,18 +858,18 @@ export class Solver {
       }
 
       // Integrate
-      matrix.plusScaleVec2(c, h, v);
+      geo.plusScaleVec2(c, h, v);
       a += h * w;
 
-      matrix.copyVec2(body.c_position.c, c);
+      geo.copyVec2(body.c_position.c, c);
       body.c_position.a = a;
-      matrix.copyVec2(body.c_velocity.v, v);
+      geo.copyVec2(body.c_velocity.v, v);
       body.c_velocity.w = w;
 
       // Sync bodies
-      matrix.copyVec2(body.m_sweep.c, c);
+      geo.copyVec2(body.m_sweep.c, c);
       body.m_sweep.a = a;
-      matrix.copyVec2(body.m_linearVelocity, v);
+      geo.copyVec2(body.m_linearVelocity, v);
       body.m_angularVelocity = w;
       body.synchronizeTransform();
     }

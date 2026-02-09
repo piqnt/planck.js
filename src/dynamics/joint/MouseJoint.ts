@@ -8,11 +8,10 @@
  */
 
 import { options } from "../../util/options";
+import * as geo from "../../common/Geo";
 import { EPSILON } from "../../common/Math";
-import { Vec2, Vec2Value } from "../../common/Vec2";
-import { Mat22 } from "../../common/Mat22";
-import { Rot } from "../../common/Rot";
-import { Transform } from "../../common/Transform";
+import { Vec2Value } from "../../common/Vec2";
+import { Mat22Value } from "../../common/Mat22";
 import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
@@ -87,21 +86,21 @@ export class MouseJoint extends Joint {
   static TYPE = "mouse-joint" as const;
 
   /** @internal */ m_type: "mouse-joint";
-  /** @internal */ m_targetA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_targetA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_maxForce: number;
-  /** @internal */ m_impulse: Vec2;
+  /** @internal */ m_impulse: Vec2Value;
   /** @internal */ m_frequencyHz: number;
   /** @internal */ m_dampingRatio: number;
   /** @internal */ m_beta: number;
   /** @internal */ m_gamma: number;
   // Solver temp
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIB: number;
-  /** @internal */ m_mass: Mat22;
-  /** @internal */ m_C: Vec2;
+  /** @internal */ m_mass: Mat22Value;
+  /** @internal */ m_C: Vec2Value;
 
   constructor(def: MouseJointDef);
   constructor(def: MouseJointOpt, bodyA: Body, bodyB: Body, target?: Vec2Value);
@@ -122,18 +121,18 @@ export class MouseJoint extends Joint {
     if (_ASSERT) console.assert(Number.isFinite(def.frequencyHz) && def.frequencyHz >= 0.0);
     if (_ASSERT) console.assert(Number.isFinite(def.dampingRatio) && def.dampingRatio >= 0.0);
 
-    if (Vec2.isValid(target)) {
-      this.m_targetA = Vec2.clone(target);
-    } else if (Vec2.isValid(def.target)) {
-      this.m_targetA = Vec2.clone(def.target);
-    } else {
-      this.m_targetA = Vec2.zero();
+    this.m_targetA = geo.vec2(0, 0);
+    if (geo.isVec2(target)) {
+      geo.copyVec2(this.m_targetA, target);
+    } else if (geo.isVec2(def.target)) {
+      geo.copyVec2(this.m_targetA, def.target);
     }
 
-    this.m_localAnchorB = Transform.mulTVec2(bodyB.getTransform(), this.m_targetA);
+    this.m_localAnchorB = geo.vec2(0, 0);
+    geo.detransformVec2(this.m_localAnchorB, bodyB.getTransform(), this.m_targetA);
 
     this.m_maxForce = def.maxForce;
-    this.m_impulse = Vec2.zero();
+    this.m_impulse = geo.vec2(0, 0);
 
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
@@ -142,12 +141,12 @@ export class MouseJoint extends Joint {
     this.m_gamma = 0.0;
 
     // Solver temp
-    this.m_rB = Vec2.zero();
-    this.m_localCenterB = Vec2.zero();
+    this.m_rB = geo.vec2(0, 0);
+    this.m_localCenterB = geo.vec2(0, 0);
     this.m_invMassB = 0.0;
     this.m_invIB = 0.0;
-    this.m_mass = new Mat22();
-    this.m_C = Vec2.zero();
+    this.m_mass = geo.mat22();
+    this.m_C = geo.vec2(0, 0);
 
     // p = attached point, m = mouse point
     // C = p - m
@@ -180,7 +179,9 @@ export class MouseJoint extends Joint {
     data = { ...data };
     data.bodyA = restore(Body, data.bodyA, world);
     data.bodyB = restore(Body, data.bodyB, world);
-    data.target = Vec2.clone(data.target);
+    if (data.target) {
+      data.target = geo.vec2(data.target.x, data.target.y);
+    }
     const joint = new MouseJoint(data);
     if (data._localAnchorB) {
       joint.m_localAnchorB = data._localAnchorB;
@@ -205,12 +206,12 @@ export class MouseJoint extends Joint {
    * Use this to update the target point.
    */
   setTarget(target: Vec2Value): void {
-    if (Vec2.areEqual(target, this.m_targetA)) return;
+    if (target.x === this.m_targetA.x && target.y === this.m_targetA.y) return;
     this.m_bodyB.setAwake(true);
-    this.m_targetA.set(target);
+    geo.copyVec2(this.m_targetA, target);
   }
 
-  getTarget(): Vec2 {
+  getTarget(): Vec2Value {
     return this.m_targetA;
   }
 
@@ -259,22 +260,25 @@ export class MouseJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
-    return Vec2.clone(this.m_targetA);
+  getAnchorA(): Vec2Value {
+    const result = geo.vec2(this.m_targetA.x, this.m_targetA.y);
+    return result;
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mulNumVec2(inv_dt, this.m_impulse);
+  getReactionForce(inv_dt: number): Vec2Value {
+    const result = geo.vec2(0, 0);
+    geo.scaleVec2(result, inv_dt, this.m_impulse);
+    return result;
   }
 
   /**
@@ -288,7 +292,7 @@ export class MouseJoint extends Joint {
    * Shift the origin for any points stored in world coordinates.
    */
   shiftOrigin(newOrigin: Vec2Value): void {
-    this.m_targetA.sub(newOrigin);
+    geo.minusVec2(this.m_targetA, newOrigin);
   }
 
   initVelocityConstraints(step: TimeStep): void {
@@ -304,7 +308,7 @@ export class MouseJoint extends Joint {
     const vB = velocity.v;
     let wB = velocity.w;
 
-    const qB = Rot.neo(aB);
+    const qB = geo.rotation(aB);
 
     const mass = this.m_bodyB.getMass();
 
@@ -329,65 +333,67 @@ export class MouseJoint extends Joint {
     this.m_beta = h * k * this.m_gamma;
 
     // Compute the effective mass matrix.
-    this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
+    this.m_rB = geo.vec2(0, 0);
+    geo.rotSubVec2(this.m_rB, qB, this.m_localAnchorB, this.m_localCenterB);
 
     // K = [(1/m1 + 1/m2) * eye(2) - skew(r1) * invI1 * skew(r1) - skew(r2) *
     // invI2 * skew(r2)]
     // = [1/m1+1/m2 0 ] + invI1 * [r1.y*r1.y -r1.x*r1.y] + invI2 * [r1.y*r1.y
     // -r1.x*r1.y]
     // [ 0 1/m1+1/m2] [-r1.x*r1.y r1.x*r1.x] [-r1.x*r1.y r1.x*r1.x]
-    const K = new Mat22();
+    const K = geo.mat22();
     K.ex.x = this.m_invMassB + this.m_invIB * this.m_rB.y * this.m_rB.y + this.m_gamma;
     K.ex.y = -this.m_invIB * this.m_rB.x * this.m_rB.y;
     K.ey.x = K.ex.y;
     K.ey.y = this.m_invMassB + this.m_invIB * this.m_rB.x * this.m_rB.x + this.m_gamma;
 
-    this.m_mass = K.getInverse();
+    this.m_mass = geo.mat22();
+    geo.inverseMat22(this.m_mass, K);
 
-    this.m_C.setVec2(cB);
-    this.m_C.addCombine(1, this.m_rB, -1, this.m_targetA);
-    this.m_C.mul(this.m_beta);
+    geo.combine3Vec2(this.m_C, 1, cB, 1, this.m_rB, -1, this.m_targetA);
+    geo.mulVec2(this.m_C, this.m_beta);
 
     // Cheat with some damping
     wB *= 0.98;
 
     if (step.warmStarting) {
-      this.m_impulse.mul(step.dtRatio);
-      vB.addMul(this.m_invMassB, this.m_impulse);
-      wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, this.m_impulse);
+      geo.mulVec2(this.m_impulse, step.dtRatio);
+      geo.plusScaleVec2(vB, this.m_invMassB, this.m_impulse);
+      wB += this.m_invIB * geo.crossVec2Vec2(this.m_rB, this.m_impulse);
     } else {
-      this.m_impulse.setZero();
+      geo.zeroVec2(vB);
     }
 
-    velocity.v.setVec2(vB);
+    geo.copyVec2(velocity.v, vB);
     velocity.w = wB;
   }
 
   solveVelocityConstraints(step: TimeStep): void {
     const velocity = this.m_bodyB.c_velocity;
-    const vB = Vec2.clone(velocity.v);
+
+    const vB = geo.vec2(velocity.v.x, velocity.v.y);
     let wB = velocity.w;
 
     // Cdot = v + cross(w, r)
+    const Cdot = geo.vec2(0, 0);
+    geo.vp(Cdot, vB, wB, this.m_rB);
+    geo.combine3Vec2(Cdot, 1, Cdot, 1, this.m_C, this.m_gamma, this.m_impulse);
+    geo.negVec2(Cdot);
 
-    const Cdot = Vec2.crossNumVec2(wB, this.m_rB);
-    Cdot.add(vB);
+    const impulse = geo.vec2(0, 0);
+    geo.mulMat22Vec2(impulse, this.m_mass, Cdot);
 
-    Cdot.addCombine(1, this.m_C, this.m_gamma, this.m_impulse);
-    Cdot.neg();
-
-    let impulse = Mat22.mulVec2(this.m_mass, Cdot);
-
-    const oldImpulse = Vec2.clone(this.m_impulse);
-    this.m_impulse.add(impulse);
+    const oldImpulse = geo.vec2(0, 0);
+    geo.copyVec2(oldImpulse, this.m_impulse);
+    geo.plusVec2(this.m_impulse, impulse);
     const maxImpulse = step.dt * this.m_maxForce;
-    this.m_impulse.clamp(maxImpulse);
-    impulse = Vec2.sub(this.m_impulse, oldImpulse);
+    geo.clampVec2(this.m_impulse, maxImpulse);
+    geo.subVec2(impulse, this.m_impulse, oldImpulse);
 
-    vB.addMul(this.m_invMassB, impulse);
-    wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, impulse);
+    geo.plusScaleVec2(vB, this.m_invMassB, impulse);
+    wB += this.m_invIB * geo.crossVec2Vec2(this.m_rB, impulse);
 
-    velocity.v.setVec2(vB);
+    geo.copyVec2(velocity.v, vB);
     velocity.w = wB;
   }
 

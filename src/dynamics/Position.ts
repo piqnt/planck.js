@@ -7,7 +7,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { Vec2, Vec2Value } from "../common/Vec2";
+import * as geo from "../common/Geo";
+import { Vec2Value } from "../common/Vec2";
 import { TransformValue } from "../common/Transform";
 
 /** @internal */ const math_sin = Math.sin;
@@ -15,7 +16,7 @@ import { TransformValue } from "../common/Transform";
 
 export class Position {
   /** location */
-  c = Vec2.zero();
+  c = geo.vec2(0, 0);
 
   /** angle */
   a = 0;
