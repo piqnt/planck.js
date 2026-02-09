@@ -1,2 +1,2 @@
 export * from "../src/index";
-export * from "./StageTestbed";
+export * from "./testbed/runtime";

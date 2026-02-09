@@ -1,8 +1,8 @@
+import { Memo } from "polymatic";
 import * as Stage from "stage-js";
-import type { CircleShape } from "../";
 
+import type { CircleShape } from "../";
 import { ComputedStyle } from "./ComputedStyle";
-import { Memo } from "../Memo";
 
 const math_PI = Math.PI;
 
@@ -70,15 +70,12 @@ export class CircleShapeComponent extends Stage.Sprite {
     this.tick(this.handleTick);
   }
 
-  __memo = Memo.init();
-
+  memo = Memo.init(0, 0, 0);
   handleTick = () => {
     const x = this.textureOffset.x;
     const y = this.textureOffset.y;
     const a = this.textureOffset.a;
-    if (!this.__memo.update(x, y, a)) {
-      return true;
-    }
+    if (!this.memo.update(x, y, a)) return true;
     this.offset(x, y);
     this.rotate(a);
   };

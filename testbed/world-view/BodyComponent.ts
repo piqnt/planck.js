@@ -1,6 +1,7 @@
+import { Memo } from "polymatic";
 import * as Stage from "stage-js";
+
 import type { Body } from "../";
-import { Memo } from "../Memo";
 
 export class BodyComponent extends Stage.Sprite {
   body: Body;
@@ -11,8 +12,7 @@ export class BodyComponent extends Stage.Sprite {
     this.tick(this.handleTick, false);
   }
 
-  __memo = Memo.init();
-
+  memo = Memo.init(0, 0, 0);
   handleTick = () => {
     if (!this.body) {
       return;
@@ -21,9 +21,7 @@ export class BodyComponent extends Stage.Sprite {
     const x = p.x;
     const y = p.y;
     const a = this.body.getAngle();
-    if (!this.__memo.update(x, y, a)) {
-      return true;
-    }
+    if (!this.memo.update(x, y, a)) return true;
     this.offset(x, y);
     this.rotate(a);
   };
