@@ -149,10 +149,10 @@ export class TestbedInstance implements TestbedInterface {
   keyup: (keyCode: number, label: string) => void;
 
   color(red: number, green: number, blue: number, alpha = 1): string {
-    const redHex = ((red * 255) | 0).toString(16).padStart(2, "0");
-    const greenHex = ((green * 255) | 0).toString(16).padStart(2, "0");
-    const blueHex = ((blue * 255) | 0).toString(16).padStart(2, "0");
-    const alphaHex = alpha !== 1 ? ((alpha * 255) | 0).toString(16).padStart(2, "0") : "";
+    const redHex = padStart(((red * 255) | 0).toString(16), 2, "0");
+    const greenHex = padStart(((green * 255) | 0).toString(16), 2, "0");
+    const blueHex = padStart(((blue * 255) | 0).toString(16), 2, "0");
+    const alphaHex = alpha !== 1 ? padStart(((alpha * 255) | 0).toString(16), 2, "0") : "";
     const hexColor = "#" + redHex + greenHex + blueHex + alphaHex;
     return hexColor;
   }
@@ -245,3 +245,10 @@ export class TestbedInstance implements TestbedInterface {
     this.runtime.context.console?.status(a, b);
   }
 }
+
+const padStart = (input: string, length: number, pad: string) => {
+  while (input.length < length) {
+    input = pad + input;
+  }
+  return input;
+};
