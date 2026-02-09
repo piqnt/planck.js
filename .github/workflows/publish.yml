@@ -62,9 +62,9 @@ jobs:
         uses: changesets/action@v1
         with:
           # build to guarantee published dist files were not altered
-          publish: npm run publish
+          publish: npm run bump
           # build to commit dist folder in version commit
-          version: npm run version
+          version: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
