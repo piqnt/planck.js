@@ -19,7 +19,6 @@ import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
@@ -106,28 +105,12 @@ export interface PrismaticJointDef extends JointDef, PrismaticJointOpt {
   motorSpeed: 0.0,
 };
 
-declare module "./PrismaticJoint" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function PrismaticJoint(def: PrismaticJointDef): PrismaticJoint;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function PrismaticJoint(
-    def: PrismaticJointOpt,
-    bodyA: Body,
-    bodyB: Body,
-    anchor: Vec2Value,
-    axis: Vec2Value,
-  ): PrismaticJoint;
-}
-
 /**
  * A prismatic joint. This joint provides one degree of freedom: translation
  * along an axis fixed in bodyA. Relative rotation is prevented. You can use a
  * joint limit to restrict the range of motion and a joint motor to drive the
  * motion or to model joint friction.
  */
-// @ts-expect-error
 export class PrismaticJoint extends Joint {
   static TYPE = "prismatic-joint" as const;
 
@@ -165,11 +148,6 @@ export class PrismaticJoint extends Joint {
   constructor(def: PrismaticJointDef);
   constructor(def: PrismaticJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value, axis?: Vec2Value);
   constructor(def: PrismaticJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value, axis?: Vec2Value) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof PrismaticJoint)) {
-      return new PrismaticJoint(def, bodyA, bodyB, anchor, axis);
-    }
-
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;

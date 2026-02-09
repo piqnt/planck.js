@@ -20,7 +20,6 @@ import { Fixture, FixtureProxy } from "./Fixture";
 import { Manifold } from "../collision/Manifold";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 export interface WorldDef {
   /** [default: { x : 0, y : 0}] */
@@ -85,25 +84,12 @@ export type WorldRayCastCallback = (fixture: Fixture, point: Vec2Value, normal: 
  */
 export type WorldAABBQueryCallback = (fixture: Fixture) => boolean;
 
-declare module "./World" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function World(deg: WorldDef): World;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function World(gravity: Vec2Value): World;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function World(): World;
-}
-
 /**
  * The `World` class contains the bodies and joints. It manages all aspects
  * of the simulation and allows for asynchronous queries (like AABB queries
  * and ray-casts). Much of your interactions with Planck.js will be with a
  * World object.
  */
-// @ts-expect-error
 export class World {
   /** @internal */ m_solver: Solver;
   /** @internal */ m_broadPhase: BroadPhase;
@@ -138,9 +124,6 @@ export class World {
    * @param def World definition or gravity vector.
    */
   constructor(def?: WorldDef | Vec2Value) {
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof World)) {
-      return new World(def);
-    }
 
     this.s_step = new TimeStep();
 

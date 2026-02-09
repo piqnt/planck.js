@@ -16,23 +16,14 @@ import { AABB, AABBValue, RayCastInput, RayCastOutput } from "../AABB";
 import { MassData } from "../../dynamics/Body";
 import { DistanceProxy } from "../Distance";
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
-
 /** @internal */ const v1 = geo.vec2(0, 0);
 /** @internal */ const v2 = geo.vec2(0, 0);
-
-declare module "./EdgeShape" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function EdgeShape(v1?: Vec2Value, v2?: Vec2Value): EdgeShape;
-}
 
 /**
  * A line segment (edge) shape. These can be connected in chains or loops to
  * other edge shapes. The connectivity information is used to ensure correct
  * contact normals.
  */
-// @ts-expect-error
 export class EdgeShape extends Shape {
   static TYPE = "edge" as const;
   /** @hidden */ m_type: "edge";
@@ -51,11 +42,6 @@ export class EdgeShape extends Shape {
   /** @hidden */ m_hasVertex3: boolean;
 
   constructor(v1?: Vec2Value, v2?: Vec2Value) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof EdgeShape)) {
-      return new EdgeShape(v1, v2);
-    }
-
     super();
 
     this.m_type = EdgeShape.TYPE;

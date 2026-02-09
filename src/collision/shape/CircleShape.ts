@@ -16,23 +16,12 @@ import { TransformValue } from "../../common/Transform";
 import { MassData } from "../../dynamics/Body";
 import { DistanceProxy } from "../Distance";
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_sqrt = Math.sqrt;
 /** @internal */ const math_PI = Math.PI;
 
 /** @internal */ const temp = geo.vec2(0, 0);
 
-declare module "./CircleShape" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function CircleShape(position: Vec2Value, radius?: number): CircleShape;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function CircleShape(radius?: number): CircleShape;
-}
-
 /** Circle shape. */
-// @ts-expect-error
 export class CircleShape extends Shape {
   static TYPE = "circle" as const;
   /** @hidden */ m_type: "circle";
@@ -43,11 +32,6 @@ export class CircleShape extends Shape {
   constructor(position: Vec2Value, radius?: number);
   constructor(radius?: number);
   constructor(a: any, b?: any) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof CircleShape)) {
-      return new CircleShape(a, b);
-    }
-
     super();
 
     this.m_type = CircleShape.TYPE;

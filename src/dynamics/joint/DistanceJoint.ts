@@ -16,7 +16,6 @@ import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 /** @internal */ const math_PI = Math.PI;
 
@@ -67,26 +66,10 @@ export interface DistanceJointDef extends JointDef, DistanceJointOpt {
   dampingRatio: 0.0,
 };
 
-declare module "./DistanceJoint" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function DistanceJoint(def: DistanceJointDef): DistanceJoint;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function DistanceJoint(
-    def: DistanceJointOpt,
-    bodyA: Body,
-    bodyB: Body,
-    anchorA: Vec2Value,
-    anchorB: Vec2Value,
-  ): DistanceJoint;
-}
-
 /**
  * A distance joint constrains two points on two bodies to remain at a fixed
  * distance from each other. You can view this as a massless, rigid rod.
  */
-// @ts-expect-error
 export class DistanceJoint extends Joint {
   static TYPE = "distance-joint" as const;
 
@@ -122,11 +105,6 @@ export class DistanceJoint extends Joint {
    */
   constructor(def: DistanceJointOpt, bodyA: Body, bodyB: Body, anchorA?: Vec2Value, anchorB?: Vec2Value);
   constructor(def: DistanceJointDef, bodyA?: Body, bodyB?: Body, anchorA?: Vec2Value, anchorB?: Vec2Value) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof DistanceJoint)) {
-      return new DistanceJoint(def, bodyA, bodyB, anchorA, anchorB);
-    }
-
     // order of constructor arguments is changed in v0.2
     if (bodyB && anchorA && "m_type" in anchorA && "x" in bodyB && "y" in bodyB) {
       const temp = bodyB;

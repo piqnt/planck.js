@@ -11,7 +11,6 @@ import { Vec2, Vec2Value } from "./Vec2";
 import { Rot, RotValue } from "./Rot";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 /**
  * A transform contains translation and rotation. It is used to represent the
@@ -23,12 +22,6 @@ export interface TransformValue {
   q: RotValue;
 }
 
-declare module "./Transform" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function Transform(position?: Vec2Value, rotation?: number): Transform;
-}
-
 /**
  * A transform contains translation and rotation. It is used to represent the
  * position and orientation of rigid frames. Initialize using a position vector
@@ -36,7 +29,6 @@ declare module "./Transform" {
  *
  * @deprecated Use TransformValue and geo functions instead.
  */
-// @ts-expect-error
 export class Transform {
   /** position */
   p: Vec2;
@@ -45,9 +37,6 @@ export class Transform {
   q: Rot;
 
   constructor(position?: Vec2Value, rotation?: number) {
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof Transform)) {
-      return new Transform(position, rotation);
-    }
     this.p = Vec2.zero();
     this.q = Rot.identity();
     if (typeof position !== "undefined") {

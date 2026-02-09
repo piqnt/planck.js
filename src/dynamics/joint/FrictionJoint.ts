@@ -17,7 +17,6 @@ import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
 /**
  * Friction joint definition.
@@ -55,20 +54,10 @@ export interface FrictionJointDef extends JointDef, FrictionJointOpt {
   maxTorque: 0.0,
 };
 
-declare module "./FrictionJoint" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function FrictionJoint(def: FrictionJointDef): FrictionJoint;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function FrictionJoint(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): FrictionJoint;
-}
-
 /**
  * Friction joint. This is used for top-down friction. It provides 2D
  * translational friction and angular friction.
  */
-// @ts-expect-error
 export class FrictionJoint extends Joint {
   static TYPE = "friction-joint" as const;
 
@@ -101,10 +90,6 @@ export class FrictionJoint extends Joint {
    */
   constructor(def: FrictionJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
   constructor(def: FrictionJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof FrictionJoint)) {
-      return new FrictionJoint(def, bodyA, bodyB, anchor);
-    }
 
     def = options(def, DEFAULTS);
     super(def, bodyA, bodyB);

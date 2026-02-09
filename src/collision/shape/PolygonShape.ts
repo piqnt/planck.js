@@ -18,7 +18,6 @@ import { SettingsInternal as Settings } from "../../Settings";
 import { Shape } from "../Shape";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
 
@@ -29,19 +28,12 @@ import { Shape } from "../Shape";
 /** @internal */ const center = geo.vec2(0, 0);
 /** @internal */ const s = geo.vec2(0, 0);
 
-declare module "./PolygonShape" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function PolygonShape(vertices?: Vec2Value[]): PolygonShape;
-}
-
 /**
  * A convex polygon. It is assumed that the interior of the polygon is to the
  * left of each edge. Polygons have a maximum number of vertices equal to
  * Settings.maxPolygonVertices. In most cases you should not need many vertices
  * for a convex polygon. extends Shape
  */
-// @ts-expect-error
 export class PolygonShape extends Shape {
   static TYPE = "polygon" as const;
   /** @hidden */ m_type: "polygon";
@@ -53,11 +45,6 @@ export class PolygonShape extends Shape {
   /** @hidden */ m_radius: number;
 
   constructor(vertices?: Vec2Value[]) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof PolygonShape)) {
-      return new PolygonShape(vertices);
-    }
-
     super();
 
     this.m_type = PolygonShape.TYPE;
