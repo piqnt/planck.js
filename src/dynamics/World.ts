@@ -15,7 +15,8 @@ import { Solver, ContactImpulse, TimeStep } from "./Solver";
 import { Body, BodyDef } from "./Body";
 import { Joint } from "./Joint";
 import { Contact } from "./Contact";
-import { AABBValue, RayCastInput, RayCastOutput } from "../collision/AABB";
+import { AABBValue } from "../collision/AABB";
+import { RayCastInput, RayCastOutput } from "../collision/Raycast";
 import { Fixture, FixtureProxy } from "./Fixture";
 import { Manifold } from "../collision/Manifold";
 
