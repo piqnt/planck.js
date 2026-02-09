@@ -10,7 +10,7 @@
 import type { MassData } from "../dynamics/Body";
 import { RayCastOutput, RayCastInput, AABBValue } from "./AABB";
 import { DistanceProxy } from "./Distance";
-import type { Transform, TransformValue } from "../common/Transform";
+import type { TransformValue } from "../common/Transform";
 import type { Vec2Value } from "../common/Vec2";
 import { Style } from "../util/Testbed";
 
@@ -86,7 +86,7 @@ export abstract class Shape {
    * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
-  abstract rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean;
+  abstract rayCast(output: RayCastOutput, input: RayCastInput, xf: TransformValue, childIndex: number): boolean;
 
   /**
    * Given a transform, compute the associated axis aligned bounding box for a

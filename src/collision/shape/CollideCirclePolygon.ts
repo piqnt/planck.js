@@ -7,7 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from "../../common/Matrix";
+import * as geo from "../../common/Geo";
 import { EPSILON } from "../../common/Math";
 import { TransformValue } from "../../common/Transform";
 import { Contact } from "../../dynamics/Contact";
@@ -34,8 +34,8 @@ Contact.addType(PolygonShape.TYPE, CircleShape.TYPE, PolygonCircleContact);
   CollidePolygonCircle(manifold, fixtureA.getShape() as PolygonShape, xfA, fixtureB.getShape() as CircleShape, xfB);
 }
 
-/** @internal */ const cLocal = matrix.vec2(0, 0);
-/** @internal */ const faceCenter = matrix.vec2(0, 0);
+/** @internal */ const cLocal = geo.vec2(0, 0);
+/** @internal */ const faceCenter = geo.vec2(0, 0);
 
 export const CollidePolygonCircle = function (
   manifold: Manifold,
@@ -47,7 +47,7 @@ export const CollidePolygonCircle = function (
   manifold.pointCount = 0;
 
   // Compute circle position in the frame of the polygon.
-  matrix.retransformVec2(cLocal, xfB, xfA, circleB.m_p);
+  geo.retransformVec2(cLocal, xfB, xfA, circleB.m_p);
 
   // Find the min separating edge.
   let normalIndex = 0;
@@ -58,7 +58,7 @@ export const CollidePolygonCircle = function (
   const normals = polygonA.m_normals;
 
   for (let i = 0; i < vertexCount; ++i) {
-    const s = matrix.dotVec2(normals[i], cLocal) - matrix.dotVec2(normals[i], vertices[i]);
+    const s = geo.dotVec2(normals[i], cLocal) - geo.dotVec2(normals[i], vertices[i]);
 
     if (s > radius) {
       // Early out.
@@ -81,9 +81,9 @@ export const CollidePolygonCircle = function (
   if (separation < EPSILON) {
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    matrix.copyVec2(manifold.localNormal, normals[normalIndex]);
-    matrix.combine2Vec2(manifold.localPoint, 0.5, v1, 0.5, v2);
-    matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
+    geo.copyVec2(manifold.localNormal, normals[normalIndex]);
+    geo.combine2Vec2(manifold.localPoint, 0.5, v1, 0.5, v2);
+    geo.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
@@ -92,49 +92,49 @@ export const CollidePolygonCircle = function (
 
   // Compute barycentric coordinates
   // u1 = (cLocal - v1) dot (v2 - v1))
-  const u1 = matrix.dotVec2(cLocal, v2) - matrix.dotVec2(cLocal, v1) - matrix.dotVec2(v1, v2) + matrix.dotVec2(v1, v1);
+  const u1 = geo.dotVec2(cLocal, v2) - geo.dotVec2(cLocal, v1) - geo.dotVec2(v1, v2) + geo.dotVec2(v1, v1);
   // u2 = (cLocal - v2) dot (v1 - v2)
-  const u2 = matrix.dotVec2(cLocal, v1) - matrix.dotVec2(cLocal, v2) - matrix.dotVec2(v2, v1) + matrix.dotVec2(v2, v2);
+  const u2 = geo.dotVec2(cLocal, v1) - geo.dotVec2(cLocal, v2) - geo.dotVec2(v2, v1) + geo.dotVec2(v2, v2);
   if (u1 <= 0.0) {
-    if (matrix.distSqrVec2(cLocal, v1) > radius * radius) {
+    if (geo.distSqrVec2(cLocal, v1) > radius * radius) {
       return;
     }
 
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    matrix.subVec2(manifold.localNormal, cLocal, v1);
-    matrix.normalizeVec2(manifold.localNormal);
-    matrix.copyVec2(manifold.localPoint, v1);
-    matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
+    geo.subVec2(manifold.localNormal, cLocal, v1);
+    geo.normalizeVec2(manifold.localNormal);
+    geo.copyVec2(manifold.localPoint, v1);
+    geo.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
   } else if (u2 <= 0.0) {
-    if (matrix.distSqrVec2(cLocal, v2) > radius * radius) {
+    if (geo.distSqrVec2(cLocal, v2) > radius * radius) {
       return;
     }
 
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    matrix.subVec2(manifold.localNormal, cLocal, v2);
-    matrix.normalizeVec2(manifold.localNormal);
-    matrix.copyVec2(manifold.localPoint, v2);
-    matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
+    geo.subVec2(manifold.localNormal, cLocal, v2);
+    geo.normalizeVec2(manifold.localNormal);
+    geo.copyVec2(manifold.localPoint, v2);
+    geo.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
   } else {
-    matrix.combine2Vec2(faceCenter, 0.5, v1, 0.5, v2);
-    const separation = matrix.dotVec2(cLocal, normals[vertIndex1]) - matrix.dotVec2(faceCenter, normals[vertIndex1]);
+    geo.combine2Vec2(faceCenter, 0.5, v1, 0.5, v2);
+    const separation = geo.dotVec2(cLocal, normals[vertIndex1]) - geo.dotVec2(faceCenter, normals[vertIndex1]);
     if (separation > radius) {
       return;
     }
 
     manifold.pointCount = 1;
     manifold.type = ManifoldType.e_faceA;
-    matrix.copyVec2(manifold.localNormal, normals[vertIndex1]);
-    matrix.copyVec2(manifold.localPoint, faceCenter);
-    matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
+    geo.copyVec2(manifold.localNormal, normals[vertIndex1]);
+    geo.copyVec2(manifold.localPoint, faceCenter);
+    geo.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
     // manifold.points[0].id.key = 0;
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);

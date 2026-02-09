@@ -7,7 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from "../../common/Matrix";
+import * as geo from "../../common/Geo";
 import { TransformValue } from "../../common/Transform";
 import { Contact } from "../../dynamics/Contact";
 import { CircleShape } from "./CircleShape";
@@ -32,8 +32,8 @@ Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
   CollideCircles(manifold, fixtureA.getShape() as CircleShape, xfA, fixtureB.getShape() as CircleShape, xfB);
 }
 
-/** @internal */ const pA = matrix.vec2(0, 0);
-/** @internal */ const pB = matrix.vec2(0, 0);
+/** @internal */ const pA = geo.vec2(0, 0);
+/** @internal */ const pB = geo.vec2(0, 0);
 
 export const CollideCircles = function (
   manifold: Manifold,
@@ -44,10 +44,10 @@ export const CollideCircles = function (
 ): void {
   manifold.pointCount = 0;
 
-  matrix.transformVec2(pA, xfA, circleA.m_p);
-  matrix.transformVec2(pB, xfB, circleB.m_p);
+  geo.transformVec2(pA, xfA, circleA.m_p);
+  geo.transformVec2(pB, xfB, circleB.m_p);
 
-  const distSqr = matrix.distSqrVec2(pB, pA);
+  const distSqr = geo.distSqrVec2(pB, pA);
   const rA = circleA.m_radius;
   const rB = circleB.m_radius;
   const radius = rA + rB;
@@ -56,10 +56,10 @@ export const CollideCircles = function (
   }
 
   manifold.type = ManifoldType.e_circles;
-  matrix.copyVec2(manifold.localPoint, circleA.m_p);
-  matrix.zeroVec2(manifold.localNormal);
+  geo.copyVec2(manifold.localPoint, circleA.m_p);
+  geo.zeroVec2(manifold.localNormal);
   manifold.pointCount = 1;
-  matrix.copyVec2(manifold.points[0].localPoint, circleB.m_p);
+  geo.copyVec2(manifold.points[0].localPoint, circleB.m_p);
 
   // manifold.points[0].id.key = 0;
   manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);

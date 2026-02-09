@@ -7,21 +7,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from "../common/Matrix";
+import * as geo from "../common/Geo";
 import { Vec2Value } from "../common/Vec2";
 import { TransformValue } from "../common/Transform";
 import { EPSILON } from "../common/Math";
 
 /** @internal */ const math_sqrt = Math.sqrt;
 
-/** @internal */ const pointA = matrix.vec2(0, 0);
-/** @internal */ const pointB = matrix.vec2(0, 0);
-/** @internal */ const temp = matrix.vec2(0, 0);
-/** @internal */ const cA = matrix.vec2(0, 0);
-/** @internal */ const cB = matrix.vec2(0, 0);
-/** @internal */ const dist = matrix.vec2(0, 0);
-/** @internal */ const planePoint = matrix.vec2(0, 0);
-/** @internal */ const clipPoint = matrix.vec2(0, 0);
+/** @internal */ const pointA = geo.vec2(0, 0);
+/** @internal */ const pointB = geo.vec2(0, 0);
+/** @internal */ const cA = geo.vec2(0, 0);
+/** @internal */ const cB = geo.vec2(0, 0);
+/** @internal */ const dist = geo.vec2(0, 0);
+/** @internal */ const planePoint = geo.vec2(0, 0);
+/** @internal */ const clipPoint = geo.vec2(0, 0);
 
 export enum ManifoldType {
   e_unset = -1,
@@ -54,15 +53,15 @@ export enum PointState {
  * Used for computing contact manifolds.
  */
 export class ClipVertex {
-  v = matrix.vec2(0, 0);
+  v = geo.vec2(0, 0);
   id: ContactID = new ContactID();
 
   set(o: ClipVertex): void {
-    matrix.copyVec2(this.v, o.v);
+    geo.copyVec2(this.v, o.v);
     this.id.set(o.id);
   }
   recycle() {
-    matrix.zeroVec2(this.v);
+    geo.zeroVec2(this.v);
     this.id.recycle();
   }
 }
@@ -88,7 +87,7 @@ export class Manifold {
    * - faceA: the normal on polygonA
    * - faceB: the normal on polygonB
    */
-  localNormal = matrix.vec2(0, 0);
+  localNormal = geo.vec2(0, 0);
 
   /**
    * Usage depends on manifold type:
@@ -96,7 +95,7 @@ export class Manifold {
    * - faceA: the center of faceA
    * - faceB: the center of faceB
    */
-  localPoint = matrix.vec2(0, 0);
+  localPoint = geo.vec2(0, 0);
 
   /** The points of contact */
   points: ManifoldPoint[] = [new ManifoldPoint(), new ManifoldPoint()];
@@ -106,8 +105,8 @@ export class Manifold {
 
   set(that: Manifold): void {
     this.type = that.type;
-    matrix.copyVec2(this.localNormal, that.localNormal);
-    matrix.copyVec2(this.localPoint, that.localPoint);
+    geo.copyVec2(this.localNormal, that.localNormal);
+    geo.copyVec2(this.localPoint, that.localPoint);
     this.pointCount = that.pointCount;
     this.points[0].set(that.points[0]);
     this.points[1].set(that.points[1]);
@@ -115,8 +114,8 @@ export class Manifold {
 
   recycle(): void {
     this.type = ManifoldType.e_unset;
-    matrix.zeroVec2(this.localNormal);
-    matrix.zeroVec2(this.localPoint);
+    geo.zeroVec2(this.localNormal);
+    geo.zeroVec2(this.localPoint);
     this.pointCount = 0;
     this.points[0].recycle();
     this.points[1].recycle();
@@ -148,64 +147,52 @@ export class Manifold {
 
     switch (this.type) {
       case ManifoldType.e_circles: {
-        matrix.setVec2(normal, 1.0, 0.0);
+        geo.setVec2(normal, 1.0, 0.0);
         const manifoldPoint = this.points[0];
-        matrix.transformVec2(pointA, xfA, this.localPoint);
-        matrix.transformVec2(pointB, xfB, manifoldPoint.localPoint);
-        matrix.subVec2(dist, pointB, pointA);
-        const lengthSqr = matrix.lengthSqrVec2(dist);
+        geo.transformVec2(pointA, xfA, this.localPoint);
+        geo.transformVec2(pointB, xfB, manifoldPoint.localPoint);
+        geo.subVec2(dist, pointB, pointA);
+        const lengthSqr = geo.lengthSqrVec2(dist);
         if (lengthSqr > EPSILON * EPSILON) {
           const length = math_sqrt(lengthSqr);
-          matrix.scaleVec2(normal, 1 / length, dist);
+          geo.scaleVec2(normal, 1 / length, dist);
         }
-        matrix.combine2Vec2(cA, 1, pointA, radiusA, normal);
-        matrix.combine2Vec2(cB, 1, pointB, -radiusB, normal);
-        matrix.combine2Vec2(points[0], 0.5, cA, 0.5, cB);
-        separations[0] = matrix.dotVec2(matrix.subVec2(temp, cB, cA), normal);
+        geo.combine2Vec2(cA, 1, pointA, radiusA, normal);
+        geo.combine2Vec2(cB, 1, pointB, -radiusB, normal);
+        geo.combine2Vec2(points[0], 0.5, cA, 0.5, cB);
+        separations[0] = geo.dotSubVec2(cB, cA, normal);
         break;
       }
 
       case ManifoldType.e_faceA: {
-        matrix.rotVec2(normal, xfA.q, this.localNormal);
-        matrix.transformVec2(planePoint, xfA, this.localPoint);
+        geo.rotVec2(normal, xfA.q, this.localNormal);
+        geo.transformVec2(planePoint, xfA, this.localPoint);
 
         for (let i = 0; i < this.pointCount; ++i) {
           const manifoldPoint = this.points[i];
-          matrix.transformVec2(clipPoint, xfB, manifoldPoint.localPoint);
-          matrix.combine2Vec2(
-            cA,
-            1,
-            clipPoint,
-            radiusA - matrix.dotVec2(matrix.subVec2(temp, clipPoint, planePoint), normal),
-            normal,
-          );
-          matrix.combine2Vec2(cB, 1, clipPoint, -radiusB, normal);
-          matrix.combine2Vec2(points[i], 0.5, cA, 0.5, cB);
-          separations[i] = matrix.dotVec2(matrix.subVec2(temp, cB, cA), normal);
+          geo.transformVec2(clipPoint, xfB, manifoldPoint.localPoint);
+          geo.combine2Vec2(cA, 1, clipPoint, radiusA - geo.dotSubVec2(clipPoint, planePoint, normal), normal);
+          geo.combine2Vec2(cB, 1, clipPoint, -radiusB, normal);
+          geo.combine2Vec2(points[i], 0.5, cA, 0.5, cB);
+          separations[i] = geo.dotSubVec2(cB, cA, normal);
         }
         break;
       }
 
       case ManifoldType.e_faceB: {
-        matrix.rotVec2(normal, xfB.q, this.localNormal);
-        matrix.transformVec2(planePoint, xfB, this.localPoint);
+        geo.rotVec2(normal, xfB.q, this.localNormal);
+        geo.transformVec2(planePoint, xfB, this.localPoint);
 
         for (let i = 0; i < this.pointCount; ++i) {
           const manifoldPoint = this.points[i];
-          matrix.transformVec2(clipPoint, xfA, manifoldPoint.localPoint);
-          matrix.combine2Vec2(
-            cB,
-            1,
-            clipPoint,
-            radiusB - matrix.dotVec2(matrix.subVec2(temp, clipPoint, planePoint), normal),
-            normal,
-          );
-          matrix.combine2Vec2(cA, 1, clipPoint, -radiusA, normal);
-          matrix.combine2Vec2(points[i], 0.5, cA, 0.5, cB);
-          separations[i] = matrix.dotVec2(matrix.subVec2(temp, cA, cB), normal);
+          geo.transformVec2(clipPoint, xfA, manifoldPoint.localPoint);
+          geo.combine2Vec2(cB, 1, clipPoint, radiusB - geo.dotSubVec2(clipPoint, planePoint, normal), normal);
+          geo.combine2Vec2(cA, 1, clipPoint, -radiusA, normal);
+          geo.combine2Vec2(points[i], 0.5, cA, 0.5, cB);
+          separations[i] = geo.dotSubVec2(cA, cB, normal);
         }
         // Ensure normal points from A to B.
-        matrix.negVec2(normal);
+        geo.negVec2(normal);
         break;
       }
     }
@@ -235,7 +222,7 @@ export class ManifoldPoint {
    * - faceA: the local center of circleB or the clip point of polygonB
    * - faceB: the clip point of polygonA
    */
-  localPoint = matrix.vec2(0, 0);
+  localPoint = geo.vec2(0, 0);
   /**
    * The non-penetration impulse
    */
@@ -250,14 +237,14 @@ export class ManifoldPoint {
   readonly id = new ContactID();
 
   set(that: ManifoldPoint): void {
-    matrix.copyVec2(this.localPoint, that.localPoint);
+    geo.copyVec2(this.localPoint, that.localPoint);
     this.normalImpulse = that.normalImpulse;
     this.tangentImpulse = that.tangentImpulse;
     this.id.set(that.id);
   }
 
   recycle(): void {
-    matrix.zeroVec2(this.localPoint);
+    geo.zeroVec2(this.localPoint);
     this.normalImpulse = 0;
     this.tangentImpulse = 0;
     this.id.recycle();
@@ -329,10 +316,10 @@ export class ContactID {
  */
 export class WorldManifold {
   /** World vector pointing from A to B */
-  normal = matrix.vec2(0, 0);
+  normal = geo.vec2(0, 0);
 
   /** World contact point (point of intersection) */
-  points = [matrix.vec2(0, 0), matrix.vec2(0, 0)]; // [maxManifoldPoints]
+  points = [geo.vec2(0, 0), geo.vec2(0, 0)]; // [maxManifoldPoints]
 
   /** A negative value indicates overlap, in meters */
   separations = [0, 0]; // [maxManifoldPoints]
@@ -341,9 +328,9 @@ export class WorldManifold {
   pointCount = 0;
 
   recycle() {
-    matrix.zeroVec2(this.normal);
-    matrix.zeroVec2(this.points[0]);
-    matrix.zeroVec2(this.points[1]);
+    geo.zeroVec2(this.normal);
+    geo.zeroVec2(this.points[0]);
+    geo.zeroVec2(this.points[1]);
     this.separations[0] = 0;
     this.separations[1] = 0;
     this.pointCount = 0;
@@ -411,8 +398,8 @@ export function clipSegmentToLine(
   let numOut = 0;
 
   // Calculate the distance of end points to the line
-  const distance0 = matrix.dotVec2(normal, vIn[0].v) - offset;
-  const distance1 = matrix.dotVec2(normal, vIn[1].v) - offset;
+  const distance0 = geo.dotVec2(normal, vIn[0].v) - offset;
+  const distance1 = geo.dotVec2(normal, vIn[1].v) - offset;
 
   // If the points are behind the plane
   if (distance0 <= 0.0) vOut[numOut++].set(vIn[0]);
@@ -422,7 +409,7 @@ export function clipSegmentToLine(
   if (distance0 * distance1 < 0.0) {
     // Find intersection point of edge and plane
     const interp = distance0 / (distance0 - distance1);
-    matrix.combine2Vec2(vOut[numOut].v, 1 - interp, vIn[0].v, interp, vIn[1].v);
+    geo.combine2Vec2(vOut[numOut].v, 1 - interp, vIn[0].v, interp, vIn[1].v);
 
     // VertexA is hitting edgeB.
     vOut[numOut].id.setFeatures(vertexIndexA, ContactFeatureType.e_vertex, vIn[0].id.indexB, ContactFeatureType.e_face);

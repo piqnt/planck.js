@@ -9,9 +9,9 @@
 
 import { options } from "../../util/options";
 import { SettingsInternal as Settings } from "../../Settings";
+import * as geo from "../../common/Geo";
 import { clamp } from "../../common/Math";
-import { Vec2, Vec2Value } from "../../common/Vec2";
-import { Rot } from "../../common/Rot";
+import { Vec2Value } from "../../common/Vec2";
 import { Joint, JointOpt, JointDef } from "../Joint";
 import { Body } from "../Body";
 import { TimeStep } from "../Solver";
@@ -91,8 +91,8 @@ export class DistanceJoint extends Joint {
   static TYPE = "distance-joint" as const;
 
   // Solver shared
-  /** @internal */ m_localAnchorA: Vec2;
-  /** @internal */ m_localAnchorB: Vec2;
+  /** @internal */ m_localAnchorA: Vec2Value;
+  /** @internal */ m_localAnchorB: Vec2Value;
   /** @internal */ m_length: number;
   /** @internal */ m_frequencyHz: number;
   /** @internal */ m_dampingRatio: number;
@@ -101,11 +101,11 @@ export class DistanceJoint extends Joint {
   /** @internal */ m_bias: number;
 
   // Solver temp
-  /** @internal */ m_u: Vec2;
-  /** @internal */ m_rA: Vec2;
-  /** @internal */ m_rB: Vec2;
-  /** @internal */ m_localCenterA: Vec2;
-  /** @internal */ m_localCenterB: Vec2;
+  /** @internal */ m_u: Vec2Value;
+  /** @internal */ m_rA: Vec2Value;
+  /** @internal */ m_rB: Vec2Value;
+  /** @internal */ m_localCenterA: Vec2Value;
+  /** @internal */ m_localCenterB: Vec2Value;
   /** @internal */ m_invMassA: number;
   /** @internal */ m_invMassB: number;
   /** @internal */ m_invIA: number;
@@ -131,7 +131,7 @@ export class DistanceJoint extends Joint {
     if (bodyB && anchorA && "m_type" in anchorA && "x" in bodyB && "y" in bodyB) {
       const temp = bodyB;
       bodyB = anchorA as any as Body;
-      anchorA = temp as any as Vec2;
+      anchorA = temp as any as Vec2Value;
     }
 
     def = options(def, DEFAULTS);
@@ -142,11 +142,26 @@ export class DistanceJoint extends Joint {
     this.m_type = DistanceJoint.TYPE;
 
     // Solver shared
-    this.m_localAnchorA = Vec2.clone(anchorA ? bodyA.getLocalPoint(anchorA) : def.localAnchorA || Vec2.zero());
-    this.m_localAnchorB = Vec2.clone(anchorB ? bodyB.getLocalPoint(anchorB) : def.localAnchorB || Vec2.zero());
-    this.m_length = Number.isFinite(def.length)
-      ? def.length
-      : Vec2.distance(bodyA.getWorldPoint(this.m_localAnchorA), bodyB.getWorldPoint(this.m_localAnchorB));
+    this.m_localAnchorA = geo.vec2(0, 0);
+    if (anchorA) {
+      geo.copyVec2(this.m_localAnchorA, bodyA.getLocalPoint(anchorA));
+    } else if (geo.isVec2(def.localAnchorA)) {
+      geo.copyVec2(this.m_localAnchorA, def.localAnchorA);
+    }
+
+    this.m_localAnchorB = geo.vec2(0, 0);
+    if (anchorB) {
+      geo.copyVec2(this.m_localAnchorB, bodyB.getLocalPoint(anchorB));
+    } else if (geo.isVec2(def.localAnchorB)) {
+      geo.copyVec2(this.m_localAnchorB, def.localAnchorB);
+    }
+
+    if (Number.isFinite(def.length)) {
+      this.m_length = def.length;
+    } else {
+      this.m_length = geo.distVec2(bodyA.getWorldPoint(this.m_localAnchorA), bodyB.getWorldPoint(this.m_localAnchorB));
+    }
+
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
     this.m_impulse = 0.0;
@@ -202,15 +217,15 @@ export class DistanceJoint extends Joint {
   /** @hidden */
   _reset(def: Partial<DistanceJointDef>): void {
     if (def.anchorA) {
-      this.m_localAnchorA.setVec2(this.m_bodyA.getLocalPoint(def.anchorA));
-    } else if (def.localAnchorA) {
-      this.m_localAnchorA.setVec2(def.localAnchorA);
+      geo.copyVec2(this.m_localAnchorA, this.m_bodyA.getLocalPoint(def.anchorA));
+    } else if (geo.isVec2(def.localAnchorA)) {
+      geo.copyVec2(this.m_localAnchorA, def.localAnchorA);
     }
 
     if (def.anchorB) {
-      this.m_localAnchorB.setVec2(this.m_bodyB.getLocalPoint(def.anchorB));
-    } else if (def.localAnchorB) {
-      this.m_localAnchorB.setVec2(def.localAnchorB);
+      geo.copyVec2(this.m_localAnchorB, this.m_bodyB.getLocalPoint(def.anchorB));
+    } else if (geo.isVec2(def.localAnchorB)) {
+      geo.copyVec2(this.m_localAnchorB, def.localAnchorB);
     }
 
     if (def.length > 0) {
@@ -218,7 +233,7 @@ export class DistanceJoint extends Joint {
     } else if (def.length < 0) {
       // don't change length
     } else if (def.anchorA || def.anchorA || def.anchorA || def.anchorA) {
-      this.m_length = Vec2.distance(
+      this.m_length = geo.distVec2(
         this.m_bodyA.getWorldPoint(this.m_localAnchorA),
         this.m_bodyB.getWorldPoint(this.m_localAnchorB),
       );
@@ -234,14 +249,14 @@ export class DistanceJoint extends Joint {
   /**
    * The local anchor point relative to bodyA's origin.
    */
-  getLocalAnchorA(): Vec2 {
+  getLocalAnchorA(): Vec2Value {
     return this.m_localAnchorA;
   }
 
   /**
    * The local anchor point relative to bodyB's origin.
    */
-  getLocalAnchorB(): Vec2 {
+  getLocalAnchorB(): Vec2Value {
     return this.m_localAnchorB;
   }
 
@@ -279,22 +294,25 @@ export class DistanceJoint extends Joint {
   /**
    * Get the anchor point on bodyA in world coordinates.
    */
-  getAnchorA(): Vec2 {
+  getAnchorA(): Vec2Value {
     return this.m_bodyA.getWorldPoint(this.m_localAnchorA);
   }
 
   /**
    * Get the anchor point on bodyB in world coordinates.
    */
-  getAnchorB(): Vec2 {
+  getAnchorB(): Vec2Value {
     return this.m_bodyB.getWorldPoint(this.m_localAnchorB);
   }
 
   /**
    * Get the reaction force on bodyB at the joint anchor in Newtons.
    */
-  getReactionForce(inv_dt: number): Vec2 {
-    return Vec2.mulNumVec2(this.m_impulse, this.m_u).mul(inv_dt);
+  getReactionForce(inv_dt: number): Vec2Value {
+    const result = geo.vec2(0, 0);
+    geo.scaleVec2(result, this.m_impulse, this.m_u);
+    geo.mulVec2(result, inv_dt);
+    return result;
   }
 
   /**
@@ -322,23 +340,26 @@ export class DistanceJoint extends Joint {
     const vB = this.m_bodyB.c_velocity.v;
     let wB = this.m_bodyB.c_velocity.w;
 
-    const qA = Rot.neo(aA);
-    const qB = Rot.neo(aB);
+    const qA = geo.rotation(aA);
+    const qB = geo.rotation(aB);
 
-    this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
-    this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
-    this.m_u = Vec2.sub(Vec2.add(cB, this.m_rB), Vec2.add(cA, this.m_rA));
+    this.m_rA = geo.vec2(0, 0);
+    geo.rotSubVec2(this.m_rA, qA, this.m_localAnchorA, this.m_localCenterA);
+    this.m_rB = geo.vec2(0, 0);
+    geo.rotSubVec2(this.m_rB, qB, this.m_localAnchorB, this.m_localCenterB);
+    this.m_u = geo.vec2(0, 0);
+    geo.combine4Vec2(this.m_u, 1, cB, 1, this.m_rB, -1, cA, -1, this.m_rA);
 
     // Handle singularity.
-    const length = this.m_u.length();
+    const length = geo.lengthVec2(this.m_u);
     if (length > Settings.linearSlop) {
-      this.m_u.mul(1.0 / length);
+      geo.mulVec2(this.m_u, 1.0 / length);
     } else {
-      this.m_u.setNum(0.0, 0.0);
+      geo.zeroVec2(this.m_u);
     }
 
-    const crAu = Vec2.crossVec2Vec2(this.m_rA, this.m_u);
-    const crBu = Vec2.crossVec2Vec2(this.m_rB, this.m_u);
+    const crAu = geo.crossVec2Vec2(this.m_rA, this.m_u);
+    const crBu = geo.crossVec2Vec2(this.m_rB, this.m_u);
     let invMass = this.m_invMassA + this.m_invIA * crAu * crAu + this.m_invMassB + this.m_invIB * crBu * crBu;
 
     // Compute the effective mass matrix.
@@ -373,20 +394,21 @@ export class DistanceJoint extends Joint {
       // Scale the impulse to support a variable time step.
       this.m_impulse *= step.dtRatio;
 
-      const P = Vec2.mulNumVec2(this.m_impulse, this.m_u);
+      const P = geo.vec2(0, 0);
+      geo.plusScaleVec2(P, this.m_impulse, this.m_u);
 
-      vA.subMul(this.m_invMassA, P);
-      wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
+      geo.minusScaleVec2(vA, this.m_invMassA, P);
+      wA -= this.m_invIA * geo.crossVec2Vec2(this.m_rA, P);
 
-      vB.addMul(this.m_invMassB, P);
-      wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
+      geo.plusScaleVec2(vB, this.m_invMassB, P);
+      wB += this.m_invIB * geo.crossVec2Vec2(this.m_rB, P);
     } else {
       this.m_impulse = 0.0;
     }
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    geo.copyVec2(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    geo.copyVec2(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -397,22 +419,23 @@ export class DistanceJoint extends Joint {
     let wB = this.m_bodyB.c_velocity.w;
 
     // Cdot = dot(u, v + cross(w, r))
-    const vpA = Vec2.add(vA, Vec2.crossNumVec2(wA, this.m_rA));
-    const vpB = Vec2.add(vB, Vec2.crossNumVec2(wB, this.m_rB));
-    const Cdot = Vec2.dot(this.m_u, vpB) - Vec2.dot(this.m_u, vpA);
+    const vp = geo.vec2(0, 0);
+    geo.dvp(vp, vB, wB, this.m_rB, vA, wA, this.m_rA);
+    const Cdot = geo.dotVec2(this.m_u, vp);
 
     const impulse = -this.m_mass * (Cdot + this.m_bias + this.m_gamma * this.m_impulse);
     this.m_impulse += impulse;
 
-    const P = Vec2.mulNumVec2(impulse, this.m_u);
-    vA.subMul(this.m_invMassA, P);
-    wA -= this.m_invIA * Vec2.crossVec2Vec2(this.m_rA, P);
-    vB.addMul(this.m_invMassB, P);
-    wB += this.m_invIB * Vec2.crossVec2Vec2(this.m_rB, P);
+    const P = geo.vec2(0, 0);
+    geo.scaleVec2(P, impulse, this.m_u);
+    geo.minusScaleVec2(vA, this.m_invMassA, P);
+    wA -= this.m_invIA * geo.crossVec2Vec2(this.m_rA, P);
+    geo.plusScaleVec2(vB, this.m_invMassB, P);
+    wB += this.m_invIB * geo.crossVec2Vec2(this.m_rB, P);
 
-    this.m_bodyA.c_velocity.v.setVec2(vA);
+    geo.copyVec2(this.m_bodyA.c_velocity.v, vA);
     this.m_bodyA.c_velocity.w = wA;
-    this.m_bodyB.c_velocity.v.setVec2(vB);
+    geo.copyVec2(this.m_bodyB.c_velocity.v, vB);
     this.m_bodyB.c_velocity.w = wB;
   }
 
@@ -430,27 +453,31 @@ export class DistanceJoint extends Joint {
     const cB = this.m_bodyB.c_position.c;
     let aB = this.m_bodyB.c_position.a;
 
-    const qA = Rot.neo(aA);
-    const qB = Rot.neo(aB);
+    const qA = geo.rotation(aA);
+    const qB = geo.rotation(aB);
 
-    const rA = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
-    const rB = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
-    const u = Vec2.sub(Vec2.add(cB, rB), Vec2.add(cA, rA));
+    const rA = geo.vec2(0, 0);
+    geo.rotSubVec2(rA, qA, this.m_localAnchorA, this.m_localCenterA);
+    const rB = geo.vec2(0, 0);
+    geo.rotSubVec2(rB, qB, this.m_localAnchorB, this.m_localCenterB);
+    const u = geo.vec2(0, 0);
+    geo.combine4Vec2(u, 1, cB, 1, rB, -1, cA, -1, rA);
 
-    const length = u.normalize();
+    const length = geo.normalizeVec2Length(u);
     const C = clamp(length - this.m_length, -Settings.maxLinearCorrection, Settings.maxLinearCorrection);
 
     const impulse = -this.m_mass * C;
-    const P = Vec2.mulNumVec2(impulse, u);
+    const P = geo.vec2(0, 0);
+    geo.plusScaleVec2(P, impulse, u);
 
-    cA.subMul(this.m_invMassA, P);
-    aA -= this.m_invIA * Vec2.crossVec2Vec2(rA, P);
-    cB.addMul(this.m_invMassB, P);
-    aB += this.m_invIB * Vec2.crossVec2Vec2(rB, P);
+    geo.minusScaleVec2(cA, this.m_invMassA, P);
+    aA -= this.m_invIA * geo.crossVec2Vec2(rA, P);
+    geo.plusScaleVec2(cB, this.m_invMassB, P);
+    aB += this.m_invIB * geo.crossVec2Vec2(rB, P);
 
-    this.m_bodyA.c_position.c.setVec2(cA);
+    geo.copyVec2(this.m_bodyA.c_position.c, cA);
     this.m_bodyA.c_position.a = aA;
-    this.m_bodyB.c_position.c.setVec2(cB);
+    geo.copyVec2(this.m_bodyB.c_position.c, cB);
     this.m_bodyB.c_position.a = aB;
 
     return math_abs(C) < Settings.linearSlop;

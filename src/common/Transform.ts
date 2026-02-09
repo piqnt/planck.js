@@ -13,10 +13,15 @@ import { Rot, RotValue } from "./Rot";
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
-export type TransformValue = {
+/**
+ * A transform contains translation and rotation. It is used to represent the
+ * position and orientation of rigid frames. Initialize using a position vector
+ * and a rotation.
+ */
+export interface TransformValue {
   p: Vec2Value;
   q: RotValue;
-};
+}
 
 declare module "./Transform" {
   /** @hidden @deprecated Use new keyword. */
@@ -28,6 +33,8 @@ declare module "./Transform" {
  * A transform contains translation and rotation. It is used to represent the
  * position and orientation of rigid frames. Initialize using a position vector
  * and a rotation.
+ *
+ * @deprecated Use TransformValue and geo functions instead.
  */
 // @ts-expect-error
 export class Transform {

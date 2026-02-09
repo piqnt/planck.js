@@ -7,13 +7,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from "../../common/Matrix";
+import * as geo from "../../common/Geo";
 import type { MassData } from "../../dynamics/Body";
 import { RayCastOutput, RayCastInput, AABBValue } from "../AABB";
 import { DistanceProxy } from "../Distance";
 import { EPSILON } from "../../common/Math";
-import { Transform, TransformValue } from "../../common/Transform";
-import { Rot } from "../../common/Rot";
+import { TransformValue } from "../../common/Transform";
 import { Vec2, Vec2Value } from "../../common/Vec2";
 import { SettingsInternal as Settings } from "../../Settings";
 import { Shape } from "../Shape";
@@ -23,12 +22,12 @@ import { Shape } from "../Shape";
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
 
-/** @internal */ const temp = matrix.vec2(0, 0);
-/** @internal */ const e = matrix.vec2(0, 0);
-/** @internal */ const e1 = matrix.vec2(0, 0);
-/** @internal */ const e2 = matrix.vec2(0, 0);
-/** @internal */ const center = matrix.vec2(0, 0);
-/** @internal */ const s = matrix.vec2(0, 0);
+/** @internal */ const temp = geo.vec2(0, 0);
+/** @internal */ const e = geo.vec2(0, 0);
+/** @internal */ const e1 = geo.vec2(0, 0);
+/** @internal */ const e2 = geo.vec2(0, 0);
+/** @internal */ const center = geo.vec2(0, 0);
+/** @internal */ const s = geo.vec2(0, 0);
 
 declare module "./PolygonShape" {
   /** @hidden @deprecated Use new keyword. */
@@ -47,9 +46,9 @@ export class PolygonShape extends Shape {
   static TYPE = "polygon" as const;
   /** @hidden */ m_type: "polygon";
 
-  /** @hidden */ m_centroid: Vec2;
-  /** @hidden */ m_vertices: Vec2[]; // [Settings.maxPolygonVertices]
-  /** @hidden */ m_normals: Vec2[]; // [Settings.maxPolygonVertices]
+  /** @hidden */ m_centroid: Vec2Value;
+  /** @hidden */ m_vertices: Vec2Value[]; // [Settings.maxPolygonVertices]
+  /** @hidden */ m_normals: Vec2Value[]; // [Settings.maxPolygonVertices]
   /** @hidden */ m_count: number;
   /** @hidden */ m_radius: number;
 
@@ -63,7 +62,7 @@ export class PolygonShape extends Shape {
 
     this.m_type = PolygonShape.TYPE;
     this.m_radius = Settings.polygonRadius;
-    this.m_centroid = Vec2.zero();
+    this.m_centroid = geo.vec2(0, 0);
     this.m_vertices = [];
     this.m_normals = [];
     this.m_count = 0;
@@ -84,7 +83,7 @@ export class PolygonShape extends Shape {
 
   /** @hidden */
   static _deserialize(data: any, fixture: any, restore: any): PolygonShape {
-    const vertices: Vec2[] = [];
+    const vertices: Vec2Value[] = [];
     if (data.vertices) {
       for (let i = 0; i < data.vertices.length; i++) {
         vertices.push(restore(Vec2, data.vertices[i]));
@@ -113,12 +112,16 @@ export class PolygonShape extends Shape {
     clone.m_type = this.m_type;
     clone.m_radius = this.m_radius;
     clone.m_count = this.m_count;
-    clone.m_centroid.setVec2(this.m_centroid);
+    geo.copyVec2(clone.m_centroid, this.m_centroid);
     for (let i = 0; i < this.m_count; i++) {
-      clone.m_vertices.push(this.m_vertices[i].clone());
+      const v = geo.vec2(0, 0);
+      geo.copyVec2(v, this.m_vertices[i]);
+      clone.m_vertices.push(v);
     }
     for (let i = 0; i < this.m_normals.length; i++) {
-      clone.m_normals.push(this.m_normals[i].clone());
+      const n = geo.vec2(0, 0);
+      geo.copyVec2(n, this.m_normals[i]);
+      clone.m_normals.push(n);
     }
     return clone;
   }
@@ -155,20 +158,21 @@ export class PolygonShape extends Shape {
     let n = math_min(vertices.length, Settings.maxPolygonVertices);
 
     // Perform welding and copy vertices into local buffer.
-    const ps: Vec2[] = []; // [Settings.maxPolygonVertices];
+    const ps: Vec2Value[] = []; // [Settings.maxPolygonVertices];
     for (let i = 0; i < n; ++i) {
       const v = vertices[i];
 
       let unique = true;
       for (let j = 0; j < ps.length; ++j) {
-        if (Vec2.distanceSquared(v, ps[j]) < 0.25 * Settings.linearSlopSquared) {
+        if (geo.distSqrVec2(v, ps[j]) < 0.25 * Settings.linearSlopSquared) {
           unique = false;
           break;
         }
       }
 
       if (unique) {
-        ps.push(Vec2.clone(v));
+        const p = geo.vec2(v.x, v.y);
+        ps.push(p);
       }
     }
 
@@ -209,16 +213,18 @@ export class PolygonShape extends Shape {
           continue;
         }
 
-        const r = Vec2.sub(ps[ie], ps[hull[m]]);
-        const v = Vec2.sub(ps[j], ps[hull[m]]);
-        const c = Vec2.crossVec2Vec2(r, v);
+        const r = geo.vec2(0, 0);
+        geo.subVec2(r, ps[ie], ps[hull[m]]);
+        const v = geo.vec2(0, 0);
+        geo.subVec2(v, ps[j], ps[hull[m]]);
+        const c = geo.crossVec2Vec2(r, v);
         // c < 0 means counter-clockwise wrapping, c > 0 means clockwise wrapping
         if (c < 0.0) {
           ie = j;
         }
 
         // Collinearity check
-        if (c === 0.0 && v.lengthSquared() > r.lengthSquared()) {
+        if (c === 0.0 && geo.lengthSqrVec2(v) > geo.lengthSqrVec2(r)) {
           ie = j;
         }
       }
@@ -250,10 +256,12 @@ export class PolygonShape extends Shape {
     for (let i = 0; i < m; ++i) {
       const i1 = i;
       const i2 = i + 1 < m ? i + 1 : 0;
-      const edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
-      if (_ASSERT) console.assert(edge.lengthSquared() > EPSILON * EPSILON);
-      this.m_normals[i] = Vec2.crossVec2Num(edge, 1.0);
-      this.m_normals[i].normalize();
+      const edge = geo.vec2(0, 0);
+      geo.subVec2(edge, this.m_vertices[i2], this.m_vertices[i1]);
+      if (_ASSERT) console.assert(geo.lengthSqrVec2(edge) > EPSILON * EPSILON);
+      this.m_normals[i] = geo.vec2(0, 0);
+      geo.crossVec2Num(this.m_normals[i], edge, 1.0);
+      geo.normalizeVec2(this.m_normals[i]);
     }
 
     // Compute the polygon centroid.
@@ -262,31 +270,29 @@ export class PolygonShape extends Shape {
 
   /** @internal */ _setAsBox(hx: number, hy: number, center?: Vec2Value, angle?: number): void {
     // start with right-bottom, counter-clockwise, as in Gift wrapping algorithm in PolygonShape._set()
-    this.m_vertices[0] = Vec2.neo(hx, -hy);
-    this.m_vertices[1] = Vec2.neo(hx, hy);
-    this.m_vertices[2] = Vec2.neo(-hx, hy);
-    this.m_vertices[3] = Vec2.neo(-hx, -hy);
+    this.m_vertices[0] = geo.vec2(hx, -hy);
+    this.m_vertices[1] = geo.vec2(hx, hy);
+    this.m_vertices[2] = geo.vec2(-hx, hy);
+    this.m_vertices[3] = geo.vec2(-hx, -hy);
 
-    this.m_normals[0] = Vec2.neo(1.0, 0.0);
-    this.m_normals[1] = Vec2.neo(0.0, 1.0);
-    this.m_normals[2] = Vec2.neo(-1.0, 0.0);
-    this.m_normals[3] = Vec2.neo(0.0, -1.0);
+    this.m_normals[0] = geo.vec2(1.0, 0.0);
+    this.m_normals[1] = geo.vec2(0.0, 1.0);
+    this.m_normals[2] = geo.vec2(-1.0, 0.0);
+    this.m_normals[3] = geo.vec2(0.0, -1.0);
 
     this.m_count = 4;
 
-    if (center && Vec2.isValid(center)) {
+    if (center && geo.isVec2(center)) {
       angle = angle || 0;
 
-      matrix.copyVec2(this.m_centroid, center);
+      geo.copyVec2(this.m_centroid, center);
 
-      const xf = Transform.identity();
-      xf.p.setVec2(center);
-      xf.q.setAngle(angle);
+      const xf = geo.transform(center.x, center.y, angle);
 
       // Transform vertices and normals.
       for (let i = 0; i < this.m_count; ++i) {
-        this.m_vertices[i] = Transform.mulVec2(xf, this.m_vertices[i]);
-        this.m_normals[i] = Rot.mulVec2(xf.q, this.m_normals[i]);
+        geo.transformVec2(this.m_vertices[i], xf, this.m_vertices[i]);
+        geo.rotVec2(this.m_normals[i], xf.q, this.m_normals[i]);
       }
     }
   }
@@ -299,10 +305,10 @@ export class PolygonShape extends Shape {
    * @param p A point in world coordinates.
    */
   testPoint(xf: TransformValue, p: Vec2Value): boolean {
-    const pLocal = matrix.detransformVec2(temp, xf, p);
+    geo.detransformVec2(temp, xf, p);
 
     for (let i = 0; i < this.m_count; ++i) {
-      const dot = matrix.dotVec2(this.m_normals[i], pLocal) - matrix.dotVec2(this.m_normals[i], this.m_vertices[i]);
+      const dot = geo.dotVec2(this.m_normals[i], temp) - geo.dotVec2(this.m_normals[i], this.m_vertices[i]);
       if (dot > 0.0) {
         return false;
       }
@@ -319,11 +325,14 @@ export class PolygonShape extends Shape {
    * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
-  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean {
+  rayCast(output: RayCastOutput, input: RayCastInput, xf: TransformValue, childIndex: number): boolean {
     // Put the ray into the polygon's frame of reference.
-    const p1 = Rot.mulTVec2(xf.q, Vec2.sub(input.p1, xf.p));
-    const p2 = Rot.mulTVec2(xf.q, Vec2.sub(input.p2, xf.p));
-    const d = Vec2.sub(p2, p1);
+    const p1 = geo.vec2(0, 0);
+    geo.detransformVec2(p1, xf, input.p1);
+    const p2 = geo.vec2(0, 0);
+    geo.detransformVec2(p2, xf, input.p2);
+    const d = geo.vec2(0, 0);
+    geo.subVec2(d, p2, p1);
 
     let lower = 0.0;
     let upper = input.maxFraction;
@@ -334,8 +343,8 @@ export class PolygonShape extends Shape {
       // p = p1 + a * d
       // dot(normal, p - v) = 0
       // dot(normal, p1 - v) + a * dot(normal, d) = 0
-      const numerator = Vec2.dot(this.m_normals[i], Vec2.sub(this.m_vertices[i], p1));
-      const denominator = Vec2.dot(this.m_normals[i], d);
+      const numerator = geo.dotSubVec2(this.m_vertices[i], p1, this.m_normals[i]);
+      const denominator = geo.dotVec2(this.m_normals[i], d);
 
       if (denominator == 0.0) {
         if (numerator < 0.0) {
@@ -361,7 +370,7 @@ export class PolygonShape extends Shape {
       // The use of epsilon here causes the assert on lower to trip
       // in some cases. Apparently the use of epsilon was to make edge
       // shapes work, but now those are handled separately.
-      // if (upper < lower - matrix.EPSILON)
+      // if (upper < lower - math.EPSILON)
       if (upper < lower) {
         return false;
       }
@@ -371,7 +380,8 @@ export class PolygonShape extends Shape {
 
     if (index >= 0) {
       output.fraction = lower;
-      output.normal = Rot.mulVec2(xf.q, this.m_normals[index]);
+      output.normal = geo.vec2(0, 0);
+      geo.rotVec2(output.normal, xf.q, this.m_normals[index]);
       return true;
     }
 
@@ -392,15 +402,15 @@ export class PolygonShape extends Shape {
     let maxX = -Infinity;
     let maxY = -Infinity;
     for (let i = 0; i < this.m_count; ++i) {
-      const v = matrix.transformVec2(temp, xf, this.m_vertices[i]);
-      minX = math_min(minX, v.x);
-      maxX = math_max(maxX, v.x);
-      minY = math_min(minY, v.y);
-      maxY = math_max(maxY, v.y);
+      geo.transformVec2(temp, xf, this.m_vertices[i]);
+      minX = math_min(minX, temp.x);
+      maxX = math_max(maxX, temp.x);
+      minY = math_min(minY, temp.y);
+      maxY = math_max(maxY, temp.y);
     }
 
-    matrix.setVec2(aabb.lowerBound, minX - this.m_radius, minY - this.m_radius);
-    matrix.setVec2(aabb.upperBound, maxX + this.m_radius, maxY + this.m_radius);
+    geo.setVec2(aabb.lowerBound, minX - this.m_radius, minY - this.m_radius);
+    geo.setVec2(aabb.upperBound, maxX + this.m_radius, maxY + this.m_radius);
   }
 
   /**
@@ -437,39 +447,39 @@ export class PolygonShape extends Shape {
 
     if (_ASSERT) console.assert(this.m_count >= 3);
 
-    matrix.zeroVec2(center);
+    geo.zeroVec2(center);
     let area = 0.0;
     let I = 0.0;
 
     // s is the reference point for forming triangles.
     // It's location doesn't change the result (except for rounding error).
-    matrix.zeroVec2(s);
+    geo.zeroVec2(s);
 
     // This code would put the reference point inside the polygon.
     for (let i = 0; i < this.m_count; ++i) {
-      matrix.plusVec2(s, this.m_vertices[i]);
+      geo.plusVec2(s, this.m_vertices[i]);
     }
-    matrix.scaleVec2(s, 1.0 / this.m_count, s);
+    geo.scaleVec2(s, 1.0 / this.m_count, s);
 
     const k_inv3 = 1.0 / 3.0;
 
     for (let i = 0; i < this.m_count; ++i) {
       // Triangle vertices.
-      matrix.subVec2(e1, this.m_vertices[i], s);
+      geo.subVec2(e1, this.m_vertices[i], s);
       if (i + 1 < this.m_count) {
-        matrix.subVec2(e2, this.m_vertices[i + 1], s);
+        geo.subVec2(e2, this.m_vertices[i + 1], s);
       } else {
-        matrix.subVec2(e2, this.m_vertices[0], s);
+        geo.subVec2(e2, this.m_vertices[0], s);
       }
 
-      const D = matrix.crossVec2Vec2(e1, e2);
+      const D = geo.crossVec2Vec2(e1, e2);
 
       const triangleArea = 0.5 * D;
       area += triangleArea;
 
       // Area weighted centroid
-      matrix.combine2Vec2(temp, triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
-      matrix.plusVec2(center, temp);
+      geo.combine2Vec2(temp, triangleArea * k_inv3, e1, triangleArea * k_inv3, e2);
+      geo.plusVec2(center, temp);
 
       const ex1 = e1.x;
       const ey1 = e1.y;
@@ -487,14 +497,14 @@ export class PolygonShape extends Shape {
 
     // Center of mass
     if (_ASSERT) console.assert(area > EPSILON);
-    matrix.scaleVec2(center, 1.0 / area, center);
-    matrix.addVec2(massData.center, center, s);
+    geo.scaleVec2(center, 1.0 / area, center);
+    geo.addVec2(massData.center, center, s);
 
     // Inertia tensor relative to the local origin (point s).
     massData.I = density * I;
 
     // Shift to center of mass then to original body origin.
-    massData.I += massData.mass * (matrix.dotVec2(massData.center, massData.center) - matrix.dotVec2(center, center));
+    massData.I += massData.mass * (geo.dotVec2(massData.center, massData.center) - geo.dotVec2(center, center));
   }
 
   /**
@@ -506,14 +516,15 @@ export class PolygonShape extends Shape {
       const i1 = i;
       const i2 = i < this.m_count - 1 ? i1 + 1 : 0;
       const p = this.m_vertices[i1];
-      matrix.subVec2(e, this.m_vertices[i2], p);
+      geo.subVec2(e, this.m_vertices[i2], p);
 
       for (let j = 0; j < this.m_count; ++j) {
         if (j == i1 || j == i2) {
           continue;
         }
 
-        const c = matrix.crossVec2Vec2(e, matrix.subVec2(temp, this.m_vertices[j], p));
+        geo.subVec2(temp, this.m_vertices[j], p);
+        const c = geo.crossVec2Vec2(e, temp);
         if (c < 0.0) {
           return false;
         }
@@ -533,21 +544,21 @@ export class PolygonShape extends Shape {
   }
 }
 
-/** @internal */ function computeCentroid(vs: Vec2[], count: number): Vec2 {
+/** @internal */ function computeCentroid(vs: Vec2Value[], count: number): Vec2Value {
   if (_ASSERT) console.assert(count >= 3);
 
-  const c = Vec2.zero();
+  const c = geo.vec2(0, 0);
   let area = 0.0;
 
   // pRef is the reference point for forming triangles.
   // It's location doesn't change the result (except for rounding error).
-  const pRef = Vec2.zero();
+  const pRef = geo.vec2(0, 0);
   if (false) {
     // This code would put the reference point inside the polygon.
     for (let i = 0; i < count; ++i) {
-      pRef.add(vs[i]);
+      geo.plusVec2(pRef, vs[i]);
     }
-    pRef.mul(1.0 / count);
+    geo.mulVec2(pRef, 1.0 / count);
   }
 
   const inv3 = 1.0 / 3.0;
@@ -558,22 +569,24 @@ export class PolygonShape extends Shape {
     const p2 = vs[i];
     const p3 = i + 1 < count ? vs[i + 1] : vs[0];
 
-    const e1 = Vec2.sub(p2, p1);
-    const e2 = Vec2.sub(p3, p1);
+    const e1 = geo.vec2(0, 0);
+    geo.subVec2(e1, p2, p1);
+    const e2 = geo.vec2(0, 0);
+    geo.subVec2(e2, p3, p1);
 
-    const D = Vec2.crossVec2Vec2(e1, e2);
+    const D = geo.crossVec2Vec2(e1, e2);
 
     const triangleArea = 0.5 * D;
     area += triangleArea;
 
     // Area weighted centroid
-    matrix.combine3Vec2(temp, 1, p1, 1, p2, 1, p3);
-    matrix.plusScaleVec2(c, triangleArea * inv3, temp);
+    geo.combine3Vec2(temp, 1, p1, 1, p2, 1, p3);
+    geo.plusScaleVec2(c, triangleArea * inv3, temp);
   }
 
   // Centroid
   if (_ASSERT) console.assert(area > EPSILON);
-  c.mul(1.0 / area);
+  geo.mulVec2(c, 1.0 / area);
   return c;
 }
 

@@ -7,11 +7,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import * as matrix from "../../common/Matrix";
+import * as geo from "../../common/Geo";
 import type { MassData } from "../../dynamics/Body";
 import { AABBValue, RayCastOutput, RayCastInput, AABB } from "../AABB";
 import { DistanceProxy } from "../Distance";
-import { Transform, TransformValue } from "../../common/Transform";
+import { TransformValue } from "../../common/Transform";
 import { Vec2, Vec2Value } from "../../common/Vec2";
 import { SettingsInternal as Settings } from "../../Settings";
 import { Shape } from "../Shape";
@@ -20,8 +20,8 @@ import { EdgeShape } from "./EdgeShape";
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 
-/** @internal */ const v1 = matrix.vec2(0, 0);
-/** @internal */ const v2 = matrix.vec2(0, 0);
+/** @internal */ const v1 = geo.vec2(0, 0);
+/** @internal */ const v2 = geo.vec2(0, 0);
 
 declare module "./ChainShape" {
   /** @hidden @deprecated Use new keyword. */
@@ -44,10 +44,10 @@ export class ChainShape extends Shape {
 
   /** @hidden */ m_radius: number;
 
-  /** @hidden */ m_vertices: Vec2[];
+  /** @hidden */ m_vertices: Vec2Value[];
   /** @hidden */ m_count: number;
-  /** @hidden */ m_prevVertex: Vec2 | null;
-  /** @hidden */ m_nextVertex: Vec2 | null;
+  /** @hidden */ m_prevVertex: Vec2Value | null;
+  /** @hidden */ m_nextVertex: Vec2Value | null;
   /** @hidden */ m_hasPrevVertex: boolean;
   /** @hidden */ m_hasNextVertex: boolean;
 
@@ -89,8 +89,8 @@ export class ChainShape extends Shape {
       isLoop: this.m_isLoop,
       hasPrevVertex: this.m_hasPrevVertex,
       hasNextVertex: this.m_hasNextVertex,
-      prevVertex: null as Vec2 | null,
-      nextVertex: null as Vec2 | null,
+      prevVertex: null as Vec2Value | null,
+      nextVertex: null as Vec2Value | null,
     };
     if (this.m_prevVertex) {
       data.prevVertex = this.m_prevVertex;
@@ -103,7 +103,7 @@ export class ChainShape extends Shape {
 
   /** @hidden */
   static _deserialize(data: any, fixture: any, restore: any): ChainShape {
-    const vertices: Vec2[] = [];
+    const vertices: Vec2Value[] = [];
     if (data.vertices) {
       for (let i = 0; i < data.vertices.length; i++) {
         vertices.push(restore(Vec2, data.vertices[i]));
@@ -150,16 +150,16 @@ export class ChainShape extends Shape {
         const v1 = vertices[i - 1];
         const v2 = vertices[i];
         // If the code crashes here, it means your vertices are too close together.
-        console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+        console.assert(geo.distSqrVec2(v1, v2) > Settings.linearSlopSquared);
       }
     }
 
     this.m_vertices = [];
     this.m_count = vertices.length + 1;
     for (let i = 0; i < vertices.length; ++i) {
-      this.m_vertices[i] = Vec2.clone(vertices[i]);
+      this.m_vertices[i] = geo.vec2(vertices[i].x, vertices[i].y);
     }
-    this.m_vertices[vertices.length] = Vec2.clone(vertices[0]);
+    this.m_vertices[vertices.length] = geo.vec2(vertices[0].x, vertices[0].y);
 
     this.m_prevVertex = this.m_vertices[this.m_count - 2];
     this.m_nextVertex = this.m_vertices[1];
@@ -182,14 +182,14 @@ export class ChainShape extends Shape {
         const v1 = vertices[i - 1];
         const v2 = vertices[i];
         // If the code crashes here, it means your vertices are too close together.
-        console.assert(Vec2.distanceSquared(v1, v2) > Settings.linearSlopSquared);
+        console.assert(geo.distSqrVec2(v1, v2) > Settings.linearSlopSquared);
       }
     }
 
     this.m_vertices = [];
     this.m_count = vertices.length;
     for (let i = 0; i < vertices.length; ++i) {
-      this.m_vertices[i] = Vec2.clone(vertices[i]);
+      this.m_vertices[i] = geo.vec2(vertices[i].x, vertices[i].y);
     }
 
     this.m_prevVertex = null;
@@ -212,13 +212,13 @@ export class ChainShape extends Shape {
    * Establish connectivity to a vertex that precedes the first vertex. Don't call
    * this for loops.
    */
-  setPrevVertex(prevVertex: Vec2): void {
+  setPrevVertex(prevVertex: Vec2Value): void {
     // todo: copy or reference
     this.m_prevVertex = prevVertex;
     this.m_hasPrevVertex = true;
   }
 
-  getPrevVertex(): Vec2 {
+  getPrevVertex(): Vec2Value {
     return this.m_prevVertex;
   }
 
@@ -226,13 +226,13 @@ export class ChainShape extends Shape {
    * Establish connectivity to a vertex that follows the last vertex. Don't call
    * this for loops.
    */
-  setNextVertex(nextVertex: Vec2): void {
+  setNextVertex(nextVertex: Vec2Value): void {
     // todo: copy or reference
     this.m_nextVertex = nextVertex;
     this.m_hasNextVertex = true;
   }
 
-  getNextVertex(): Vec2 {
+  getNextVertex(): Vec2Value {
     return this.m_nextVertex;
   }
 
@@ -287,7 +287,7 @@ export class ChainShape extends Shape {
     }
   }
 
-  getVertex(index: number): Vec2 {
+  getVertex(index: number): Vec2Value {
     if (_ASSERT) console.assert(0 <= index && index <= this.m_count);
     if (index < this.m_count) {
       return this.m_vertices[index];
@@ -321,7 +321,7 @@ export class ChainShape extends Shape {
    * @param xf The transform to be applied to the shape.
    * @param childIndex The child shape index
    */
-  rayCast(output: RayCastOutput, input: RayCastInput, xf: Transform, childIndex: number): boolean {
+  rayCast(output: RayCastOutput, input: RayCastInput, xf: TransformValue, childIndex: number): boolean {
     if (_ASSERT) console.assert(0 <= childIndex && childIndex < this.m_count);
 
     const edgeShape = new EdgeShape(this.getVertex(childIndex), this.getVertex(childIndex + 1));
@@ -339,8 +339,8 @@ export class ChainShape extends Shape {
   computeAABB(aabb: AABBValue, xf: TransformValue, childIndex: number): void {
     if (_ASSERT) console.assert(0 <= childIndex && childIndex < this.m_count);
 
-    matrix.transformVec2(v1, xf, this.getVertex(childIndex));
-    matrix.transformVec2(v2, xf, this.getVertex(childIndex + 1));
+    geo.transformVec2(v1, xf, this.getVertex(childIndex));
+    geo.transformVec2(v2, xf, this.getVertex(childIndex + 1));
 
     AABB.combinePoints(aabb, v1, v2);
   }
@@ -356,7 +356,7 @@ export class ChainShape extends Shape {
    */
   computeMass(massData: MassData, density?: number): void {
     massData.mass = 0.0;
-    matrix.zeroVec2(massData.center);
+    geo.zeroVec2(massData.center);
     massData.I = 0.0;
   }
 

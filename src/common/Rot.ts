@@ -15,6 +15,9 @@ import { Vec2, Vec2Value } from "./Vec2";
 /** @internal */ const math_cos = Math.cos;
 /** @internal */ const math_atan2 = Math.atan2;
 
+/**
+ * Rotation
+ */
 export interface RotValue {
   /** sin(angle) */
   s: number;
@@ -34,7 +37,11 @@ declare module "./Rot" {
   function Rot(): Rot;
 }
 
-/** Rotation */
+/**
+ * Rotation
+ * 
+ * @deprecated Use RotValue and geo functions instead.
+ * */
 // @ts-expect-error
 export class Rot {
   /** sin(angle) */
