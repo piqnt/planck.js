@@ -58,5 +58,3 @@ export * from "./collision/DynamicTree";
 export * from "./util/stats";
 
 export * from "./internal";
-
-export * from "./util/DataDriver";

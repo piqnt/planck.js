@@ -1,19 +1,19 @@
+import { Memo } from "polymatic";
 import * as Stage from "stage-js";
-import type { ChainShape } from "../";
 
+import type { PolygonShape } from "../";
 import { ComputedStyle } from "./ComputedStyle";
-import { Memo } from "../Memo";
 
 const math_max = Math.max;
 const math_min = Math.min;
 
-export class ChainShapeComponent extends Stage.Sprite {
+export class PolygonShapeComponent extends Stage.Sprite {
   style: ComputedStyle;
-  shape: ChainShape;
+  shape: PolygonShape;
 
   textureOffset = { x: 0, y: 0, a: 0 };
 
-  constructor(shape: ChainShape, style: ComputedStyle) {
+  constructor(shape: PolygonShape, style: ComputedStyle) {
     super();
 
     this.style = style;
@@ -30,7 +30,6 @@ export class ChainShapeComponent extends Stage.Sprite {
         const v = vertices[i];
         key += v.x + "," + v.y + ";";
       }
-      key += shape.isLoop() + ";";
 
       key += style.lineWidth + ";";
       key += style.stroke + ";";
@@ -81,7 +80,13 @@ export class ChainShapeComponent extends Stage.Sprite {
         else ctx.lineTo(x, y);
       }
 
-      // last vertex of loop is the same as the first, don't need to close the path
+      if (vertices.length > 2) {
+        if (fill) {
+          ctx.fillStyle = fill;
+          ctx.fill();
+        }
+        ctx.closePath();
+      }
 
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
@@ -95,15 +100,12 @@ export class ChainShapeComponent extends Stage.Sprite {
     this.tick(this.handleTick);
   }
 
-  __memo = Memo.init();
-
+  memo = Memo.init(0, 0, 0);
   handleTick = () => {
     const x = this.textureOffset.x;
     const y = this.textureOffset.y;
     const a = this.textureOffset.a;
-    if (!this.__memo.update(x, y, a)) {
-      return true;
-    }
+    if (!this.memo.update(x, y, a)) return true;
     this.offset(x, y);
     this.rotate(a);
   };

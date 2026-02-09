@@ -1,14 +1,9 @@
-import {
-  World,
-  Circle,
-  Chain,
-  Settings,
-  Testbed,
-  Contact,
-  Vec2Value,
-  DataDriver,
-  Body,
-} from "planck";
+import { World, Circle, Chain, Settings, Contact, Vec2Value, Body } from "../testbed";
+
+import { Binder, Driver, Middleware, Runtime } from "polymatic";
+
+import { DefaultTestbedContext } from "../testbed/testbed/TestbedContext";
+import { TestbedMain } from "../testbed/testbed/TestbedMain";
 
 const width = 10.0;
 const height = 6.0;
@@ -40,77 +35,74 @@ interface GoalData {
 
 type UserData = PlayerData | BallData | WallData | GoalData;
 
-class SoccerGame {
-  terminal = new TestbedTerminal();
-  physics = new SoccerPhysics();
-
-  wall: WallData;
-  rightGoal: GoalData;
-  leftGoal: GoalData;
+class SoccerState {
+  wall?: WallData;
+  rightGoal?: GoalData;
+  leftGoal?: GoalData;
   ball: BallData | null = null;
 
   playersRed: PlayerData[] = [];
   playersBlue: PlayerData[] = [];
+}
 
-  setup() {
-    this.physics.setup(this);
-    this.terminal.setup(this);
-  }
+class SoccerContext extends DefaultTestbedContext {
+  soccer = new SoccerState();
+}
 
-  update() {
-    this.physics.update(this);
-    this.terminal.update(this);
+class SoccerGame extends Middleware<SoccerContext> {
+  constructor() {
+    super();
+    this.use(new SoccerPhysics());
+    this.use(new TestbedTerminal());
+
+    this.on("game-start", this.start);
+    this.on("onGoal", this.onGoal);
   }
 
   start() {
-    this.wall = {
+    this.context.soccer.wall = {
       key: "wall",
       type: "wall",
     };
 
-    this.ball = {
+    this.context.soccer.ball = {
       key: "ball-" + Math.random(),
       type: "ball",
     };
 
-    this.leftGoal = {
+    this.context.soccer.leftGoal = {
       key: "left",
       type: "goal",
     };
 
-    this.rightGoal = {
+    this.context.soccer.rightGoal = {
       key: "right",
       type: "goal",
     };
 
-    this.playersRed = this.team().map((v) => ({
+    this.context.soccer.playersRed = this.team().map((v) => ({
       type: "player",
       key: "player-" + Math.random(),
       position: v,
       color: "red",
     }));
 
-    this.playersBlue = this.team(true).map((v) => ({
+    this.context.soccer.playersBlue = this.team(true).map((v) => ({
       type: "player",
       key: "player-" + Math.random(),
       position: v,
       color: "blue",
     }));
-
-    this.update();
   }
 
   onGoal() {
-    this.ball = null;
+    this.context.soccer.ball = null;
     setTimeout(() => {
-      this.ball = {
+      this.context.soccer.ball = {
         key: "ball-" + Math.random(),
         type: "ball",
       };
-      this.update();
     }, 500);
-
-    this.update();
   }
 
   team(reverse: boolean = false) {
@@ -129,59 +121,89 @@ class SoccerGame {
   }
 }
 
-class TestbedTerminal {
-  setup(game: SoccerGame) {
-    const testbed = Testbed.mount();
-    testbed.x = 0;
-    testbed.y = 0;
-    testbed.width = width * 1.6;
-    testbed.height = height * 1.6;
-    testbed.mouseForce = -120;
-    testbed.start(game.physics.world);
+class TestbedTerminal extends Middleware<SoccerContext> {
+  constructor() {
+    super();
+    this.use(new TestbedMain());
+
+    this.on("game-start", this.setup);
   }
-
-  update(game: SoccerGame) {}
+  setup() {
+    this.context.camera.x = 0;
+    this.context.camera.y = 0;
+    this.context.camera.width = width * 1.6;
+    this.context.camera.height = height * 1.6;
+  }
 }
 
-interface SoccerPhysicsListener {
-  onGoal(): void;
-}
-
-class SoccerPhysics {
-  listener: SoccerPhysicsListener;
-
-  world: World;
-
-  driver = new DataDriver<UserData, Body>((data) => data.key, {
-    enter: (data: UserData) => {
-      if (data.type === "player") return this.createPlayer(data);
-      if (data.type === "ball") return this.createBall(data);
-      if (data.type === "wall") return this.createWall(data);
-      if (data.type === "goal") return this.createGoal(data);
-      return null;
-    },
-    update: (data, body) => {},
-    exit: (data, body) => {
-      this.world.destroyBody(body);
-    },
+class SoccerPhysics extends Middleware<SoccerContext> {
+  binder = Binder.create<UserData>({
+    key: (object) => object.key,
+    drivers: [
+      Driver.create<PlayerData, Body>({
+        filter: (data) => data.type === "player",
+        enter: (data) => {
+          return this.createPlayer(data);
+        },
+        update: (data, body) => {},
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+      Driver.create<BallData, Body>({
+        filter: (data) => data.type === "ball",
+        enter: (data) => {
+          return this.createBall(data);
+        },
+        update: (data, body) => {},
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+      Driver.create<WallData, Body>({
+        filter: (data) => data.type === "wall",
+        enter: (data) => {
+          return this.createWall(data);
+        },
+        update: (data, body) => {},
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+      Driver.create<GoalData, Body>({
+        filter: (data) => data.type === "goal",
+        enter: (data) => {
+          return this.createGoal(data);
+        },
+        update: (data, body) => {},
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+    ],
   });
 
-  setup(listener: SoccerPhysicsListener) {
-    this.listener = listener;
-    this.world = new World();
-    this.world.on("post-solve", this.collide.bind(this));
+  constructor() {
+    super();
+    this.on("game-start", this.setup);
+    this.on("frame-update", this.update);
+  }
+
+  setup() {
+    this.context.world = new World();
+    this.context.world.on("post-solve", this.collide.bind(this));
 
     Settings.velocityThreshold = 0;
   }
 
-  update(game: SoccerGame) {
-    this.driver.update([
-      game.wall,
-      game.leftGoal,
-      game.rightGoal,
-      game.ball,
-      ...game.playersRed,
-      ...game.playersBlue,
+  update() {
+    this.binder.data([
+      this.context.soccer.wall,
+      this.context.soccer.leftGoal,
+      this.context.soccer.rightGoal,
+      this.context.soccer.ball,
+      ...this.context.soccer.playersRed,
+      ...this.context.soccer.playersBlue,
     ]);
   }
 
@@ -205,7 +227,7 @@ class SoccerPhysics {
       { x: +width * 0.5 - 0.2, y: -height * 0.5 },
     ];
 
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "static",
       userData: data,
     });
@@ -220,7 +242,7 @@ class SoccerPhysics {
   }
 
   createGoal(data: GoalData) {
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "static",
       position: {
         x: data.key === "left" ? -width * 0.5 : +width * 0.5,
@@ -241,7 +263,7 @@ class SoccerPhysics {
   }
 
   createBall(data: BallData) {
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "dynamic",
       bullet: true,
       linearDamping: 3.5,
@@ -260,7 +282,7 @@ class SoccerPhysics {
   }
 
   createPlayer(data: PlayerData) {
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "dynamic",
       bullet: true,
       linearDamping: 4,
@@ -299,15 +321,15 @@ class SoccerPhysics {
 
     if (ball && goal) {
       // do not change world immediately
-      this.world.queueUpdate(() => {
-        this.listener.onGoal();
+      this.context.world.queueUpdate(() => {
+        this.emit("onGoal");
       });
     }
   }
 }
 
-{
-  const game = new SoccerGame();
-  game.setup();
-  game.start();
-}
+const main = new SoccerGame();
+const context = new SoccerContext();
+Runtime.activate(main, context);
+main.emit("game-start");
+main.emit("tool-switch", { name: "interact-impulse", maxForce: 120 });

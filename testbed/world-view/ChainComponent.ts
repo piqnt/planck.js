@@ -1,38 +1,42 @@
+import { Memo } from "polymatic";
 import * as Stage from "stage-js";
-import type { PulleyJoint } from "../";
 
-import { Memo } from "../Memo";
-
+import type { ChainShape } from "../";
 import { ComputedStyle } from "./ComputedStyle";
 
 const math_max = Math.max;
 const math_min = Math.min;
 
-export class PulleyJointComponent extends Stage.Node {
+export class ChainShapeComponent extends Stage.Sprite {
   style: ComputedStyle;
-  joint: PulleyJoint;
-  memo = Memo.init();
+  shape: ChainShape;
 
-  constructor(joint: PulleyJoint, style: ComputedStyle) {
+  textureOffset = { x: 0, y: 0, a: 0 };
+
+  constructor(shape: ChainShape, style: ComputedStyle) {
     super();
 
     this.style = style;
-    this.joint = joint;
+    this.shape = shape;
 
-    const vertices = [];
-
-    let offsetX = 0;
-    let offsetY = 0;
-    const offsetMemo = Memo.init();
+    const textureOffset = this.textureOffset;
 
     const texture = Stage.canvas();
     texture.setMemoizer(() => {
-      const v1 = joint.getAnchorA();
-      const v2 = joint.getGroundAnchorA();
-      const v3 = joint.getGroundAnchorB();
-      const v4 = joint.getAnchorB();
-      const token = v1.x + "." + v1.y + "." + v2.x + "." + v2.y + "." + v3.x + "." + v3.y + "." + v4.x + "." + v4.y;
-      return token;
+      let key = "";
+
+      const vertices = shape.m_vertices;
+      for (let i = 0; i < vertices.length; ++i) {
+        const v = vertices[i];
+        key += v.x + "," + v.y + ";";
+      }
+      key += shape.isLoop() + ";";
+
+      key += style.lineWidth + ";";
+      key += style.stroke + ";";
+      key += style.fill + ";";
+
+      return key;
     });
     texture.setDrawer(function () {
       const lineWidth = style.lineWidth;
@@ -43,10 +47,7 @@ export class PulleyJointComponent extends Stage.Node {
       const ratio = this.getDevicePixelRatio();
       const lw = lineWidth / ratio;
 
-      vertices[0] = joint.getAnchorA();
-      vertices[1] = joint.getGroundAnchorA();
-      vertices[2] = joint.getGroundAnchorB();
-      vertices[3] = joint.getAnchorB();
+      const vertices = shape.m_vertices;
 
       if (!vertices.length) {
         return;
@@ -64,13 +65,10 @@ export class PulleyJointComponent extends Stage.Node {
         maxY = math_max(maxY, v.y);
       }
 
-      const width = maxX - minX;
-      const height = maxY - minY;
+      textureOffset.x = minX;
+      textureOffset.y = minY;
 
-      offsetX = minX;
-      offsetY = minY;
-
-      this.setSize(width + lw, height + lw, ratio);
+      this.setSize(maxX - minX + lw, maxY - minY + lw, ratio);
       this.setPadding(-lw / 2);
 
       ctx.scale(ratio, ratio);
@@ -83,18 +81,27 @@ export class PulleyJointComponent extends Stage.Node {
         else ctx.lineTo(x, y);
       }
 
+      // last vertex of loop is the same as the first, don't need to close the path
+
       ctx.lineCap = "round";
+      ctx.lineJoin = "round";
       ctx.lineWidth = lw;
       ctx.strokeStyle = stroke ?? "";
       ctx.stroke();
     });
 
-    const sprite = Stage.sprite(texture);
-    sprite.tick(() => {
-      if (offsetMemo.update(offsetX, offsetY)) {
-        sprite.offset(offsetX, offsetY);
-      }
-    });
-    this.append(sprite);
+    this.texture(texture);
+
+    this.tick(this.handleTick);
   }
+
+  memo = Memo.init(0, 0, 0);
+  handleTick = () => {
+    const x = this.textureOffset.x;
+    const y = this.textureOffset.y;
+    const a = this.textureOffset.a;
+    if (!this.memo.update(x, y, a)) return true;
+    this.offset(x, y);
+    this.rotate(a);
+  };
 }

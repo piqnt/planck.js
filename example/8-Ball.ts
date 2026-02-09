@@ -1,14 +1,9 @@
-import {
-  World,
-  Circle,
-  Settings,
-  Polygon,
-  Testbed,
-  Vec2Value,
-  Contact,
-  DataDriver,
-  Body,
-} from "planck";
+import { World, Circle, Settings, Polygon, Vec2Value, Contact, Body } from "../testbed";
+
+import { Binder, Driver, Middleware, Runtime } from "polymatic";
+
+import { DefaultTestbedContext } from "../testbed/testbed/TestbedContext";
+import { TestbedMain } from "../testbed/testbed/TestbedMain";
 
 const BLACK = "black";
 const WHITE = "white";
@@ -29,93 +24,76 @@ const COLORS = [
   "blue-stripe",
 ];
 
-class EightBallGame {
-  // physics simulation
-  physics = new BilliardPhysics();
-
-  // user input and output
-  terminal = new TestbedTerminal();
-
+class EightBallState {
   // table geometry
   table = new BilliardTableData();
-
   // game data
-  balls: BallData[];
-  rails: RailData[];
-  pockets: PocketData[];
+  balls: BallData[] = [];
+  rails: RailData[] = [];
+  pockets: PocketData[] = [];
+}
 
-  // setup everything together
-  setup() {
-    this.physics.setup(this);
-    this.terminal.setup(this);
-  }
+class EightBallContext extends DefaultTestbedContext {
+  game = new EightBallState();
+}
 
-  // inform the physics and the terminal about the changes
-  update() {
-    this.physics.update(this);
-    this.terminal.update(this);
+class EightBallGame extends Middleware<EightBallContext> {
+  constructor() {
+    super();
+    this.use(new BilliardPhysics());
+    this.use(new EightBallTestbed());
+
+    this.on("activate", this.handleActivate);
+    this.on("ball-in-pocket", this.onBallInPocket);
   }
 
   // start a new game
-  start() {
-    this.rails = this.table.getRails();
-    this.pockets = this.table.getPockets();
-    this.balls = this.table.rackBalls();
-
-    this.update();
+  handleActivate() {
+    this.context.game.rails = this.context.game.table.getRails();
+    this.context.game.pockets = this.context.game.table.getPockets();
+    this.context.game.balls = this.context.game.table.rackBalls();
   }
 
   // reset the cue ball
   resetCueBall() {
-    this.balls.push(this.table.cueBall());
-
-    this.update();
+    this.context.game.balls.push(this.context.game.table.cueBall());
   }
 
   // sink event listener
-  onBallInPocket(ball: BallData, pocket: PocketData) {
-    const index = this.balls.indexOf(ball);
-    if (index !== -1) this.balls.splice(index, 1);
+  onBallInPocket({ ball, pocket }: { ball: BallData; pocket: PocketData }) {
+    const index = this.context.game.balls.indexOf(ball);
+    if (index !== -1) this.context.game.balls.splice(index, 1);
 
     if (ball.color === BLACK) {
-      this.balls = [];
-      setTimeout(this.start.bind(this), 400);
+      this.context.game.balls = [];
+      setTimeout(this.handleActivate.bind(this), 400);
     } else if (ball.color === WHITE) {
       setTimeout(this.resetCueBall.bind(this), 400);
     }
-
-    this.update();
   }
 }
 
-// we use testbed here to implement user input and output
-class TestbedTerminal {
-  testbed: Testbed;
-
-  setup(game: EightBallGame) {
-    if (this.testbed) return;
-
-    Settings.velocityThreshold = 0;
-
-    this.testbed = Testbed.mount();
-    this.testbed.x = 0;
-    this.testbed.y = 0;
-    this.testbed.width = game.table.tableWidth * 1.2;
-    this.testbed.height = game.table.tableHeight * 1.2;
-    this.testbed.mouseForce = -20;
-    this.testbed.start(game.physics.world);
+class EightBallTestbed extends Middleware<EightBallContext> {
+  constructor() {
+    super();
+    this.use(new TestbedMain());
+    this.on("activate", this.handleActivate);
   }
 
-  update(game: EightBallGame) {}
+  handleActivate() {
+    Settings.velocityThreshold = 0;
+
+    this.context.camera.x = 0;
+    this.context.camera.y = 0;
+    this.context.camera.width = this.context.game.table.tableWidth * 1.2;
+    this.context.camera.height = this.context.game.table.tableHeight * 1.2;
+  }
 }
 
 interface BallData {
   type: "ball";
   key: string;
-  position: {
-    x: number;
-    y: number;
-  };
+  position: { x: number; y: number };
   radius: number;
   color: string;
 }
@@ -155,42 +133,63 @@ const STYLES = {
   "purple-stripe": { fill: "#9900ff", stroke: "#ffffff" },
   "blue-solid": { fill: "#0077ff", stroke: "#000000" },
   "blue-stripe": { fill: "#0077ff", stroke: "#ffffff" },
-};
+} as Record<string, { fill: string; stroke: string }>;
 
-interface BilliardPhysicsListener {
-  onBallInPocket(ball: BallData, pocket: PocketData): void;
-}
-
-class BilliardPhysics {
-  listener: BilliardPhysicsListener;
-  world: World;
-
-  // physics driver bridges the game data and the physics world
-  driver = new DataDriver<UserData, Body>((data) => data.key, {
-    enter: (data: UserData) => {
-      if (data.type === "ball") return this.createBall(data);
-      if (data.type === "rail") return this.createRail(data);
-      if (data.type === "pocket") return this.createPocket(data);
-      return null;
-    },
-    update: (data, body) => {},
-    exit: (data, body) => {
-      this.world.destroyBody(body);
-    },
-  });
-
-  setup(listener: BilliardPhysicsListener) {
-    this.listener = listener;
-    this.world = new World();
-    this.world.on("begin-contact", this.collide);
+class BilliardPhysics extends Middleware<EightBallContext> {
+  constructor() {
+    super();
+    this.on("activate", this.handleActivate);
+    this.on("frame-update", this.handleFrameLoop);
   }
 
-  update(game: EightBallGame) {
-    this.driver.update([...game.balls, ...game.rails, ...game.pockets]);
+  binder = Binder.create<UserData>({
+    key: (data) => data.key,
+    drivers: [
+      Driver.create<BallData, Body>({
+        filter: (data) => data.type === "ball",
+        enter: (data) => {
+          return this.createBall(data);
+        },
+        update: (data, body) => {},
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+      Driver.create<RailData, Body>({
+        filter: (data) => data.type === "rail",
+        enter: (data) => {
+          return this.createRail(data);
+        },
+        update: (data, body) => {},
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+      Driver.create<PocketData, Body>({
+        filter: (data) => data.type === "pocket",
+        enter: (data) => {
+          return this.createPocket(data);
+        },
+        update: (data, body) => {},
+        exit: (data, body) => {
+          this.context.world.destroyBody(body);
+        },
+      }),
+    ],
+  });
+
+  handleActivate() {
+    this.context.world = new World();
+    this.context.world.on("begin-contact", this.collide);
+  }
+
+  handleFrameLoop() {
+    const { game } = this.context;
+    this.binder.data([...game.balls, ...game.rails, ...game.pockets]);
   }
 
   createBall(data: BallData) {
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "dynamic",
       bullet: true,
       position: data.position,
@@ -198,21 +197,19 @@ class BilliardPhysics {
       angularDamping: 1,
       userData: data,
     });
-    const color = data.color;
-    const style = color && STYLES[color];
     body.createFixture({
       shape: new Circle(data.radius),
       friction: 0.1,
       restitution: 0.99,
       density: 1,
       userData: data,
-      style,
+      style: STYLES[data.color],
     });
     return body;
   }
 
   createRail(data: RailData) {
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "static",
       userData: data,
     });
@@ -226,7 +223,7 @@ class BilliardPhysics {
   }
 
   createPocket(data: PocketData) {
-    const body = this.world.createBody({
+    const body = this.context.world.createBody({
       type: "static",
       position: data.position,
       userData: data,
@@ -255,11 +252,11 @@ class BilliardPhysics {
 
     if (ball && pocket) {
       // do not change world immediately
-      this.world.queueUpdate(() => {
-        this.listener.onBallInPocket(
-          ball.getUserData() as BallData,
-          pocket.getUserData() as PocketData,
-        );
+      this.context.world.queueUpdate(() => {
+        this.emit("ball-in-pocket", {
+          ball: ball.getUserData() as BallData,
+          pocket: pocket.getUserData() as PocketData,
+        });
       });
     }
   };
@@ -470,8 +467,8 @@ class Util {
   }
 }
 
-{
-  const game = new EightBallGame();
-  game.setup();
-  game.start();
-}
+const main = new EightBallGame();
+const context = new EightBallContext();
+Runtime.activate(main, context);
+main.emit("game-start");
+main.emit("tool-switch", { name: "interact-impulse", maxForce: 20 });

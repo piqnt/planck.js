@@ -1,8 +1,8 @@
+import { Memo } from "polymatic";
 import * as Stage from "stage-js";
-import type { EdgeShape } from "../";
 
+import type { EdgeShape } from "../";
 import { ComputedStyle } from "./ComputedStyle";
-import { Memo } from "../Memo";
 
 const math_atan2 = Math.atan2;
 const math_sqrt = Math.sqrt;
@@ -80,15 +80,12 @@ export class EdgeShapeComponent extends Stage.Sprite {
     this.tick(this.handleTick);
   }
 
-  __memo = Memo.init();
-
+  memo = Memo.init(0, 0, 0);
   handleTick = () => {
     const x = this.textureOffset.x;
     const y = this.textureOffset.y;
     const a = this.textureOffset.a;
-    if (!this.__memo.update(x, y, a)) {
-      return true;
-    }
+    if (!this.memo.update(x, y, a)) return true;
     this.offset(x, y);
     this.rotate(a);
   };
