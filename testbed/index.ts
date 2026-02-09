@@ -1,2 +1,2 @@
 export * from "../src/index";
-export * from "./StageTestbed";
+import "planck-testbed/v1";

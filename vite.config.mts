@@ -14,6 +14,8 @@ export default function viteConfig(configEnv: ConfigEnv) {
   return buildConfig(configEnv, buildTestbed);
 }
 
+// dedupe: ["planck"],
+
 function buildConfig(configEnv: ConfigEnv, buildTestbed: boolean) {
   const filename = buildTestbed ? "planck-with-testbed" : "planck";
   const entry = normalizePath(path.resolve(__dirname, buildTestbed ? "testbed" : "src", "main.ts"));
@@ -50,8 +52,8 @@ function buildConfig(configEnv: ConfigEnv, buildTestbed: boolean) {
       typescript({}),
       dtsBundleGenerator({
         fileName: filename + ".d.ts",
-      })
-    ]
+      }),
+    ],
   });
 }
 
@@ -78,6 +80,9 @@ function serveConfig(configEnv: ConfigEnv) {
       _ASSERT: "false",
       CONSTRUCTOR_FACTORY: "false",
       _CONSTRUCTOR_FACTORY: "false",
+    },
+    optimizeDeps: {
+      include: ["planck"],
     },
   });
 }
