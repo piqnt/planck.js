@@ -1,4 +1,4 @@
-import planck, { World, Circle, Testbed } from '..';
+import planck, { World, Circle, Testbed } from '../testbed/main';
 
 const world = new World();
 
