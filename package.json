@@ -1,6 +1,6 @@
 {
-  "name": "planck",
-  "version": "1.4.2",
+  "name": "planck-v2",
+  "version": "2.0.4",
   "description": "2D JavaScript/TypeScript physics engine for cross-platform HTML5 game development",
   "homepage": "https://github.com/piqnt/planck.js",
   "keywords": [
@@ -47,6 +47,10 @@
     },
     "./dist/*": "./dist/*"
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "engines": {
     "node": ">=24.0"
   },
