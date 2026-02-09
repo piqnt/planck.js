@@ -55,7 +55,9 @@
     "node": ">=24.0"
   },
   "peerDependencies": {
-    "stage-js": "^1.0.0-alpha.12"
+    "hammerjs": "^2.0.8",
+    "polymatic": "^0.0.12",
+    "stage-js": "^1.0.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
