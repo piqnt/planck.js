@@ -2,8 +2,7 @@ import { World, Vec2Value, Circle, Chain, Settings, Contact, Body } from "../tes
 
 import { Binder, Driver, Middleware, Runtime } from "polymatic";
 
-import { DefaultTestbedContext } from "../testbed/testbed/TestbedContext";
-import { TestbedMain } from "../testbed/testbed/TestbedMain";
+import { DefaultTestbedContext, TestbedMain } from "planck-testbed";
 
 type Color = "red" | "blue";
 

@@ -2,8 +2,7 @@ import { World, CircleShape, BoxShape, EdgeShape, PolygonShape, Body, Contact, V
 
 import { Binder, Driver, Middleware, Runtime } from "polymatic";
 
-import { DefaultTestbedContext } from "../testbed/testbed/TestbedContext";
-import { TestbedMain } from "../testbed/testbed/TestbedMain";
+import { DefaultTestbedContext, TestbedMain } from "planck-testbed";
 
 interface BallData {
   key: string;

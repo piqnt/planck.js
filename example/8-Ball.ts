@@ -2,8 +2,7 @@ import { World, Circle, Settings, Polygon, Vec2Value, Contact, Body } from "../t
 
 import { Binder, Driver, Middleware, Runtime } from "polymatic";
 
-import { DefaultTestbedContext } from "../testbed/testbed/TestbedContext";
-import { TestbedMain } from "../testbed/testbed/TestbedMain";
+import { DefaultTestbedContext, TestbedMain } from "planck-testbed";
 
 const BLACK = "black";
 const WHITE = "white";

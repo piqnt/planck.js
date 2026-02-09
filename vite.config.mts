@@ -10,13 +10,12 @@ export default function viteConfig(configEnv: ConfigEnv) {
   if (isServe) {
     return serveConfig(configEnv);
   }
-  const buildTestbed = process.env.BUILD_TESTBED === "true";
-  return buildConfig(configEnv, buildTestbed);
+  return buildConfig(configEnv);
 }
 
-function buildConfig(configEnv: ConfigEnv, buildTestbed: boolean) {
-  const filename = buildTestbed ? "planck-with-testbed" : "planck";
-  const entry = normalizePath(path.resolve(__dirname, buildTestbed ? "testbed" : "src", "main.ts"));
+function buildConfig(configEnv: ConfigEnv) {
+  const filename =  "planck";
+  const entry =  "./src/main.ts";
 
   return defineConfig({
     define: {

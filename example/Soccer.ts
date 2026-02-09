@@ -2,8 +2,7 @@ import { World, Circle, Chain, Settings, Contact, Vec2Value, Body } from "../tes
 
 import { Binder, Driver, Middleware, Runtime } from "polymatic";
 
-import { DefaultTestbedContext } from "../testbed/testbed/TestbedContext";
-import { TestbedMain } from "../testbed/testbed/TestbedMain";
+import { DefaultTestbedContext, TestbedMain } from "planck-testbed";
 
 const width = 10.0;
 const height = 6.0;
