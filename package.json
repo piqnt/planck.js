@@ -47,6 +47,10 @@
     },
     "./dist/*": "./dist/*"
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "engines": {
     "node": ">=24.0"
   },

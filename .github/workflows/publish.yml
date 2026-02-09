@@ -1,0 +1,63 @@
+name: NPM Publish V2
+
+on:
+  push:
+    branches: [v2]
+  # pull_request:
+  #   branches: [ v2 ]
+
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+
+jobs:
+  publish:
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.x"
+
+      - name: npm-install
+        run: npm install
+
+      - name: npm-install
+        run: npm install
+
+      - name: npm-test
+        run: npm run test
+
+      - name: npm-lint
+        run: npm run lint
+
+      - name: npm-build
+        run: npm run build
+
+      - name: npm-test-types
+        run: npm run test:types
+
+      - name: npm-typedoc
+        run: npm run typedoc
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          # build to guarantee published dist files were not altered
+          publish: npm run bump
+          # build to commit dist folder in version commit
+          version: npm run release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
