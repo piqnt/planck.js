@@ -29,21 +29,19 @@
   "sideEffects": [
     "./dist/planck-with-testbed.*"
   ],
-  "module": "dist/planck.mjs",
+  "module": "dist/planck.js",
   "main": "dist/planck.js",
-  "jsdelivr": "dist/planck.min.js",
-  "unpkg": "dist/planck.min.js",
-  "types": "index.d.ts",
+  "types": "dist/planck.d.ts",
   "exports": {
     ".": {
       "types": "./dist/planck.d.ts",
-      "import": "./dist/planck.mjs",
-      "default": "./dist/planck.js"
+      "import": "./dist/planck.js",
+      "default": "./dist/planck.umd.cjs"
     },
     "./with-testbed": {
       "types": "./dist/planck-with-testbed.d.ts",
-      "import": "./dist/planck-with-testbed.mjs",
-      "default": "./dist/planck-with-testbed.js"
+      "import": "./dist/planck-with-testbed.js",
+      "default": "./dist/planck-with-testbed.umd.cjs"
     },
     "./dist/*": "./dist/*"
   },
@@ -96,9 +94,9 @@
     "preflight": "npm run lint && npm run test:types && npm run test",
     "testbed": "npm run dev",
     "dev": "vite",
-    "build": "rimraf ./dist/* && vite build && BUILD_TESTBED=true vite build && npm run terser-core && npm run terser-testbed",
-    "terser-core": "terser ./dist/planck.js -o ./dist/planck.min.js --source-map",
-    "terser-testbed": "terser ./dist/planck-with-testbed.js -o ./dist/planck-with-testbed.min.js --source-map",
+    "build": "rimraf ./dist/* && npm run build-core && npm run build-testbed",
+    "build-core": "vite build",
+    "build-testbed": "BUILD_TESTBED=true vite build",
     "watch": "vite build --watch",
     "preview": "vite preview",
     "benchmark": "git log -n 1 && vite-node ./benchmark/node",
