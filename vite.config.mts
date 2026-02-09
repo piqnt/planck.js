@@ -22,26 +22,29 @@ function buildConfig(configEnv: ConfigEnv, buildTestbed: boolean) {
     define: {
       ASSERT: "false",
       _ASSERT: "false",
-      CONSTRUCTOR_FACTORY: "true",
-      _CONSTRUCTOR_FACTORY: "true",
     },
     build: {
       lib: {
         entry: entry,
         name: "planck",
-        fileName: function (format) {
-          if (format === "umd") {
-            return filename + ".js";
-          } else if (format === "es") {
-            return filename + ".mjs";
-          }
-          return filename + "." + format + ".js";
-        },
         formats: ["es", "umd"],
       },
       emptyOutDir: false,
       minify: false,
       sourcemap: true,
+      rollupOptions: {
+        output: [
+          {
+            format: "es",
+            entryFileNames: `${filename}.js`,
+          },
+          {
+            format: "umd",
+            entryFileNames: `${filename}.umd.cjs`,
+            name: "planck",
+          },
+        ],
+      },
     },
     plugins: [
       rollupLicensePlugin({
@@ -76,8 +79,6 @@ function serveConfig(configEnv: ConfigEnv) {
     define: {
       ASSERT: "false",
       _ASSERT: "false",
-      CONSTRUCTOR_FACTORY: "false",
-      _CONSTRUCTOR_FACTORY: "false",
     },
   });
 }
