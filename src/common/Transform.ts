@@ -12,16 +12,21 @@ import { Rot, RotValue } from "./Rot";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 
-export type TransformValue = {
+/**
+ * A transform contains translation and rotation. It is used to represent the
+ * position and orientation of rigid frames. Initialize using a position vector
+ * and a rotation.
+ */
+export interface TransformValue {
   p: Vec2Value;
   q: RotValue;
-};
+}
 
 /**
  * A transform contains translation and rotation. It is used to represent the
  * position and orientation of rigid frames. Initialize using a position vector
  * and a rotation.
- * 
+ *
  * @deprecated Use TransformValue and geo functions instead.
  */
 export class Transform {
