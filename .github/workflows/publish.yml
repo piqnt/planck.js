@@ -19,7 +19,6 @@ permissions:
 
 jobs:
   publish:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     permissions:
       contents: write
