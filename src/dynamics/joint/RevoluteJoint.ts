@@ -18,7 +18,6 @@ import { Body } from "../Body";
 import { TimeStep } from "../Solver";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
-/** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_abs = Math.abs;
 
 // todo: use string?
@@ -108,15 +107,6 @@ export interface RevoluteJointDef extends JointDef, RevoluteJointOpt {
   enableMotor: false,
 };
 
-declare module "./RevoluteJoint" {
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function RevoluteJoint(def: RevoluteJointDef): RevoluteJoint;
-  /** @hidden @deprecated Use new keyword. */
-  // @ts-expect-error
-  function RevoluteJoint(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor: Vec2Value): RevoluteJoint;
-}
-
 /**
  * A revolute joint constrains two bodies to share a common point while they are
  * free to rotate about the point. The relative rotation about the shared point
@@ -125,7 +115,6 @@ declare module "./RevoluteJoint" {
  * relative rotation about the shared point. A maximum motor torque is provided
  * so that infinite forces are not generated.
  */
-// @ts-expect-error
 export class RevoluteJoint extends Joint {
   static TYPE = "revolute-joint" as const;
 
@@ -160,11 +149,6 @@ export class RevoluteJoint extends Joint {
   constructor(def: RevoluteJointDef);
   constructor(def: RevoluteJointOpt, bodyA: Body, bodyB: Body, anchor?: Vec2Value);
   constructor(def: RevoluteJointDef, bodyA?: Body, bodyB?: Body, anchor?: Vec2Value) {
-    // @ts-ignore
-    if (_CONSTRUCTOR_FACTORY && !(this instanceof RevoluteJoint)) {
-      return new RevoluteJoint(def, bodyA, bodyB, anchor);
-    }
-
     def = def ?? ({} as RevoluteJointDef);
     super(def, bodyA, bodyB);
     bodyA = this.m_bodyA;
