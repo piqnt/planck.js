@@ -873,14 +873,14 @@ export class World {
    * Call this method to find new contacts.
    */
   findNewContacts(): void {
-    this.m_broadPhase.updatePairs((proxyA: FixtureProxy, proxyB: FixtureProxy) => this.createContact(proxyA, proxyB));
+    this.m_broadPhase.updatePairs(this.createContact);
   }
 
   /**
    * @internal
    * Callback for broad-phase.
    */
-  createContact(proxyA: FixtureProxy, proxyB: FixtureProxy): void {
+  createContact = (proxyA: FixtureProxy, proxyB: FixtureProxy): void => {
     const fixtureA = proxyA.fixture;
     const fixtureB = proxyB.fixture;
 
@@ -942,7 +942,7 @@ export class World {
     this.m_contactList = contact;
 
     ++this.m_contactCount;
-  }
+  };
 
   /**
    * @internal
