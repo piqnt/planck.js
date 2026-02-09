@@ -11,7 +11,8 @@ import { SettingsInternal as Settings } from "../Settings";
 import * as geo from "../common/Geo";
 import { Pool } from "../util/Pool";
 import { Vec2Value } from "../common/Vec2";
-import { AABB, AABBValue, RayCastCallback, RayCastInput } from "./AABB";
+import { AABB, AABBValue } from "./AABB";
+import { RayCastCallback, RayCastInput } from "./Raycast";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const math_abs = Math.abs;
