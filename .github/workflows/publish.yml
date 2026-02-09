@@ -1,10 +1,16 @@
 name: NPM Publish V2
 
 on:
-  workflow_run:
-    workflows: [Build]
+  push:
     branches: [v2]
-    types: [completed]
+  # pull_request:
+  #   branches: [ v2 ]
+  # workflow_run:
+  #   workflows: [Build]
+  #   branches: [v2]
+  #   types: [completed]
+
+  workflow_dispatch:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -33,6 +39,24 @@ jobs:
 
       - name: npm-install
         run: npm install
+
+      - name: npm-install
+        run: npm install
+
+      - name: npm-test
+        run: npm run test
+
+      - name: npm-lint
+        run: npm run lint
+
+      - name: npm-build
+        run: npm run build
+
+      - name: npm-test-types
+        run: npm run test:types
+
+      - name: npm-typedoc
+        run: npm run typedoc
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
