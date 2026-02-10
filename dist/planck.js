@@ -1,10 +1,10 @@
 (function(global, factory) {
   typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define(["exports"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global.planck = {}));
-})(this, function(exports2) {
+})(this, (function(exports2) {
   "use strict";/**
- * Planck.js v1.4.2
+ * Planck.js v1.4.3
  * @license The MIT license
- * @copyright Copyright (c) 2025 Erin Catto, Ali Shakiba
+ * @copyright Copyright (c) 2026 Erin Catto, Ali Shakiba
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +25,6 @@
  * SOFTWARE.
  */
 
-  /*! *****************************************************************************
-      Copyright (c) Microsoft Corporation.
-  
-      Permission to use, copy, modify, and/or distribute this software for any
-      purpose with or without fee is hereby granted.
-  
-      THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-      REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-      AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-      INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-      LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-      OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-      PERFORMANCE OF THIS SOFTWARE.
-      ***************************************************************************** */
   var extendStatics = function(d2, b2) {
     extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d3, b3) {
       d3.__proto__ = b3;
@@ -65,6 +51,10 @@
       return t;
     };
     return __assign.apply(this, arguments);
+  };
+  typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+    var e3 = new Error(message);
+    return e3.name = "SuppressedError", e3.error = error, e3.suppressed = suppressed, e3;
   };
   var options = function(input2, defaults) {
     if (input2 === null || typeof input2 === "undefined") {
@@ -150,7 +140,7 @@
   var math_min$8 = Math.min;
   var Vec2 = (
     /** @class */
-    function() {
+    (function() {
       function Vec22(x2, y) {
         if (!(this instanceof Vec22)) {
           return new Vec22(x2, y);
@@ -470,13 +460,13 @@
         };
       };
       return Vec22;
-    }()
+    })()
   );
   var math_max$7 = Math.max;
   var math_min$7 = Math.min;
   var AABB = (
     /** @class */
-    function() {
+    (function() {
       function AABB2(lower, upper) {
         if (!(this instanceof AABB2)) {
           return new AABB2(lower, upper);
@@ -660,12 +650,12 @@
         return 2 * (ux - lx + uy - ly);
       };
       return AABB2;
-    }()
+    })()
   );
   var math_PI$6 = Math.PI;
   var Settings = (
     /** @class */
-    function() {
+    (function() {
       function Settings2() {
       }
       Object.defineProperty(Settings2, "polygonRadius", {
@@ -703,11 +693,11 @@
       Settings2.linearSleepTolerance = 0.01;
       Settings2.angularSleepTolerance = 2 / 180 * math_PI$6;
       return Settings2;
-    }()
+    })()
   );
   var SettingsInternal = (
     /** @class */
-    function() {
+    (function() {
       function SettingsInternal2() {
       }
       Object.defineProperty(SettingsInternal2, "maxManifoldPoints", {
@@ -893,11 +883,11 @@
         configurable: true
       });
       return SettingsInternal2;
-    }()
+    })()
   );
   var Pool = (
     /** @class */
-    function() {
+    (function() {
       function Pool2(opts) {
         this._list = [];
         this._max = Infinity;
@@ -966,13 +956,13 @@
         return " +" + this._createCount + " >" + this._allocateCount + " <" + this._releaseCount + " -" + this._disposeCount + " =" + this._list.length + "/" + this._max;
       };
       return Pool2;
-    }()
+    })()
   );
   var math_abs$8 = Math.abs;
   var math_max$6 = Math.max;
   var TreeNode = (
     /** @class */
-    function() {
+    (function() {
       function TreeNode2(id) {
         this.aabb = new AABB();
         this.userData = null;
@@ -989,7 +979,7 @@
         return this.child1 == null;
       };
       return TreeNode2;
-    }()
+    })()
   );
   var poolTreeNode = new Pool({
     create: function() {
@@ -1006,7 +996,7 @@
   });
   var DynamicTree = (
     /** @class */
-    function() {
+    (function() {
       function DynamicTree2() {
         this.inputPool = new Pool({
           create: function() {
@@ -1486,11 +1476,11 @@
         this.inputPool.release(subInput);
       };
       return DynamicTree2;
-    }()
+    })()
   );
   var Iterator = (
     /** @class */
-    function() {
+    (function() {
       function Iterator2() {
         this.parents = [];
         this.states = [];
@@ -1534,13 +1524,13 @@
         this.parents.length = 0;
       };
       return Iterator2;
-    }()
+    })()
   );
   var math_max$5 = Math.max;
   var math_min$6 = Math.min;
   var BroadPhase = (
     /** @class */
-    function() {
+    (function() {
       function BroadPhase2() {
         var _this = this;
         this.m_tree = new DynamicTree();
@@ -1629,7 +1619,7 @@
         }
       };
       return BroadPhase2;
-    }()
+    })()
   );
   var math_sin$2 = Math.sin;
   var math_cos$2 = Math.cos;
@@ -1667,7 +1657,7 @@
   }
   function addVec2(out, v3, w) {
     out.x = v3.x + w.x;
-    out.y = v3.x + w.y;
+    out.y = v3.y + w.y;
     return out;
   }
   function minusVec2(out, w) {
@@ -1840,7 +1830,7 @@
   var math_atan2$1 = Math.atan2;
   var Rot = (
     /** @class */
-    function() {
+    (function() {
       function Rot2(angle) {
         if (!(this instanceof Rot2)) {
           return new Rot2(angle);
@@ -1952,14 +1942,14 @@
         return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
       };
       return Rot2;
-    }()
+    })()
   );
   var math_atan2 = Math.atan2;
   var math_PI$5 = Math.PI;
   var temp$7 = vec2(0, 0);
   var Sweep = (
     /** @class */
-    function() {
+    (function() {
       function Sweep2() {
         this.localCenter = Vec2.zero();
         this.c = Vec2.zero();
@@ -2020,11 +2010,11 @@
         this.a0 = that.a0;
       };
       return Sweep2;
-    }()
+    })()
   );
   var Transform = (
     /** @class */
-    function() {
+    (function() {
       function Transform2(position, rotation2) {
         if (!(this instanceof Transform2)) {
           return new Transform2(position, rotation2);
@@ -2142,23 +2132,23 @@
         return xf2;
       };
       return Transform2;
-    }()
+    })()
   );
   var Velocity = (
     /** @class */
-    /* @__PURE__ */ function() {
+    /* @__PURE__ */ (function() {
       function Velocity2() {
         this.v = Vec2.zero();
         this.w = 0;
       }
       return Velocity2;
-    }()
+    })()
   );
   var math_sin = Math.sin;
   var math_cos = Math.cos;
   var Position = (
     /** @class */
-    function() {
+    (function() {
       function Position2() {
         this.c = Vec2.zero();
         this.a = 0;
@@ -2171,7 +2161,7 @@
         return xf2;
       };
       return Position2;
-    }()
+    })()
   );
   function getTransform(xf2, p, c2, a2) {
     xf2.q.c = math_cos(a2);
@@ -2182,7 +2172,7 @@
   }
   var Shape = (
     /** @class */
-    function() {
+    (function() {
       function Shape2() {
         this.style = {};
         this.appData = {};
@@ -2194,7 +2184,7 @@
         return typeof obj.m_type === "string" && typeof obj.m_radius === "number";
       };
       return Shape2;
-    }()
+    })()
   );
   var synchronize_aabb1 = new AABB();
   var synchronize_aabb2 = new AABB();
@@ -2211,18 +2201,18 @@
   };
   var FixtureProxy = (
     /** @class */
-    /* @__PURE__ */ function() {
+    /* @__PURE__ */ (function() {
       function FixtureProxy2(fixture, childIndex) {
         this.aabb = new AABB();
         this.fixture = fixture;
         this.childIndex = childIndex;
       }
       return FixtureProxy2;
-    }()
+    })()
   );
   var Fixture = (
     /** @class */
-    function() {
+    (function() {
       function Fixture2(body, shape, def) {
         this.style = {};
         this.appData = {};
@@ -2428,7 +2418,7 @@
         return collide;
       };
       return Fixture2;
-    }()
+    })()
   );
   var STATIC = "static";
   var KINEMATIC = "kinematic";
@@ -2456,7 +2446,7 @@
   };
   var Body = (
     /** @class */
-    function() {
+    (function() {
       function Body2(world, def) {
         this.style = {};
         this.appData = {};
@@ -3025,11 +3015,11 @@
       Body2.KINEMATIC = "kinematic";
       Body2.DYNAMIC = "dynamic";
       return Body2;
-    }()
+    })()
   );
   var JointEdge = (
     /** @class */
-    /* @__PURE__ */ function() {
+    /* @__PURE__ */ (function() {
       function JointEdge2() {
         this.other = null;
         this.joint = null;
@@ -3037,11 +3027,11 @@
         this.next = null;
       }
       return JointEdge2;
-    }()
+    })()
   );
   var Joint = (
     /** @class */
-    function() {
+    (function() {
       function Joint2(def, bodyA, bodyB) {
         this.m_type = "unknown-joint";
         this.m_prev = null;
@@ -3091,7 +3081,7 @@
         return this._reset(def);
       };
       return Joint2;
-    }()
+    })()
   );
   var stats = {
     gjkCalls: 0,
@@ -3138,7 +3128,7 @@
   stats.gjkMaxIters = 0;
   var DistanceInput = (
     /** @class */
-    function() {
+    (function() {
       function DistanceInput2() {
         this.proxyA = new DistanceProxy();
         this.proxyB = new DistanceProxy();
@@ -3154,11 +3144,11 @@
         this.useRadii = false;
       };
       return DistanceInput2;
-    }()
+    })()
   );
   var DistanceOutput = (
     /** @class */
-    function() {
+    (function() {
       function DistanceOutput2() {
         this.pointA = vec2(0, 0);
         this.pointB = vec2(0, 0);
@@ -3172,11 +3162,11 @@
         this.iterations = 0;
       };
       return DistanceOutput2;
-    }()
+    })()
   );
   var SimplexCache = (
     /** @class */
-    function() {
+    (function() {
       function SimplexCache2() {
         this.metric = 0;
         this.indexA = [];
@@ -3190,7 +3180,7 @@
         this.count = 0;
       };
       return SimplexCache2;
-    }()
+    })()
   );
   var Distance = function(output2, cache2, input2) {
     ++stats.gjkCalls;
@@ -3264,7 +3254,7 @@
   };
   var DistanceProxy = (
     /** @class */
-    function() {
+    (function() {
       function DistanceProxy2() {
         this.m_vertices = [];
         this.m_count = 0;
@@ -3305,11 +3295,11 @@
         this.m_radius = radius;
       };
       return DistanceProxy2;
-    }()
+    })()
   );
   var SimplexVertex = (
     /** @class */
-    function() {
+    (function() {
       function SimplexVertex2() {
         this.wA = vec2(0, 0);
         this.indexA = 0;
@@ -3335,13 +3325,13 @@
         this.a = v3.a;
       };
       return SimplexVertex2;
-    }()
+    })()
   );
   var searchDirection_reuse = vec2(0, 0);
   var closestPoint_reuse = vec2(0, 0);
   var Simplex = (
     /** @class */
-    function() {
+    (function() {
       function Simplex2() {
         this.m_v1 = new SimplexVertex();
         this.m_v2 = new SimplexVertex();
@@ -3616,7 +3606,7 @@
         this.m_count = 3;
       };
       return Simplex2;
-    }()
+    })()
   );
   var simplex = new Simplex();
   var input$1 = new DistanceInput();
@@ -3641,7 +3631,7 @@
   Distance.Cache = SimplexCache;
   var ShapeCastInput = (
     /** @class */
-    function() {
+    (function() {
       function ShapeCastInput2() {
         this.proxyA = new DistanceProxy();
         this.proxyB = new DistanceProxy();
@@ -3657,11 +3647,11 @@
         zeroVec2(this.translationB);
       };
       return ShapeCastInput2;
-    }()
+    })()
   );
   var ShapeCastOutput = (
     /** @class */
-    /* @__PURE__ */ function() {
+    /* @__PURE__ */ (function() {
       function ShapeCastOutput2() {
         this.point = Vec2.zero();
         this.normal = Vec2.zero();
@@ -3669,7 +3659,7 @@
         this.iterations = 0;
       }
       return ShapeCastOutput2;
-    }()
+    })()
   );
   var ShapeCast = function(output2, input2) {
     output2.iterations = 0;
@@ -3763,7 +3753,7 @@
   var math_max$3 = Math.max;
   var TOIInput = (
     /** @class */
-    function() {
+    (function() {
       function TOIInput2() {
         this.proxyA = new DistanceProxy();
         this.proxyB = new DistanceProxy();
@@ -3778,7 +3768,7 @@
         this.tMax = -1;
       };
       return TOIInput2;
-    }()
+    })()
   );
   exports2.TOIOutputState = void 0;
   (function(TOIOutputState2) {
@@ -3791,7 +3781,7 @@
   })(exports2.TOIOutputState || (exports2.TOIOutputState = {}));
   var TOIOutput = (
     /** @class */
-    function() {
+    (function() {
       function TOIOutput2() {
         this.state = exports2.TOIOutputState.e_unset;
         this.t = -1;
@@ -3801,7 +3791,7 @@
         this.t = -1;
       };
       return TOIOutput2;
-    }()
+    })()
   );
   stats.toiTime = 0;
   stats.toiMaxTime = 0;
@@ -3950,7 +3940,7 @@
   })(SeparationFunctionType || (SeparationFunctionType = {}));
   var SeparationFunction = (
     /** @class */
-    function() {
+    (function() {
       function SeparationFunction2() {
         this.m_proxyA = null;
         this.m_proxyB = null;
@@ -4085,7 +4075,7 @@
         return this.compute(false, t);
       };
       return SeparationFunction2;
-    }()
+    })()
   );
   var separationFunction = new SeparationFunction();
   TimeOfImpact.Input = TOIInput;
@@ -4095,7 +4085,7 @@
   var math_min$5 = Math.min;
   var TimeStep = (
     /** @class */
-    function() {
+    (function() {
       function TimeStep2() {
         this.dt = 0;
         this.inv_dt = 0;
@@ -4115,7 +4105,7 @@
         this.dtRatio = dt * this.inv_dt0;
       };
       return TimeStep2;
-    }()
+    })()
   );
   var s_subStep = new TimeStep();
   var c = vec2(0, 0);
@@ -4128,7 +4118,7 @@
   var backup2 = new Sweep();
   var ContactImpulse = (
     /** @class */
-    function() {
+    (function() {
       function ContactImpulse2(contact) {
         this.contact = contact;
         this.normals = [];
@@ -4165,11 +4155,11 @@
         configurable: true
       });
       return ContactImpulse2;
-    }()
+    })()
   );
   var Solver = (
     /** @class */
-    function() {
+    (function() {
       function Solver2(world) {
         this.m_world = world;
         this.m_stack = [];
@@ -4658,12 +4648,12 @@
         }
       };
       return Solver2;
-    }()
+    })()
   );
   Solver.TimeStep = TimeStep;
   var Mat22 = (
     /** @class */
-    function() {
+    (function() {
       function Mat222(a2, b2, c2, d2) {
         if (typeof a2 === "object" && a2 !== null) {
           this.ex = Vec2.clone(a2);
@@ -4790,7 +4780,7 @@
         return new Mat222(Vec2.add(mx1.ex, mx2.ex), Vec2.add(mx1.ey, mx2.ey));
       };
       return Mat222;
-    }()
+    })()
   );
   var math_sqrt$2 = Math.sqrt;
   var pointA$1 = vec2(0, 0);
@@ -4823,7 +4813,7 @@
   })(exports2.PointState || (exports2.PointState = {}));
   var ClipVertex = (
     /** @class */
-    function() {
+    (function() {
       function ClipVertex2() {
         this.v = vec2(0, 0);
         this.id = new ContactID();
@@ -4837,11 +4827,11 @@
         this.id.recycle();
       };
       return ClipVertex2;
-    }()
+    })()
   );
   var Manifold = (
     /** @class */
-    function() {
+    (function() {
       function Manifold2() {
         this.localNormal = vec2(0, 0);
         this.localPoint = vec2(0, 0);
@@ -4926,11 +4916,11 @@
       Manifold2.getPointStates = getPointStates;
       Manifold2.PointState = exports2.PointState;
       return Manifold2;
-    }()
+    })()
   );
   var ManifoldPoint = (
     /** @class */
-    function() {
+    (function() {
       function ManifoldPoint2() {
         this.localPoint = vec2(0, 0);
         this.normalImpulse = 0;
@@ -4950,11 +4940,11 @@
         this.id.recycle();
       };
       return ManifoldPoint2;
-    }()
+    })()
   );
   var ContactID = (
     /** @class */
-    function() {
+    (function() {
       function ContactID2() {
         this.key = -1;
         this.indexA = -1;
@@ -4995,11 +4985,11 @@
         this.key = -1;
       };
       return ContactID2;
-    }()
+    })()
   );
   var WorldManifold = (
     /** @class */
-    function() {
+    (function() {
       function WorldManifold2() {
         this.normal = vec2(0, 0);
         this.points = [vec2(0, 0), vec2(0, 0)];
@@ -5015,7 +5005,7 @@
         this.pointCount = 0;
       };
       return WorldManifold2;
-    }()
+    })()
   );
   function getPointStates(state1, state2, manifold1, manifold2) {
     for (var i = 0; i < manifold1.pointCount; ++i) {
@@ -5070,7 +5060,7 @@
   var worldManifold = new WorldManifold();
   var ContactEdge = (
     /** @class */
-    function() {
+    (function() {
       function ContactEdge2(contact) {
         this.prev = null;
         this.next = null;
@@ -5083,7 +5073,7 @@
         this.other = null;
       };
       return ContactEdge2;
-    }()
+    })()
   );
   function mixFriction(friction1, friction2) {
     return math_sqrt$1(friction1 * friction2);
@@ -5094,7 +5084,7 @@
   var s_registers = [];
   var VelocityConstraintPoint = (
     /** @class */
-    function() {
+    (function() {
       function VelocityConstraintPoint2() {
         this.rA = vec2(0, 0);
         this.rB = vec2(0, 0);
@@ -5114,7 +5104,7 @@
         this.velocityBias = 0;
       };
       return VelocityConstraintPoint2;
-    }()
+    })()
   );
   var cA = vec2(0, 0);
   var vA = vec2(0, 0);
@@ -5144,7 +5134,7 @@
   var temp$2 = vec2(0, 0);
   var Contact = (
     /** @class */
-    function() {
+    (function() {
       function Contact2() {
         this.m_nodeA = new ContactEdge(this);
         this.m_nodeB = new ContactEdge(this);
@@ -5521,6 +5511,7 @@
               negVec2(normal$2);
               break;
             }
+            // todo: what should we do here?
             default: {
               return minSeparation;
             }
@@ -5919,7 +5910,7 @@
         contactPool.release(contact);
       };
       return Contact2;
-    }()
+    })()
   );
   var DEFAULTS$b = {
     gravity: Vec2.zero(),
@@ -5933,7 +5924,7 @@
   };
   var World = (
     /** @class */
-    function() {
+    (function() {
       function World2(def) {
         if (!(this instanceof World2)) {
           return new World2(def);
@@ -6508,11 +6499,11 @@
         this.publish("post-solve", contact, impulse);
       };
       return World2;
-    }()
+    })()
   );
   var Vec3 = (
     /** @class */
-    function() {
+    (function() {
       function Vec32(x2, y, z) {
         if (!(this instanceof Vec32)) {
           return new Vec32(x2, y, z);
@@ -6631,13 +6622,13 @@
         return new Vec32(-v3.x, -v3.y, -v3.z);
       };
       return Vec32;
-    }()
+    })()
   );
   var v1$2 = vec2(0, 0);
   var v2$1 = vec2(0, 0);
   var EdgeShape = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(EdgeShape2, _super);
       function EdgeShape2(v122, v22) {
         var _this = this;
@@ -6797,13 +6788,13 @@
       };
       EdgeShape2.TYPE = "edge";
       return EdgeShape2;
-    }(Shape)
+    })(Shape)
   );
   var v1$1 = vec2(0, 0);
   var v2 = vec2(0, 0);
   var ChainShape = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(ChainShape2, _super);
       function ChainShape2(vertices, loop) {
         var _this = this;
@@ -6989,7 +6980,7 @@
       };
       ChainShape2.TYPE = "chain";
       return ChainShape2;
-    }(Shape)
+    })(Shape)
   );
   var math_max$1 = Math.max;
   var math_min$3 = Math.min;
@@ -7001,7 +6992,7 @@
   var s = vec2(0, 0);
   var PolygonShape = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(PolygonShape2, _super);
       function PolygonShape2(vertices) {
         var _this = this;
@@ -7285,7 +7276,7 @@
       };
       PolygonShape2.TYPE = "polygon";
       return PolygonShape2;
-    }(Shape)
+    })(Shape)
   );
   function computeCentroid(vs, count) {
     var c2 = Vec2.zero();
@@ -7313,7 +7304,7 @@
   var temp = vec2(0, 0);
   var CircleShape = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(CircleShape2, _super);
       function CircleShape2(a2, b2) {
         var _this = this;
@@ -7408,7 +7399,7 @@
       };
       CircleShape2.TYPE = "circle";
       return CircleShape2;
-    }(Shape)
+    })(Shape)
   );
   var math_abs$5 = Math.abs;
   var math_PI$3 = Math.PI;
@@ -7418,7 +7409,7 @@
   };
   var DistanceJoint = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(DistanceJoint2, _super);
       function DistanceJoint2(def, bodyA, bodyB, anchorA, anchorB) {
         var _this = this;
@@ -7637,7 +7628,7 @@
       };
       DistanceJoint2.TYPE = "distance-joint";
       return DistanceJoint2;
-    }(Joint)
+    })(Joint)
   );
   var DEFAULTS$9 = {
     maxForce: 0,
@@ -7645,7 +7636,7 @@
   };
   var FrictionJoint = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(FrictionJoint2, _super);
       function FrictionJoint2(def, bodyA, bodyB, anchor) {
         var _this = this;
@@ -7826,11 +7817,11 @@
       };
       FrictionJoint2.TYPE = "friction-joint";
       return FrictionJoint2;
-    }(Joint)
+    })(Joint)
   );
   var Mat33 = (
     /** @class */
-    function() {
+    (function() {
       function Mat332(a2, b2, c2) {
         if (typeof a2 === "object" && a2 !== null) {
           this.ex = Vec3.clone(a2);
@@ -7963,7 +7954,7 @@
         return new Mat332(Vec3.add(a2.ex, b2.ex), Vec3.add(a2.ey, b2.ey), Vec3.add(a2.ez, b2.ez));
       };
       return Mat332;
-    }()
+    })()
   );
   var math_abs$4 = Math.abs;
   var LimitState$2;
@@ -7983,7 +7974,7 @@
   };
   var RevoluteJoint = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(RevoluteJoint2, _super);
       function RevoluteJoint2(def, bodyA, bodyB, anchor) {
         var _this = this;
@@ -8393,7 +8384,7 @@
       };
       RevoluteJoint2.TYPE = "revolute-joint";
       return RevoluteJoint2;
-    }(Joint)
+    })(Joint)
   );
   var math_abs$3 = Math.abs;
   var math_max = Math.max;
@@ -8415,7 +8406,7 @@
   };
   var PrismaticJoint = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(PrismaticJoint2, _super);
       function PrismaticJoint2(def, bodyA, bodyB, anchor, axis) {
         var _this = this;
@@ -8880,14 +8871,14 @@
       };
       PrismaticJoint2.TYPE = "prismatic-joint";
       return PrismaticJoint2;
-    }(Joint)
+    })(Joint)
   );
   var DEFAULTS$6 = {
     ratio: 1
   };
   var GearJoint = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(GearJoint2, _super);
       function GearJoint2(def, bodyA, bodyB, joint1, joint2, ratio) {
         var _this = this;
@@ -9201,7 +9192,7 @@
       };
       GearJoint2.TYPE = "gear-joint";
       return GearJoint2;
-    }(Joint)
+    })(Joint)
   );
   var DEFAULTS$5 = {
     maxForce: 1,
@@ -9210,7 +9201,7 @@
   };
   var MotorJoint = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(MotorJoint2, _super);
       function MotorJoint2(def, bodyA, bodyB) {
         var _this = this;
@@ -9419,7 +9410,7 @@
       };
       MotorJoint2.TYPE = "motor-joint";
       return MotorJoint2;
-    }(Joint)
+    })(Joint)
   );
   var math_PI$2 = Math.PI;
   var DEFAULTS$4 = {
@@ -9429,7 +9420,7 @@
   };
   var MouseJoint = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(MouseJoint2, _super);
       function MouseJoint2(def, bodyA, bodyB, target) {
         var _this = this;
@@ -9606,7 +9597,7 @@
       };
       MouseJoint2.TYPE = "mouse-joint";
       return MouseJoint2;
-    }(Joint)
+    })(Joint)
   );
   var math_abs$2 = Math.abs;
   var DEFAULTS$3 = {
@@ -9614,7 +9605,7 @@
   };
   var PulleyJoint = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(PulleyJoint2, _super);
       function PulleyJoint2(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, ratio) {
         var _this = this;
@@ -9853,7 +9844,7 @@
       };
       PulleyJoint2.TYPE = "pulley-joint";
       return PulleyJoint2;
-    }(Joint)
+    })(Joint)
   );
   var math_min$1 = Math.min;
   var LimitState;
@@ -9868,7 +9859,7 @@
   };
   var RopeJoint = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(RopeJoint2, _super);
       function RopeJoint2(def, bodyA, bodyB, anchor) {
         var _this = this;
@@ -10050,7 +10041,7 @@
       };
       RopeJoint2.TYPE = "rope-joint";
       return RopeJoint2;
-    }(Joint)
+    })(Joint)
   );
   var math_abs$1 = Math.abs;
   var math_PI$1 = Math.PI;
@@ -10060,7 +10051,7 @@
   };
   var WeldJoint = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(WeldJoint2, _super);
       function WeldJoint2(def, bodyA, bodyB, anchor) {
         var _this = this;
@@ -10333,7 +10324,7 @@
       };
       WeldJoint2.TYPE = "weld-joint";
       return WeldJoint2;
-    }(Joint)
+    })(Joint)
   );
   var math_abs = Math.abs;
   var math_PI = Math.PI;
@@ -10346,7 +10337,7 @@
   };
   var WheelJoint = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(WheelJoint2, _super);
       function WheelJoint2(def, bodyA, bodyB, anchor, axis) {
         var _this = this;
@@ -10696,7 +10687,7 @@
       };
       WheelJoint2.TYPE = "wheel-joint";
       return WheelJoint2;
-    }(Joint)
+    })(Joint)
   );
   var _a;
   var SID = 0;
@@ -10735,7 +10726,7 @@
   };
   var Serializer = (
     /** @class */
-    /* @__PURE__ */ function() {
+    /* @__PURE__ */ (function() {
       function Serializer2(options2) {
         var _this = this;
         this.toJson = function(root) {
@@ -10846,7 +10837,7 @@
         this.options = __assign(__assign({}, DEFAULT_OPTIONS), options2);
       }
       return Serializer2;
-    }()
+    })()
   );
   var worldSerializer = new Serializer({
     rootClass: World
@@ -10855,7 +10846,7 @@
   Serializer.toJson = worldSerializer.toJson;
   var Testbed = (
     /** @class */
-    function() {
+    (function() {
       function Testbed2() {
       }
       Testbed2.mount = function(options2) {
@@ -10867,7 +10858,7 @@
         return testbed2;
       };
       return Testbed2;
-    }()
+    })()
   );
   function testbed(a2, b2) {
     var callback;
@@ -10891,7 +10882,7 @@
   }
   var BoxShape = (
     /** @class */
-    function(_super) {
+    (function(_super) {
       __extends(BoxShape2, _super);
       function BoxShape2(halfWidth, halfHeight, center2, angle) {
         var _this = this;
@@ -10904,7 +10895,7 @@
       }
       BoxShape2.TYPE = "polygon";
       return BoxShape2;
-    }(PolygonShape)
+    })(PolygonShape)
   );
   Contact.addType(CircleShape.TYPE, CircleShape.TYPE, CircleCircleContact);
   function CircleCircleContact(manifold, xfA2, fixtureA, indexA, xfB2, fixtureB, indexB) {
@@ -11286,15 +11277,15 @@
   })(VertexType || (VertexType = {}));
   var EPAxis = (
     /** @class */
-    /* @__PURE__ */ function() {
+    /* @__PURE__ */ (function() {
       function EPAxis2() {
       }
       return EPAxis2;
-    }()
+    })()
   );
   var TempPolygon = (
     /** @class */
-    /* @__PURE__ */ function() {
+    /* @__PURE__ */ (function() {
       function TempPolygon2() {
         this.vertices = [];
         this.normals = [];
@@ -11305,11 +11296,11 @@
         }
       }
       return TempPolygon2;
-    }()
+    })()
   );
   var ReferenceFace = (
     /** @class */
-    function() {
+    (function() {
       function ReferenceFace2() {
         this.v1 = vec2(0, 0);
         this.v2 = vec2(0, 0);
@@ -11325,7 +11316,7 @@
         zeroVec2(this.sideNormal2);
       };
       return ReferenceFace2;
-    }()
+    })()
   );
   var clipPoints1 = [new ClipVertex(), new ClipVertex()];
   var clipPoints2 = [new ClipVertex(), new ClipVertex()];
@@ -11657,7 +11648,7 @@
   };
   var DataDriver = (
     /** @class */
-    function() {
+    (function() {
       function DataDriver2(key, listener) {
         this._refMap = {};
         this._map = {};
@@ -11725,7 +11716,7 @@
         return this._refMap[this._key(d2)];
       };
       return DataDriver2;
-    }()
+    })()
   );
   const planck = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
@@ -11904,5 +11895,5 @@
   exports2.testOverlap = testOverlap;
   exports2.testbed = testbed;
   Object.defineProperties(exports2, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
-});
+}));
 //# sourceMappingURL=planck.js.map

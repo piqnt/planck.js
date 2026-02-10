@@ -1,5 +1,11 @@
 # planck
 
+## 1.4.3
+
+### Patch Changes
+
+- 0bba3b2: Bug fix addVec2
+
 ## 1.4.2
 
 ### Patch Changes
