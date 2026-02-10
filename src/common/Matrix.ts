@@ -60,7 +60,7 @@ export function plusVec2(out: Vec2Value, w: Vec2Value): Vec2Value {
 
 export function addVec2(out: Vec2Value, v: Vec2Value, w: Vec2Value): Vec2Value {
   out.x = v.x + w.x;
-  out.y = v.x + w.y;
+  out.y = v.y + w.y;
   return out;
 }
 
