@@ -50,9 +50,6 @@
   "engines": {
     "node": ">=24.0"
   },
-  "peerDependencies": {
-    "stage-js": "^1.0.0-alpha.12"
-  },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
     "@eslint/js": "^9.39.2",
@@ -61,6 +58,7 @@
     "ajv": "^8.17.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
+    "planck-testbed": "^0.0.3",
     "prettier": "^3.8.1",
     "rimraf": "^6.1.2",
     "rollup-plugin-license": "^3.6.0",
@@ -80,13 +78,13 @@
     "vitest": "^4.0.18"
   },
   "scripts": {
-    "lint": "eslint './src/**/*.ts' './testbed/**/*.ts'",
-    "pretty": "prettier --write './src/**/*.ts' './testbed/**/*.ts'",
+    "lint": "eslint './src/**/*.ts'",
+    "pretty": "prettier --write './src/**/*.ts'",
     "lint:example": "eslint --fix './example/**/*.ts'",
     "pretty:example": "prettier --write './example/**/*.ts'",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:types": "tsd --typings=./dist/planck.d.ts && tsd --typings=./dist/planck-with-testbed.d.ts",
+    "test:types": "tsd --typings=./dist/planck.d.ts",
     "preflight": "npm run lint && npm run test:types && npm run test",
     "testbed": "npm run dev",
     "dev": "vite",
