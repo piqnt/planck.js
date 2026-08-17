@@ -19,7 +19,7 @@ The initialization functions create normal vectors and perform validation.
 So you should use initialization functions to create a polygon.
 
 You can create a polygon shape by passing in a vertex array. The maximal
-size of the array is controlled by `Setting.MaxPolygonVertices` which has a
+size of the array is controlled by `Settings.MaxPolygonVertices` which has a
 default value of 8. This is sufficient to describe most convex polygons.
 
 The `PolygonShape.set` function automatically computes the convex hull
