@@ -25,32 +25,55 @@
  * SOFTWARE.
  */
 
-  var extendStatics$1 = function(d2, b2) {
-    extendStatics$1 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d3, b3) {
+  /**
+   * Planck.js v1.5.0
+   * @license The MIT license
+   * @copyright Copyright (c) 2026 Erin Catto, Ali Shakiba
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in all
+   * copies or substantial portions of the Software.
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   * SOFTWARE.
+   */
+  var extendStatics = function(d2, b2) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d3, b3) {
       d3.__proto__ = b3;
     } || function(d3, b3) {
       for (var p in b3) if (Object.prototype.hasOwnProperty.call(b3, p)) d3[p] = b3[p];
     };
-    return extendStatics$1(d2, b2);
+    return extendStatics(d2, b2);
   };
-  function __extends$1(d2, b2) {
+  function __extends(d2, b2) {
     if (typeof b2 !== "function" && b2 !== null)
       throw new TypeError("Class extends value " + String(b2) + " is not a constructor or null");
-    extendStatics$1(d2, b2);
+    extendStatics(d2, b2);
     function __() {
       this.constructor = d2;
     }
     d2.prototype = b2 === null ? Object.create(b2) : (__.prototype = b2.prototype, new __());
   }
-  var __assign$1 = function() {
-    __assign$1 = Object.assign || function __assign2(t) {
+  var __assign = function() {
+    __assign = Object.assign || function __assign2(t) {
       for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
         s2 = arguments[i];
         for (var p in s2) if (Object.prototype.hasOwnProperty.call(s2, p)) t[p] = s2[p];
       }
       return t;
     };
-    return __assign$1.apply(this, arguments);
+    return __assign.apply(this, arguments);
   };
   typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
     var e3 = new Error(message);
@@ -60,7 +83,7 @@
     if (input2 === null || typeof input2 === "undefined") {
       input2 = {};
     }
-    var output2 = __assign$1({}, input2);
+    var output2 = __assign({}, input2);
     for (var key in defaults) {
       if (defaults.hasOwnProperty(key) && typeof input2[key] === "undefined") {
         output2[key] = defaults[key];
@@ -77,7 +100,7 @@
     }
     return output2;
   };
-  var math_random$1 = Math.random;
+  var math_random = Math.random;
   var EPSILON = 1e-9;
   var isFinite = Number.isFinite;
   function nextPowerOfTwo(x2) {
@@ -107,7 +130,7 @@
       return num + (num <= 0 ? min : max);
     }
   }
-  function clamp$1(num, min, max) {
+  function clamp(num, min, max) {
     if (num < min) {
       return min;
     } else if (num > max) {
@@ -116,7 +139,7 @@
       return num;
     }
   }
-  function random$1(min, max) {
+  function random(min, max) {
     if (typeof min === "undefined") {
       max = 1;
       min = 0;
@@ -124,20 +147,20 @@
       max = min;
       min = 0;
     }
-    return min === max ? min : math_random$1() * (max - min) + min;
+    return min === max ? min : math_random() * (max - min) + min;
   }
-  var math$1 = Object.create(Math);
-  math$1.EPSILON = EPSILON;
-  math$1.isFinite = isFinite;
-  math$1.nextPowerOfTwo = nextPowerOfTwo;
-  math$1.isPowerOfTwo = isPowerOfTwo;
-  math$1.mod = mod;
-  math$1.clamp = clamp$1;
-  math$1.random = random$1;
-  var math_abs$a = Math.abs;
-  var math_sqrt$8 = Math.sqrt;
-  var math_max$b = Math.max;
-  var math_min$d = Math.min;
+  var math = Object.create(Math);
+  math.EPSILON = EPSILON;
+  math.isFinite = isFinite;
+  math.nextPowerOfTwo = nextPowerOfTwo;
+  math.isPowerOfTwo = isPowerOfTwo;
+  math.mod = mod;
+  math.clamp = clamp;
+  math.random = random;
+  var math_abs$9 = Math.abs;
+  var math_sqrt$5 = Math.sqrt;
+  var math_max$8 = Math.max;
+  var math_min$8 = Math.min;
   var Vec2 = (
     /** @class */
     (function() {
@@ -307,25 +330,25 @@
         return Vec22.lengthSquared(this);
       };
       Vec22.prototype.normalize = function() {
-        var length2 = this.length();
-        if (length2 < EPSILON) {
+        var length = this.length();
+        if (length < EPSILON) {
           return 0;
         }
-        var invLength = 1 / length2;
+        var invLength = 1 / length;
         this.x *= invLength;
         this.y *= invLength;
-        return length2;
+        return length;
       };
       Vec22.normalize = function(v3) {
-        var length2 = Vec22.lengthOf(v3);
-        if (length2 < EPSILON) {
+        var length = Vec22.lengthOf(v3);
+        if (length < EPSILON) {
           return Vec22.zero();
         }
-        var invLength = 1 / length2;
+        var invLength = 1 / length;
         return Vec22.neo(v3.x * invLength, v3.y * invLength);
       };
       Vec22.lengthOf = function(v3) {
-        return math_sqrt$8(v3.x * v3.x + v3.y * v3.y);
+        return math_sqrt$5(v3.x * v3.x + v3.y * v3.y);
       };
       Vec22.lengthSquared = function(v3) {
         return v3.x * v3.x + v3.y * v3.y;
@@ -333,7 +356,7 @@
       Vec22.distance = function(v3, w) {
         var dx = v3.x - w.x;
         var dy = v3.y - w.y;
-        return math_sqrt$8(dx * dx + dy * dy);
+        return math_sqrt$5(dx * dx + dy * dy);
       };
       Vec22.distanceSquared = function(v3, w) {
         var dx = v3.x - w.x;
@@ -418,21 +441,21 @@
         return Vec22.neo(-v3.x, -v3.y);
       };
       Vec22.abs = function(v3) {
-        return Vec22.neo(math_abs$a(v3.x), math_abs$a(v3.y));
+        return Vec22.neo(math_abs$9(v3.x), math_abs$9(v3.y));
       };
       Vec22.mid = function(v3, w) {
         return Vec22.neo((v3.x + w.x) * 0.5, (v3.y + w.y) * 0.5);
       };
       Vec22.upper = function(v3, w) {
-        return Vec22.neo(math_max$b(v3.x, w.x), math_max$b(v3.y, w.y));
+        return Vec22.neo(math_max$8(v3.x, w.x), math_max$8(v3.y, w.y));
       };
       Vec22.lower = function(v3, w) {
-        return Vec22.neo(math_min$d(v3.x, w.x), math_min$d(v3.y, w.y));
+        return Vec22.neo(math_min$8(v3.x, w.x), math_min$8(v3.y, w.y));
       };
       Vec22.prototype.clamp = function(max) {
         var lengthSqr = this.x * this.x + this.y * this.y;
         if (lengthSqr > max * max) {
-          var scale = max / math_sqrt$8(lengthSqr);
+          var scale = max / math_sqrt$5(lengthSqr);
           this.x *= scale;
           this.y *= scale;
         }
@@ -445,8 +468,8 @@
       };
       Vec22.clampVec2 = function(v3, min, max) {
         return {
-          x: clamp$1(v3.x, min === null || min === void 0 ? void 0 : min.x, max === null || max === void 0 ? void 0 : max.x),
-          y: clamp$1(v3.y, min === null || min === void 0 ? void 0 : min.y, max === null || max === void 0 ? void 0 : max.y)
+          x: clamp(v3.x, min === null || min === void 0 ? void 0 : min.x, max === null || max === void 0 ? void 0 : max.x),
+          y: clamp(v3.y, min === null || min === void 0 ? void 0 : min.y, max === null || max === void 0 ? void 0 : max.y)
         };
       };
       Vec22.scaleFn = function(x2, y) {
@@ -462,8 +485,8 @@
       return Vec22;
     })()
   );
-  var math_max$a = Math.max;
-  var math_min$c = Math.min;
+  var math_max$7 = Math.max;
+  var math_min$7 = Math.min;
   var AABB = (
     /** @class */
     (function() {
@@ -508,16 +531,16 @@
         var upperA = a2.upperBound;
         var lowerB = b2.lowerBound;
         var upperB = b2.upperBound;
-        var lowerX = math_min$c(lowerA.x, lowerB.x);
-        var lowerY = math_min$c(lowerA.y, lowerB.y);
-        var upperX = math_max$a(upperB.x, upperA.x);
-        var upperY = math_max$a(upperB.y, upperA.y);
+        var lowerX = math_min$7(lowerA.x, lowerB.x);
+        var lowerY = math_min$7(lowerA.y, lowerB.y);
+        var upperX = math_max$7(upperB.x, upperA.x);
+        var upperY = math_max$7(upperB.y, upperA.y);
         this.lowerBound.setNum(lowerX, lowerY);
         this.upperBound.setNum(upperX, upperY);
       };
       AABB2.prototype.combinePoints = function(a2, b2) {
-        this.lowerBound.setNum(math_min$c(a2.x, b2.x), math_min$c(a2.y, b2.y));
-        this.upperBound.setNum(math_max$a(a2.x, b2.x), math_max$a(a2.y, b2.y));
+        this.lowerBound.setNum(math_min$7(a2.x, b2.x), math_min$7(a2.y, b2.y));
+        this.upperBound.setNum(math_max$7(a2.x, b2.x), math_max$7(a2.y, b2.y));
       };
       AABB2.prototype.set = function(aabb) {
         this.lowerBound.setNum(aabb.lowerBound.x, aabb.lowerBound.y);
@@ -535,12 +558,12 @@
         AABB2.extend(this, value);
         return this;
       };
-      AABB2.extend = function(out2, value) {
-        out2.lowerBound.x -= value;
-        out2.lowerBound.y -= value;
-        out2.upperBound.x += value;
-        out2.upperBound.y += value;
-        return out2;
+      AABB2.extend = function(out, value) {
+        out.lowerBound.x -= value;
+        out.lowerBound.y -= value;
+        out.upperBound.x += value;
+        out.upperBound.y += value;
+        return out;
       };
       AABB2.testOverlap = function(a2, b2) {
         var d1x = b2.lowerBound.x - a2.upperBound.x;
@@ -556,8 +579,8 @@
         return Vec2.areEqual(a2.lowerBound, b2.lowerBound) && Vec2.areEqual(a2.upperBound, b2.upperBound);
       };
       AABB2.diff = function(a2, b2) {
-        var wD = math_max$a(0, math_min$c(a2.upperBound.x, b2.upperBound.x) - math_max$a(b2.lowerBound.x, a2.lowerBound.x));
-        var hD = math_max$a(0, math_min$c(a2.upperBound.y, b2.upperBound.y) - math_max$a(b2.lowerBound.y, a2.lowerBound.y));
+        var wD = math_max$7(0, math_min$7(a2.upperBound.x, b2.upperBound.x) - math_max$7(b2.lowerBound.x, a2.lowerBound.x));
+        var hD = math_max$7(0, math_min$7(a2.upperBound.y, b2.upperBound.y) - math_max$7(b2.lowerBound.y, a2.lowerBound.y));
         var wA = a2.upperBound.x - a2.lowerBound.x;
         var hA = a2.upperBound.y - a2.lowerBound.y;
         var wB = b2.upperBound.x - b2.lowerBound.x;
@@ -592,7 +615,7 @@
               normal3.x = s2;
               tmin = t1;
             }
-            tmax = math_min$c(tmax, t2);
+            tmax = math_min$7(tmax, t2);
             if (tmin > tmax) {
               return false;
             }
@@ -619,7 +642,7 @@
               normal3.y = s2;
               tmin = t1;
             }
-            tmax = math_min$c(tmax, t2);
+            tmax = math_min$7(tmax, t2);
             if (tmin > tmax) {
               return false;
             }
@@ -635,24 +658,24 @@
       AABB2.prototype.toString = function() {
         return JSON.stringify(this);
       };
-      AABB2.combinePoints = function(out2, a2, b2) {
-        out2.lowerBound.x = math_min$c(a2.x, b2.x);
-        out2.lowerBound.y = math_min$c(a2.y, b2.y);
-        out2.upperBound.x = math_max$a(a2.x, b2.x);
-        out2.upperBound.y = math_max$a(a2.y, b2.y);
-        return out2;
+      AABB2.combinePoints = function(out, a2, b2) {
+        out.lowerBound.x = math_min$7(a2.x, b2.x);
+        out.lowerBound.y = math_min$7(a2.y, b2.y);
+        out.upperBound.x = math_max$7(a2.x, b2.x);
+        out.upperBound.y = math_max$7(a2.y, b2.y);
+        return out;
       };
       AABB2.combinedPerimeter = function(a2, b2) {
-        var lx = math_min$c(a2.lowerBound.x, b2.lowerBound.x);
-        var ly = math_min$c(a2.lowerBound.y, b2.lowerBound.y);
-        var ux = math_max$a(a2.upperBound.x, b2.upperBound.x);
-        var uy = math_max$a(a2.upperBound.y, b2.upperBound.y);
+        var lx = math_min$7(a2.lowerBound.x, b2.lowerBound.x);
+        var ly = math_min$7(a2.lowerBound.y, b2.lowerBound.y);
+        var ux = math_max$7(a2.upperBound.x, b2.upperBound.x);
+        var uy = math_max$7(a2.upperBound.y, b2.upperBound.y);
         return 2 * (ux - lx + uy - ly);
       };
       return AABB2;
     })()
   );
-  var math_PI$8 = Math.PI;
+  var math_PI$6 = Math.PI;
   var Settings = (
     /** @class */
     (function() {
@@ -677,21 +700,21 @@
       Settings2.aabbExtension = 0.1;
       Settings2.aabbMultiplier = 2;
       Settings2.linearSlop = 5e-3;
-      Settings2.angularSlop = 2 / 180 * math_PI$8;
+      Settings2.angularSlop = 2 / 180 * math_PI$6;
       Settings2.maxSubSteps = 8;
       Settings2.maxTOIContacts = 32;
       Settings2.maxTOIIterations = 20;
       Settings2.maxDistanceIterations = 20;
       Settings2.velocityThreshold = 1;
       Settings2.maxLinearCorrection = 0.2;
-      Settings2.maxAngularCorrection = 8 / 180 * math_PI$8;
+      Settings2.maxAngularCorrection = 8 / 180 * math_PI$6;
       Settings2.maxTranslation = 2;
-      Settings2.maxRotation = 0.5 * math_PI$8;
+      Settings2.maxRotation = 0.5 * math_PI$6;
       Settings2.baumgarte = 0.2;
       Settings2.toiBaugarte = 0.75;
       Settings2.timeToSleep = 0.5;
       Settings2.linearSleepTolerance = 0.01;
-      Settings2.angularSleepTolerance = 2 / 180 * math_PI$8;
+      Settings2.angularSleepTolerance = 2 / 180 * math_PI$6;
       return Settings2;
     })()
   );
@@ -958,8 +981,8 @@
       return Pool2;
     })()
   );
-  var math_abs$9 = Math.abs;
-  var math_max$9 = Math.max;
+  var math_abs$8 = Math.abs;
+  var math_max$6 = Math.max;
   var TreeNode = (
     /** @class */
     (function() {
@@ -1144,7 +1167,7 @@
           index = this.balance(index);
           var child1 = index.child1;
           var child2 = index.child2;
-          index.height = 1 + math_max$9(child1.height, child2.height);
+          index.height = 1 + math_max$6(child1.height, child2.height);
           index.aabb.combine(child1.aabb, child2.aabb);
           index = index.parent;
         }
@@ -1176,7 +1199,7 @@
             var child1 = index.child1;
             var child2 = index.child2;
             index.aabb.combine(child1.aabb, child2.aabb);
-            index.height = 1 + math_max$9(child1.height, child2.height);
+            index.height = 1 + math_max$6(child1.height, child2.height);
             index = index.parent;
           }
         } else {
@@ -1214,16 +1237,16 @@
             G.parent = A;
             A.aabb.combine(B.aabb, G.aabb);
             C.aabb.combine(A.aabb, F.aabb);
-            A.height = 1 + math_max$9(B.height, G.height);
-            C.height = 1 + math_max$9(A.height, F.height);
+            A.height = 1 + math_max$6(B.height, G.height);
+            C.height = 1 + math_max$6(A.height, F.height);
           } else {
             C.child2 = G;
             A.child2 = F;
             F.parent = A;
             A.aabb.combine(B.aabb, F.aabb);
             C.aabb.combine(A.aabb, G.aabb);
-            A.height = 1 + math_max$9(B.height, F.height);
-            C.height = 1 + math_max$9(A.height, G.height);
+            A.height = 1 + math_max$6(B.height, F.height);
+            C.height = 1 + math_max$6(A.height, G.height);
           }
           return C;
         }
@@ -1248,16 +1271,16 @@
             E.parent = A;
             A.aabb.combine(C.aabb, E.aabb);
             B.aabb.combine(A.aabb, D.aabb);
-            A.height = 1 + math_max$9(C.height, E.height);
-            B.height = 1 + math_max$9(A.height, D.height);
+            A.height = 1 + math_max$6(C.height, E.height);
+            B.height = 1 + math_max$6(A.height, D.height);
           } else {
             B.child2 = E;
             A.child1 = D;
             D.parent = A;
             A.aabb.combine(C.aabb, D.aabb);
             B.aabb.combine(A.aabb, E.aabb);
-            A.height = 1 + math_max$9(C.height, D.height);
-            B.height = 1 + math_max$9(A.height, E.height);
+            A.height = 1 + math_max$6(C.height, D.height);
+            B.height = 1 + math_max$6(A.height, E.height);
           }
           return B;
         }
@@ -1299,7 +1322,7 @@
         }
         var height1 = this.computeHeight(node.child1.id);
         var height2 = this.computeHeight(node.child2.id);
-        return 1 + math_max$9(height1, height2);
+        return 1 + math_max$6(height1, height2);
       };
       DynamicTree2.prototype.validateStructure = function(node) {
         if (node == null) {
@@ -1337,8 +1360,8 @@
           if (node.height <= 1) {
             continue;
           }
-          var balance = math_abs$9(node.child2.height - node.child1.height);
-          maxBalance = math_max$9(maxBalance, balance);
+          var balance = math_abs$8(node.child2.height - node.child1.height);
+          maxBalance = math_max$6(maxBalance, balance);
         }
         this.iteratorPool.release(it);
         return maxBalance;
@@ -1382,7 +1405,7 @@
           var parent_1 = this.allocateNode();
           parent_1.child1 = child1;
           parent_1.child2 = child2;
-          parent_1.height = 1 + math_max$9(child1.height, child2.height);
+          parent_1.height = 1 + math_max$6(child1.height, child2.height);
           parent_1.aabb.combine(child1.aabb, child2.aabb);
           parent_1.parent = null;
           child1.parent = parent_1;
@@ -1451,7 +1474,7 @@
           }
           var c2 = node.aabb.getCenter();
           var h = node.aabb.getExtents();
-          var separation = math_abs$9(Vec2.dot(v3, Vec2.sub(p1, c2))) - Vec2.dot(abs_v, h);
+          var separation = math_abs$8(Vec2.dot(v3, Vec2.sub(p1, c2))) - Vec2.dot(abs_v, h);
           if (separation > 0) {
             continue;
           }
@@ -1526,8 +1549,8 @@
       return Iterator2;
     })()
   );
-  var math_max$8 = Math.max;
-  var math_min$b = Math.min;
+  var math_max$5 = Math.max;
+  var math_min$6 = Math.min;
   var BroadPhase = (
     /** @class */
     (function() {
@@ -1542,8 +1565,8 @@
           if (proxyId === _this.m_queryProxyId) {
             return true;
           }
-          var proxyIdA = math_min$b(proxyId, _this.m_queryProxyId);
-          var proxyIdB = math_max$8(proxyId, _this.m_queryProxyId);
+          var proxyIdA = math_min$6(proxyId, _this.m_queryProxyId);
+          var proxyIdB = math_max$5(proxyId, _this.m_queryProxyId);
           var userDataA = _this.m_tree.getUserData(proxyIdA);
           var userDataB = _this.m_tree.getUserData(proxyIdB);
           _this.m_callback(userDataA, userDataB);
@@ -1623,114 +1646,114 @@
   );
   var math_sin$2 = Math.sin;
   var math_cos$2 = Math.cos;
-  var math_sqrt$7 = Math.sqrt;
+  var math_sqrt$4 = Math.sqrt;
   function vec2(x2, y) {
     return { x: x2, y };
   }
   function rotation(angle) {
     return { s: math_sin$2(angle), c: math_cos$2(angle) };
   }
-  function setVec2(out2, x2, y) {
-    out2.x = x2;
-    out2.y = y;
-    return out2;
+  function setVec2(out, x2, y) {
+    out.x = x2;
+    out.y = y;
+    return out;
   }
-  function copyVec2(out2, w) {
-    out2.x = w.x;
-    out2.y = w.y;
-    return out2;
+  function copyVec2(out, w) {
+    out.x = w.x;
+    out.y = w.y;
+    return out;
   }
-  function zeroVec2(out2) {
-    out2.x = 0;
-    out2.y = 0;
-    return out2;
+  function zeroVec2(out) {
+    out.x = 0;
+    out.y = 0;
+    return out;
   }
-  function negVec2(out2) {
-    out2.x = -out2.x;
-    out2.y = -out2.y;
-    return out2;
+  function negVec2(out) {
+    out.x = -out.x;
+    out.y = -out.y;
+    return out;
   }
-  function plusVec2(out2, w) {
-    out2.x += w.x;
-    out2.y += w.y;
-    return out2;
+  function plusVec2(out, w) {
+    out.x += w.x;
+    out.y += w.y;
+    return out;
   }
-  function addVec2(out2, v3, w) {
-    out2.x = v3.x + w.x;
-    out2.y = v3.y + w.y;
-    return out2;
+  function addVec2(out, v3, w) {
+    out.x = v3.x + w.x;
+    out.y = v3.y + w.y;
+    return out;
   }
-  function minusVec2(out2, w) {
-    out2.x -= w.x;
-    out2.y -= w.y;
-    return out2;
+  function minusVec2(out, w) {
+    out.x -= w.x;
+    out.y -= w.y;
+    return out;
   }
-  function subVec2(out2, v3, w) {
-    out2.x = v3.x - w.x;
-    out2.y = v3.y - w.y;
-    return out2;
+  function subVec2(out, v3, w) {
+    out.x = v3.x - w.x;
+    out.y = v3.y - w.y;
+    return out;
   }
-  function mulVec2(out2, m) {
-    out2.x *= m;
-    out2.y *= m;
-    return out2;
+  function mulVec2(out, m) {
+    out.x *= m;
+    out.y *= m;
+    return out;
   }
-  function scaleVec2(out2, m, w) {
-    out2.x = m * w.x;
-    out2.y = m * w.y;
-    return out2;
+  function scaleVec2(out, m, w) {
+    out.x = m * w.x;
+    out.y = m * w.y;
+    return out;
   }
-  function plusScaleVec2(out2, m, w) {
-    out2.x += m * w.x;
-    out2.y += m * w.y;
-    return out2;
+  function plusScaleVec2(out, m, w) {
+    out.x += m * w.x;
+    out.y += m * w.y;
+    return out;
   }
-  function minusScaleVec2(out2, m, w) {
-    out2.x -= m * w.x;
-    out2.y -= m * w.y;
-    return out2;
+  function minusScaleVec2(out, m, w) {
+    out.x -= m * w.x;
+    out.y -= m * w.y;
+    return out;
   }
-  function combine2Vec2(out2, am, a2, bm, b2) {
-    out2.x = am * a2.x + bm * b2.x;
-    out2.y = am * a2.y + bm * b2.y;
-    return out2;
+  function combine2Vec2(out, am, a2, bm, b2) {
+    out.x = am * a2.x + bm * b2.x;
+    out.y = am * a2.y + bm * b2.y;
+    return out;
   }
-  function combine3Vec2(out2, am, a2, bm, b2, cm, c2) {
-    out2.x = am * a2.x + bm * b2.x + cm * c2.x;
-    out2.y = am * a2.y + bm * b2.y + cm * c2.y;
-    return out2;
+  function combine3Vec2(out, am, a2, bm, b2, cm, c2) {
+    out.x = am * a2.x + bm * b2.x + cm * c2.x;
+    out.y = am * a2.y + bm * b2.y + cm * c2.y;
+    return out;
   }
-  function normalizeVec2Length(out2) {
-    var length2 = math_sqrt$7(out2.x * out2.x + out2.y * out2.y);
-    if (length2 !== 0) {
-      var invLength = 1 / length2;
-      out2.x *= invLength;
-      out2.y *= invLength;
+  function normalizeVec2Length(out) {
+    var length = math_sqrt$4(out.x * out.x + out.y * out.y);
+    if (length !== 0) {
+      var invLength = 1 / length;
+      out.x *= invLength;
+      out.y *= invLength;
     }
-    return length2;
+    return length;
   }
-  function normalizeVec2(out2) {
-    var length2 = math_sqrt$7(out2.x * out2.x + out2.y * out2.y);
-    if (length2 > 0) {
-      var invLength = 1 / length2;
-      out2.x *= invLength;
-      out2.y *= invLength;
+  function normalizeVec2(out) {
+    var length = math_sqrt$4(out.x * out.x + out.y * out.y);
+    if (length > 0) {
+      var invLength = 1 / length;
+      out.x *= invLength;
+      out.y *= invLength;
     }
-    return out2;
+    return out;
   }
-  function crossVec2Num(out2, v3, w) {
+  function crossVec2Num(out, v3, w) {
     var x2 = w * v3.y;
     var y = -w * v3.x;
-    out2.x = x2;
-    out2.y = y;
-    return out2;
+    out.x = x2;
+    out.y = y;
+    return out;
   }
-  function crossNumVec2(out2, w, v3) {
+  function crossNumVec2(out, w, v3) {
     var x2 = -w * v3.y;
     var y = w * v3.x;
-    out2.x = x2;
-    out2.y = y;
-    return out2;
+    out.x = x2;
+    out.y = y;
+    return out;
   }
   function crossVec2Vec2(a2, b2) {
     return a2.x * b2.y - a2.y * b2.x;
@@ -1744,90 +1767,90 @@
   function distVec2(a2, b2) {
     var dx = a2.x - b2.x;
     var dy = a2.y - b2.y;
-    return math_sqrt$7(dx * dx + dy * dy);
+    return math_sqrt$4(dx * dx + dy * dy);
   }
   function distSqrVec2(a2, b2) {
     var dx = a2.x - b2.x;
     var dy = a2.y - b2.y;
     return dx * dx + dy * dy;
   }
-  function setRotAngle(out2, a2) {
-    out2.c = math_cos$2(a2);
-    out2.s = math_sin$2(a2);
-    return out2;
+  function setRotAngle(out, a2) {
+    out.c = math_cos$2(a2);
+    out.s = math_sin$2(a2);
+    return out;
   }
-  function rotVec2(out2, q, v3) {
-    out2.x = q.c * v3.x - q.s * v3.y;
-    out2.y = q.s * v3.x + q.c * v3.y;
-    return out2;
+  function rotVec2(out, q, v3) {
+    out.x = q.c * v3.x - q.s * v3.y;
+    out.y = q.s * v3.x + q.c * v3.y;
+    return out;
   }
-  function derotVec2(out2, q, v3) {
+  function derotVec2(out, q, v3) {
     var x2 = q.c * v3.x + q.s * v3.y;
     var y = -q.s * v3.x + q.c * v3.y;
-    out2.x = x2;
-    out2.y = y;
-    return out2;
+    out.x = x2;
+    out.y = y;
+    return out;
   }
-  function rerotVec2(out2, before, after, v3) {
+  function rerotVec2(out, before, after, v3) {
     var x0 = before.c * v3.x + before.s * v3.y;
     var y0 = -before.s * v3.x + before.c * v3.y;
     var x2 = after.c * x0 - after.s * y0;
     var y = after.s * x0 + after.c * y0;
-    out2.x = x2;
-    out2.y = y;
-    return out2;
+    out.x = x2;
+    out.y = y;
+    return out;
   }
   function transform(x2, y, a2) {
     return { p: vec2(x2, y), q: rotation(a2) };
   }
-  function copyTransform(out2, transform2) {
-    out2.p.x = transform2.p.x;
-    out2.p.y = transform2.p.y;
-    out2.q.s = transform2.q.s;
-    out2.q.c = transform2.q.c;
-    return out2;
+  function copyTransform(out, transform2) {
+    out.p.x = transform2.p.x;
+    out.p.y = transform2.p.y;
+    out.q.s = transform2.q.s;
+    out.q.c = transform2.q.c;
+    return out;
   }
-  function transformVec2(out2, xf2, v3) {
+  function transformVec2(out, xf2, v3) {
     var x2 = xf2.q.c * v3.x - xf2.q.s * v3.y + xf2.p.x;
     var y = xf2.q.s * v3.x + xf2.q.c * v3.y + xf2.p.y;
-    out2.x = x2;
-    out2.y = y;
-    return out2;
+    out.x = x2;
+    out.y = y;
+    return out;
   }
-  function detransformVec2(out2, xf2, v3) {
+  function detransformVec2(out, xf2, v3) {
     var px = v3.x - xf2.p.x;
     var py = v3.y - xf2.p.y;
     var x2 = xf2.q.c * px + xf2.q.s * py;
     var y = -xf2.q.s * px + xf2.q.c * py;
-    out2.x = x2;
-    out2.y = y;
-    return out2;
+    out.x = x2;
+    out.y = y;
+    return out;
   }
-  function retransformVec2(out2, from, to, v3) {
+  function retransformVec2(out, from, to, v3) {
     var x0 = from.q.c * v3.x - from.q.s * v3.y + from.p.x;
     var y0 = from.q.s * v3.x + from.q.c * v3.y + from.p.y;
     var px = x0 - to.p.x;
     var py = y0 - to.p.y;
     var x2 = to.q.c * px + to.q.s * py;
     var y = -to.q.s * px + to.q.c * py;
-    out2.x = x2;
-    out2.y = y;
-    return out2;
+    out.x = x2;
+    out.y = y;
+    return out;
   }
-  function detransformTransform(out2, a2, b2) {
+  function detransformTransform(out, a2, b2) {
     var c2 = a2.q.c * b2.q.c + a2.q.s * b2.q.s;
     var s2 = a2.q.c * b2.q.s - a2.q.s * b2.q.c;
     var x2 = a2.q.c * (b2.p.x - a2.p.x) + a2.q.s * (b2.p.y - a2.p.y);
     var y = -a2.q.s * (b2.p.x - a2.p.x) + a2.q.c * (b2.p.y - a2.p.y);
-    out2.q.c = c2;
-    out2.q.s = s2;
-    out2.p.x = x2;
-    out2.p.y = y;
-    return out2;
+    out.q.c = c2;
+    out.q.s = s2;
+    out.p.x = x2;
+    out.p.y = y;
+    return out;
   }
   var math_sin$1 = Math.sin;
   var math_cos$1 = Math.cos;
-  var math_atan2$3 = Math.atan2;
+  var math_atan2$1 = Math.atan2;
   var Rot = (
     /** @class */
     (function() {
@@ -1890,7 +1913,7 @@
         this.c = math_cos$1(angle);
       };
       Rot2.prototype.getAngle = function() {
-        return math_atan2$3(this.s, this.c);
+        return math_atan2$1(this.s, this.c);
       };
       Rot2.prototype.getXAxis = function() {
         return Vec2.neo(this.c, this.s);
@@ -1944,8 +1967,8 @@
       return Rot2;
     })()
   );
-  var math_atan2$2 = Math.atan2;
-  var math_PI$7 = Math.PI;
+  var math_atan2 = Math.atan2;
+  var math_PI$5 = Math.PI;
   var temp$7 = vec2(0, 0);
   var Sweep = (
     /** @class */
@@ -1970,7 +1993,7 @@
         transformVec2(temp$7, xf2, this.localCenter);
         copyVec2(this.c, temp$7);
         copyVec2(this.c0, temp$7);
-        this.a = this.a0 = math_atan2$2(xf2.q.s, xf2.q.c);
+        this.a = this.a0 = math_atan2(xf2.q.s, xf2.q.c);
       };
       Sweep2.prototype.setLocalCenter = function(localCenter2, xf2) {
         copyVec2(this.localCenter, localCenter2);
@@ -1997,7 +2020,7 @@
         copyVec2(this.c0, this.c);
       };
       Sweep2.prototype.normalize = function() {
-        var a0 = mod(this.a0, -math_PI$7, +math_PI$7);
+        var a0 = mod(this.a0, -math_PI$5, +math_PI$5);
         this.a -= this.a0 - a0;
         this.a0 = a0;
       };
@@ -3085,7 +3108,7 @@
       return Joint2;
     })()
   );
-  var stats$1 = {
+  var stats = {
     gjkCalls: 0,
     gjkIters: 0,
     gjkMaxIters: 0,
@@ -3117,7 +3140,7 @@
     now,
     diff
   };
-  var math_max$7 = Math.max;
+  var math_max$4 = Math.max;
   var temp$5 = vec2(0, 0);
   var normal$4 = vec2(0, 0);
   var e12 = vec2(0, 0);
@@ -3125,9 +3148,9 @@
   var e23 = vec2(0, 0);
   var temp1 = vec2(0, 0);
   var temp2 = vec2(0, 0);
-  stats$1.gjkCalls = 0;
-  stats$1.gjkIters = 0;
-  stats$1.gjkMaxIters = 0;
+  stats.gjkCalls = 0;
+  stats.gjkIters = 0;
+  stats.gjkMaxIters = 0;
   var DistanceInput = (
     /** @class */
     (function() {
@@ -3185,7 +3208,7 @@
     })()
   );
   var Distance = function(output2, cache2, input2) {
-    ++stats$1.gjkCalls;
+    ++stats.gjkCalls;
     var proxyA = input2.proxyA;
     var proxyB = input2.proxyB;
     var xfA2 = input2.transformA;
@@ -3219,7 +3242,7 @@
       transformVec2(vertex.wB, xfB2, proxyB.getVertex(vertex.indexB));
       subVec2(vertex.w, vertex.wB, vertex.wA);
       ++iter;
-      ++stats$1.gjkIters;
+      ++stats.gjkIters;
       var duplicate = false;
       for (var i = 0; i < saveCount; ++i) {
         if (vertex.indexA === saveA[i] && vertex.indexB === saveB[i]) {
@@ -3232,7 +3255,7 @@
       }
       ++simplex.m_count;
     }
-    stats$1.gjkMaxIters = math_max$7(stats$1.gjkMaxIters, iter);
+    stats.gjkMaxIters = math_max$4(stats.gjkMaxIters, iter);
     simplex.getWitnessPoints(output2.pointA, output2.pointB);
     output2.distance = distVec2(output2.pointA, output2.pointB);
     output2.iterations = iter;
@@ -3670,8 +3693,8 @@
     output2.point.setZero();
     var proxyA = input2.proxyA;
     var proxyB = input2.proxyB;
-    var radiusA = math_max$7(proxyA.m_radius, SettingsInternal.polygonRadius);
-    var radiusB = math_max$7(proxyB.m_radius, SettingsInternal.polygonRadius);
+    var radiusA = math_max$4(proxyA.m_radius, SettingsInternal.polygonRadius);
+    var radiusB = math_max$4(proxyB.m_radius, SettingsInternal.polygonRadius);
     var radius = radiusA + radiusB;
     var xfA2 = input2.transformA;
     var xfB2 = input2.transformB;
@@ -3686,7 +3709,7 @@
     var indexB = proxyB.getSupport(Rot.mulTVec2(xfB2.q, r));
     var wB = Transform.mulVec2(xfB2, proxyB.getVertex(indexB));
     var v3 = Vec2.sub(wA, wB);
-    var sigma = math_max$7(SettingsInternal.polygonRadius, radius - SettingsInternal.polygonRadius);
+    var sigma = math_max$4(SettingsInternal.polygonRadius, radius - SettingsInternal.polygonRadius);
     var tolerance = 0.5 * SettingsInternal.linearSlop;
     var k_maxIters = 20;
     var iter = 0;
@@ -3751,8 +3774,8 @@
     output2.iterations = iter;
     return true;
   };
-  var math_abs$8 = Math.abs;
-  var math_max$6 = Math.max;
+  var math_abs$7 = Math.abs;
+  var math_max$3 = Math.max;
   var TOIInput = (
     /** @class */
     (function() {
@@ -3795,13 +3818,13 @@
       return TOIOutput2;
     })()
   );
-  stats$1.toiTime = 0;
-  stats$1.toiMaxTime = 0;
-  stats$1.toiCalls = 0;
-  stats$1.toiIters = 0;
-  stats$1.toiMaxIters = 0;
-  stats$1.toiRootIters = 0;
-  stats$1.toiMaxRootIters = 0;
+  stats.toiTime = 0;
+  stats.toiMaxTime = 0;
+  stats.toiCalls = 0;
+  stats.toiIters = 0;
+  stats.toiMaxIters = 0;
+  stats.toiRootIters = 0;
+  stats.toiMaxRootIters = 0;
   var distanceInput = new DistanceInput();
   var distanceOutput = new DistanceOutput();
   var cache = new SimplexCache();
@@ -3817,7 +3840,7 @@
   var localPointB = vec2(0, 0);
   var TimeOfImpact = function(output2, input2) {
     var timer = Timer.now();
-    ++stats$1.toiCalls;
+    ++stats.toiCalls;
     output2.state = exports2.TOIOutputState.e_unknown;
     output2.t = input2.tMax;
     var proxyA = input2.proxyA;
@@ -3828,7 +3851,7 @@
     sweepB.normalize();
     var tMax = input2.tMax;
     var totalRadius = proxyA.m_radius + proxyB.m_radius;
-    var target = math_max$6(SettingsInternal.linearSlop, totalRadius - 3 * SettingsInternal.linearSlop);
+    var target = math_max$3(SettingsInternal.linearSlop, totalRadius - 3 * SettingsInternal.linearSlop);
     var tolerance = 0.25 * SettingsInternal.linearSlop;
     var t1 = 0;
     var k_maxIterations = SettingsInternal.maxTOIIterations;
@@ -3893,9 +3916,9 @@
             t = 0.5 * (a1 + a2);
           }
           ++rootIterCount;
-          ++stats$1.toiRootIters;
+          ++stats.toiRootIters;
           var s3 = separationFunction.evaluate(t);
-          if (math_abs$8(s3 - target) < tolerance) {
+          if (math_abs$7(s3 - target) < tolerance) {
             t2 = t;
             break;
           }
@@ -3910,14 +3933,14 @@
             break;
           }
         }
-        stats$1.toiMaxRootIters = math_max$6(stats$1.toiMaxRootIters, rootIterCount);
+        stats.toiMaxRootIters = math_max$3(stats.toiMaxRootIters, rootIterCount);
         ++pushBackIter;
         if (pushBackIter === SettingsInternal.maxPolygonVertices) {
           break;
         }
       }
       ++iter;
-      ++stats$1.toiIters;
+      ++stats.toiIters;
       if (done) {
         break;
       }
@@ -3927,10 +3950,10 @@
         break;
       }
     }
-    stats$1.toiMaxIters = math_max$6(stats$1.toiMaxIters, iter);
+    stats.toiMaxIters = math_max$3(stats.toiMaxIters, iter);
     var time = Timer.diff(timer);
-    stats$1.toiMaxTime = math_max$6(stats$1.toiMaxTime, time);
-    stats$1.toiTime += time;
+    stats.toiMaxTime = math_max$3(stats.toiMaxTime, time);
+    stats.toiTime += time;
     separationFunction.recycle();
   };
   var SeparationFunctionType;
@@ -4082,9 +4105,9 @@
   var separationFunction = new SeparationFunction();
   TimeOfImpact.Input = TOIInput;
   TimeOfImpact.Output = TOIOutput;
-  var math_abs$7 = Math.abs;
-  var math_sqrt$6 = Math.sqrt;
-  var math_min$a = Math.min;
+  var math_abs$6 = Math.abs;
+  var math_sqrt$3 = Math.sqrt;
+  var math_min$5 = Math.min;
   var TimeStep = (
     /** @class */
     (function() {
@@ -4330,12 +4353,12 @@
           scaleVec2(translation, h, v);
           var translationLengthSqr = lengthSqrVec2(translation);
           if (translationLengthSqr > SettingsInternal.maxTranslationSquared) {
-            var ratio = SettingsInternal.maxTranslation / math_sqrt$6(translationLengthSqr);
+            var ratio = SettingsInternal.maxTranslation / math_sqrt$3(translationLengthSqr);
             mulVec2(v, ratio);
           }
           var rotation2 = h * w;
           if (rotation2 * rotation2 > SettingsInternal.maxRotationSquared) {
-            var ratio = SettingsInternal.maxRotation / math_abs$7(rotation2);
+            var ratio = SettingsInternal.maxRotation / math_abs$6(rotation2);
             w *= ratio;
           }
           plusScaleVec2(c, h, v);
@@ -4351,7 +4374,7 @@
           for (var j = 0; j < this.m_contacts.length; ++j) {
             var contact = this.m_contacts[j];
             var separation = contact.solvePositionConstraint(step);
-            minSeparation = math_min$a(minSeparation, separation);
+            minSeparation = math_min$5(minSeparation, separation);
           }
           var contactsOkay = minSeparation >= -3 * SettingsInternal.linearSlop;
           var jointsOkay = true;
@@ -4388,7 +4411,7 @@
               minSleepTime = 0;
             } else {
               body.m_sleepTime += h;
-              minSleepTime = math_min$a(minSleepTime, body.m_sleepTime);
+              minSleepTime = math_min$5(minSleepTime, body.m_sleepTime);
             }
           }
           if (minSleepTime >= SettingsInternal.timeToSleep && positionSolved) {
@@ -4462,7 +4485,7 @@
               TimeOfImpact(output, input);
               var beta = output.t;
               if (output.state == exports2.TOIOutputState.e_touching) {
-                alpha = math_min$a(alpha0 + (1 - alpha0) * beta, 1);
+                alpha = math_min$5(alpha0 + (1 - alpha0) * beta, 1);
               } else {
                 alpha = 1;
               }
@@ -4589,7 +4612,7 @@
           for (var j = 0; j < this.m_contacts.length; ++j) {
             var contact = this.m_contacts[j];
             var separation = contact.solvePositionConstraintTOI(subStep, toiA, toiB);
-            minSeparation = math_min$a(minSeparation, separation);
+            minSeparation = math_min$5(minSeparation, separation);
           }
           var contactsOkay = minSeparation >= -1.5 * SettingsInternal.linearSlop;
           if (contactsOkay) {
@@ -4621,12 +4644,12 @@
           scaleVec2(translation, h, v);
           var translationLengthSqr = lengthSqrVec2(translation);
           if (translationLengthSqr > SettingsInternal.maxTranslationSquared) {
-            var ratio = SettingsInternal.maxTranslation / math_sqrt$6(translationLengthSqr);
+            var ratio = SettingsInternal.maxTranslation / math_sqrt$3(translationLengthSqr);
             mulVec2(v, ratio);
           }
           var rotation2 = h * w;
           if (rotation2 * rotation2 > SettingsInternal.maxRotationSquared) {
-            var ratio = SettingsInternal.maxRotation / math_abs$7(rotation2);
+            var ratio = SettingsInternal.maxRotation / math_abs$6(rotation2);
             w *= ratio;
           }
           plusScaleVec2(c, h, v);
@@ -4784,7 +4807,7 @@
       return Mat222;
     })()
   );
-  var math_sqrt$5 = Math.sqrt;
+  var math_sqrt$2 = Math.sqrt;
   var pointA$1 = vec2(0, 0);
   var pointB$1 = vec2(0, 0);
   var temp$3 = vec2(0, 0);
@@ -4874,7 +4897,7 @@
             subVec2(dist, pointB$1, pointA$1);
             var lengthSqr = lengthSqrVec2(dist);
             if (lengthSqr > EPSILON * EPSILON) {
-              var length_1 = math_sqrt$5(lengthSqr);
+              var length_1 = math_sqrt$2(lengthSqr);
               scaleVec2(normal3, 1 / length_1, dist);
             }
             combine2Vec2(cA$1, 1, pointA$1, radiusA, normal3);
@@ -5047,9 +5070,9 @@
     }
     return numOut;
   }
-  var math_sqrt$4 = Math.sqrt;
-  var math_max$5 = Math.max;
-  var math_min$9 = Math.min;
+  var math_sqrt$1 = Math.sqrt;
+  var math_max$2 = Math.max;
+  var math_min$4 = Math.min;
   var contactPool = new Pool({
     create: function() {
       return new Contact();
@@ -5078,7 +5101,7 @@
     })()
   );
   function mixFriction(friction1, friction2) {
-    return math_sqrt$4(friction1 * friction2);
+    return math_sqrt$1(friction1 * friction2);
   }
   function mixRestitution(restitution1, restitution2) {
     return restitution1 > restitution2 ? restitution1 : restitution2;
@@ -5520,11 +5543,11 @@
           }
           subVec2(rA, point, cA);
           subVec2(rB, point, cB);
-          minSeparation = math_min$9(minSeparation, separation);
+          minSeparation = math_min$4(minSeparation, separation);
           var baumgarte = toi ? SettingsInternal.toiBaugarte : SettingsInternal.baumgarte;
           var linearSlop = SettingsInternal.linearSlop;
           var maxLinearCorrection = SettingsInternal.maxLinearCorrection;
-          var C = clamp$1(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0);
+          var C = clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0);
           var rnA = crossVec2Vec2(rA, normal$2);
           var rnB = crossVec2Vec2(rB, normal$2);
           var K = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
@@ -5712,7 +5735,7 @@
           var vt = dotVec2(dv, tangent$1) - this.v_tangentSpeed;
           var lambda = vcp.tangentMass * -vt;
           var maxFriction = friction * vcp.normalImpulse;
-          var newImpulse = clamp$1(vcp.tangentImpulse + lambda, -maxFriction, maxFriction);
+          var newImpulse = clamp(vcp.tangentImpulse + lambda, -maxFriction, maxFriction);
           lambda = newImpulse - vcp.tangentImpulse;
           vcp.tangentImpulse = newImpulse;
           scaleVec2(P$1, lambda, tangent$1);
@@ -5731,7 +5754,7 @@
             minusVec2(dv, crossNumVec2(temp$2, wA, vcp.rA));
             var vn = dotVec2(dv, normal$2);
             var lambda = -vcp.normalMass * (vn - vcp.velocityBias);
-            var newImpulse = math_max$5(vcp.normalImpulse + lambda, 0);
+            var newImpulse = math_max$2(vcp.normalImpulse + lambda, 0);
             lambda = newImpulse - vcp.normalImpulse;
             vcp.normalImpulse = newImpulse;
             scaleVec2(P$1, lambda, normal$2);
@@ -5914,7 +5937,7 @@
       return Contact2;
     })()
   );
-  var DEFAULTS$c = {
+  var DEFAULTS$b = {
     gravity: Vec2.zero(),
     allowSleep: true,
     warmStarting: true,
@@ -5937,7 +5960,7 @@
         } else if (Vec2.isValid(def)) {
           def = { gravity: def };
         }
-        def = options(def, DEFAULTS$c);
+        def = options(def, DEFAULTS$b);
         this.m_solver = new Solver(this);
         this.m_broadPhase = new BroadPhase();
         this.m_contactList = null;
@@ -6633,7 +6656,7 @@
   var EdgeShape = (
     /** @class */
     (function(_super) {
-      __extends$1(EdgeShape2, _super);
+      __extends(EdgeShape2, _super);
       function EdgeShape2(v122, v22) {
         var _this = this;
         if (!(_this instanceof EdgeShape2)) {
@@ -6797,7 +6820,7 @@
   var ChainShape = (
     /** @class */
     (function(_super) {
-      __extends$1(ChainShape2, _super);
+      __extends(ChainShape2, _super);
       function ChainShape2(vertices, loop) {
         var _this = this;
         if (!(_this instanceof ChainShape2)) {
@@ -6984,8 +7007,8 @@
       return ChainShape2;
     })(Shape)
   );
-  var math_max$4 = Math.max;
-  var math_min$8 = Math.min;
+  var math_max$1 = Math.max;
+  var math_min$3 = Math.min;
   var temp$1 = vec2(0, 0);
   var e$1 = vec2(0, 0);
   var e1$1 = vec2(0, 0);
@@ -6995,7 +7018,7 @@
   var PolygonShape = (
     /** @class */
     (function(_super) {
-      __extends$1(PolygonShape2, _super);
+      __extends(PolygonShape2, _super);
       function PolygonShape2(vertices) {
         var _this = this;
         if (!(_this instanceof PolygonShape2)) {
@@ -7060,7 +7083,7 @@
           this._setAsBox(1, 1);
           return;
         }
-        var n2 = math_min$8(vertices.length, SettingsInternal.maxPolygonVertices);
+        var n2 = math_min$3(vertices.length, SettingsInternal.maxPolygonVertices);
         var ps = [];
         for (var i = 0; i < n2; ++i) {
           var v3 = vertices[i];
@@ -7206,10 +7229,10 @@
         var maxY = -Infinity;
         for (var i = 0; i < this.m_count; ++i) {
           var v3 = transformVec2(temp$1, xf2, this.m_vertices[i]);
-          minX = math_min$8(minX, v3.x);
-          maxX = math_max$4(maxX, v3.x);
-          minY = math_min$8(minY, v3.y);
-          maxY = math_max$4(maxY, v3.y);
+          minX = math_min$3(minX, v3.x);
+          maxX = math_max$1(maxX, v3.x);
+          minY = math_min$3(minY, v3.y);
+          maxY = math_max$1(maxY, v3.y);
         }
         setVec2(aabb.lowerBound, minX - this.m_radius, minY - this.m_radius);
         setVec2(aabb.upperBound, maxX + this.m_radius, maxY + this.m_radius);
@@ -7301,13 +7324,13 @@
     c2.mul(1 / area);
     return c2;
   }
-  var math_sqrt$3 = Math.sqrt;
-  var math_PI$6 = Math.PI;
+  var math_sqrt = Math.sqrt;
+  var math_PI$4 = Math.PI;
   var temp = vec2(0, 0);
   var CircleShape = (
     /** @class */
     (function(_super) {
-      __extends$1(CircleShape2, _super);
+      __extends(CircleShape2, _super);
       function CircleShape2(a2, b2) {
         var _this = this;
         if (!(_this instanceof CircleShape2)) {
@@ -7373,7 +7396,7 @@
         if (sigma < 0 || rr < EPSILON) {
           return false;
         }
-        var a2 = -(c2 + math_sqrt$3(sigma));
+        var a2 = -(c2 + math_sqrt(sigma));
         if (0 <= a2 && a2 <= input2.maxFraction * rr) {
           a2 /= rr;
           output2.fraction = a2;
@@ -7389,7 +7412,7 @@
         setVec2(aabb.upperBound, p.x + this.m_radius, p.y + this.m_radius);
       };
       CircleShape2.prototype.computeMass = function(massData, density) {
-        massData.mass = density * math_PI$6 * this.m_radius * this.m_radius;
+        massData.mass = density * math_PI$4 * this.m_radius * this.m_radius;
         copyVec2(massData.center, this.m_p);
         massData.I = massData.mass * (0.5 * this.m_radius * this.m_radius + lengthSqrVec2(this.m_p));
       };
@@ -7403,16 +7426,16 @@
       return CircleShape2;
     })(Shape)
   );
-  var math_abs$6 = Math.abs;
-  var math_PI$5 = Math.PI;
-  var DEFAULTS$b = {
+  var math_abs$5 = Math.abs;
+  var math_PI$3 = Math.PI;
+  var DEFAULTS$a = {
     frequencyHz: 0,
     dampingRatio: 0
   };
   var DistanceJoint = (
     /** @class */
     (function(_super) {
-      __extends$1(DistanceJoint2, _super);
+      __extends(DistanceJoint2, _super);
       function DistanceJoint2(def, bodyA, bodyB, anchorA, anchorB) {
         var _this = this;
         if (!(_this instanceof DistanceJoint2)) {
@@ -7423,7 +7446,7 @@
           bodyB = anchorA;
           anchorA = temp3;
         }
-        def = options(def, DEFAULTS$b);
+        def = options(def, DEFAULTS$a);
         _this = _super.call(this, def, bodyA, bodyB) || this;
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
@@ -7452,7 +7475,7 @@
         };
       };
       DistanceJoint2._deserialize = function(data, world, restore) {
-        data = __assign$1({}, data);
+        data = __assign({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new DistanceJoint2(data);
@@ -7488,8 +7511,8 @@
       DistanceJoint2.prototype.getLocalAnchorB = function() {
         return this.m_localAnchorB;
       };
-      DistanceJoint2.prototype.setLength = function(length2) {
-        this.m_length = length2;
+      DistanceJoint2.prototype.setLength = function(length) {
+        this.m_length = length;
       };
       DistanceJoint2.prototype.getLength = function() {
         return this.m_length;
@@ -7538,9 +7561,9 @@
         this.m_rA = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
         this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
         this.m_u = Vec2.sub(Vec2.add(cB2, this.m_rB), Vec2.add(cA2, this.m_rA));
-        var length2 = this.m_u.length();
-        if (length2 > SettingsInternal.linearSlop) {
-          this.m_u.mul(1 / length2);
+        var length = this.m_u.length();
+        if (length > SettingsInternal.linearSlop) {
+          this.m_u.mul(1 / length);
         } else {
           this.m_u.setNum(0, 0);
         }
@@ -7549,8 +7572,8 @@
         var invMass = this.m_invMassA + this.m_invIA * crAu * crAu + this.m_invMassB + this.m_invIB * crBu * crBu;
         this.m_mass = invMass != 0 ? 1 / invMass : 0;
         if (this.m_frequencyHz > 0) {
-          var C = length2 - this.m_length;
-          var omega = 2 * math_PI$5 * this.m_frequencyHz;
+          var C = length - this.m_length;
+          var omega = 2 * math_PI$3 * this.m_frequencyHz;
           var d2 = 2 * this.m_mass * this.m_dampingRatio * omega;
           var k = this.m_mass * omega * omega;
           var h = step.dt;
@@ -7611,8 +7634,8 @@
         var rA2 = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
         var rB2 = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
         var u = Vec2.sub(Vec2.add(cB2, rB2), Vec2.add(cA2, rA2));
-        var length2 = u.normalize();
-        var C = clamp$1(length2 - this.m_length, -SettingsInternal.maxLinearCorrection, SettingsInternal.maxLinearCorrection);
+        var length = u.normalize();
+        var C = clamp(length - this.m_length, -SettingsInternal.maxLinearCorrection, SettingsInternal.maxLinearCorrection);
         var impulse = -this.m_mass * C;
         var P3 = Vec2.mulNumVec2(impulse, u);
         cA2.subMul(this.m_invMassA, P3);
@@ -7623,26 +7646,26 @@
         this.m_bodyA.c_position.a = aA;
         this.m_bodyB.c_position.c.setVec2(cB2);
         this.m_bodyB.c_position.a = aB;
-        return math_abs$6(C) < SettingsInternal.linearSlop;
+        return math_abs$5(C) < SettingsInternal.linearSlop;
       };
       DistanceJoint2.TYPE = "distance-joint";
       return DistanceJoint2;
     })(Joint)
   );
-  var DEFAULTS$a = {
+  var DEFAULTS$9 = {
     maxForce: 0,
     maxTorque: 0
   };
   var FrictionJoint = (
     /** @class */
     (function(_super) {
-      __extends$1(FrictionJoint2, _super);
+      __extends(FrictionJoint2, _super);
       function FrictionJoint2(def, bodyA, bodyB, anchor) {
         var _this = this;
         if (!(_this instanceof FrictionJoint2)) {
           return new FrictionJoint2(def, bodyA, bodyB, anchor);
         }
-        def = options(def, DEFAULTS$a);
+        def = options(def, DEFAULTS$9);
         _this = _super.call(this, def, bodyA, bodyB) || this;
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
@@ -7668,7 +7691,7 @@
         };
       };
       FrictionJoint2._deserialize = function(data, world, restore) {
-        data = __assign$1({}, data);
+        data = __assign({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new FrictionJoint2(data);
@@ -7785,7 +7808,7 @@
           var impulse = -this.m_angularMass * Cdot;
           var oldImpulse = this.m_angularImpulse;
           var maxImpulse = h * this.m_maxTorque;
-          this.m_angularImpulse = clamp$1(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
+          this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
           impulse = this.m_angularImpulse - oldImpulse;
           wA -= iA * impulse;
           wB += iB * impulse;
@@ -7955,7 +7978,7 @@
       return Mat332;
     })()
   );
-  var math_abs$5 = Math.abs;
+  var math_abs$4 = Math.abs;
   var LimitState$2;
   (function(LimitState2) {
     LimitState2[LimitState2["inactiveLimit"] = 0] = "inactiveLimit";
@@ -7963,7 +7986,7 @@
     LimitState2[LimitState2["atUpperLimit"] = 2] = "atUpperLimit";
     LimitState2[LimitState2["equalLimits"] = 3] = "equalLimits";
   })(LimitState$2 || (LimitState$2 = {}));
-  var DEFAULTS$9 = {
+  var DEFAULTS$8 = {
     lowerAngle: 0,
     upperAngle: 0,
     maxMotorTorque: 0,
@@ -7974,7 +7997,7 @@
   var RevoluteJoint = (
     /** @class */
     (function(_super) {
-      __extends$1(RevoluteJoint2, _super);
+      __extends(RevoluteJoint2, _super);
       function RevoluteJoint2(def, bodyA, bodyB, anchor) {
         var _this = this;
         var _a2, _b, _c, _d, _e, _f;
@@ -8009,12 +8032,12 @@
         }
         _this.m_impulse = new Vec3();
         _this.m_motorImpulse = 0;
-        _this.m_lowerAngle = (_a2 = def.lowerAngle) !== null && _a2 !== void 0 ? _a2 : DEFAULTS$9.lowerAngle;
-        _this.m_upperAngle = (_b = def.upperAngle) !== null && _b !== void 0 ? _b : DEFAULTS$9.upperAngle;
-        _this.m_maxMotorTorque = (_c = def.maxMotorTorque) !== null && _c !== void 0 ? _c : DEFAULTS$9.maxMotorTorque;
-        _this.m_motorSpeed = (_d = def.motorSpeed) !== null && _d !== void 0 ? _d : DEFAULTS$9.motorSpeed;
-        _this.m_enableLimit = (_e = def.enableLimit) !== null && _e !== void 0 ? _e : DEFAULTS$9.enableLimit;
-        _this.m_enableMotor = (_f = def.enableMotor) !== null && _f !== void 0 ? _f : DEFAULTS$9.enableMotor;
+        _this.m_lowerAngle = (_a2 = def.lowerAngle) !== null && _a2 !== void 0 ? _a2 : DEFAULTS$8.lowerAngle;
+        _this.m_upperAngle = (_b = def.upperAngle) !== null && _b !== void 0 ? _b : DEFAULTS$8.upperAngle;
+        _this.m_maxMotorTorque = (_c = def.maxMotorTorque) !== null && _c !== void 0 ? _c : DEFAULTS$8.maxMotorTorque;
+        _this.m_motorSpeed = (_d = def.motorSpeed) !== null && _d !== void 0 ? _d : DEFAULTS$8.motorSpeed;
+        _this.m_enableLimit = (_e = def.enableLimit) !== null && _e !== void 0 ? _e : DEFAULTS$8.enableLimit;
+        _this.m_enableMotor = (_f = def.enableMotor) !== null && _f !== void 0 ? _f : DEFAULTS$8.enableMotor;
         return _this;
       }
       RevoluteJoint2.prototype._serialize = function() {
@@ -8035,7 +8058,7 @@
         };
       };
       RevoluteJoint2._deserialize = function(data, world, restore) {
-        data = __assign$1({}, data);
+        data = __assign({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new RevoluteJoint2(data);
@@ -8204,7 +8227,7 @@
         }
         if (this.m_enableLimit && fixedRotation == false) {
           var jointAngle = aB - aA - this.m_referenceAngle;
-          if (math_abs$5(this.m_upperAngle - this.m_lowerAngle) < 2 * SettingsInternal.angularSlop) {
+          if (math_abs$4(this.m_upperAngle - this.m_lowerAngle) < 2 * SettingsInternal.angularSlop) {
             this.m_limitState = LimitState$2.equalLimits;
           } else if (jointAngle <= this.m_lowerAngle) {
             if (this.m_limitState != LimitState$2.atLowerLimit) {
@@ -8255,7 +8278,7 @@
           var impulse = -this.m_motorMass * Cdot;
           var oldImpulse = this.m_motorImpulse;
           var maxImpulse = step.dt * this.m_maxMotorTorque;
-          this.m_motorImpulse = clamp$1(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
+          this.m_motorImpulse = clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
           impulse = this.m_motorImpulse - oldImpulse;
           wA -= iA * impulse;
           wB += iB * impulse;
@@ -8334,18 +8357,18 @@
           var angle = aB - aA - this.m_referenceAngle;
           var limitImpulse = 0;
           if (this.m_limitState == LimitState$2.equalLimits) {
-            var C = clamp$1(angle - this.m_lowerAngle, -SettingsInternal.maxAngularCorrection, SettingsInternal.maxAngularCorrection);
+            var C = clamp(angle - this.m_lowerAngle, -SettingsInternal.maxAngularCorrection, SettingsInternal.maxAngularCorrection);
             limitImpulse = -this.m_motorMass * C;
-            angularError = math_abs$5(C);
+            angularError = math_abs$4(C);
           } else if (this.m_limitState == LimitState$2.atLowerLimit) {
             var C = angle - this.m_lowerAngle;
             angularError = -C;
-            C = clamp$1(C + SettingsInternal.angularSlop, -SettingsInternal.maxAngularCorrection, 0);
+            C = clamp(C + SettingsInternal.angularSlop, -SettingsInternal.maxAngularCorrection, 0);
             limitImpulse = -this.m_motorMass * C;
           } else if (this.m_limitState == LimitState$2.atUpperLimit) {
             var C = angle - this.m_upperAngle;
             angularError = C;
-            C = clamp$1(C - SettingsInternal.angularSlop, 0, SettingsInternal.maxAngularCorrection);
+            C = clamp(C - SettingsInternal.angularSlop, 0, SettingsInternal.maxAngularCorrection);
             limitImpulse = -this.m_motorMass * C;
           }
           aA -= this.m_invIA * limitImpulse;
@@ -8385,9 +8408,9 @@
       return RevoluteJoint2;
     })(Joint)
   );
-  var math_abs$4 = Math.abs;
-  var math_max$3 = Math.max;
-  var math_min$7 = Math.min;
+  var math_abs$3 = Math.abs;
+  var math_max = Math.max;
+  var math_min$2 = Math.min;
   var LimitState$1;
   (function(LimitState2) {
     LimitState2[LimitState2["inactiveLimit"] = 0] = "inactiveLimit";
@@ -8395,7 +8418,7 @@
     LimitState2[LimitState2["atUpperLimit"] = 2] = "atUpperLimit";
     LimitState2[LimitState2["equalLimits"] = 3] = "equalLimits";
   })(LimitState$1 || (LimitState$1 = {}));
-  var DEFAULTS$8 = {
+  var DEFAULTS$7 = {
     enableLimit: false,
     lowerTranslation: 0,
     upperTranslation: 0,
@@ -8406,13 +8429,13 @@
   var PrismaticJoint = (
     /** @class */
     (function(_super) {
-      __extends$1(PrismaticJoint2, _super);
+      __extends(PrismaticJoint2, _super);
       function PrismaticJoint2(def, bodyA, bodyB, anchor, axis) {
         var _this = this;
         if (!(_this instanceof PrismaticJoint2)) {
           return new PrismaticJoint2(def, bodyA, bodyB, anchor, axis);
         }
-        def = options(def, DEFAULTS$8);
+        def = options(def, DEFAULTS$7);
         _this = _super.call(this, def, bodyA, bodyB) || this;
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
@@ -8457,7 +8480,7 @@
         };
       };
       PrismaticJoint2._deserialize = function(data, world, restore) {
-        data = __assign$1({}, data);
+        data = __assign({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         data.localAxisA = Vec2.clone(data.localAxisA);
@@ -8663,7 +8686,7 @@
         }
         if (this.m_enableLimit) {
           var jointTranslation = Vec2.dot(this.m_axis, d2);
-          if (math_abs$4(this.m_upperTranslation - this.m_lowerTranslation) < 2 * SettingsInternal.linearSlop) {
+          if (math_abs$3(this.m_upperTranslation - this.m_lowerTranslation) < 2 * SettingsInternal.linearSlop) {
             this.m_limitState = LimitState$1.equalLimits;
           } else if (jointTranslation <= this.m_lowerTranslation) {
             if (this.m_limitState != LimitState$1.atLowerLimit) {
@@ -8719,7 +8742,7 @@
           var impulse = this.m_motorMass * (this.m_motorSpeed - Cdot);
           var oldImpulse = this.m_motorImpulse;
           var maxImpulse = step.dt * this.m_maxMotorForce;
-          this.m_motorImpulse = clamp$1(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
+          this.m_motorImpulse = clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
           impulse = this.m_motorImpulse - oldImpulse;
           var P3 = Vec2.mulNumVec2(impulse, this.m_axis);
           var LA = impulse * this.m_a1;
@@ -8742,9 +8765,9 @@
           var df = this.m_K.solve33(Vec3.neg(Cdot));
           this.m_impulse.add(df);
           if (this.m_limitState == LimitState$1.atLowerLimit) {
-            this.m_impulse.z = math_max$3(this.m_impulse.z, 0);
+            this.m_impulse.z = math_max(this.m_impulse.z, 0);
           } else if (this.m_limitState == LimitState$1.atUpperLimit) {
-            this.m_impulse.z = math_min$7(this.m_impulse.z, 0);
+            this.m_impulse.z = math_min$2(this.m_impulse.z, 0);
           }
           var b2 = Vec2.combine(-1, Cdot1, -(this.m_impulse.z - f1.z), Vec2.neo(this.m_K.ez.x, this.m_K.ez.y));
           var f2r = Vec2.add(this.m_K.solve22(b2), Vec2.neo(f1.x, f1.y));
@@ -8799,24 +8822,24 @@
         var C1 = Vec2.zero();
         C1.x = Vec2.dot(perp2, d2);
         C1.y = aB - aA - this.m_referenceAngle;
-        var linearError = math_abs$4(C1.x);
-        var angularError = math_abs$4(C1.y);
+        var linearError = math_abs$3(C1.x);
+        var angularError = math_abs$3(C1.y);
         var linearSlop = SettingsInternal.linearSlop;
         var maxLinearCorrection = SettingsInternal.maxLinearCorrection;
         var active = false;
         var C2 = 0;
         if (this.m_enableLimit) {
           var translation2 = Vec2.dot(axis, d2);
-          if (math_abs$4(this.m_upperTranslation - this.m_lowerTranslation) < 2 * linearSlop) {
-            C2 = clamp$1(translation2, -maxLinearCorrection, maxLinearCorrection);
-            linearError = math_max$3(linearError, math_abs$4(translation2));
+          if (math_abs$3(this.m_upperTranslation - this.m_lowerTranslation) < 2 * linearSlop) {
+            C2 = clamp(translation2, -maxLinearCorrection, maxLinearCorrection);
+            linearError = math_max(linearError, math_abs$3(translation2));
             active = true;
           } else if (translation2 <= this.m_lowerTranslation) {
-            C2 = clamp$1(translation2 - this.m_lowerTranslation + linearSlop, -maxLinearCorrection, 0);
+            C2 = clamp(translation2 - this.m_lowerTranslation + linearSlop, -maxLinearCorrection, 0);
             linearError = Math.max(linearError, this.m_lowerTranslation - translation2);
             active = true;
           } else if (translation2 >= this.m_upperTranslation) {
-            C2 = clamp$1(translation2 - this.m_upperTranslation - linearSlop, 0, maxLinearCorrection);
+            C2 = clamp(translation2 - this.m_upperTranslation - linearSlop, 0, maxLinearCorrection);
             linearError = Math.max(linearError, translation2 - this.m_upperTranslation);
             active = true;
           }
@@ -8872,19 +8895,19 @@
       return PrismaticJoint2;
     })(Joint)
   );
-  var DEFAULTS$7 = {
+  var DEFAULTS$6 = {
     ratio: 1
   };
   var GearJoint = (
     /** @class */
     (function(_super) {
-      __extends$1(GearJoint2, _super);
+      __extends(GearJoint2, _super);
       function GearJoint2(def, bodyA, bodyB, joint1, joint2, ratio) {
         var _this = this;
         if (!(_this instanceof GearJoint2)) {
           return new GearJoint2(def, bodyA, bodyB, joint1, joint2, ratio);
         }
-        def = options(def, DEFAULTS$7);
+        def = options(def, DEFAULTS$6);
         _this = _super.call(this, def, bodyA, bodyB) || this;
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
@@ -8959,7 +8982,7 @@
         };
       };
       GearJoint2._deserialize = function(data, world, restore) {
-        data = __assign$1({}, data);
+        data = __assign({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         data.joint1 = restore(Joint, data.joint1, world);
@@ -9193,7 +9216,7 @@
       return GearJoint2;
     })(Joint)
   );
-  var DEFAULTS$6 = {
+  var DEFAULTS$5 = {
     maxForce: 1,
     maxTorque: 1,
     correctionFactor: 0.3
@@ -9201,13 +9224,13 @@
   var MotorJoint = (
     /** @class */
     (function(_super) {
-      __extends$1(MotorJoint2, _super);
+      __extends(MotorJoint2, _super);
       function MotorJoint2(def, bodyA, bodyB) {
         var _this = this;
         if (!(_this instanceof MotorJoint2)) {
           return new MotorJoint2(def, bodyA, bodyB);
         }
-        def = options(def, DEFAULTS$6);
+        def = options(def, DEFAULTS$5);
         _this = _super.call(this, def, bodyA, bodyB) || this;
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
@@ -9235,7 +9258,7 @@
         };
       };
       MotorJoint2._deserialize = function(data, world, restore) {
-        data = __assign$1({}, data);
+        data = __assign({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new MotorJoint2(data);
@@ -9378,7 +9401,7 @@
           var impulse = -this.m_angularMass * Cdot;
           var oldImpulse = this.m_angularImpulse;
           var maxImpulse = h * this.m_maxTorque;
-          this.m_angularImpulse = clamp$1(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
+          this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
           impulse = this.m_angularImpulse - oldImpulse;
           wA -= iA * impulse;
           wB += iB * impulse;
@@ -9411,8 +9434,8 @@
       return MotorJoint2;
     })(Joint)
   );
-  var math_PI$4 = Math.PI;
-  var DEFAULTS$5 = {
+  var math_PI$2 = Math.PI;
+  var DEFAULTS$4 = {
     maxForce: 0,
     frequencyHz: 5,
     dampingRatio: 0.7
@@ -9420,13 +9443,13 @@
   var MouseJoint = (
     /** @class */
     (function(_super) {
-      __extends$1(MouseJoint2, _super);
+      __extends(MouseJoint2, _super);
       function MouseJoint2(def, bodyA, bodyB, target) {
         var _this = this;
         if (!(_this instanceof MouseJoint2)) {
           return new MouseJoint2(def, bodyA, bodyB, target);
         }
-        def = options(def, DEFAULTS$5);
+        def = options(def, DEFAULTS$4);
         _this = _super.call(this, def, bodyA, bodyB) || this;
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
@@ -9467,7 +9490,7 @@
         };
       };
       MouseJoint2._deserialize = function(data, world, restore) {
-        data = __assign$1({}, data);
+        data = __assign({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         data.target = Vec2.clone(data.target);
@@ -9542,7 +9565,7 @@
         var wB = velocity.w;
         var qB = Rot.neo(aB);
         var mass = this.m_bodyB.getMass();
-        var omega = 2 * math_PI$4 * this.m_frequencyHz;
+        var omega = 2 * math_PI$2 * this.m_frequencyHz;
         var d2 = 2 * mass * this.m_dampingRatio * omega;
         var k = mass * (omega * omega);
         var h = step.dt;
@@ -9598,20 +9621,20 @@
       return MouseJoint2;
     })(Joint)
   );
-  var math_abs$3 = Math.abs;
-  var DEFAULTS$4 = {
+  var math_abs$2 = Math.abs;
+  var DEFAULTS$3 = {
     collideConnected: true
   };
   var PulleyJoint = (
     /** @class */
     (function(_super) {
-      __extends$1(PulleyJoint2, _super);
+      __extends(PulleyJoint2, _super);
       function PulleyJoint2(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, ratio) {
         var _this = this;
         if (!(_this instanceof PulleyJoint2)) {
           return new PulleyJoint2(def, bodyA, bodyB, groundA, groundB, anchorA, anchorB, ratio);
         }
-        def = options(def, DEFAULTS$4);
+        def = options(def, DEFAULTS$3);
         _this = _super.call(this, def, bodyA, bodyB) || this;
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
@@ -9643,7 +9666,7 @@
         };
       };
       PulleyJoint2._deserialize = function(data, world, restore) {
-        data = __assign$1({}, data);
+        data = __assign({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new PulleyJoint2(data);
@@ -9827,7 +9850,7 @@
           mass = 1 / mass;
         }
         var C = this.m_constant - lengthA - this.m_ratio * lengthB;
-        var linearError = math_abs$3(C);
+        var linearError = math_abs$2(C);
         var impulse = -mass * C;
         var PA = Vec2.mulNumVec2(-impulse, uA);
         var PB = Vec2.mulNumVec2(-this.m_ratio * impulse, uB);
@@ -9845,7 +9868,7 @@
       return PulleyJoint2;
     })(Joint)
   );
-  var math_min$6 = Math.min;
+  var math_min$1 = Math.min;
   var LimitState;
   (function(LimitState2) {
     LimitState2[LimitState2["inactiveLimit"] = 0] = "inactiveLimit";
@@ -9853,19 +9876,19 @@
     LimitState2[LimitState2["atUpperLimit"] = 2] = "atUpperLimit";
     LimitState2[LimitState2["equalLimits"] = 3] = "equalLimits";
   })(LimitState || (LimitState = {}));
-  var DEFAULTS$3 = {
+  var DEFAULTS$2 = {
     maxLength: 0
   };
   var RopeJoint = (
     /** @class */
     (function(_super) {
-      __extends$1(RopeJoint2, _super);
+      __extends(RopeJoint2, _super);
       function RopeJoint2(def, bodyA, bodyB, anchor) {
         var _this = this;
         if (!(_this instanceof RopeJoint2)) {
           return new RopeJoint2(def, bodyA, bodyB, anchor);
         }
-        def = options(def, DEFAULTS$3);
+        def = options(def, DEFAULTS$2);
         _this = _super.call(this, def, bodyA, bodyB) || this;
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
@@ -9891,7 +9914,7 @@
         };
       };
       RopeJoint2._deserialize = function(data, world, restore) {
-        data = __assign$1({}, data);
+        data = __assign({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new RopeJoint2(data);
@@ -9908,8 +9931,8 @@
       RopeJoint2.prototype.getLocalAnchorB = function() {
         return this.m_localAnchorB;
       };
-      RopeJoint2.prototype.setMaxLength = function(length2) {
-        this.m_maxLength = length2;
+      RopeJoint2.prototype.setMaxLength = function(length) {
+        this.m_maxLength = length;
       };
       RopeJoint2.prototype.getMaxLength = function() {
         return this.m_maxLength;
@@ -9999,7 +10022,7 @@
         }
         var impulse = -this.m_mass * Cdot;
         var oldImpulse = this.m_impulse;
-        this.m_impulse = math_min$6(0, this.m_impulse + impulse);
+        this.m_impulse = math_min$1(0, this.m_impulse + impulse);
         impulse = this.m_impulse - oldImpulse;
         var P3 = Vec2.mulNumVec2(impulse, this.m_u);
         vA2.subMul(this.m_invMassA, P3);
@@ -10023,9 +10046,9 @@
         var u = Vec2.zero();
         u.addCombine(1, cB2, 1, rB2);
         u.subCombine(1, cA2, 1, rA2);
-        var length2 = u.normalize();
-        var C = length2 - this.m_maxLength;
-        C = clamp$1(C, 0, SettingsInternal.maxLinearCorrection);
+        var length = u.normalize();
+        var C = length - this.m_maxLength;
+        C = clamp(C, 0, SettingsInternal.maxLinearCorrection);
         var impulse = -this.m_mass * C;
         var P3 = Vec2.mulNumVec2(impulse, u);
         cA2.subMul(this.m_invMassA, P3);
@@ -10036,28 +10059,28 @@
         this.m_bodyA.c_position.a = aA;
         this.m_bodyB.c_position.c.setVec2(cB2);
         this.m_bodyB.c_position.a = aB;
-        return length2 - this.m_maxLength < SettingsInternal.linearSlop;
+        return length - this.m_maxLength < SettingsInternal.linearSlop;
       };
       RopeJoint2.TYPE = "rope-joint";
       return RopeJoint2;
     })(Joint)
   );
-  var math_abs$2 = Math.abs;
-  var math_PI$3 = Math.PI;
-  var DEFAULTS$2 = {
+  var math_abs$1 = Math.abs;
+  var math_PI$1 = Math.PI;
+  var DEFAULTS$1 = {
     frequencyHz: 0,
     dampingRatio: 0
   };
   var WeldJoint = (
     /** @class */
     (function(_super) {
-      __extends$1(WeldJoint2, _super);
+      __extends(WeldJoint2, _super);
       function WeldJoint2(def, bodyA, bodyB, anchor) {
         var _this = this;
         if (!(_this instanceof WeldJoint2)) {
           return new WeldJoint2(def, bodyA, bodyB, anchor);
         }
-        def = options(def, DEFAULTS$2);
+        def = options(def, DEFAULTS$1);
         _this = _super.call(this, def, bodyA, bodyB) || this;
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
@@ -10087,7 +10110,7 @@
         };
       };
       WeldJoint2._deserialize = function(data, world, restore) {
-        data = __assign$1({}, data);
+        data = __assign({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new WeldJoint2(data);
@@ -10180,7 +10203,7 @@
           var invM = iA + iB;
           var m = invM > 0 ? 1 / invM : 0;
           var C = aB - aA - this.m_referenceAngle;
-          var omega = 2 * math_PI$3 * this.m_frequencyHz;
+          var omega = 2 * math_PI$1 * this.m_frequencyHz;
           var d2 = 2 * m * this.m_dampingRatio * omega;
           var k = m * omega * omega;
           var h = step.dt;
@@ -10300,7 +10323,7 @@
           C1.subCombine(1, cA2, 1, rA2);
           var C2 = aB - aA - this.m_referenceAngle;
           positionError = C1.length();
-          angularError = math_abs$2(C2);
+          angularError = math_abs$1(C2);
           var C = new Vec3(C1.x, C1.y, C2);
           var impulse = new Vec3();
           if (K.ez.z > 0) {
@@ -10325,9 +10348,9 @@
       return WeldJoint2;
     })(Joint)
   );
-  var math_abs$1 = Math.abs;
-  var math_PI$2 = Math.PI;
-  var DEFAULTS$1 = {
+  var math_abs = Math.abs;
+  var math_PI = Math.PI;
+  var DEFAULTS = {
     enableMotor: false,
     maxMotorTorque: 0,
     motorSpeed: 0,
@@ -10337,13 +10360,13 @@
   var WheelJoint = (
     /** @class */
     (function(_super) {
-      __extends$1(WheelJoint2, _super);
+      __extends(WheelJoint2, _super);
       function WheelJoint2(def, bodyA, bodyB, anchor, axis) {
         var _this = this;
         if (!(_this instanceof WheelJoint2)) {
           return new WheelJoint2(def, bodyA, bodyB, anchor, axis);
         }
-        def = options(def, DEFAULTS$1);
+        def = options(def, DEFAULTS);
         _this = _super.call(this, def, bodyA, bodyB) || this;
         bodyA = _this.m_bodyA;
         bodyB = _this.m_bodyB;
@@ -10394,7 +10417,7 @@
         };
       };
       WheelJoint2._deserialize = function(data, world, restore) {
-        data = __assign$1({}, data);
+        data = __assign({}, data);
         data.bodyA = restore(Body, data.bodyA, world);
         data.bodyB = restore(Body, data.bodyB, world);
         var joint = new WheelJoint2(data);
@@ -10558,7 +10581,7 @@
           if (invMass > 0) {
             this.m_springMass = 1 / invMass;
             var C = Vec2.dot(d2, this.m_ax);
-            var omega = 2 * math_PI$2 * this.m_frequencyHz;
+            var omega = 2 * math_PI * this.m_frequencyHz;
             var damp = 2 * this.m_springMass * this.m_dampingRatio * omega;
             var k = this.m_springMass * omega * omega;
             var h = step.dt;
@@ -10631,7 +10654,7 @@
           var impulse = -this.m_motorMass * Cdot;
           var oldImpulse = this.m_motorImpulse;
           var maxImpulse = step.dt * this.m_maxMotorTorque;
-          this.m_motorImpulse = clamp$1(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
+          this.m_motorImpulse = clamp(this.m_motorImpulse + impulse, -maxImpulse, maxImpulse);
           impulse = this.m_motorImpulse - oldImpulse;
           wA -= iA * impulse;
           wB += iB * impulse;
@@ -10682,7 +10705,7 @@
         this.m_bodyA.c_position.a = aA;
         this.m_bodyB.c_position.c.setVec2(cB2);
         this.m_bodyB.c_position.a = aB;
-        return math_abs$1(C) <= SettingsInternal.linearSlop;
+        return math_abs(C) <= SettingsInternal.linearSlop;
       };
       WheelJoint2.TYPE = "wheel-joint";
       return WheelJoint2;
@@ -10833,7 +10856,7 @@
           var root = deserializeWithHooks(rootClass, json[0], null);
           return root;
         };
-        this.options = __assign$1(__assign$1({}, DEFAULT_OPTIONS), options2);
+        this.options = __assign(__assign({}, DEFAULT_OPTIONS), options2);
       }
       return Serializer2;
     })()
@@ -10882,7 +10905,7 @@
   var BoxShape = (
     /** @class */
     (function(_super) {
-      __extends$1(BoxShape2, _super);
+      __extends(BoxShape2, _super);
       function BoxShape2(halfWidth, halfHeight, center2, angle) {
         var _this = this;
         if (!(_this instanceof BoxShape2)) {
@@ -11250,7 +11273,7 @@
       manifold.points[0].id.setFeatures(0, exports2.ContactFeatureType.e_vertex, 0, exports2.ContactFeatureType.e_vertex);
     }
   };
-  var math_min$5 = Math.min;
+  var math_min = Math.min;
   Contact.addType(EdgeShape.TYPE, PolygonShape.TYPE, EdgePolygonContact);
   Contact.addType(ChainShape.TYPE, PolygonShape.TYPE, ChainPolygonContact);
   function EdgePolygonContact(manifold, xfA2, fA, indexA, xfB2, fB, indexB) {
@@ -11514,7 +11537,7 @@
         scaleVec2(n, -1, polygonBA.normals[i]);
         var s1 = dotVec2(n, polygonBA.vertices[i]) - dotVec2(n, v13);
         var s22 = dotVec2(n, polygonBA.vertices[i]) - dotVec2(n, v22);
-        var s2 = math_min$5(s1, s22);
+        var s2 = math_min(s1, s22);
         if (s2 > radius) {
           polygonAxis.type = EPAxisType.e_edgeB;
           polygonAxis.index = i;
@@ -11643,7 +11666,7 @@
     Distance,
     TimeOfImpact,
     DynamicTree,
-    stats: stats$1
+    stats
   };
   var DataDriver = (
     /** @class */
@@ -11717,4943 +11740,6 @@
       return DataDriver2;
     })()
   );
-  /**
-   * Stage.js v1.0.1
-   * @copyright Copyright Ali Shakiba
-   * @license Licensed under the MIT (https://github.com/piqnt/stage.js/blob/main/LICENSE.md)
-   */
-  var math_random = Math.random;
-  var math_sqrt$2 = Math.sqrt;
-  function random(min, max) {
-    if (typeof min === "undefined") {
-      max = 1;
-      min = 0;
-    } else if (typeof max === "undefined") {
-      max = min;
-      min = 0;
-    }
-    return min == max ? min : math_random() * (max - min) + min;
-  }
-  function wrap(num, min, max) {
-    if (typeof min === "undefined") {
-      max = 1;
-      min = 0;
-    } else if (typeof max === "undefined") {
-      max = min;
-      min = 0;
-    }
-    if (max > min) {
-      num = (num - min) % (max - min);
-      return num + (num < 0 ? max : min);
-    } else {
-      num = (num - max) % (min - max);
-      return num + (num <= 0 ? min : max);
-    }
-  }
-  function clamp(num, min, max) {
-    if (num < min) {
-      return min;
-    } else if (num > max) {
-      return max;
-    } else {
-      return num;
-    }
-  }
-  function length(x2, y) {
-    return math_sqrt$2(x2 * x2 + y * y);
-  }
-  var math = Object.create(Math);
-  math.random = random;
-  math.wrap = wrap;
-  math.clamp = clamp;
-  math.length = length;
-  math.rotate = wrap;
-  math.limit = clamp;
-  var Matrix = (
-    /** @class */
-    (function() {
-      function Matrix2(a2, b2, c2, d2, e3, f) {
-        this.a = 1;
-        this.b = 0;
-        this.c = 0;
-        this.d = 1;
-        this.e = 0;
-        this.f = 0;
-        if (typeof a2 === "object") {
-          this.reset(a2);
-        } else {
-          this.reset(a2, b2, c2, d2, e3, f);
-        }
-      }
-      Matrix2.prototype.toString = function() {
-        return "[" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.e + ", " + this.f + "]";
-      };
-      Matrix2.prototype.clone = function() {
-        return new Matrix2(this.a, this.b, this.c, this.d, this.e, this.f);
-      };
-      Matrix2.prototype.reset = function(a2, b2, c2, d2, e3, f) {
-        this._dirty = true;
-        if (typeof a2 === "object") {
-          this.a = a2.a;
-          this.d = a2.d;
-          this.b = a2.b;
-          this.c = a2.c;
-          this.e = a2.e;
-          this.f = a2.f;
-        } else {
-          this.a = typeof a2 === "number" ? a2 : 1;
-          this.b = typeof b2 === "number" ? b2 : 0;
-          this.c = typeof c2 === "number" ? c2 : 0;
-          this.d = typeof d2 === "number" ? d2 : 1;
-          this.e = typeof e3 === "number" ? e3 : 0;
-          this.f = typeof f === "number" ? f : 0;
-        }
-        return this;
-      };
-      Matrix2.prototype.identity = function() {
-        this._dirty = true;
-        this.a = 1;
-        this.b = 0;
-        this.c = 0;
-        this.d = 1;
-        this.e = 0;
-        this.f = 0;
-        return this;
-      };
-      Matrix2.prototype.rotate = function(angle) {
-        if (!angle) {
-          return this;
-        }
-        this._dirty = true;
-        var u = angle ? Math.cos(angle) : 1;
-        var v3 = angle ? Math.sin(angle) : 0;
-        var a2 = u * this.a - v3 * this.b;
-        var b2 = u * this.b + v3 * this.a;
-        var c2 = u * this.c - v3 * this.d;
-        var d2 = u * this.d + v3 * this.c;
-        var e3 = u * this.e - v3 * this.f;
-        var f = u * this.f + v3 * this.e;
-        this.a = a2;
-        this.b = b2;
-        this.c = c2;
-        this.d = d2;
-        this.e = e3;
-        this.f = f;
-        return this;
-      };
-      Matrix2.prototype.translate = function(x2, y) {
-        if (!x2 && !y) {
-          return this;
-        }
-        this._dirty = true;
-        this.e += x2;
-        this.f += y;
-        return this;
-      };
-      Matrix2.prototype.scale = function(x2, y) {
-        if (!(x2 - 1) && !(y - 1)) {
-          return this;
-        }
-        this._dirty = true;
-        this.a *= x2;
-        this.b *= y;
-        this.c *= x2;
-        this.d *= y;
-        this.e *= x2;
-        this.f *= y;
-        return this;
-      };
-      Matrix2.prototype.skew = function(x2, y) {
-        if (!x2 && !y) {
-          return this;
-        }
-        this._dirty = true;
-        var a2 = this.a + this.b * x2;
-        var b2 = this.b + this.a * y;
-        var c2 = this.c + this.d * x2;
-        var d2 = this.d + this.c * y;
-        var e3 = this.e + this.f * x2;
-        var f = this.f + this.e * y;
-        this.a = a2;
-        this.b = b2;
-        this.c = c2;
-        this.d = d2;
-        this.e = e3;
-        this.f = f;
-        return this;
-      };
-      Matrix2.prototype.concat = function(m) {
-        this._dirty = true;
-        var a2 = this.a * m.a + this.b * m.c;
-        var b2 = this.b * m.d + this.a * m.b;
-        var c2 = this.c * m.a + this.d * m.c;
-        var d2 = this.d * m.d + this.c * m.b;
-        var e3 = this.e * m.a + m.e + this.f * m.c;
-        var f = this.f * m.d + m.f + this.e * m.b;
-        this.a = a2;
-        this.b = b2;
-        this.c = c2;
-        this.d = d2;
-        this.e = e3;
-        this.f = f;
-        return this;
-      };
-      Matrix2.prototype.inverse = function() {
-        if (this._dirty) {
-          this._dirty = false;
-          if (!this.inverted) {
-            this.inverted = new Matrix2();
-          }
-          var z = this.a * this.d - this.b * this.c;
-          this.inverted.a = this.d / z;
-          this.inverted.b = -this.b / z;
-          this.inverted.c = -this.c / z;
-          this.inverted.d = this.a / z;
-          this.inverted.e = (this.c * this.f - this.e * this.d) / z;
-          this.inverted.f = (this.e * this.b - this.a * this.f) / z;
-        }
-        return this.inverted;
-      };
-      Matrix2.prototype.map = function(p, q) {
-        q = q || { x: 0, y: 0 };
-        q.x = this.a * p.x + this.c * p.y + this.e;
-        q.y = this.b * p.x + this.d * p.y + this.f;
-        return q;
-      };
-      Matrix2.prototype.mapX = function(x2, y) {
-        if (typeof x2 === "object") {
-          y = x2.y;
-          x2 = x2.x;
-        }
-        return this.a * x2 + this.c * y + this.e;
-      };
-      Matrix2.prototype.mapY = function(x2, y) {
-        if (typeof x2 === "object") {
-          y = x2.y;
-          x2 = x2.x;
-        }
-        return this.b * x2 + this.d * y + this.f;
-      };
-      return Matrix2;
-    })()
-  );
-  /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation.
-  
-    Permission to use, copy, modify, and/or distribute this software for any
-    purpose with or without fee is hereby granted.
-  
-    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-    AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-    PERFORMANCE OF THIS SOFTWARE.
-    ***************************************************************************** */
-  var extendStatics = function(d2, b2) {
-    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d22, b22) {
-      d22.__proto__ = b22;
-    } || function(d22, b22) {
-      for (var p in b22) if (b22.hasOwnProperty(p)) d22[p] = b22[p];
-    };
-    return extendStatics(d2, b2);
-  };
-  function __extends(d2, b2) {
-    extendStatics(d2, b2);
-    function __() {
-      this.constructor = d2;
-    }
-    d2.prototype = b2 === null ? Object.create(b2) : (__.prototype = b2.prototype, new __());
-  }
-  var __assign = function() {
-    __assign = Object.assign || function __assign2(t) {
-      for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
-        s2 = arguments[i];
-        for (var p in s2) if (Object.prototype.hasOwnProperty.call(s2, p)) t[p] = s2[p];
-      }
-      return t;
-    };
-    return __assign.apply(this, arguments);
-  };
-  function __awaiter(thisArg, _arguments, P3, generator) {
-    function adopt(value) {
-      return value instanceof P3 ? value : new P3(function(resolve) {
-        resolve(value);
-      });
-    }
-    return new (P3 || (P3 = Promise))(function(resolve, reject) {
-      function fulfilled(value) {
-        try {
-          step(generator.next(value));
-        } catch (e3) {
-          reject(e3);
-        }
-      }
-      function rejected(value) {
-        try {
-          step(generator["throw"](value));
-        } catch (e3) {
-          reject(e3);
-        }
-      }
-      function step(result) {
-        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-      }
-      step((generator = generator.apply(thisArg, [])).next());
-    });
-  }
-  function __generator(thisArg, body) {
-    var _ = { label: 0, sent: function() {
-      if (t[0] & 1) throw t[1];
-      return t[1];
-    }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-      return this;
-    }), g;
-    function verb(n2) {
-      return function(v3) {
-        return step([n2, v3]);
-      };
-    }
-    function step(op) {
-      if (f) throw new TypeError("Generator is already executing.");
-      while (_) try {
-        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-        if (y = 0, t) op = [op[0] & 2, t.value];
-        switch (op[0]) {
-          case 0:
-          case 1:
-            t = op;
-            break;
-          case 4:
-            _.label++;
-            return { value: op[1], done: false };
-          case 5:
-            _.label++;
-            y = op[1];
-            op = [0];
-            continue;
-          case 7:
-            op = _.ops.pop();
-            _.trys.pop();
-            continue;
-          default:
-            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-              _ = 0;
-              continue;
-            }
-            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-              _.label = op[1];
-              break;
-            }
-            if (op[0] === 6 && _.label < t[1]) {
-              _.label = t[1];
-              t = op;
-              break;
-            }
-            if (t && _.label < t[2]) {
-              _.label = t[2];
-              _.ops.push(op);
-              break;
-            }
-            if (t[2]) _.ops.pop();
-            _.trys.pop();
-            continue;
-        }
-        op = body.call(thisArg, _);
-      } catch (e3) {
-        op = [6, e3];
-        y = 0;
-      } finally {
-        f = t = 0;
-      }
-      if (op[0] & 5) throw op[1];
-      return { value: op[0] ? op[1] : void 0, done: true };
-    }
-  }
-  var objectToString = Object.prototype.toString;
-  function isFn(value) {
-    var str = objectToString.call(value);
-    return str === "[object Function]" || str === "[object GeneratorFunction]" || str === "[object AsyncFunction]";
-  }
-  function isHash(value) {
-    return objectToString.call(value) === "[object Object]" && value.constructor === Object;
-  }
-  const stats = {
-    create: 0,
-    tick: 0,
-    component: 0,
-    draw: 0,
-    fps: 0
-  };
-  var uid = function() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2);
-  };
-  var Texture = (
-    /** @class */
-    (function() {
-      function Texture2() {
-        this.uid = "texture:" + uid();
-        this.sx = 0;
-        this.sy = 0;
-        this.dx = 0;
-        this.dy = 0;
-      }
-      Texture2.prototype.setSourceCoordinate = function(x2, y) {
-        this.sx = x2;
-        this.sy = y;
-      };
-      Texture2.prototype.setSourceDimension = function(w, h) {
-        this.sw = w;
-        this.sh = h;
-      };
-      Texture2.prototype.setDestinationCoordinate = function(x2, y) {
-        this.dx = x2;
-        this.dy = y;
-      };
-      Texture2.prototype.setDestinationDimension = function(w, h) {
-        this.dw = w;
-        this.dh = h;
-      };
-      Texture2.prototype.draw = function(context, x1, y1, w1, h1, x2, y2, w2, h2) {
-        var sx, sy, sw, sh;
-        var dx, dy, dw, dh;
-        if (arguments.length > 5) {
-          sx = this.sx + x1;
-          sy = this.sy + y1;
-          sw = w1 !== null && w1 !== void 0 ? w1 : this.sw;
-          sh = h1 !== null && h1 !== void 0 ? h1 : this.sh;
-          dx = this.dx + x2;
-          dy = this.dy + y2;
-          dw = w2 !== null && w2 !== void 0 ? w2 : this.dw;
-          dh = h2 !== null && h2 !== void 0 ? h2 : this.dh;
-        } else if (arguments.length > 1) {
-          sx = this.sx;
-          sy = this.sy;
-          sw = this.sw;
-          sh = this.sh;
-          dx = this.dx + x1;
-          dy = this.dy + y1;
-          dw = w1 !== null && w1 !== void 0 ? w1 : this.dw;
-          dh = h1 !== null && h1 !== void 0 ? h1 : this.dh;
-        } else {
-          sx = this.sx;
-          sy = this.sy;
-          sw = this.sw;
-          sh = this.sh;
-          dx = this.dx;
-          dy = this.dy;
-          dw = this.dw;
-          dh = this.dh;
-        }
-        this.drawWithNormalizedArgs(context, sx, sy, sw, sh, dx, dy, dw, dh);
-      };
-      return Texture2;
-    })()
-  );
-  var ImageTexture = (
-    /** @class */
-    (function(_super) {
-      __extends(ImageTexture2, _super);
-      function ImageTexture2(source, pixelRatio) {
-        var _this = _super.call(this) || this;
-        _this._pixelRatio = 1;
-        _this.padding = 0;
-        if (typeof source === "object") {
-          _this.setSourceImage(source, pixelRatio);
-        }
-        return _this;
-      }
-      ImageTexture2.prototype.setSourceImage = function(image, pixelRatio) {
-        if (pixelRatio === void 0) {
-          pixelRatio = 1;
-        }
-        this._source = image;
-        this._pixelRatio = pixelRatio;
-      };
-      ImageTexture2.prototype.setPadding = function(padding) {
-        this.padding = padding;
-      };
-      ImageTexture2.prototype.getWidth = function() {
-        return this._source.width / this._pixelRatio + (this.padding + this.padding);
-      };
-      ImageTexture2.prototype.getHeight = function() {
-        return this._source.height / this._pixelRatio + (this.padding + this.padding);
-      };
-      ImageTexture2.prototype.prerender = function(context) {
-        return false;
-      };
-      ImageTexture2.prototype.drawWithNormalizedArgs = function(context, sx, sy, sw, sh, dx, dy, dw, dh) {
-        var image = this._source;
-        if (image === null || typeof image !== "object") {
-          return;
-        }
-        sw = sw !== null && sw !== void 0 ? sw : this._source.width / this._pixelRatio;
-        sh = sh !== null && sh !== void 0 ? sh : this._source.height / this._pixelRatio;
-        dw = dw !== null && dw !== void 0 ? dw : sw;
-        dh = dh !== null && dh !== void 0 ? dh : sh;
-        dx += this.padding;
-        dy += this.padding;
-        var ix = sx * this._pixelRatio;
-        var iy = sy * this._pixelRatio;
-        var iw = sw * this._pixelRatio;
-        var ih = sh * this._pixelRatio;
-        try {
-          stats.draw++;
-          context.drawImage(image, ix, iy, iw, ih, dx, dy, dw, dh);
-        } catch (ex) {
-          if (!this._draw_failed) {
-            console.log("Unable to draw: ", image);
-            console.log(ex);
-            this._draw_failed = true;
-          }
-        }
-      };
-      return ImageTexture2;
-    })(Texture)
-  );
-  var PipeTexture = (
-    /** @class */
-    (function(_super) {
-      __extends(PipeTexture2, _super);
-      function PipeTexture2(source) {
-        var _this = _super.call(this) || this;
-        _this._source = source;
-        return _this;
-      }
-      PipeTexture2.prototype.setSourceTexture = function(texture2) {
-        this._source = texture2;
-      };
-      PipeTexture2.prototype.getWidth = function() {
-        var _a2, _b;
-        return (_b = (_a2 = this.dw) !== null && _a2 !== void 0 ? _a2 : this.sw) !== null && _b !== void 0 ? _b : this._source.getWidth();
-      };
-      PipeTexture2.prototype.getHeight = function() {
-        var _a2, _b;
-        return (_b = (_a2 = this.dh) !== null && _a2 !== void 0 ? _a2 : this.sh) !== null && _b !== void 0 ? _b : this._source.getHeight();
-      };
-      PipeTexture2.prototype.prerender = function(context) {
-        return this._source.prerender(context);
-      };
-      PipeTexture2.prototype.drawWithNormalizedArgs = function(context, sx, sy, sw, sh, dx, dy, dw, dh) {
-        var texture2 = this._source;
-        if (texture2 === null || typeof texture2 !== "object") {
-          return;
-        }
-        texture2.draw(context, sx, sy, sw, sh, dx, dy, dw, dh);
-      };
-      return PipeTexture2;
-    })(Texture)
-  );
-  /** @class */
-  (function(_super) {
-    __extends(Atlas2, _super);
-    function Atlas2(def) {
-      if (def === void 0) {
-        def = {};
-      }
-      var _this = _super.call(this) || this;
-      _this.pipeSpriteTexture = function(def2) {
-        var map = _this._map;
-        var ppu = _this._ppu;
-        var trim = _this._trim;
-        if (!def2) {
-          return void 0;
-        }
-        def2 = Object.assign({}, def2);
-        if (isFn(map)) {
-          def2 = map(def2);
-        }
-        if (ppu != 1) {
-          def2.x *= ppu;
-          def2.y *= ppu;
-          def2.width *= ppu;
-          def2.height *= ppu;
-          def2.top *= ppu;
-          def2.bottom *= ppu;
-          def2.left *= ppu;
-          def2.right *= ppu;
-        }
-        if (trim != 0) {
-          def2.x += trim;
-          def2.y += trim;
-          def2.width -= 2 * trim;
-          def2.height -= 2 * trim;
-          def2.top -= trim;
-          def2.bottom -= trim;
-          def2.left -= trim;
-          def2.right -= trim;
-        }
-        var texture2 = new PipeTexture(_this);
-        texture2.top = def2.top;
-        texture2.bottom = def2.bottom;
-        texture2.left = def2.left;
-        texture2.right = def2.right;
-        texture2.setSourceCoordinate(def2.x, def2.y);
-        texture2.setSourceDimension(def2.width, def2.height);
-        return texture2;
-      };
-      _this.findSpriteDefinition = function(query) {
-        var textures = _this._textures;
-        if (textures) {
-          if (isFn(textures)) {
-            return textures(query);
-          } else if (isHash(textures)) {
-            return textures[query];
-          }
-        }
-      };
-      _this.select = function(query) {
-        if (!query) {
-          return new TextureSelection(new PipeTexture(_this));
-        }
-        var textureDefinition = _this.findSpriteDefinition(query);
-        if (textureDefinition) {
-          return new TextureSelection(textureDefinition, _this);
-        }
-      };
-      _this.name = def.name;
-      _this._ppu = def.ppu || def.ratio || 1;
-      _this._trim = def.trim || 0;
-      _this._map = def.map || def.filter;
-      _this._textures = def.textures;
-      if (typeof def.image === "object" && isHash(def.image)) {
-        if ("src" in def.image) {
-          _this._imageSrc = def.image.src;
-        } else if ("url" in def.image) {
-          _this._imageSrc = def.image.url;
-        }
-        if (typeof def.image.ratio === "number") {
-          _this._pixelRatio = def.image.ratio;
-        }
-      } else {
-        if (typeof def.imagePath === "string") {
-          _this._imageSrc = def.imagePath;
-        } else if (typeof def.image === "string") {
-          _this._imageSrc = def.image;
-        }
-        if (typeof def.imageRatio === "number") {
-          _this._pixelRatio = def.imageRatio;
-        }
-      }
-      deprecatedWarning(def);
-      return _this;
-    }
-    Atlas2.prototype.load = function() {
-      return __awaiter(this, void 0, void 0, function() {
-        var image;
-        return __generator(this, function(_a2) {
-          switch (_a2.label) {
-            case 0:
-              if (!this._imageSrc) return [3, 2];
-              return [4, asyncLoadImage(this._imageSrc)];
-            case 1:
-              image = _a2.sent();
-              this.setSourceImage(image, this._pixelRatio);
-              _a2.label = 2;
-            case 2:
-              return [
-                2
-                /*return*/
-              ];
-          }
-        });
-      });
-    };
-    return Atlas2;
-  })(ImageTexture);
-  function asyncLoadImage(src) {
-    console.debug && console.debug("Loading image: " + src);
-    return new Promise(function(resolve, reject) {
-      var img = new Image();
-      img.onload = function() {
-        console.debug && console.debug("Image loaded: " + src);
-        resolve(img);
-      };
-      img.onerror = function(error) {
-        console.error("Loading failed: " + src);
-        reject(error);
-      };
-      img.src = src;
-    });
-  }
-  function deprecatedWarning(def) {
-    if ("filter" in def)
-      console.warn("'filter' field of atlas definition is deprecated");
-    if ("cutouts" in def)
-      console.warn("'cutouts' field of atlas definition is deprecated");
-    if ("sprites" in def)
-      console.warn("'sprites' field of atlas definition is deprecated");
-    if ("factory" in def)
-      console.warn("'factory' field of atlas definition is deprecated");
-    if ("ratio" in def)
-      console.warn("'ratio' field of atlas definition is deprecated");
-    if ("imagePath" in def)
-      console.warn("'imagePath' field of atlas definition is deprecated");
-    if ("imageRatio" in def)
-      console.warn("'imageRatio' field of atlas definition is deprecated");
-    if (typeof def.image === "object" && "url" in def.image)
-      console.warn("'image.url' field of atlas definition is deprecated");
-  }
-  function isAtlasSpriteDefinition(selection) {
-    return typeof selection === "object" && isHash(selection) && "number" === typeof selection.width && "number" === typeof selection.height;
-  }
-  var TextureSelection = (
-    /** @class */
-    (function() {
-      function TextureSelection2(selection, atlas2) {
-        this.selection = selection;
-        this.atlas = atlas2;
-      }
-      TextureSelection2.prototype.resolve = function(selection, subquery) {
-        if (!selection) {
-          return NO_TEXTURE;
-        } else if (Array.isArray(selection)) {
-          return this.resolve(selection[0]);
-        } else if (selection instanceof Texture) {
-          return selection;
-        } else if (isAtlasSpriteDefinition(selection)) {
-          if (!this.atlas) {
-            return NO_TEXTURE;
-          }
-          return this.atlas.pipeSpriteTexture(selection);
-        } else if (typeof selection === "object" && isHash(selection) && typeof subquery !== "undefined") {
-          return this.resolve(selection[subquery]);
-        } else if (typeof selection === "function" && isFn(selection)) {
-          return this.resolve(selection(subquery));
-        } else if (typeof selection === "string") {
-          if (!this.atlas) {
-            return NO_TEXTURE;
-          }
-          return this.resolve(this.atlas.findSpriteDefinition(selection));
-        }
-      };
-      TextureSelection2.prototype.one = function(subquery) {
-        return this.resolve(this.selection, subquery);
-      };
-      TextureSelection2.prototype.array = function(arr) {
-        var array = Array.isArray(arr) ? arr : [];
-        if (Array.isArray(this.selection)) {
-          for (var i = 0; i < this.selection.length; i++) {
-            array[i] = this.resolve(this.selection[i]);
-          }
-        } else {
-          array[0] = this.resolve(this.selection);
-        }
-        return array;
-      };
-      return TextureSelection2;
-    })()
-  );
-  var NO_TEXTURE = new /** @class */
-  ((function(_super) {
-    __extends(class_1, _super);
-    function class_1() {
-      var _this = _super.call(this) || this;
-      _this.setSourceDimension(0, 0);
-      return _this;
-    }
-    class_1.prototype.getWidth = function() {
-      return 0;
-    };
-    class_1.prototype.getHeight = function() {
-      return 0;
-    };
-    class_1.prototype.prerender = function(context) {
-      return false;
-    };
-    class_1.prototype.drawWithNormalizedArgs = function(context, sx, sy, sw, sh, dx, dy, dw, dh) {
-    };
-    class_1.prototype.setSourceCoordinate = function(x2, y) {
-    };
-    class_1.prototype.setSourceDimension = function(w, h) {
-    };
-    class_1.prototype.setDestinationCoordinate = function(x2, y) {
-    };
-    class_1.prototype.setDestinationDimension = function(w, h) {
-    };
-    class_1.prototype.draw = function() {
-    };
-    return class_1;
-  })(Texture))();
-  var NO_SELECTION = new TextureSelection(NO_TEXTURE);
-  var ATLAS_MEMO_BY_NAME = {};
-  var ATLAS_ARRAY = [];
-  function texture(query) {
-    if ("string" !== typeof query) {
-      return new TextureSelection(query);
-    }
-    var result = null;
-    var colonIndex = query.indexOf(":");
-    if (colonIndex > 0 && query.length > colonIndex + 1) {
-      var atlas_1 = ATLAS_MEMO_BY_NAME[query.slice(0, colonIndex)];
-      result = atlas_1 && atlas_1.select(query.slice(colonIndex + 1));
-    }
-    if (!result) {
-      var atlas_2 = ATLAS_MEMO_BY_NAME[query];
-      result = atlas_2 && atlas_2.select();
-    }
-    if (!result) {
-      for (var i = 0; i < ATLAS_ARRAY.length; i++) {
-        result = ATLAS_ARRAY[i].select(query);
-        if (result) {
-          break;
-        }
-      }
-    }
-    if (!result) {
-      console.error("Texture not found: " + query);
-      result = NO_SELECTION;
-    }
-    return result;
-  }
-  var ResizableTexture = (
-    /** @class */
-    (function(_super) {
-      __extends(ResizableTexture2, _super);
-      function ResizableTexture2(source, mode) {
-        var _this = _super.call(this) || this;
-        _this._source = source;
-        _this._resizeMode = mode;
-        return _this;
-      }
-      ResizableTexture2.prototype.getWidth = function() {
-        var _a2;
-        return (_a2 = this.dw) !== null && _a2 !== void 0 ? _a2 : this._source.getWidth();
-      };
-      ResizableTexture2.prototype.getHeight = function() {
-        var _a2;
-        return (_a2 = this.dh) !== null && _a2 !== void 0 ? _a2 : this._source.getHeight();
-      };
-      ResizableTexture2.prototype.prerender = function(context) {
-        return false;
-      };
-      ResizableTexture2.prototype.drawWithNormalizedArgs = function(context, sx, sy, sw, sh, dx, dy, dw, dh) {
-        var texture2 = this._source;
-        if (texture2 === null || typeof texture2 !== "object") {
-          return;
-        }
-        var outWidth = dw;
-        var outHeight = dh;
-        var left = Number.isFinite(texture2.left) ? texture2.left : 0;
-        var right = Number.isFinite(texture2.right) ? texture2.right : 0;
-        var top = Number.isFinite(texture2.top) ? texture2.top : 0;
-        var bottom = Number.isFinite(texture2.bottom) ? texture2.bottom : 0;
-        var width = texture2.getWidth() - left - right;
-        var height = texture2.getHeight() - top - bottom;
-        if (!this._innerSize) {
-          outWidth = Math.max(outWidth - left - right, 0);
-          outHeight = Math.max(outHeight - top - bottom, 0);
-        }
-        if (top > 0 && left > 0) {
-          texture2.draw(context, 0, 0, left, top, 0, 0, left, top);
-        }
-        if (bottom > 0 && left > 0) {
-          texture2.draw(context, 0, height + top, left, bottom, 0, outHeight + top, left, bottom);
-        }
-        if (top > 0 && right > 0) {
-          texture2.draw(context, width + left, 0, right, top, outWidth + left, 0, right, top);
-        }
-        if (bottom > 0 && right > 0) {
-          texture2.draw(context, width + left, height + top, right, bottom, outWidth + left, outHeight + top, right, bottom);
-        }
-        if (this._resizeMode === "stretch") {
-          if (top > 0) {
-            texture2.draw(context, left, 0, width, top, left, 0, outWidth, top);
-          }
-          if (bottom > 0) {
-            texture2.draw(context, left, height + top, width, bottom, left, outHeight + top, outWidth, bottom);
-          }
-          if (left > 0) {
-            texture2.draw(context, 0, top, left, height, 0, top, left, outHeight);
-          }
-          if (right > 0) {
-            texture2.draw(context, width + left, top, right, height, outWidth + left, top, right, outHeight);
-          }
-          texture2.draw(context, left, top, width, height, left, top, outWidth, outHeight);
-        } else if (this._resizeMode === "tile") {
-          var l = left;
-          var r = outWidth;
-          var w = void 0;
-          while (r > 0) {
-            w = Math.min(width, r);
-            r -= width;
-            var t = top;
-            var b2 = outHeight;
-            var h = void 0;
-            while (b2 > 0) {
-              h = Math.min(height, b2);
-              b2 -= height;
-              texture2.draw(context, left, top, w, h, l, t, w, h);
-              if (r <= 0) {
-                if (left) {
-                  texture2.draw(context, 0, top, left, h, 0, t, left, h);
-                }
-                if (right) {
-                  texture2.draw(context, width + left, top, right, h, l + w, t, right, h);
-                }
-              }
-              t += h;
-            }
-            if (top) {
-              texture2.draw(context, left, 0, w, top, l, 0, w, top);
-            }
-            if (bottom) {
-              texture2.draw(context, left, height + top, w, bottom, l, t, w, bottom);
-            }
-            l += w;
-          }
-        }
-      };
-      return ResizableTexture2;
-    })(Texture)
-  );
-  function getDevicePixelRatio() {
-    return typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
-  }
-  function isValidFitMode(value) {
-    return value && (value === "cover" || value === "contain" || value === "fill" || value === "in" || value === "in-pad" || value === "out" || value === "out-crop");
-  }
-  var iid$1 = 0;
-  var Pin = (
-    /** @class */
-    (function() {
-      function Pin2(owner) {
-        this.uid = "pin:" + uid();
-        this._directionX = 1;
-        this._directionY = 1;
-        this._owner = owner;
-        this._parent = null;
-        this._relativeMatrix = new Matrix();
-        this._absoluteMatrix = new Matrix();
-        this.reset();
-      }
-      Pin2.prototype.reset = function() {
-        this._textureAlpha = 1;
-        this._alpha = 1;
-        this._width = 0;
-        this._height = 0;
-        this._scaleX = 1;
-        this._scaleY = 1;
-        this._skewX = 0;
-        this._skewY = 0;
-        this._rotation = 0;
-        this._pivoted = false;
-        this._pivotX = 0;
-        this._pivotY = 0;
-        this._handled = false;
-        this._handleX = 0;
-        this._handleY = 0;
-        this._aligned = false;
-        this._alignX = 0;
-        this._alignY = 0;
-        this._offsetX = 0;
-        this._offsetY = 0;
-        this._boxX = 0;
-        this._boxY = 0;
-        this._boxWidth = this._width;
-        this._boxHeight = this._height;
-        this._ts_translate = ++iid$1;
-        this._ts_transform = ++iid$1;
-        this._ts_matrix = ++iid$1;
-      };
-      Pin2.prototype._update = function() {
-        this._parent = this._owner._parent && this._owner._parent._pin;
-        if (this._handled && this._mo_handle != this._ts_transform) {
-          this._mo_handle = this._ts_transform;
-          this._ts_translate = ++iid$1;
-        }
-        if (this._aligned && this._parent && this._mo_align != this._parent._ts_transform) {
-          this._mo_align = this._parent._ts_transform;
-          this._ts_translate = ++iid$1;
-        }
-        return this;
-      };
-      Pin2.prototype.toString = function() {
-        return this._owner + " (" + (this._parent ? this._parent._owner : null) + ")";
-      };
-      Pin2.prototype.absoluteMatrix = function() {
-        this._update();
-        var ts = Math.max(this._ts_transform, this._ts_translate, this._parent ? this._parent._ts_matrix : 0);
-        if (this._mo_abs == ts) {
-          return this._absoluteMatrix;
-        }
-        this._mo_abs = ts;
-        var abs = this._absoluteMatrix;
-        abs.reset(this.relativeMatrix());
-        this._parent && abs.concat(this._parent._absoluteMatrix);
-        this._ts_matrix = ++iid$1;
-        return abs;
-      };
-      Pin2.prototype.relativeMatrix = function() {
-        this._update();
-        var ts = Math.max(this._ts_transform, this._ts_translate, this._parent ? this._parent._ts_transform : 0);
-        if (this._mo_rel == ts) {
-          return this._relativeMatrix;
-        }
-        this._mo_rel = ts;
-        var rel = this._relativeMatrix;
-        rel.identity();
-        if (this._pivoted) {
-          rel.translate(-this._pivotX * this._width, -this._pivotY * this._height);
-        }
-        rel.scale(this._scaleX * this._directionX, this._scaleY * this._directionY);
-        rel.skew(this._skewX, this._skewY);
-        rel.rotate(this._rotation);
-        if (this._pivoted) {
-          rel.translate(this._pivotX * this._width, this._pivotY * this._height);
-        }
-        if (this._pivoted) {
-          this._boxX = 0;
-          this._boxY = 0;
-          this._boxWidth = this._width;
-          this._boxHeight = this._height;
-        } else {
-          var p = void 0;
-          var q = void 0;
-          if (rel.a > 0 && rel.c > 0 || rel.a < 0 && rel.c < 0) {
-            p = 0;
-            q = rel.a * this._width + rel.c * this._height;
-          } else {
-            p = rel.a * this._width;
-            q = rel.c * this._height;
-          }
-          if (p > q) {
-            this._boxX = q;
-            this._boxWidth = p - q;
-          } else {
-            this._boxX = p;
-            this._boxWidth = q - p;
-          }
-          if (rel.b > 0 && rel.d > 0 || rel.b < 0 && rel.d < 0) {
-            p = 0;
-            q = rel.b * this._width + rel.d * this._height;
-          } else {
-            p = rel.b * this._width;
-            q = rel.d * this._height;
-          }
-          if (p > q) {
-            this._boxY = q;
-            this._boxHeight = p - q;
-          } else {
-            this._boxY = p;
-            this._boxHeight = q - p;
-          }
-        }
-        this._x = this._offsetX;
-        this._y = this._offsetY;
-        this._x -= this._boxX + this._handleX * this._boxWidth * this._directionX;
-        this._y -= this._boxY + this._handleY * this._boxHeight * this._directionY;
-        if (this._aligned && this._parent) {
-          this._parent.relativeMatrix();
-          this._x += this._alignX * this._parent._width;
-          this._y += this._alignY * this._parent._height;
-        }
-        rel.translate(this._x, this._y);
-        return this._relativeMatrix;
-      };
-      Pin2.prototype.get = function(key) {
-        if (typeof getters[key] === "function") {
-          return getters[key](this);
-        }
-      };
-      Pin2.prototype.set = function(a2, b2) {
-        if (typeof a2 === "string") {
-          if (typeof setters[a2] === "function" && typeof b2 !== "undefined") {
-            setters[a2](this, b2);
-          }
-        } else if (typeof a2 === "object") {
-          for (b2 in a2) {
-            if (typeof setters[b2] === "function" && typeof a2[b2] !== "undefined") {
-              setters[b2](this, a2[b2], a2);
-            }
-          }
-        }
-        if (this._owner) {
-          this._owner._ts_pin = ++iid$1;
-          this._owner.touch();
-        }
-        return this;
-      };
-      Pin2.prototype.fit = function(width, height, mode) {
-        this._ts_transform = ++iid$1;
-        if (mode === "contain") {
-          mode = "in-pad";
-        }
-        if (mode === "cover") {
-          mode = "out-crop";
-        }
-        if (typeof width === "number") {
-          this._scaleX = width / this._unscaled_width;
-          this._width = this._unscaled_width;
-        }
-        if (typeof height === "number") {
-          this._scaleY = height / this._unscaled_height;
-          this._height = this._unscaled_height;
-        }
-        if (typeof width === "number" && typeof height === "number" && typeof mode === "string") {
-          if (mode === "fill") ;
-          else if (mode === "out" || mode === "out-crop") {
-            this._scaleX = this._scaleY = Math.max(this._scaleX, this._scaleY);
-          } else if (mode === "in" || mode === "in-pad") {
-            this._scaleX = this._scaleY = Math.min(this._scaleX, this._scaleY);
-          }
-          if (mode === "out-crop" || mode === "in-pad") {
-            this._width = width / this._scaleX;
-            this._height = height / this._scaleY;
-          }
-        }
-      };
-      return Pin2;
-    })()
-  );
-  var getters = {
-    alpha: function(pin) {
-      return pin._alpha;
-    },
-    textureAlpha: function(pin) {
-      return pin._textureAlpha;
-    },
-    width: function(pin) {
-      return pin._width;
-    },
-    height: function(pin) {
-      return pin._height;
-    },
-    boxWidth: function(pin) {
-      return pin._boxWidth;
-    },
-    boxHeight: function(pin) {
-      return pin._boxHeight;
-    },
-    // scale : function(pin: Pin) {
-    // },
-    scaleX: function(pin) {
-      return pin._scaleX;
-    },
-    scaleY: function(pin) {
-      return pin._scaleY;
-    },
-    // skew : function(pin: Pin) {
-    // },
-    skewX: function(pin) {
-      return pin._skewX;
-    },
-    skewY: function(pin) {
-      return pin._skewY;
-    },
-    rotation: function(pin) {
-      return pin._rotation;
-    },
-    // pivot : function(pin: Pin) {
-    // },
-    pivotX: function(pin) {
-      return pin._pivotX;
-    },
-    pivotY: function(pin) {
-      return pin._pivotY;
-    },
-    // offset : function(pin: Pin) {
-    // },
-    offsetX: function(pin) {
-      return pin._offsetX;
-    },
-    offsetY: function(pin) {
-      return pin._offsetY;
-    },
-    // align : function(pin: Pin) {
-    // },
-    alignX: function(pin) {
-      return pin._alignX;
-    },
-    alignY: function(pin) {
-      return pin._alignY;
-    },
-    // handle : function(pin: Pin) {
-    // },
-    handleX: function(pin) {
-      return pin._handleX;
-    },
-    handleY: function(pin) {
-      return pin._handleY;
-    }
-  };
-  var setters = {
-    alpha: function(pin, value) {
-      pin._alpha = value;
-    },
-    textureAlpha: function(pin, value) {
-      pin._textureAlpha = value;
-    },
-    width: function(pin, value) {
-      pin._unscaled_width = value;
-      pin._width = value;
-      pin._ts_transform = ++iid$1;
-    },
-    height: function(pin, value) {
-      pin._unscaled_height = value;
-      pin._height = value;
-      pin._ts_transform = ++iid$1;
-    },
-    scale: function(pin, value) {
-      pin._scaleX = value;
-      pin._scaleY = value;
-      pin._ts_transform = ++iid$1;
-    },
-    scaleX: function(pin, value) {
-      pin._scaleX = value;
-      pin._ts_transform = ++iid$1;
-    },
-    scaleY: function(pin, value) {
-      pin._scaleY = value;
-      pin._ts_transform = ++iid$1;
-    },
-    skew: function(pin, value) {
-      pin._skewX = value;
-      pin._skewY = value;
-      pin._ts_transform = ++iid$1;
-    },
-    skewX: function(pin, value) {
-      pin._skewX = value;
-      pin._ts_transform = ++iid$1;
-    },
-    skewY: function(pin, value) {
-      pin._skewY = value;
-      pin._ts_transform = ++iid$1;
-    },
-    rotation: function(pin, value) {
-      pin._rotation = value;
-      pin._ts_transform = ++iid$1;
-    },
-    pivot: function(pin, value) {
-      pin._pivotX = value;
-      pin._pivotY = value;
-      pin._pivoted = true;
-      pin._ts_transform = ++iid$1;
-    },
-    pivotX: function(pin, value) {
-      pin._pivotX = value;
-      pin._pivoted = true;
-      pin._ts_transform = ++iid$1;
-    },
-    pivotY: function(pin, value) {
-      pin._pivotY = value;
-      pin._pivoted = true;
-      pin._ts_transform = ++iid$1;
-    },
-    offset: function(pin, value) {
-      pin._offsetX = value;
-      pin._offsetY = value;
-      pin._ts_translate = ++iid$1;
-    },
-    offsetX: function(pin, value) {
-      pin._offsetX = value;
-      pin._ts_translate = ++iid$1;
-    },
-    offsetY: function(pin, value) {
-      pin._offsetY = value;
-      pin._ts_translate = ++iid$1;
-    },
-    align: function(pin, value) {
-      this.alignX(pin, value);
-      this.alignY(pin, value);
-    },
-    alignX: function(pin, value) {
-      pin._alignX = value;
-      pin._aligned = true;
-      pin._ts_translate = ++iid$1;
-      this.handleX(pin, value);
-    },
-    alignY: function(pin, value) {
-      pin._alignY = value;
-      pin._aligned = true;
-      pin._ts_translate = ++iid$1;
-      this.handleY(pin, value);
-    },
-    handle: function(pin, value) {
-      this.handleX(pin, value);
-      this.handleY(pin, value);
-    },
-    handleX: function(pin, value) {
-      pin._handleX = value;
-      pin._handled = true;
-      pin._ts_translate = ++iid$1;
-    },
-    handleY: function(pin, value) {
-      pin._handleY = value;
-      pin._handled = true;
-      pin._ts_translate = ++iid$1;
-    },
-    resizeMode: function(pin, value, all) {
-      if (all) {
-        if (value == "in") {
-          value = "in-pad";
-        } else if (value == "out") {
-          value = "out-crop";
-        }
-        pin.fit(all.resizeWidth, all.resizeHeight, value);
-      }
-    },
-    resizeWidth: function(pin, value, all) {
-      if (!all || !all.resizeMode) {
-        pin.fit(value, null);
-      }
-    },
-    resizeHeight: function(pin, value, all) {
-      if (!all || !all.resizeMode) {
-        pin.fit(null, value);
-      }
-    },
-    scaleMode: function(pin, value, all) {
-      if (all) {
-        pin.fit(all.scaleWidth, all.scaleHeight, value);
-      }
-    },
-    scaleWidth: function(pin, value, all) {
-      if (!all || !all.scaleMode) {
-        pin.fit(value, null);
-      }
-    },
-    scaleHeight: function(pin, value, all) {
-      if (!all || !all.scaleMode) {
-        pin.fit(null, value);
-      }
-    },
-    matrix: function(pin, value) {
-      this.scaleX(pin, value.a);
-      this.skewX(pin, value.c / value.d);
-      this.skewY(pin, value.b / value.a);
-      this.scaleY(pin, value.d);
-      this.offsetX(pin, value.e);
-      this.offsetY(pin, value.f);
-      this.rotation(pin, 0);
-    }
-  };
-  var IDENTITY = function(x2) {
-    return x2;
-  };
-  var Easing = (
-    /** @class */
-    (function() {
-      function Easing2() {
-      }
-      Easing2.init = function(query, params) {
-        if (typeof query === "function")
-          return query;
-        if (typeof query !== "string")
-          return void 0;
-        var easing;
-        if (query.indexOf("(") === -1) {
-          easing = initEasing(query, params);
-        } else {
-          var tokens = /^((\w|-)+)?(\((.*)\))?$/i.exec(query);
-          if (tokens || tokens.length) {
-            var name2 = tokens[1];
-            var params2 = JSON.parse("[" + tokens[4] + "]");
-            easing = initEasing(name2, params2);
-          }
-        }
-        return easing;
-      };
-      return Easing2;
-    })()
-  );
-  var initEasing = function(query, params) {
-    var easing;
-    var easingFunction = EasingFunctions[query];
-    var easingFactory = EasingFactories[query];
-    if (easingFunction) {
-      easing = easingFunction;
-    } else if (easingFactory) {
-      if (params) {
-        easing = easingFactory.apply(null, params);
-      } else {
-        easing = easingFactory();
-      }
-    }
-    return easing;
-  };
-  var out = function(f) {
-    return function(t) {
-      return 1 - f(1 - t);
-    };
-  };
-  var inOut = function(f) {
-    return function(t) {
-      return t < 0.5 ? f(2 * t) / 2 : 1 - f(2 * (1 - t)) / 2;
-    };
-  };
-  var outIn = function(f) {
-    return function(t) {
-      return t < 0.5 ? 1 - f(2 * (1 - t)) / 2 : f(2 * t) / 2;
-    };
-  };
-  var linear = function(t) {
-    return t;
-  };
-  var quad = function(t) {
-    return t * t;
-  };
-  var cubic = function(t) {
-    return t * t * t;
-  };
-  var quart = function(t) {
-    return t * t * t * t;
-  };
-  var quint = function(t) {
-    return t * t * t * t * t;
-  };
-  var sin = function(t) {
-    return 1 - Math.cos(t * Math.PI / 2);
-  };
-  var exp = function(t) {
-    return t == 0 ? 0 : Math.pow(2, 10 * (t - 1));
-  };
-  var circle = function(t) {
-    return 1 - Math.sqrt(1 - t * t);
-  };
-  var bounce = function(t) {
-    return t < 1 / 2.75 ? 7.5625 * t * t : t < 2 / 2.75 ? 7.5625 * (t -= 1.5 / 2.75) * t + 0.75 : t < 2.5 / 2.75 ? 7.5625 * (t -= 2.25 / 2.75) * t + 0.9375 : 7.5625 * (t -= 2.625 / 2.75) * t + 0.984375;
-  };
-  var poly = function(e3) {
-    return function(t) {
-      return Math.pow(t, e3);
-    };
-  };
-  var elastic = function(a2, p) {
-    if (a2 === void 0) {
-      a2 = 1;
-    }
-    if (p === void 0) {
-      p = 0.45;
-    }
-    var s2 = p / (2 * Math.PI) * Math.asin(1 / a2);
-    return function(t) {
-      return 1 + a2 * Math.pow(2, -10 * t) * Math.sin((t - s2) * (2 * Math.PI) / p);
-    };
-  };
-  var back = function(s2) {
-    if (s2 === void 0) {
-      s2 = 1.70158;
-    }
-    return function(t) {
-      return t * t * ((s2 + 1) * t - s2);
-    };
-  };
-  var EasingFunctions = {
-    "linear": linear,
-    "linear-in": linear,
-    "linear-out": out(linear),
-    "linear-in-out": inOut(linear),
-    "linear-out-in": outIn(linear),
-    "quad": quad,
-    "quad-in": quad,
-    "quad-out": out(quad),
-    "quad-in-out": inOut(quad),
-    "quad-out-in": outIn(quad),
-    "cubic": cubic,
-    "cubic-in": cubic,
-    "cubic-out": out(cubic),
-    "cubic-in-out": inOut(cubic),
-    "cubic-out-in": outIn(cubic),
-    "quart": quart,
-    "quart-in": quart,
-    "quart-out": out(quart),
-    "quart-in-out": inOut(quart),
-    "quart-out-in": outIn(quart),
-    "quint": quint,
-    "quint-in": quint,
-    "quint-out": out(quint),
-    "quint-in-out": inOut(quint),
-    "quint-out-in": outIn(quint),
-    "sin": sin,
-    "sin-in": sin,
-    "sin-out": out(sin),
-    "sin-in-out": inOut(sin),
-    "sin-out-in": outIn(sin),
-    "sine": sin,
-    "sine-in": sin,
-    "sine-out": out(sin),
-    "sine-in-out": inOut(sin),
-    "sine-out-in": outIn(sin),
-    "exp": exp,
-    "exp-in": exp,
-    "exp-out": out(exp),
-    "exp-in-out": inOut(exp),
-    "exp-out-in": outIn(exp),
-    "expo": exp,
-    "expo-in": exp,
-    "expo-out": out(exp),
-    "expo-in-out": inOut(exp),
-    "expo-out-in": outIn(exp),
-    "circle": circle,
-    "circle-in": circle,
-    "circle-out": out(circle),
-    "circle-in-out": inOut(circle),
-    "circle-out-in": outIn(circle),
-    "circ": circle,
-    "circ-in": circle,
-    "circ-out": out(circle),
-    "circ-in-out": inOut(circle),
-    "circ-out-in": outIn(circle),
-    "bounce": bounce,
-    "bounce-in": bounce,
-    "bounce-out": out(bounce),
-    "bounce-in-out": inOut(bounce),
-    "bounce-out-in": outIn(bounce)
-  };
-  var EasingFactories = {
-    "poly": poly,
-    "poly-in": poly,
-    "poly-out": function(e3) {
-      return out(poly(e3));
-    },
-    "poly-in-out": function(e3) {
-      return inOut(poly(e3));
-    },
-    "poly-out-in": function(e3) {
-      return outIn(poly(e3));
-    },
-    "elastic": elastic,
-    "elastic-in": elastic,
-    "elastic-out": function(a2, p) {
-      return out(elastic(a2, p));
-    },
-    "elastic-in-out": function(a2, p) {
-      return inOut(elastic(a2, p));
-    },
-    "elastic-out-in": function(a2, p) {
-      return outIn(elastic(a2, p));
-    },
-    "back": back,
-    "back-in": back,
-    "back-out": function(s2) {
-      return out(back(s2));
-    },
-    "back-in-out": function(s2) {
-      return inOut(back(s2));
-    },
-    "back-out-in": function(s2) {
-      return outIn(back(s2));
-    }
-  };
-  var Transition = (
-    /** @class */
-    (function() {
-      function Transition2(owner, options2) {
-        if (options2 === void 0) {
-          options2 = {};
-        }
-        this.uid = "transition:" + uid();
-        this._ending = [];
-        this._end = {};
-        this._duration = options2.duration || 400;
-        this._delay = options2.delay || 0;
-        this._owner = owner;
-        this._time = 0;
-      }
-      Transition2.prototype.tick = function(component2, elapsed, now2, last) {
-        this._time += elapsed;
-        if (this._time < this._delay) {
-          return;
-        }
-        var time = this._time - this._delay;
-        if (!this._start) {
-          this._start = {};
-          for (var key in this._end) {
-            this._start[key] = this._owner._pin.get(key);
-          }
-        }
-        var p = Math.min(time / this._duration, 1);
-        var ended = p >= 1;
-        if (typeof this._easing == "function") {
-          p = this._easing(p);
-        }
-        var q = 1 - p;
-        for (var key in this._end) {
-          this._owner._pin.set(key, this._start[key] * q + this._end[key] * p);
-        }
-        return ended;
-      };
-      Transition2.prototype.finish = function() {
-        var _this = this;
-        this._ending.forEach(function(callback) {
-          try {
-            callback.call(_this._owner);
-          } catch (e3) {
-            console.error(e3);
-          }
-        });
-        return this._next;
-      };
-      Transition2.prototype.tween = function(a2, b2) {
-        var options2;
-        if (typeof a2 === "object" && a2 !== null) {
-          options2 = a2;
-        } else {
-          options2 = {};
-          if (typeof a2 === "number") {
-            options2.duration = a2;
-            if (typeof b2 === "number") {
-              options2.delay = b2;
-            }
-          }
-        }
-        return this._next = new Transition2(this._owner, options2);
-      };
-      Transition2.prototype.duration = function(duration) {
-        this._duration = duration;
-        return this;
-      };
-      Transition2.prototype.delay = function(delay) {
-        this._delay = delay;
-        return this;
-      };
-      Transition2.prototype.ease = function(easing) {
-        var _a2;
-        var params = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-          params[_i - 1] = arguments[_i];
-        }
-        this._easing = (_a2 = Easing.init(easing, params)) !== null && _a2 !== void 0 ? _a2 : IDENTITY;
-        return this;
-      };
-      Transition2.prototype.done = function(fn) {
-        this._ending.push(fn);
-        return this;
-      };
-      Transition2.prototype.hide = function() {
-        this._ending.push(function() {
-          this.hide();
-        });
-        this._hide = true;
-        return this;
-      };
-      Transition2.prototype.remove = function() {
-        this._ending.push(function() {
-          this.remove();
-        });
-        this._remove = true;
-        return this;
-      };
-      Transition2.prototype.pin = function(a2, b2) {
-        if (typeof a2 === "object") {
-          for (var attr in a2) {
-            pinning(this._owner, this._end, attr, a2[attr]);
-          }
-        } else if (typeof b2 !== "undefined") {
-          pinning(this._owner, this._end, a2, b2);
-        }
-        return this;
-      };
-      Transition2.prototype.then = function(fn) {
-        this.done(fn);
-        return this;
-      };
-      Transition2.prototype.clear = function(forward) {
-        return this;
-      };
-      Transition2.prototype.size = function(w, h) {
-        this.pin("width", w);
-        this.pin("height", h);
-        return this;
-      };
-      Transition2.prototype.width = function(w) {
-        this.pin("width", w);
-        return this;
-      };
-      Transition2.prototype.height = function(h) {
-        this.pin("height", h);
-        return this;
-      };
-      Transition2.prototype.offset = function(a2, b2) {
-        if (typeof a2 === "object") {
-          b2 = a2.y;
-          a2 = a2.x;
-        }
-        this.pin("offsetX", a2);
-        this.pin("offsetY", b2);
-        return this;
-      };
-      Transition2.prototype.rotate = function(a2) {
-        this.pin("rotation", a2);
-        return this;
-      };
-      Transition2.prototype.skew = function(a2, b2) {
-        if (typeof a2 === "object") {
-          b2 = a2.y;
-          a2 = a2.x;
-        } else if (typeof b2 === "undefined") {
-          b2 = a2;
-        }
-        this.pin("skewX", a2);
-        this.pin("skewY", b2);
-        return this;
-      };
-      Transition2.prototype.scale = function(a2, b2) {
-        if (typeof a2 === "object") {
-          b2 = a2.y;
-          a2 = a2.x;
-        } else if (typeof b2 === "undefined") {
-          b2 = a2;
-        }
-        this.pin("scaleX", a2);
-        this.pin("scaleY", b2);
-        return this;
-      };
-      Transition2.prototype.alpha = function(a2, ta) {
-        this.pin("alpha", a2);
-        if (typeof ta !== "undefined") {
-          this.pin("textureAlpha", ta);
-        }
-        return this;
-      };
-      return Transition2;
-    })()
-  );
-  function pinning(component2, map, key, value) {
-    if (typeof component2._pin.get(key) === "number") {
-      map[key] = value;
-    } else if (typeof component2._pin.get(key + "X") === "number" && typeof component2._pin.get(key + "Y") === "number") {
-      map[key + "X"] = value;
-      map[key + "Y"] = value;
-    }
-  }
-  var iid = 0;
-  stats.create = 0;
-  function assertType(obj) {
-    if (obj && obj instanceof Component) {
-      return obj;
-    }
-    throw "Invalid component: " + obj;
-  }
-  var Component = (
-    /** @class */
-    (function() {
-      function Component2() {
-        var _this = this;
-        this.uid = "component:" + uid();
-        this._label = "";
-        this._parent = null;
-        this._next = null;
-        this._prev = null;
-        this._first = null;
-        this._last = null;
-        this._visible = true;
-        this._alpha = 1;
-        this._padding = 0;
-        this._spacing = 0;
-        this._pin = new Pin(this);
-        this._listeners = {};
-        this._attrs = {};
-        this._flags = {};
-        this._transitions = [];
-        this._tickBefore = [];
-        this._tickAfter = [];
-        this.MAX_ELAPSE = Infinity;
-        this.renderedBefore = false;
-        this._transitionTickInitied = false;
-        this._transitionTickLastTime = 0;
-        this._transitionTick = function(elapsed, now2, last) {
-          if (!_this._transitions.length) {
-            return false;
-          }
-          var ignore = _this._transitionTickLastTime !== last;
-          _this._transitionTickLastTime = now2;
-          if (ignore) {
-            return true;
-          }
-          var head = _this._transitions[0];
-          var ended = head.tick(_this, elapsed, now2, last);
-          if (ended) {
-            if (head === _this._transitions[0]) {
-              _this._transitions.shift();
-            }
-            var next = head.finish();
-            if (next) {
-              _this._transitions.unshift(next);
-            }
-          }
-          return true;
-        };
-        stats.create++;
-        if (this instanceof Component2) {
-          this.label(this.constructor.name);
-        }
-      }
-      Component2.prototype.matrix = function(relative) {
-        if (relative === void 0) {
-          relative = false;
-        }
-        if (relative === true) {
-          return this._pin.relativeMatrix();
-        }
-        return this._pin.absoluteMatrix();
-      };
-      Component2.prototype.getPixelRatio = function() {
-        var _a2;
-        var m = (_a2 = this._parent) === null || _a2 === void 0 ? void 0 : _a2.matrix();
-        var pixelRatio = !m ? 1 : Math.max(Math.abs(m.a), Math.abs(m.b)) / getDevicePixelRatio();
-        return pixelRatio;
-      };
-      Component2.prototype.getDevicePixelRatio = function() {
-        var _a2;
-        var parentMatrix = (_a2 = this._parent) === null || _a2 === void 0 ? void 0 : _a2.matrix();
-        var pixelRatio = !parentMatrix ? 1 : Math.max(Math.abs(parentMatrix.a), Math.abs(parentMatrix.b));
-        return pixelRatio;
-      };
-      Component2.prototype.getLogicalPixelRatio = function() {
-        return this.getDevicePixelRatio() / getDevicePixelRatio();
-      };
-      Component2.prototype.pin = function(a2, b2) {
-        if (typeof a2 === "object") {
-          this._pin.set(a2);
-          return this;
-        } else if (typeof a2 === "string") {
-          if (typeof b2 === "undefined") {
-            return this._pin.get(a2);
-          } else {
-            this._pin.set(a2, b2);
-            return this;
-          }
-        } else if (typeof a2 === "undefined") {
-          return this._pin;
-        }
-      };
-      Component2.prototype.fit = function(a2, b2, c2) {
-        var _a2, _b, _c;
-        if (typeof a2 === "object") {
-          this._pin.fit((_a2 = a2.width) !== null && _a2 !== void 0 ? _a2 : a2.x, (_b = a2.height) !== null && _b !== void 0 ? _b : a2.y, (_c = a2.mode) !== null && _c !== void 0 ? _c : b2);
-        } else {
-          this._pin.fit(a2, b2, c2);
-        }
-        return this;
-      };
-      Component2.prototype.scaleTo = function(a2, b2, c2) {
-        return this.fit(a2, b2, c2);
-      };
-      Component2.prototype.toString = function() {
-        return "[" + this._label + "]";
-      };
-      Component2.prototype.id = function(label) {
-        if (typeof label === "undefined") {
-          return this._label;
-        }
-        this._label = label;
-        return this;
-      };
-      Component2.prototype.label = function(label) {
-        if (typeof label === "undefined") {
-          return this._label;
-        }
-        this._label = label;
-        return this;
-      };
-      Component2.prototype.attr = function(name, value) {
-        if (typeof value === "undefined") {
-          return this._attrs !== null ? this._attrs[name] : void 0;
-        }
-        (this._attrs !== null ? this._attrs : this._attrs = {})[name] = value;
-        return this;
-      };
-      Component2.prototype.visible = function(visible) {
-        if (typeof visible === "undefined") {
-          return this._visible;
-        }
-        this._visible = visible;
-        this._parent && (this._parent._ts_children = ++iid);
-        this._ts_pin = ++iid;
-        this.touch();
-        return this;
-      };
-      Component2.prototype.hide = function() {
-        this.visible(false);
-        return this;
-      };
-      Component2.prototype.show = function() {
-        this.visible(true);
-        return this;
-      };
-      Component2.prototype.parent = function() {
-        return this._parent;
-      };
-      Component2.prototype.next = function(visible) {
-        var next = this._next;
-        while (next && visible && !next._visible) {
-          next = next._next;
-        }
-        return next;
-      };
-      Component2.prototype.prev = function(visible) {
-        var prev = this._prev;
-        while (prev && visible && !prev._visible) {
-          prev = prev._prev;
-        }
-        return prev;
-      };
-      Component2.prototype.first = function(visible) {
-        var next = this._first;
-        while (next && visible && !next._visible) {
-          next = next._next;
-        }
-        return next;
-      };
-      Component2.prototype.last = function(visible) {
-        var prev = this._last;
-        while (prev && visible && !prev._visible) {
-          prev = prev._prev;
-        }
-        return prev;
-      };
-      Component2.prototype.visit = function(visitor, payload) {
-        var reverse = visitor.reverse;
-        var visible = visitor.visible;
-        if (visitor.start && visitor.start(this, payload)) {
-          return;
-        }
-        var child;
-        var next = reverse ? this.last(visible) : this.first(visible);
-        while (child = next) {
-          next = reverse ? child.prev(visible) : child.next(visible);
-          if (child.visit(visitor, payload)) {
-            return true;
-          }
-        }
-        return visitor.end && visitor.end(this, payload);
-      };
-      Component2.prototype.append = function(child, more) {
-        if (Array.isArray(child)) {
-          for (var i = 0; i < child.length; i++) {
-            Component2.append(this, child[i]);
-          }
-        } else if (typeof more !== "undefined") {
-          for (var i = 0; i < arguments.length; i++) {
-            Component2.append(this, arguments[i]);
-          }
-        } else if (typeof child !== "undefined")
-          Component2.append(this, child);
-        return this;
-      };
-      Component2.prototype.prepend = function(child, more) {
-        if (Array.isArray(child)) {
-          for (var i = child.length - 1; i >= 0; i--) {
-            Component2.prepend(this, child[i]);
-          }
-        } else if (typeof more !== "undefined") {
-          for (var i = arguments.length - 1; i >= 0; i--) {
-            Component2.prepend(this, arguments[i]);
-          }
-        } else if (typeof child !== "undefined")
-          Component2.prepend(this, child);
-        return this;
-      };
-      Component2.prototype.appendTo = function(parent) {
-        Component2.append(parent, this);
-        return this;
-      };
-      Component2.prototype.prependTo = function(parent) {
-        Component2.prepend(parent, this);
-        return this;
-      };
-      Component2.prototype.insertNext = function(sibling, more) {
-        if (Array.isArray(sibling)) {
-          for (var i = 0; i < sibling.length; i++) {
-            Component2.insertAfter(sibling[i], this);
-          }
-        } else if (typeof more !== "undefined") {
-          for (var i = 0; i < arguments.length; i++) {
-            Component2.insertAfter(arguments[i], this);
-          }
-        } else if (typeof sibling !== "undefined") {
-          Component2.insertAfter(sibling, this);
-        }
-        return this;
-      };
-      Component2.prototype.insertPrev = function(sibling, more) {
-        if (Array.isArray(sibling)) {
-          for (var i = sibling.length - 1; i >= 0; i--) {
-            Component2.insertBefore(sibling[i], this);
-          }
-        } else if (typeof more !== "undefined") {
-          for (var i = arguments.length - 1; i >= 0; i--) {
-            Component2.insertBefore(arguments[i], this);
-          }
-        } else if (typeof sibling !== "undefined") {
-          Component2.insertBefore(sibling, this);
-        }
-        return this;
-      };
-      Component2.prototype.insertAfter = function(prev) {
-        Component2.insertAfter(this, prev);
-        return this;
-      };
-      Component2.prototype.insertBefore = function(next) {
-        Component2.insertBefore(this, next);
-        return this;
-      };
-      Component2.append = function(parent, child) {
-        assertType(child);
-        assertType(parent);
-        child.remove();
-        if (parent._last) {
-          parent._last._next = child;
-          child._prev = parent._last;
-        }
-        child._parent = parent;
-        parent._last = child;
-        if (!parent._first) {
-          parent._first = child;
-        }
-        child._parent._flag(child, true);
-        child._ts_parent = ++iid;
-        parent._ts_children = ++iid;
-        parent.touch();
-      };
-      Component2.prepend = function(parent, child) {
-        assertType(child);
-        assertType(parent);
-        child.remove();
-        if (parent._first) {
-          parent._first._prev = child;
-          child._next = parent._first;
-        }
-        child._parent = parent;
-        parent._first = child;
-        if (!parent._last) {
-          parent._last = child;
-        }
-        child._parent._flag(child, true);
-        child._ts_parent = ++iid;
-        parent._ts_children = ++iid;
-        parent.touch();
-      };
-      Component2.insertBefore = function(self2, next) {
-        assertType(self2);
-        assertType(next);
-        self2.remove();
-        var parent = next._parent;
-        var prev = next._prev;
-        if (!parent) {
-          return;
-        }
-        next._prev = self2;
-        prev && (prev._next = self2) || parent && (parent._first = self2);
-        self2._parent = parent;
-        self2._prev = prev;
-        self2._next = next;
-        self2._parent._flag(self2, true);
-        self2._ts_parent = ++iid;
-        self2.touch();
-      };
-      Component2.insertAfter = function(self2, prev) {
-        assertType(self2);
-        assertType(prev);
-        self2.remove();
-        var parent = prev._parent;
-        var next = prev._next;
-        if (!parent) {
-          return;
-        }
-        prev._next = self2;
-        next && (next._prev = self2) || parent && (parent._last = self2);
-        self2._parent = parent;
-        self2._prev = prev;
-        self2._next = next;
-        self2._parent._flag(self2, true);
-        self2._ts_parent = ++iid;
-        self2.touch();
-      };
-      Component2.prototype.remove = function(child, more) {
-        if (typeof child !== "undefined") {
-          if (Array.isArray(child)) {
-            for (var i = 0; i < child.length; i++) {
-              assertType(child[i]).remove();
-            }
-          } else if (typeof more !== "undefined") {
-            for (var i = 0; i < arguments.length; i++) {
-              assertType(arguments[i]).remove();
-            }
-          } else {
-            assertType(child).remove();
-          }
-          return this;
-        }
-        if (this._prev) {
-          this._prev._next = this._next;
-        }
-        if (this._next) {
-          this._next._prev = this._prev;
-        }
-        if (this._parent) {
-          if (this._parent._first === this) {
-            this._parent._first = this._next;
-          }
-          if (this._parent._last === this) {
-            this._parent._last = this._prev;
-          }
-          this._parent._flag(this, false);
-          this._parent._ts_children = ++iid;
-          this._parent.touch();
-        }
-        this._prev = this._next = this._parent = null;
-        this._ts_parent = ++iid;
-        return this;
-      };
-      Component2.prototype.empty = function() {
-        var child = null;
-        var next = this._first;
-        while (child = next) {
-          next = child._next;
-          child._prev = child._next = child._parent = null;
-          this._flag(child, false);
-        }
-        this._first = this._last = null;
-        this._ts_children = ++iid;
-        this.touch();
-        return this;
-      };
-      Component2.prototype.touch = function() {
-        this._ts_touch = ++iid;
-        this._parent && this._parent.touch();
-        return this;
-      };
-      Component2.prototype._flag = function(key, value) {
-        if (typeof value === "undefined") {
-          return this._flags !== null && this._flags[key] || 0;
-        }
-        if (typeof key === "string") {
-          if (value) {
-            this._flags = this._flags || {};
-            if (!this._flags[key] && this._parent) {
-              this._parent._flag(key, true);
-            }
-            this._flags[key] = (this._flags[key] || 0) + 1;
-          } else if (this._flags && this._flags[key] > 0) {
-            if (this._flags[key] == 1 && this._parent) {
-              this._parent._flag(key, false);
-            }
-            this._flags[key] = this._flags[key] - 1;
-          }
-        }
-        if (typeof key === "object") {
-          if (key._flags) {
-            for (var type in key._flags) {
-              if (key._flags[type] > 0) {
-                this._flag(type, value);
-              }
-            }
-          }
-        }
-        return this;
-      };
-      Component2.prototype.hitTest = function(hit) {
-        var width = this._pin._width;
-        var height = this._pin._height;
-        return hit.x >= 0 && hit.x <= width && hit.y >= 0 && hit.y <= height;
-      };
-      Component2.prototype.prerender = function() {
-        if (!this._visible) {
-          return;
-        }
-        this.prerenderTexture();
-        var child;
-        var next = this._first;
-        while (child = next) {
-          next = child._next;
-          child.prerender();
-        }
-      };
-      Component2.prototype.prerenderTexture = function() {
-      };
-      Component2.prototype.render = function(context) {
-        if (!this._visible) {
-          return;
-        }
-        stats.component++;
-        var m = this.matrix();
-        context.setTransform(m.a, m.b, m.c, m.d, m.e, m.f);
-        this._alpha = this._pin._alpha * (this._parent ? this._parent._alpha : 1);
-        var alpha = this._pin._textureAlpha * this._alpha;
-        if (context.globalAlpha != alpha) {
-          context.globalAlpha = alpha;
-        }
-        if (!this.renderedBefore) {
-          this.prerenderTexture();
-        }
-        this.renderedBefore = true;
-        this.renderTexture(context);
-        if (context.globalAlpha != this._alpha) {
-          context.globalAlpha = this._alpha;
-        }
-        var child;
-        var next = this._first;
-        while (child = next) {
-          next = child._next;
-          child.render(context);
-        }
-      };
-      Component2.prototype.renderTexture = function(context) {
-      };
-      Component2.prototype._tick = function(elapsed, now2, last) {
-        if (!this._visible) {
-          return;
-        }
-        if (elapsed > this.MAX_ELAPSE) {
-          elapsed = this.MAX_ELAPSE;
-        }
-        var ticked = false;
-        if (this._tickBefore !== null) {
-          for (var i = 0; i < this._tickBefore.length; i++) {
-            stats.tick++;
-            var tickFn = this._tickBefore[i];
-            ticked = tickFn.call(this, elapsed, now2, last) === true || ticked;
-          }
-        }
-        var child;
-        var next = this._first;
-        while (child = next) {
-          next = child._next;
-          if (child._flag("_tick")) {
-            ticked = child._tick(elapsed, now2, last) === true ? true : ticked;
-          }
-        }
-        if (this._tickAfter !== null) {
-          for (var i = 0; i < this._tickAfter.length; i++) {
-            stats.tick++;
-            var tickFn = this._tickAfter[i];
-            ticked = tickFn.call(this, elapsed, now2, last) === true || ticked;
-          }
-        }
-        return ticked;
-      };
-      Component2.prototype.tick = function(callback, before) {
-        var _a2, _b;
-        if (before === void 0) {
-          before = false;
-        }
-        if (typeof callback !== "function") {
-          return;
-        }
-        if (before) {
-          if (this._tickBefore === null) {
-            this._tickBefore = [];
-          }
-          this._tickBefore.push(callback);
-        } else {
-          if (this._tickAfter === null) {
-            this._tickAfter = [];
-          }
-          this._tickAfter.push(callback);
-        }
-        var hasTickListener = ((_a2 = this._tickAfter) === null || _a2 === void 0 ? void 0 : _a2.length) > 0 || ((_b = this._tickBefore) === null || _b === void 0 ? void 0 : _b.length) > 0;
-        this._flag("_tick", hasTickListener);
-      };
-      Component2.prototype.untick = function(callback) {
-        if (typeof callback !== "function") {
-          return;
-        }
-        var i;
-        if (this._tickBefore !== null && (i = this._tickBefore.indexOf(callback)) >= 0) {
-          this._tickBefore.splice(i, 1);
-        }
-        if (this._tickAfter !== null && (i = this._tickAfter.indexOf(callback)) >= 0) {
-          this._tickAfter.splice(i, 1);
-        }
-      };
-      Component2.prototype.timeout = function(callback, time) {
-        this.setTimeout(callback, time);
-      };
-      Component2.prototype.setTimeout = function(callback, time) {
-        function timer(t) {
-          if ((time -= t) < 0) {
-            this.untick(timer);
-            callback.call(this);
-          } else {
-            return true;
-          }
-        }
-        this.tick(timer);
-        return timer;
-      };
-      Component2.prototype.clearTimeout = function(timer) {
-        this.untick(timer);
-      };
-      Component2.prototype.on = function(type, listener) {
-        if (!type || !type.length || typeof listener !== "function") {
-          return this;
-        }
-        if (typeof type !== "string" && typeof type.join === "function") {
-          for (var i = 0; i < type.length; i++) {
-            this.on(type[i], listener);
-          }
-        } else if (typeof type === "string" && type.indexOf(" ") > -1) {
-          type = type.match(/\S+/g);
-          for (var i = 0; i < type.length; i++) {
-            this._on(type[i], listener);
-          }
-        } else if (typeof type === "string") {
-          this._on(type, listener);
-        } else ;
-        return this;
-      };
-      Component2.prototype._on = function(type, listener) {
-        if (typeof type !== "string" && typeof listener !== "function") {
-          return;
-        }
-        this._listeners[type] = this._listeners[type] || [];
-        this._listeners[type].push(listener);
-        this._flag(type, true);
-      };
-      Component2.prototype.off = function(type, listener) {
-        if (!type || !type.length || typeof listener !== "function") {
-          return this;
-        }
-        if (typeof type !== "string" && typeof type.join === "function") {
-          for (var i = 0; i < type.length; i++) {
-            this.off(type[i], listener);
-          }
-        } else if (typeof type === "string" && type.indexOf(" ") > -1) {
-          type = type.match(/\S+/g);
-          for (var i = 0; i < type.length; i++) {
-            this._off(type[i], listener);
-          }
-        } else if (typeof type === "string") {
-          this._off(type, listener);
-        } else ;
-        return this;
-      };
-      Component2.prototype._off = function(type, listener) {
-        if (typeof type !== "string" && typeof listener !== "function") {
-          return;
-        }
-        var listeners = this._listeners[type];
-        if (!listeners || !listeners.length) {
-          return;
-        }
-        var index = listeners.indexOf(listener);
-        if (index >= 0) {
-          listeners.splice(index, 1);
-          this._flag(type, false);
-        }
-      };
-      Component2.prototype.listeners = function(type) {
-        return this._listeners[type];
-      };
-      Component2.prototype.publish = function(name, args) {
-        var listeners = this.listeners(name);
-        if (!listeners || !listeners.length) {
-          return 0;
-        }
-        for (var l = 0; l < listeners.length; l++) {
-          listeners[l].apply(this, args);
-        }
-        return listeners.length;
-      };
-      Component2.prototype.trigger = function(name, args) {
-        this.publish(name, args);
-        return this;
-      };
-      Component2.prototype.size = function(w, h) {
-        this.pin("width", w);
-        this.pin("height", h);
-        return this;
-      };
-      Component2.prototype.width = function(w) {
-        if (typeof w === "undefined") {
-          return this.pin("width");
-        }
-        this.pin("width", w);
-        return this;
-      };
-      Component2.prototype.height = function(h) {
-        if (typeof h === "undefined") {
-          return this.pin("height");
-        }
-        this.pin("height", h);
-        return this;
-      };
-      Component2.prototype.offset = function(a2, b2) {
-        if (typeof a2 === "object") {
-          b2 = a2.y;
-          a2 = a2.x;
-        }
-        this.pin("offsetX", a2);
-        this.pin("offsetY", b2);
-        return this;
-      };
-      Component2.prototype.rotate = function(a2) {
-        this.pin("rotation", a2);
-        return this;
-      };
-      Component2.prototype.skew = function(a2, b2) {
-        if (typeof a2 === "object") {
-          b2 = a2.y;
-          a2 = a2.x;
-        } else if (typeof b2 === "undefined")
-          b2 = a2;
-        this.pin("skewX", a2);
-        this.pin("skewY", b2);
-        return this;
-      };
-      Component2.prototype.scale = function(a2, b2) {
-        if (typeof a2 === "object") {
-          b2 = a2.y;
-          a2 = a2.x;
-        } else if (typeof b2 === "undefined")
-          b2 = a2;
-        this.pin("scaleX", a2);
-        this.pin("scaleY", b2);
-        return this;
-      };
-      Component2.prototype.alpha = function(a2, ta) {
-        this.pin("alpha", a2);
-        if (typeof ta !== "undefined") {
-          this.pin("textureAlpha", ta);
-        }
-        return this;
-      };
-      Component2.prototype.tween = function(a2, b2, c2) {
-        var options2;
-        if (typeof a2 === "object" && a2 !== null) {
-          options2 = a2;
-        } else {
-          options2 = {};
-          if (typeof a2 === "number") {
-            options2.duration = a2;
-            if (typeof b2 === "number") {
-              options2.delay = b2;
-              if (typeof c2 === "boolean") {
-                options2.append = c2;
-              }
-            } else if (typeof b2 === "boolean") {
-              options2.append = b2;
-            }
-          } else if (typeof a2 === "boolean") {
-            options2.append = a2;
-          }
-        }
-        if (!this._transitionTickInitied) {
-          this.tick(this._transitionTick, true);
-          this._transitionTickInitied = true;
-        }
-        this.touch();
-        if (!options2.append) {
-          this._transitions.length = 0;
-        }
-        var transition = new Transition(this, options2);
-        this._transitions.push(transition);
-        return transition;
-      };
-      Component2.prototype.row = function(align) {
-        this.direction("row", align);
-        return this;
-      };
-      Component2.prototype.column = function(align) {
-        this.direction("column", align);
-        return this;
-      };
-      Component2.prototype.align = function(direction, align) {
-        if (typeof direction === "string") {
-          return this.direction(direction, align);
-        }
-      };
-      Component2.prototype.direction = function(direction, align) {
-        var _this = this;
-        this._padding = this._padding;
-        this._spacing = this._spacing;
-        this._layoutTicker && this.untick(this._layoutTicker);
-        this.tick(this._layoutTicker = function() {
-          if (_this._mo_seq == _this._ts_touch) {
-            return;
-          }
-          _this._mo_seq = _this._ts_touch;
-          var alignChildren = _this._mo_seqAlign != _this._ts_children;
-          _this._mo_seqAlign = _this._ts_children;
-          var width = 0;
-          var height = 0;
-          var child;
-          var next = _this.first(true);
-          var first = true;
-          while (child = next) {
-            next = child.next(true);
-            child.matrix(true);
-            var w = child.pin("boxWidth");
-            var h = child.pin("boxHeight");
-            if (direction == "column") {
-              !first && (height += _this._spacing);
-              child.pin("offsetY") != height && child.pin("offsetY", height);
-              width = Math.max(width, w);
-              height = height + h;
-              alignChildren && child.pin("alignX", align);
-            } else if (direction == "row") {
-              !first && (width += _this._spacing);
-              child.pin("offsetX") != width && child.pin("offsetX", width);
-              width = width + w;
-              height = Math.max(height, h);
-              alignChildren && child.pin("alignY", align);
-            }
-            first = false;
-          }
-          width += 2 * _this._padding;
-          height += 2 * _this._padding;
-          _this.pin("width") != width && _this.pin("width", width);
-          _this.pin("height") != height && _this.pin("height", height);
-        });
-        return this;
-      };
-      Component2.prototype.box = function() {
-        return this.minimize();
-      };
-      Component2.prototype.layer = function() {
-        return this.maximize();
-      };
-      Component2.prototype.minimize = function() {
-        var _this = this;
-        this._padding = this._padding;
-        this._layoutTicker && this.untick(this._layoutTicker);
-        this.tick(this._layoutTicker = function() {
-          if (_this._mo_box == _this._ts_touch) {
-            return;
-          }
-          _this._mo_box = _this._ts_touch;
-          var width = 0;
-          var height = 0;
-          var child;
-          var next = _this.first(true);
-          while (child = next) {
-            next = child.next(true);
-            child.matrix(true);
-            var w = child.pin("boxWidth");
-            var h = child.pin("boxHeight");
-            width = Math.max(width, w);
-            height = Math.max(height, h);
-          }
-          width += 2 * _this._padding;
-          height += 2 * _this._padding;
-          _this.pin("width") != width && _this.pin("width", width);
-          _this.pin("height") != height && _this.pin("height", height);
-        });
-        return this;
-      };
-      Component2.prototype.maximize = function() {
-        var _this = this;
-        this._layoutTicker && this.untick(this._layoutTicker);
-        this.tick(this._layoutTicker = function() {
-          var parent = _this.parent();
-          if (parent) {
-            var width = parent.pin("width");
-            if (_this.pin("width") != width) {
-              _this.pin("width", width);
-            }
-            var height = parent.pin("height");
-            if (_this.pin("height") != height) {
-              _this.pin("height", height);
-            }
-          }
-        }, true);
-        return this;
-      };
-      Component2.prototype.padding = function(pad) {
-        this._padding = pad;
-        return this;
-      };
-      Component2.prototype.spacing = function(space) {
-        this._spacing = space;
-        return this;
-      };
-      return Component2;
-    })()
-  );
-  function sprite(frame) {
-    var sprite2 = new Sprite();
-    frame && sprite2.texture(frame);
-    return sprite2;
-  }
-  var Sprite = (
-    /** @class */
-    (function(_super) {
-      __extends(Sprite2, _super);
-      function Sprite2() {
-        var _this = _super.call(this) || this;
-        _this._texture = null;
-        _this._image = null;
-        _this._tiled = false;
-        _this._stretched = false;
-        _this.prerenderContext = {};
-        _this.label("Sprite");
-        return _this;
-      }
-      Sprite2.prototype.texture = function(frame) {
-        this._image = texture(frame).one();
-        if (this._image) {
-          this.pin("width", this._image.getWidth());
-          this.pin("height", this._image.getHeight());
-          if (this._tiled) {
-            this._texture = new ResizableTexture(this._image, "tile");
-          } else if (this._stretched) {
-            this._texture = new ResizableTexture(this._image, "stretch");
-          } else {
-            this._texture = new PipeTexture(this._image);
-          }
-        } else {
-          this.pin("width", 0);
-          this.pin("height", 0);
-          this._texture = null;
-        }
-        return this;
-      };
-      Sprite2.prototype.image = function(frame) {
-        return this.texture(frame);
-      };
-      Sprite2.prototype.tile = function(inner) {
-        this._tiled = true;
-        var texture2 = new ResizableTexture(this._image, "tile");
-        this._texture = texture2;
-        return this;
-      };
-      Sprite2.prototype.stretch = function(inner) {
-        this._stretched = true;
-        var texture2 = new ResizableTexture(this._image, "stretch");
-        this._texture = texture2;
-        return this;
-      };
-      Sprite2.prototype.prerenderTexture = function() {
-        if (!this._image)
-          return;
-        var pixelRatio = this.getDevicePixelRatio();
-        this.prerenderContext.pixelRatio = pixelRatio;
-        var updated = this._image.prerender(this.prerenderContext);
-        if (updated === true) {
-          var w = this._image.getWidth();
-          var h = this._image.getHeight();
-          this.size(w, h);
-        }
-      };
-      Sprite2.prototype.renderTexture = function(context) {
-        if (!this._texture)
-          return;
-        if (this._texture["_resizeMode"]) {
-          this._texture.dw = this.pin("width");
-          this._texture.dh = this.pin("height");
-        }
-        this._texture.draw(context);
-      };
-      return Sprite2;
-    })(Component)
-  );
-  var CanvasTexture = (
-    /** @class */
-    (function(_super) {
-      __extends(CanvasTexture2, _super);
-      function CanvasTexture2() {
-        var _this = _super.call(this, document.createElement("canvas")) || this;
-        _this._lastPixelRatio = 0;
-        return _this;
-      }
-      CanvasTexture2.prototype.setSize = function(destWidth, destHeight, pixelRatio) {
-        if (pixelRatio === void 0) {
-          pixelRatio = 1;
-        }
-        this._source.width = destWidth * pixelRatio;
-        this._source.height = destHeight * pixelRatio;
-        this._pixelRatio = pixelRatio;
-      };
-      CanvasTexture2.prototype.getContext = function(type, attributes) {
-        if (type === void 0) {
-          type = "2d";
-        }
-        return this._source.getContext(type, attributes);
-      };
-      CanvasTexture2.prototype.getDevicePixelRatio = function() {
-        return this._lastPixelRatio;
-      };
-      CanvasTexture2.prototype.getOptimalPixelRatio = function() {
-        return this.getDevicePixelRatio();
-      };
-      CanvasTexture2.prototype.setMemoizer = function(memoizer) {
-        this._memoizer = memoizer;
-      };
-      CanvasTexture2.prototype.setDrawer = function(drawer) {
-        this._drawer = drawer;
-      };
-      CanvasTexture2.prototype.prerender = function(context) {
-        var newPixelRatio = context.pixelRatio;
-        var lastPixelRatio = this._lastPixelRatio;
-        var pixelRationChange = lastPixelRatio / newPixelRatio;
-        var pixelRatioChanged = lastPixelRatio === 0 || pixelRationChange > 1.25 || pixelRationChange < 0.8;
-        if (pixelRatioChanged) {
-          this._lastPixelRatio = newPixelRatio;
-        }
-        var newMemoKey = this._memoizer ? this._memoizer.call(this) : null;
-        var memoKeyChanged = this._lastMemoKey !== newMemoKey;
-        if (pixelRatioChanged || memoKeyChanged) {
-          this._lastMemoKey = newMemoKey;
-          this._lastPixelRatio = newPixelRatio;
-          if (typeof this._drawer === "function") {
-            this._drawer.call(this);
-          }
-          return true;
-        }
-      };
-      CanvasTexture2.prototype.size = function(width, height, pixelRatio) {
-        this.setSize(width, height, pixelRatio);
-        return this;
-      };
-      CanvasTexture2.prototype.context = function(type, attributes) {
-        if (type === void 0) {
-          type = "2d";
-        }
-        return this.getContext(type, attributes);
-      };
-      CanvasTexture2.prototype.canvas = function(legacyTextureDrawer) {
-        if (typeof legacyTextureDrawer === "function") {
-          legacyTextureDrawer.call(this, this.getContext());
-        } else if (typeof legacyTextureDrawer === "undefined") {
-          if (typeof this._drawer === "function") {
-            this._drawer.call(this);
-          }
-        }
-        return this;
-      };
-      return CanvasTexture2;
-    })(ImageTexture)
-  );
-  function canvas(type, attributes, legacyTextureDrawer) {
-    if (typeof type === "function") {
-      var texture_1 = new CanvasTexture();
-      legacyTextureDrawer = type;
-      texture_1.setDrawer(function() {
-        legacyTextureDrawer.call(texture_1, texture_1.getContext());
-      });
-      return texture_1;
-    } else if (typeof attributes === "function") {
-      var texture_2 = new CanvasTexture();
-      legacyTextureDrawer = attributes;
-      texture_2.setDrawer(function() {
-        legacyTextureDrawer.call(texture_2, texture_2.getContext(type));
-      });
-      return texture_2;
-    } else if (typeof legacyTextureDrawer === "function") {
-      var texture_3 = new CanvasTexture();
-      texture_3.setDrawer(function() {
-        legacyTextureDrawer.call(texture_3, texture_3.getContext(type, attributes));
-      });
-      return texture_3;
-    } else {
-      var texture2 = new CanvasTexture();
-      return texture2;
-    }
-  }
-  var POINTER_DOWN = "touchstart mousedown";
-  var POINTER_MOVE = "touchmove mousemove";
-  var POINTER_UP = "touchend mouseup";
-  var POINTER_CANCEL = "touchcancel mousecancel";
-  var EventPoint = (
-    /** @class */
-    (function() {
-      function EventPoint2() {
-      }
-      EventPoint2.prototype.clone = function(obj) {
-        if (obj) {
-          obj.x = this.x;
-          obj.y = this.y;
-        } else {
-          obj = {
-            x: this.x,
-            y: this.y
-          };
-        }
-        return obj;
-      };
-      EventPoint2.prototype.toString = function() {
-        return (this.x | 0) + "x" + (this.y | 0);
-      };
-      return EventPoint2;
-    })()
-  );
-  var PointerSyntheticEvent = (
-    /** @class */
-    (function() {
-      function PointerSyntheticEvent2() {
-        this.abs = new EventPoint();
-      }
-      PointerSyntheticEvent2.prototype.clone = function(obj) {
-        if (obj) {
-          obj.x = this.x;
-          obj.y = this.y;
-        } else {
-          obj = {
-            x: this.x,
-            y: this.y
-          };
-        }
-        return obj;
-      };
-      PointerSyntheticEvent2.prototype.toString = function() {
-        return this.type + ": " + (this.x | 0) + "x" + (this.y | 0);
-      };
-      return PointerSyntheticEvent2;
-    })()
-  );
-  var VisitPayload = (
-    /** @class */
-    (function() {
-      function VisitPayload2() {
-        this.type = "";
-        this.x = 0;
-        this.y = 0;
-        this.timeStamp = -1;
-        this.event = null;
-        this.root = null;
-        this.collected = null;
-      }
-      VisitPayload2.prototype.toString = function() {
-        return this.type + ": " + (this.x | 0) + "x" + (this.y | 0);
-      };
-      return VisitPayload2;
-    })()
-  );
-  var syntheticEvent = new PointerSyntheticEvent();
-  var PAYLOAD = new VisitPayload();
-  var Pointer = (
-    /** @class */
-    (function() {
-      function Pointer2() {
-        var _this = this;
-        this.ratio = 1;
-        this.clickList = [];
-        this.cancelList = [];
-        this.handleStart = function(event) {
-          Pointer2.DEBUG && console.debug && console.debug("pointer-start", event.type);
-          event.preventDefault();
-          _this.localPoint(event);
-          _this.dispatchEvent(event.type, event);
-          _this.findTargets("click", _this.clickList);
-          _this.findTargets("mousecancel", _this.cancelList);
-        };
-        this.handleMove = function(event) {
-          event.preventDefault();
-          _this.localPoint(event);
-          _this.dispatchEvent(event.type, event);
-        };
-        this.handleEnd = function(event) {
-          var _a2;
-          event.preventDefault();
-          Pointer2.DEBUG && console.debug && console.debug("pointer-end", event.type);
-          _this.dispatchEvent(event.type, event);
-          if (_this.clickList.length) {
-            Pointer2.DEBUG && console.debug && console.debug("pointer-click: ", event.type, (_a2 = _this.clickList) === null || _a2 === void 0 ? void 0 : _a2.length);
-            _this.dispatchEvent("click", event, _this.clickList);
-          }
-          _this.cancelList.length = 0;
-        };
-        this.handleCancel = function(event) {
-          var _a2;
-          if (_this.cancelList.length) {
-            Pointer2.DEBUG && console.debug && console.debug("pointer-cancel", event.type, (_a2 = _this.clickList) === null || _a2 === void 0 ? void 0 : _a2.length);
-            _this.dispatchEvent("mousecancel", event, _this.cancelList);
-          }
-          _this.clickList.length = 0;
-        };
-        this.visitStart = function(component2, payload) {
-          return !component2._flag(payload.type);
-        };
-        this.visitEnd = function(component2, payload) {
-          syntheticEvent.raw = payload.event;
-          syntheticEvent.type = payload.type;
-          syntheticEvent.timeStamp = payload.timeStamp;
-          syntheticEvent.abs.x = payload.x;
-          syntheticEvent.abs.y = payload.y;
-          var listeners = component2.listeners(payload.type);
-          if (!listeners) {
-            return;
-          }
-          component2.matrix().inverse().map(payload, syntheticEvent);
-          var isEventTarget = component2 === payload.root || component2.attr("spy") || component2.hitTest(syntheticEvent);
-          if (!isEventTarget) {
-            return;
-          }
-          if (payload.collected) {
-            payload.collected.push(component2);
-          }
-          if (payload.event) {
-            var stop_1 = false;
-            for (var l = 0; l < listeners.length; l++) {
-              stop_1 = listeners[l].call(component2, syntheticEvent) ? true : stop_1;
-            }
-            return stop_1;
-          }
-        };
-      }
-      Pointer2.prototype.mount = function(stage, elem) {
-        var _this = this;
-        this.stage = stage;
-        this.elem = elem;
-        this.ratio = stage.viewport().ratio || 1;
-        stage.on("viewport", function(viewport) {
-          var _a2;
-          _this.ratio = (_a2 = viewport.ratio) !== null && _a2 !== void 0 ? _a2 : _this.ratio;
-        });
-        elem.addEventListener("touchstart", this.handleStart);
-        elem.addEventListener("touchend", this.handleEnd);
-        elem.addEventListener("touchmove", this.handleMove);
-        elem.addEventListener("touchcancel", this.handleCancel);
-        elem.addEventListener("mousedown", this.handleStart);
-        elem.addEventListener("mouseup", this.handleEnd);
-        elem.addEventListener("mousemove", this.handleMove);
-        document.addEventListener("mouseup", this.handleCancel);
-        window.addEventListener("blur", this.handleCancel);
-        return this;
-      };
-      Pointer2.prototype.unmount = function() {
-        var elem = this.elem;
-        elem.removeEventListener("touchstart", this.handleStart);
-        elem.removeEventListener("touchend", this.handleEnd);
-        elem.removeEventListener("touchmove", this.handleMove);
-        elem.removeEventListener("touchcancel", this.handleCancel);
-        elem.removeEventListener("mousedown", this.handleStart);
-        elem.removeEventListener("mouseup", this.handleEnd);
-        elem.removeEventListener("mousemove", this.handleMove);
-        document.removeEventListener("mouseup", this.handleCancel);
-        window.removeEventListener("blur", this.handleCancel);
-        return this;
-      };
-      Pointer2.prototype.localPoint = function(event) {
-        var _a2;
-        var elem = this.elem;
-        var x2;
-        var y;
-        if ((_a2 = event.touches) === null || _a2 === void 0 ? void 0 : _a2.length) {
-          x2 = event.touches[0].clientX;
-          y = event.touches[0].clientY;
-        } else {
-          x2 = event.clientX;
-          y = event.clientY;
-        }
-        var rect = elem.getBoundingClientRect();
-        x2 -= rect.left;
-        y -= rect.top;
-        x2 -= elem.clientLeft | 0;
-        y -= elem.clientTop | 0;
-        PAYLOAD.x = x2 * this.ratio;
-        PAYLOAD.y = y * this.ratio;
-      };
-      Pointer2.prototype.findTargets = function(type, result) {
-        var payload = PAYLOAD;
-        payload.type = type;
-        payload.root = this.stage;
-        payload.event = null;
-        payload.collected = result;
-        payload.collected.length = 0;
-        this.stage.visit({
-          reverse: true,
-          visible: true,
-          start: this.visitStart,
-          end: this.visitEnd
-        }, payload);
-      };
-      Pointer2.prototype.dispatchEvent = function(type, event, targets) {
-        var payload = PAYLOAD;
-        payload.type = type;
-        payload.root = this.stage;
-        payload.event = event;
-        payload.timeStamp = Date.now();
-        payload.collected = null;
-        if (type !== "mousemove" && type !== "touchmove") {
-          Pointer2.DEBUG && console.debug && console.debug("pointer:dispatchEvent", payload, targets === null || targets === void 0 ? void 0 : targets.length);
-        }
-        if (targets) {
-          while (targets.length) {
-            var component2 = targets.shift();
-            if (this.visitEnd(component2, payload)) {
-              break;
-            }
-          }
-          targets.length = 0;
-        } else {
-          this.stage.visit({
-            reverse: true,
-            visible: true,
-            start: this.visitStart,
-            end: this.visitEnd
-          }, payload);
-        }
-      };
-      Pointer2.DEBUG = false;
-      return Pointer2;
-    })()
-  );
-  function mount(configs) {
-    if (configs === void 0) {
-      configs = {};
-    }
-    var root = new Root();
-    root.mount(configs);
-    root.pointer = new Pointer().mount(root, root.dom);
-    return root;
-  }
-  var DEFAULT_CANVAS_MOUNTED = false;
-  var Root = (
-    /** @class */
-    (function(_super) {
-      __extends(Root2, _super);
-      function Root2() {
-        var _this = _super.call(this) || this;
-        _this.canvas = null;
-        _this.dom = null;
-        _this.context = null;
-        _this.clientWidth = -1;
-        _this.clientHeight = -1;
-        _this.pixelRatio = 1;
-        _this.canvasWidth = 0;
-        _this.canvasHeight = 0;
-        _this.mounted = false;
-        _this.paused = false;
-        _this.sleep = false;
-        _this.mount = function(configs) {
-          if (configs === void 0) {
-            configs = {};
-          }
-          if (typeof configs.canvas === "string") {
-            _this.canvas = document.getElementById(configs.canvas);
-            if (!_this.canvas) {
-              console.error("Canvas element not found: ", configs.canvas);
-            }
-          } else if (configs.canvas instanceof HTMLCanvasElement) {
-            _this.canvas = configs.canvas;
-          } else if (configs.canvas) {
-            console.error("Unknown value for canvas:", configs.canvas);
-          }
-          if (!_this.canvas) {
-            _this.canvas = document.getElementById("cutjs") || document.getElementById("stage");
-          }
-          if (!_this.canvas) {
-            if (DEFAULT_CANVAS_MOUNTED) {
-              throw new Error("Default canvas element is already mounted. Please provide a canvas element or an id of a canvas element to mount.");
-            }
-            DEFAULT_CANVAS_MOUNTED = true;
-            console.debug && console.debug("Creating canvas element...");
-            _this.canvas = document.createElement("canvas");
-            Object.assign(_this.canvas.style, {
-              position: "absolute",
-              display: "block",
-              top: "0",
-              left: "0",
-              bottom: "0",
-              right: "0",
-              width: "100%",
-              height: "100%"
-            });
-            var body = document.body;
-            body.insertBefore(_this.canvas, body.firstChild);
-          }
-          if (_this.canvas["__STAGE_MOUNTED"]) {
-            console.error("Canvas element is already mounted: ", _this.canvas);
-          }
-          _this.canvas["__STAGE_MOUNTED"] = true;
-          _this.dom = _this.canvas;
-          _this.context = _this.canvas.getContext("2d");
-          _this.devicePixelRatio = window.devicePixelRatio || 1;
-          _this.backingStoreRatio = _this.context["webkitBackingStorePixelRatio"] || _this.context["mozBackingStorePixelRatio"] || _this.context["msBackingStorePixelRatio"] || _this.context["oBackingStorePixelRatio"] || _this.context["backingStorePixelRatio"] || 1;
-          _this.pixelRatio = _this.devicePixelRatio / _this.backingStoreRatio;
-          _this.mounted = true;
-          _this.requestFrame();
-        };
-        _this.frameRequested = false;
-        _this.requestFrame = function() {
-          if (!_this.frameRequested) {
-            _this.frameRequested = true;
-            requestAnimationFrame(_this.onFrame);
-          }
-        };
-        _this._lastFrameTime = 0;
-        _this._mo_touch = null;
-        _this.onFrame = function(now2) {
-          _this.frameRequested = false;
-          if (!_this.mounted || !_this.canvas || !_this.context) {
-            return;
-          }
-          _this.requestFrame();
-          _this.resizeCanvas();
-          var last = _this._lastFrameTime || now2;
-          var elapsed = now2 - last;
-          if (!_this.mounted || _this.paused || _this.sleep) {
-            return;
-          }
-          _this._lastFrameTime = now2;
-          _this.prerender();
-          var tickRequest = _this._tick(elapsed, now2, last);
-          if (_this._mo_touch != _this._ts_touch) {
-            _this._mo_touch = _this._ts_touch;
-            _this.sleep = false;
-            if (_this.canvasWidth > 0 && _this.canvasHeight > 0) {
-              _this.context.setTransform(1, 0, 0, 1, 0, 0);
-              _this.context.clearRect(0, 0, _this.canvasWidth, _this.canvasHeight);
-              if (_this.debugDrawAxis > 0) {
-                _this.renderDebug(_this.context);
-              }
-              _this.render(_this.context);
-            }
-          } else if (tickRequest) {
-            _this.sleep = false;
-          } else {
-            _this.sleep = true;
-          }
-          stats.fps = elapsed ? 1e3 / elapsed : 0;
-        };
-        _this.debugDrawAxis = 0;
-        _this.label("Root");
-        return _this;
-      }
-      Root2.prototype.resizeCanvas = function() {
-        var newClientWidth = this.canvas.clientWidth;
-        var newClientHeight = this.canvas.clientHeight;
-        if (this.clientWidth === newClientWidth && this.clientHeight === newClientHeight)
-          return;
-        this.clientWidth = newClientWidth;
-        this.clientHeight = newClientHeight;
-        var notStyled = this.canvas.clientWidth === this.canvas.width && this.canvas.clientHeight === this.canvas.height;
-        var pixelRatio;
-        if (notStyled) {
-          pixelRatio = 1;
-          this.canvasWidth = this.canvas.width;
-          this.canvasHeight = this.canvas.height;
-        } else {
-          pixelRatio = this.pixelRatio;
-          this.canvasWidth = this.clientWidth * pixelRatio;
-          this.canvasHeight = this.clientHeight * pixelRatio;
-          if (this.canvas.width !== this.canvasWidth || this.canvas.height !== this.canvasHeight) {
-            this.canvas.width = this.canvasWidth;
-            this.canvas.height = this.canvasHeight;
-          }
-        }
-        console.debug && console.debug("Resize: [" + this.canvasWidth + ", " + this.canvasHeight + "] = " + pixelRatio + " x [" + this.clientWidth + ", " + this.clientHeight + "]");
-        this.viewport({
-          width: this.canvasWidth,
-          height: this.canvasHeight,
-          ratio: pixelRatio
-        });
-      };
-      Root2.prototype.renderDebug = function(context) {
-        var size = typeof this.debugDrawAxis === "number" ? this.debugDrawAxis : 10;
-        var m = this.matrix();
-        context.setTransform(m.a, m.b, m.c, m.d, m.e, m.f);
-        var lineWidth = 3 / m.a;
-        context.beginPath();
-        context.moveTo(0, 0);
-        context.lineTo(0, 0.8 * size);
-        context.lineTo(-0.2 * size, 0.8 * size);
-        context.lineTo(0, size);
-        context.lineTo(0.2 * size, 0.8 * size);
-        context.lineTo(0, 0.8 * size);
-        context.strokeStyle = "rgba(93, 173, 226)";
-        context.lineJoin = "round";
-        context.lineCap = "round";
-        context.lineWidth = lineWidth;
-        context.stroke();
-        context.beginPath();
-        context.moveTo(0, 0);
-        context.lineTo(0.8 * size, 0);
-        context.lineTo(0.8 * size, -0.2 * size);
-        context.lineTo(size, 0);
-        context.lineTo(0.8 * size, 0.2 * size);
-        context.lineTo(0.8 * size, 0);
-        context.strokeStyle = "rgba(236, 112, 99)";
-        context.lineJoin = "round";
-        context.lineCap = "round";
-        context.lineWidth = lineWidth;
-        context.stroke();
-      };
-      Root2.prototype.resume = function() {
-        if (this.sleep || this.paused) {
-          this.requestFrame();
-        }
-        this.paused = false;
-        this.sleep = false;
-        this.publish("resume");
-        return this;
-      };
-      Root2.prototype.pause = function() {
-        if (!this.paused) {
-          this.publish("pause");
-        }
-        this.paused = true;
-        return this;
-      };
-      Root2.prototype.touch = function() {
-        if (this.sleep || this.paused) {
-          this.requestFrame();
-        }
-        this.sleep = false;
-        return _super.prototype.touch.call(this);
-      };
-      Root2.prototype.unmount = function() {
-        var _a2;
-        this.mounted = false;
-        (_a2 = this.pointer) === null || _a2 === void 0 ? void 0 : _a2.unmount();
-        return this;
-      };
-      Root2.prototype.background = function(color) {
-        if (this.dom) {
-          this.dom.style.backgroundColor = color;
-        }
-        return this;
-      };
-      Root2.prototype.viewport = function(width, height, ratio) {
-        if (typeof width === "undefined") {
-          return Object.assign({}, this._viewport);
-        }
-        if (typeof width === "object") {
-          var options2 = width;
-          width = options2.width;
-          height = options2.height;
-          ratio = options2.ratio;
-        }
-        if (typeof width === "number" && typeof height === "number") {
-          this._viewport = {
-            width,
-            height,
-            ratio: typeof ratio === "number" ? ratio : 1
-          };
-          this.viewbox();
-          var data_1 = Object.assign({}, this._viewport);
-          this.visit({
-            start: function(component2) {
-              if (!component2._flag("viewport")) {
-                return true;
-              }
-              component2.publish("viewport", [data_1]);
-            }
-          });
-        }
-        return this;
-      };
-      Root2.prototype.viewbox = function(width, height, mode) {
-        if (typeof width === "number" && typeof height === "number") {
-          this._viewbox = {
-            width,
-            height,
-            mode
-          };
-        } else if (typeof width === "object" && width !== null) {
-          this._viewbox = __assign({}, width);
-        }
-        this.rescale();
-        return this;
-      };
-      Root2.prototype.camera = function(matrix) {
-        this._camera = matrix;
-        this.rescale();
-        return this;
-      };
-      Root2.prototype.rescale = function() {
-        var viewbox = this._viewbox;
-        var viewport = this._viewport;
-        var camera = this._camera;
-        if (viewport && viewbox) {
-          var viewportWidth = viewport.width;
-          var viewportHeight = viewport.height;
-          var viewboxMode = isValidFitMode(viewbox.mode) ? viewbox.mode : "in-pad";
-          var viewboxWidth = viewbox.width;
-          var viewboxHeight = viewbox.height;
-          this.pin({
-            width: viewboxWidth,
-            height: viewboxHeight
-          });
-          this.fit(viewportWidth, viewportHeight, viewboxMode);
-          var viewboxX = viewbox.x || 0;
-          var viewboxY = viewbox.y || 0;
-          var cameraZoomX = (camera === null || camera === void 0 ? void 0 : camera.a) || 1;
-          var cameraZoomY = (camera === null || camera === void 0 ? void 0 : camera.d) || 1;
-          var cameraX = (camera === null || camera === void 0 ? void 0 : camera.e) || 0;
-          var cameraY = (camera === null || camera === void 0 ? void 0 : camera.f) || 0;
-          var pinScaleX = this.pin("scaleX");
-          var pinScaleY = this.pin("scaleY");
-          var scaleX = pinScaleX * cameraZoomX;
-          var scaleY = pinScaleY * cameraZoomY;
-          this.pin("scaleX", scaleX);
-          this.pin("scaleY", scaleY);
-          this.pin("offsetX", cameraX - viewboxX * scaleX);
-          this.pin("offsetY", cameraY - viewboxY * scaleY);
-        } else if (viewport) {
-          this.pin({
-            width: viewport.width,
-            height: viewport.height
-          });
-        }
-        return this;
-      };
-      Root2.prototype.flipX = function(x2) {
-        this._pin._directionX = x2 ? -1 : 1;
-        return this;
-      };
-      Root2.prototype.flipY = function(y) {
-        this._pin._directionY = y ? -1 : 1;
-        return this;
-      };
-      return Root2;
-    })(Component)
-  );
-  var FPS = 15;
-  /** @class */
-  (function(_super) {
-    __extends(Anim2, _super);
-    function Anim2() {
-      var _this = _super.call(this) || this;
-      _this._texture = null;
-      _this._frames = [];
-      _this._time = -1;
-      _this._repeat = 0;
-      _this._index = 0;
-      _this._animTickLastTime = 0;
-      _this._animTick = function(t, now2, last) {
-        if (_this._time < 0 || _this._frames.length <= 1) {
-          return;
-        }
-        var ignore = _this._animTickLastTime != last;
-        _this._animTickLastTime = now2;
-        if (ignore) {
-          return true;
-        }
-        _this._time += t;
-        if (_this._time < _this._ft) {
-          return true;
-        }
-        var n2 = _this._time / _this._ft | 0;
-        _this._time -= n2 * _this._ft;
-        _this.moveFrame(n2);
-        if (_this._repeat > 0 && (_this._repeat -= n2) <= 0) {
-          _this.stop();
-          _this._callback && _this._callback();
-          return false;
-        }
-        return true;
-      };
-      _this.label("Anim");
-      _this._fps = FPS;
-      _this._ft = 1e3 / _this._fps;
-      _this.tick(_this._animTick, false);
-      return _this;
-    }
-    Anim2.prototype.renderTexture = function(context) {
-      if (!this._texture)
-        return;
-      this._texture.draw(context);
-    };
-    Anim2.prototype.fps = function(fps) {
-      if (typeof fps === "undefined") {
-        return this._fps;
-      }
-      this._fps = fps > 0 ? fps : FPS;
-      this._ft = 1e3 / this._fps;
-      return this;
-    };
-    Anim2.prototype.setFrames = function(frames) {
-      return this.frames(frames);
-    };
-    Anim2.prototype.frames = function(frames) {
-      this._index = 0;
-      this._frames = texture(frames).array();
-      this.touch();
-      return this;
-    };
-    Anim2.prototype.length = function() {
-      return this._frames ? this._frames.length : 0;
-    };
-    Anim2.prototype.gotoFrame = function(frame, resize) {
-      if (resize === void 0) {
-        resize = false;
-      }
-      this._index = math.wrap(frame, this._frames.length) | 0;
-      resize = resize || !this._texture;
-      this._texture = this._frames[this._index];
-      if (resize) {
-        this.pin("width", this._texture.getWidth());
-        this.pin("height", this._texture.getHeight());
-      }
-      this.touch();
-      return this;
-    };
-    Anim2.prototype.moveFrame = function(move) {
-      return this.gotoFrame(this._index + move);
-    };
-    Anim2.prototype.repeat = function(repeat, callback) {
-      this._repeat = repeat * this._frames.length - 1;
-      this._callback = callback;
-      this.play();
-      return this;
-    };
-    Anim2.prototype.play = function(frame) {
-      if (typeof frame !== "undefined") {
-        this.gotoFrame(frame);
-        this._time = 0;
-      } else if (this._time < 0) {
-        this._time = 0;
-      }
-      this.touch();
-      return this;
-    };
-    Anim2.prototype.stop = function(frame) {
-      this._time = -1;
-      if (typeof frame !== "undefined") {
-        this.gotoFrame(frame);
-      }
-      return this;
-    };
-    return Anim2;
-  })(Component);
-  /** @class */
-  (function(_super) {
-    __extends(Monotype2, _super);
-    function Monotype2() {
-      var _this = _super.call(this) || this;
-      _this._textures = [];
-      _this.label("Monotype");
-      return _this;
-    }
-    Monotype2.prototype.renderTexture = function(context) {
-      if (!this._textures || !this._textures.length)
-        return;
-      for (var i = 0, n2 = this._textures.length; i < n2; i++) {
-        this._textures[i].draw(context);
-      }
-    };
-    Monotype2.prototype.setFont = function(frames) {
-      return this.frames(frames);
-    };
-    Monotype2.prototype.frames = function(frames) {
-      this._textures = [];
-      if (typeof frames == "string") {
-        var selection_1 = texture(frames);
-        this._font = function(value) {
-          return selection_1.one(value);
-        };
-      } else if (typeof frames === "object") {
-        this._font = function(value) {
-          return frames[value];
-        };
-      } else if (typeof frames === "function") {
-        this._font = frames;
-      }
-      return this;
-    };
-    Monotype2.prototype.setValue = function(value) {
-      return this.value(value);
-    };
-    Monotype2.prototype.value = function(value) {
-      if (typeof value === "undefined") {
-        return this._value;
-      }
-      if (this._value === value) {
-        return this;
-      }
-      this._value = value;
-      if (value === null) {
-        value = "";
-      } else if (typeof value !== "string" && !Array.isArray(value)) {
-        value = value.toString();
-      }
-      this._spacing = this._spacing || 0;
-      var width = 0;
-      var height = 0;
-      for (var i = 0; i < value.length; i++) {
-        var v3 = value[i];
-        var texture_1 = this._textures[i] = this._font(typeof v3 === "string" ? v3 : v3 + "");
-        width += i > 0 ? this._spacing : 0;
-        texture_1.setDestinationCoordinate(width, 0);
-        width = width + texture_1.getWidth();
-        height = Math.max(height, texture_1.getHeight());
-      }
-      this.pin("width", width);
-      this.pin("height", height);
-      this._textures.length = value.length;
-      return this;
-    };
-    return Monotype2;
-  })(Component);
-  var SHAPE_DEFAULTS = {
-    stroke: "rgba(255,255,255,0.9)",
-    fill: "rgba(255,255,255,0.1)",
-    lineWidth: 3
-  };
-  var JOINT_DEFAULTS = {
-    stroke: "rgba(255,255,255,0.9)",
-    fill: null,
-    lineWidth: 3
-  };
-  function getStyle(obj) {
-    if (typeof obj["render"] === "object" && ("stroke" in obj["render"] || "fill" in obj["render"])) {
-      return obj["render"];
-    } else if (typeof obj["style"] === "object") {
-      return obj["style"];
-    }
-  }
-  var ComputedShapeStyle = (
-    /** @class */
-    (function() {
-      function ComputedShapeStyle2(body, fixture, global) {
-        this.body = body;
-        this.fixture = fixture;
-        this.global = global;
-      }
-      Object.defineProperty(ComputedShapeStyle2.prototype, "stroke", {
-        get: function() {
-          var _a2;
-          var shapeStyle = getStyle(this.fixture.getShape());
-          var fixtureStyle = getStyle(this.fixture);
-          var bodyStyle = getStyle(this.body);
-          var stroke = SHAPE_DEFAULTS.stroke;
-          if (shapeStyle === null || shapeStyle === void 0 ? void 0 : shapeStyle.stroke) {
-            stroke = shapeStyle.stroke;
-          } else if (fixtureStyle === null || fixtureStyle === void 0 ? void 0 : fixtureStyle.stroke) {
-            stroke = fixtureStyle.stroke;
-          } else if (bodyStyle === null || bodyStyle === void 0 ? void 0 : bodyStyle.stroke) {
-            stroke = bodyStyle.stroke;
-          } else if ((_a2 = this.global) === null || _a2 === void 0 ? void 0 : _a2.stroke) {
-            stroke = this.global.stroke;
-          } else if (this.body.isDynamic()) {
-            stroke = "rgba(255,255,255,0.9)";
-          } else if (this.body.isKinematic()) {
-            stroke = "rgba(255,255,255,0.8)";
-          } else if (this.body.isStatic()) {
-            stroke = "rgba(255,255,255,0.7)";
-          }
-          return stroke;
-        },
-        enumerable: false,
-        configurable: true
-      });
-      Object.defineProperty(ComputedShapeStyle2.prototype, "fill", {
-        get: function() {
-          var _a2;
-          var shapeStyle = getStyle(this.fixture.getShape());
-          var fixtureStyle = getStyle(this.fixture);
-          var bodyStyle = getStyle(this.body);
-          var fill = SHAPE_DEFAULTS.fill;
-          if (shapeStyle === null || shapeStyle === void 0 ? void 0 : shapeStyle.fill) {
-            fill = shapeStyle.fill;
-          } else if (fixtureStyle === null || fixtureStyle === void 0 ? void 0 : fixtureStyle.fill) {
-            fill = fixtureStyle.fill;
-          } else if (bodyStyle === null || bodyStyle === void 0 ? void 0 : bodyStyle.fill) {
-            fill = bodyStyle.fill;
-          } else if ((_a2 = this.global) === null || _a2 === void 0 ? void 0 : _a2.fill) {
-            fill = this.global.fill;
-          }
-          return fill;
-        },
-        enumerable: false,
-        configurable: true
-      });
-      Object.defineProperty(ComputedShapeStyle2.prototype, "lineWidth", {
-        get: function() {
-          var _a2;
-          var shapeStyle = getStyle(this.fixture.getShape());
-          var fixtureStyle = getStyle(this.fixture);
-          var bodyStyle = getStyle(this.body);
-          var lineWidth = SHAPE_DEFAULTS.lineWidth;
-          if (shapeStyle === null || shapeStyle === void 0 ? void 0 : shapeStyle.lineWidth) {
-            lineWidth = shapeStyle.lineWidth;
-          } else if (fixtureStyle === null || fixtureStyle === void 0 ? void 0 : fixtureStyle.lineWidth) {
-            lineWidth = fixtureStyle.lineWidth;
-          } else if (bodyStyle === null || bodyStyle === void 0 ? void 0 : bodyStyle.lineWidth) {
-            lineWidth = bodyStyle.lineWidth;
-          } else if ((_a2 = this.global) === null || _a2 === void 0 ? void 0 : _a2.lineWidth) {
-            lineWidth = this.global.lineWidth;
-          }
-          return lineWidth;
-        },
-        enumerable: false,
-        configurable: true
-      });
-      return ComputedShapeStyle2;
-    })()
-  );
-  var ComputedJointStyle = (
-    /** @class */
-    (function() {
-      function ComputedJointStyle2(joint, global) {
-        this.joint = joint;
-        this.global = global;
-      }
-      Object.defineProperty(ComputedJointStyle2.prototype, "stroke", {
-        get: function() {
-          var _a2;
-          var jointStyle = getStyle(this.joint);
-          var stroke = JOINT_DEFAULTS.stroke;
-          if (jointStyle === null || jointStyle === void 0 ? void 0 : jointStyle.stroke) {
-            stroke = jointStyle.stroke;
-          } else if ((_a2 = this.global) === null || _a2 === void 0 ? void 0 : _a2.stroke) {
-            stroke = this.global.stroke;
-          }
-          return stroke;
-        },
-        enumerable: false,
-        configurable: true
-      });
-      Object.defineProperty(ComputedJointStyle2.prototype, "fill", {
-        get: function() {
-          var _a2;
-          var jointStyle = getStyle(this.joint);
-          var fill = JOINT_DEFAULTS.fill;
-          if (jointStyle === null || jointStyle === void 0 ? void 0 : jointStyle.fill) {
-            fill = jointStyle.fill;
-          } else if ((_a2 = this.global) === null || _a2 === void 0 ? void 0 : _a2.fill) {
-            fill = this.global.fill;
-          }
-          return fill;
-        },
-        enumerable: false,
-        configurable: true
-      });
-      Object.defineProperty(ComputedJointStyle2.prototype, "lineWidth", {
-        get: function() {
-          var _a2;
-          var jointStyle = getStyle(this.joint);
-          var lineWidth = JOINT_DEFAULTS.lineWidth;
-          if (jointStyle === null || jointStyle === void 0 ? void 0 : jointStyle.lineWidth) {
-            lineWidth = jointStyle.lineWidth;
-          } else if ((_a2 = this.global) === null || _a2 === void 0 ? void 0 : _a2.lineWidth) {
-            lineWidth = this.global.lineWidth;
-          }
-          return lineWidth;
-        },
-        enumerable: false,
-        configurable: true
-      });
-      return ComputedJointStyle2;
-    })()
-  );
-  var Memo = (
-    /** @class */
-    (function() {
-      function Memo2() {
-        this.memory = [];
-      }
-      Memo2.init = function() {
-        return new Memo2();
-      };
-      Memo2.prototype.update = function() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          args[_i] = arguments[_i];
-        }
-        var equal = this.memory.length === args.length;
-        for (var i = 0; i < args.length; i++) {
-          equal = equal && this.memory[i] === args[i];
-          this.memory[i] = args[i];
-        }
-        this.memory.length = args.length;
-        return !equal;
-      };
-      Memo2.prototype.clear = function() {
-        this.memory.length = 0;
-      };
-      return Memo2;
-    })()
-  );
-  var math_max$2 = Math.max;
-  var math_min$4 = Math.min;
-  var ChainShapeComponent = (
-    /** @class */
-    (function(_super) {
-      __extends$1(ChainShapeComponent2, _super);
-      function ChainShapeComponent2(shape, style) {
-        var _this = _super.call(this) || this;
-        _this.textureOffset = { x: 0, y: 0, a: 0 };
-        _this.__memo = Memo.init();
-        _this.handleTick = function() {
-          var x2 = _this.textureOffset.x;
-          var y = _this.textureOffset.y;
-          var a2 = _this.textureOffset.a;
-          if (!_this.__memo.update(x2, y, a2)) {
-            return true;
-          }
-          _this.offset(x2, y);
-          _this.rotate(a2);
-        };
-        _this.style = style;
-        _this.shape = shape;
-        var textureOffset = _this.textureOffset;
-        var texture2 = canvas();
-        texture2.setMemoizer(function() {
-          var key = "";
-          var vertices = shape.m_vertices;
-          for (var i = 0; i < vertices.length; ++i) {
-            var v3 = vertices[i];
-            key += v3.x + "," + v3.y + ";";
-          }
-          key += shape.isLoop() + ";";
-          key += style.lineWidth + ";";
-          key += style.stroke + ";";
-          key += style.fill + ";";
-          return key;
-        });
-        texture2.setDrawer(function() {
-          var lineWidth = style.lineWidth;
-          var stroke = style.stroke;
-          style.fill;
-          var ctx = this.getContext();
-          var ratio = this.getDevicePixelRatio();
-          var lw = lineWidth / ratio;
-          var vertices = shape.m_vertices;
-          if (!vertices.length) {
-            return;
-          }
-          var minX = Infinity;
-          var minY = Infinity;
-          var maxX = -Infinity;
-          var maxY = -Infinity;
-          for (var i = 0; i < vertices.length; ++i) {
-            var v3 = vertices[i];
-            minX = math_min$4(minX, v3.x);
-            maxX = math_max$2(maxX, v3.x);
-            minY = math_min$4(minY, v3.y);
-            maxY = math_max$2(maxY, v3.y);
-          }
-          textureOffset.x = minX;
-          textureOffset.y = minY;
-          this.setSize(maxX - minX + lw, maxY - minY + lw, ratio);
-          this.setPadding(-lw / 2);
-          ctx.scale(ratio, ratio);
-          ctx.beginPath();
-          for (var i = 0; i < vertices.length; ++i) {
-            var v3 = vertices[i];
-            var x2 = v3.x - minX + lw / 2;
-            var y = v3.y - minY + lw / 2;
-            if (i == 0)
-              ctx.moveTo(x2, y);
-            else
-              ctx.lineTo(x2, y);
-          }
-          ctx.lineCap = "round";
-          ctx.lineJoin = "round";
-          ctx.lineWidth = lw;
-          ctx.strokeStyle = stroke !== null && stroke !== void 0 ? stroke : "";
-          ctx.stroke();
-        });
-        _this.texture(texture2);
-        _this.tick(_this.handleTick);
-        return _this;
-      }
-      return ChainShapeComponent2;
-    })(Sprite)
-  );
-  var math_PI$1 = Math.PI;
-  var CircleShapeComponent = (
-    /** @class */
-    (function(_super) {
-      __extends$1(CircleShapeComponent2, _super);
-      function CircleShapeComponent2(shape, style) {
-        var _this = _super.call(this) || this;
-        _this.textureOffset = { x: 0, y: 0, a: 0 };
-        _this.__memo = Memo.init();
-        _this.handleTick = function() {
-          var x2 = _this.textureOffset.x;
-          var y = _this.textureOffset.y;
-          var a2 = _this.textureOffset.a;
-          if (!_this.__memo.update(x2, y, a2)) {
-            return true;
-          }
-          _this.offset(x2, y);
-          _this.rotate(a2);
-        };
-        _this.style = style;
-        _this.shape = shape;
-        var textureOffset = _this.textureOffset;
-        var texture2 = canvas();
-        texture2.setMemoizer(function() {
-          var key = "";
-          var v3 = shape.getCenter();
-          key += v3.x + "," + v3.y + ";";
-          key += shape.getRadius() + ";";
-          key += style.lineWidth + ";";
-          key += style.stroke + ";";
-          key += style.fill + ";";
-          return key;
-        });
-        texture2.setDrawer(function() {
-          var lineWidth = style.lineWidth;
-          var stroke = style.stroke;
-          var fill = style.fill;
-          var ctx = this.getContext();
-          var ratio = this.getDevicePixelRatio();
-          var lw = lineWidth / ratio;
-          var r = shape.m_radius;
-          textureOffset.x = shape.m_p.x - r;
-          textureOffset.y = shape.m_p.y - r;
-          this.setSize(r * 2 + lw, r * 2 + lw, ratio);
-          this.setPadding(-lw / 2);
-          ctx.scale(ratio, ratio);
-          ctx.arc(r + lw / 2, r + lw / 2, r, 0, 2 * math_PI$1);
-          if (fill) {
-            ctx.fillStyle = fill;
-            ctx.fill();
-          }
-          ctx.lineTo(r + lw / 2, r + lw / 2);
-          ctx.lineWidth = lw;
-          ctx.strokeStyle = stroke !== null && stroke !== void 0 ? stroke : "";
-          ctx.lineCap = "round";
-          ctx.lineJoin = "round";
-          ctx.stroke();
-        });
-        _this.texture(texture2);
-        _this.tick(_this.handleTick);
-        return _this;
-      }
-      return CircleShapeComponent2;
-    })(Sprite)
-  );
-  var math_atan2$1 = Math.atan2;
-  var math_sqrt$1 = Math.sqrt;
-  var math_min$3 = Math.min;
-  var EdgeShapeComponent = (
-    /** @class */
-    (function(_super) {
-      __extends$1(EdgeShapeComponent2, _super);
-      function EdgeShapeComponent2(shape, style) {
-        var _this = _super.call(this) || this;
-        _this.textureOffset = { x: 0, y: 0, a: 0 };
-        _this.__memo = Memo.init();
-        _this.handleTick = function() {
-          var x2 = _this.textureOffset.x;
-          var y = _this.textureOffset.y;
-          var a2 = _this.textureOffset.a;
-          if (!_this.__memo.update(x2, y, a2)) {
-            return true;
-          }
-          _this.offset(x2, y);
-          _this.rotate(a2);
-        };
-        _this.style = style;
-        _this.shape = shape;
-        var textureOffset = _this.textureOffset;
-        var texture2 = canvas();
-        texture2.setMemoizer(function() {
-          var key = "";
-          var v13 = shape.m_vertex1;
-          var v22 = shape.m_vertex2;
-          key += (v13 === null || v13 === void 0 ? void 0 : v13.x) + "," + (v13 === null || v13 === void 0 ? void 0 : v13.y) + ";";
-          key += (v22 === null || v22 === void 0 ? void 0 : v22.x) + "," + (v22 === null || v22 === void 0 ? void 0 : v22.y) + ";";
-          key += style.lineWidth + ";";
-          key += style.stroke + ";";
-          key += style.fill + ";";
-          return key;
-        });
-        texture2.setDrawer(function() {
-          var lineWidth = style.lineWidth;
-          var stroke = style.stroke;
-          style.fill;
-          var ctx = this.getContext();
-          var ratio = this.getDevicePixelRatio();
-          var lw = lineWidth / ratio;
-          var v13 = shape.m_vertex1;
-          var v22 = shape.m_vertex2;
-          var dx = v22.x - v13.x;
-          var dy = v22.y - v13.y;
-          var length2 = math_sqrt$1(dx * dx + dy * dy);
-          this.setSize(length2 + lw, lw, ratio);
-          this.setPadding(-lw / 2);
-          var minX = math_min$3(v13.x, v22.x);
-          var minY = math_min$3(v13.y, v22.y);
-          textureOffset.x = minX;
-          textureOffset.y = minY;
-          textureOffset.a = math_atan2$1(dy, dx);
-          ctx.scale(ratio, ratio);
-          ctx.beginPath();
-          ctx.moveTo(lw / 2, lw / 2);
-          ctx.lineTo(lw / 2 + length2, lw / 2);
-          ctx.lineCap = "round";
-          ctx.lineWidth = lw;
-          ctx.strokeStyle = stroke !== null && stroke !== void 0 ? stroke : "";
-          ctx.stroke();
-        });
-        _this.texture(texture2);
-        _this.tick(_this.handleTick);
-        return _this;
-      }
-      return EdgeShapeComponent2;
-    })(Sprite)
-  );
-  var math_max$1 = Math.max;
-  var math_min$2 = Math.min;
-  var PolygonShapeComponent = (
-    /** @class */
-    (function(_super) {
-      __extends$1(PolygonShapeComponent2, _super);
-      function PolygonShapeComponent2(shape, style) {
-        var _this = _super.call(this) || this;
-        _this.textureOffset = { x: 0, y: 0, a: 0 };
-        _this.__memo = Memo.init();
-        _this.handleTick = function() {
-          var x2 = _this.textureOffset.x;
-          var y = _this.textureOffset.y;
-          var a2 = _this.textureOffset.a;
-          if (!_this.__memo.update(x2, y, a2)) {
-            return true;
-          }
-          _this.offset(x2, y);
-          _this.rotate(a2);
-        };
-        _this.style = style;
-        _this.shape = shape;
-        var textureOffset = _this.textureOffset;
-        var texture2 = canvas();
-        texture2.setMemoizer(function() {
-          var key = "";
-          var vertices = shape.m_vertices;
-          for (var i = 0; i < vertices.length; ++i) {
-            var v3 = vertices[i];
-            key += v3.x + "," + v3.y + ";";
-          }
-          key += style.lineWidth + ";";
-          key += style.stroke + ";";
-          key += style.fill + ";";
-          return key;
-        });
-        texture2.setDrawer(function() {
-          var lineWidth = style.lineWidth;
-          var stroke = style.stroke;
-          var fill = style.fill;
-          var ctx = this.getContext();
-          var ratio = this.getDevicePixelRatio();
-          var lw = lineWidth / ratio;
-          var vertices = shape.m_vertices;
-          if (!vertices.length) {
-            return;
-          }
-          var minX = Infinity;
-          var minY = Infinity;
-          var maxX = -Infinity;
-          var maxY = -Infinity;
-          for (var i = 0; i < vertices.length; ++i) {
-            var v3 = vertices[i];
-            minX = math_min$2(minX, v3.x);
-            maxX = math_max$1(maxX, v3.x);
-            minY = math_min$2(minY, v3.y);
-            maxY = math_max$1(maxY, v3.y);
-          }
-          textureOffset.x = minX;
-          textureOffset.y = minY;
-          this.setSize(maxX - minX + lw, maxY - minY + lw, ratio);
-          this.setPadding(-lw / 2);
-          ctx.scale(ratio, ratio);
-          ctx.beginPath();
-          for (var i = 0; i < vertices.length; ++i) {
-            var v3 = vertices[i];
-            var x2 = v3.x - minX + lw / 2;
-            var y = v3.y - minY + lw / 2;
-            if (i == 0)
-              ctx.moveTo(x2, y);
-            else
-              ctx.lineTo(x2, y);
-          }
-          if (vertices.length > 2) {
-            if (fill) {
-              ctx.fillStyle = fill;
-              ctx.fill();
-            }
-            ctx.closePath();
-          }
-          ctx.lineCap = "round";
-          ctx.lineJoin = "round";
-          ctx.lineWidth = lw;
-          ctx.strokeStyle = stroke !== null && stroke !== void 0 ? stroke : "";
-          ctx.stroke();
-        });
-        _this.texture(texture2);
-        _this.tick(_this.handleTick);
-        return _this;
-      }
-      return PolygonShapeComponent2;
-    })(Sprite)
-  );
-  var math_atan2 = Math.atan2;
-  var math_sqrt = Math.sqrt;
-  var math_min$1 = Math.min;
-  var JointComponent = (
-    /** @class */
-    (function(_super) {
-      __extends$1(JointComponent2, _super);
-      function JointComponent2(joint, style) {
-        var _this = _super.call(this) || this;
-        _this.memo = Memo.init();
-        _this.style = style;
-        _this.joint = joint;
-        var offsetX = 0;
-        var offsetY = 0;
-        var offsetA = 0;
-        var offsetMemo = Memo.init();
-        var texture2 = canvas();
-        texture2.setMemoizer(function() {
-          var v13 = joint.getAnchorA();
-          var v22 = joint.getAnchorB();
-          var token = v13.x + "." + v13.y + "." + v22.x + "." + v22.y;
-          return token;
-        });
-        texture2.setDrawer(function() {
-          var lineWidth = style.lineWidth;
-          var stroke = style.stroke;
-          style.fill;
-          var ctx = this.getContext();
-          var ratio = this.getDevicePixelRatio();
-          var lw = lineWidth / ratio;
-          var v13 = joint.getAnchorA();
-          var v22 = joint.getAnchorB();
-          var dx = v22.x - v13.x;
-          var dy = v22.y - v13.y;
-          var length2 = math_sqrt(dx * dx + dy * dy);
-          this.setSize(length2 + lw, lw, ratio);
-          this.setPadding(-lw / 2);
-          var minX = math_min$1(v13.x, v22.x);
-          var minY = math_min$1(v13.y, v22.y);
-          offsetX = minX;
-          offsetY = minY;
-          offsetA = math_atan2(dy, dx);
-          ctx.scale(ratio, ratio);
-          ctx.beginPath();
-          ctx.moveTo(lw / 2, lw / 2);
-          ctx.lineTo(lw / 2 + length2, lw / 2);
-          ctx.lineCap = "round";
-          ctx.lineWidth = lw;
-          ctx.strokeStyle = stroke !== null && stroke !== void 0 ? stroke : "";
-          ctx.stroke();
-        });
-        var sprite$1 = sprite(texture2);
-        sprite$1.tick(function() {
-          if (offsetMemo.update(offsetX, offsetY, offsetA)) {
-            sprite$1.offset(offsetX, offsetY);
-            sprite$1.rotate(offsetA);
-          }
-        });
-        _this.append(sprite$1);
-        return _this;
-      }
-      return JointComponent2;
-    })(Component)
-  );
-  var math_max = Math.max;
-  var math_min = Math.min;
-  var PulleyJointComponent = (
-    /** @class */
-    (function(_super) {
-      __extends$1(PulleyJointComponent2, _super);
-      function PulleyJointComponent2(joint, style) {
-        var _this = _super.call(this) || this;
-        _this.memo = Memo.init();
-        _this.style = style;
-        _this.joint = joint;
-        var vertices = [];
-        var offsetX = 0;
-        var offsetY = 0;
-        var offsetMemo = Memo.init();
-        var texture2 = canvas();
-        texture2.setMemoizer(function() {
-          var v13 = joint.getAnchorA();
-          var v22 = joint.getGroundAnchorA();
-          var v3 = joint.getGroundAnchorB();
-          var v4 = joint.getAnchorB();
-          var token = v13.x + "." + v13.y + "." + v22.x + "." + v22.y + "." + v3.x + "." + v3.y + "." + v4.x + "." + v4.y;
-          return token;
-        });
-        texture2.setDrawer(function() {
-          var lineWidth = style.lineWidth;
-          var stroke = style.stroke;
-          style.fill;
-          var ctx = this.getContext();
-          var ratio = this.getDevicePixelRatio();
-          var lw = lineWidth / ratio;
-          vertices[0] = joint.getAnchorA();
-          vertices[1] = joint.getGroundAnchorA();
-          vertices[2] = joint.getGroundAnchorB();
-          vertices[3] = joint.getAnchorB();
-          if (!vertices.length) {
-            return;
-          }
-          var minX = Infinity;
-          var minY = Infinity;
-          var maxX = -Infinity;
-          var maxY = -Infinity;
-          for (var i = 0; i < vertices.length; ++i) {
-            var v3 = vertices[i];
-            minX = math_min(minX, v3.x);
-            maxX = math_max(maxX, v3.x);
-            minY = math_min(minY, v3.y);
-            maxY = math_max(maxY, v3.y);
-          }
-          var width = maxX - minX;
-          var height = maxY - minY;
-          offsetX = minX;
-          offsetY = minY;
-          this.setSize(width + lw, height + lw, ratio);
-          this.setPadding(-lw / 2);
-          ctx.scale(ratio, ratio);
-          ctx.beginPath();
-          for (var i = 0; i < vertices.length; ++i) {
-            var v3 = vertices[i];
-            var x2 = v3.x - minX + lw / 2;
-            var y = v3.y - minY + lw / 2;
-            if (i == 0)
-              ctx.moveTo(x2, y);
-            else
-              ctx.lineTo(x2, y);
-          }
-          ctx.lineCap = "round";
-          ctx.lineWidth = lw;
-          ctx.strokeStyle = stroke !== null && stroke !== void 0 ? stroke : "";
-          ctx.stroke();
-        });
-        var sprite$1 = sprite(texture2);
-        sprite$1.tick(function() {
-          if (offsetMemo.update(offsetX, offsetY)) {
-            sprite$1.offset(offsetX, offsetY);
-          }
-        });
-        _this.append(sprite$1);
-        return _this;
-      }
-      return PulleyJointComponent2;
-    })(Component)
-  );
-  var BodyComponent = (
-    /** @class */
-    (function(_super) {
-      __extends$1(BodyComponent2, _super);
-      function BodyComponent2(body) {
-        var _this = _super.call(this) || this;
-        _this.__memo = Memo.init();
-        _this.handleTick = function() {
-          if (!_this.body) {
-            return;
-          }
-          var p = _this.body.getPosition();
-          var x2 = p.x;
-          var y = p.y;
-          var a2 = _this.body.getAngle();
-          if (!_this.__memo.update(x2, y, a2)) {
-            return true;
-          }
-          _this.offset(x2, y);
-          _this.rotate(a2);
-        };
-        _this.body = body;
-        _this.tick(_this.handleTick, false);
-        return _this;
-      }
-      return BodyComponent2;
-    })(Sprite)
-  );
-  var math_abs = Math.abs;
-  var HIT_RADIUS_PIXEL = 10;
-  var DEFAULTS = {
-    speed: 1,
-    hz: 60
-  };
-  var WorldComponent = (
-    /** @class */
-    (function(_super) {
-      __extends$1(WorldComponent2, _super);
-      function WorldComponent2(context, emit) {
-        var _this = _super.call(this) || this;
-        _this.bodies = /* @__PURE__ */ new WeakMap();
-        _this.shapes = /* @__PURE__ */ new WeakMap();
-        _this.joints = /* @__PURE__ */ new WeakMap();
-        _this.getHitRadius = function() {
-          var pixelPerUnit = _this.getLogicalPixelRatio();
-          var hitRadius = HIT_RADIUS_PIXEL / pixelPerUnit;
-          return hitRadius;
-        };
-        _this.timeBuffer = 0;
-        _this.stepErrored = false;
-        _this.handleTick = function(dt) {
-          var _a2, _b;
-          if (!_this.world)
-            return false;
-          if (_this.stepErrored)
-            return false;
-          if (_this.context.paused)
-            return false;
-          var speed = (_a2 = _this.context.speed) !== null && _a2 !== void 0 ? _a2 : DEFAULTS.speed;
-          var hz = (_b = _this.context.hz) !== null && _b !== void 0 ? _b : DEFAULTS.hz;
-          if (math_abs(hz) < 1) {
-            hz = 1 / hz;
-          }
-          var timeStep = 1 / hz;
-          try {
-            dt = dt * 1e-3 * speed;
-            _this.timeBuffer += dt;
-            while (_this.timeBuffer > timeStep) {
-              _this.world.step(timeStep);
-              _this.timeBuffer -= timeStep;
-            }
-            _this.renderWorld();
-            return true;
-          } catch (error) {
-            _this.stepErrored = true;
-            console.error(error);
-            return false;
-          }
-        };
-        _this.setWorld = function(world) {
-          if (_this.world === world) {
-            return;
-          }
-          if (_this.world) {
-            _this.world.off("remove-body", _this.removeBody);
-            _this.world.off("remove-fixture", _this.removeShape);
-            _this.world.off("remove-joint", _this.removeJoint);
-          }
-          _this.world = world;
-          if (_this.world) {
-            _this.world.on("remove-body", _this.removeBody);
-            _this.world.on("remove-fixture", _this.removeShape);
-            _this.world.on("remove-joint", _this.removeJoint);
-          }
-          _this.empty();
-          _this.bodies = /* @__PURE__ */ new WeakMap();
-          _this.shapes = /* @__PURE__ */ new WeakMap();
-          _this.joints = /* @__PURE__ */ new WeakMap();
-          _this.renderWorld();
-        };
-        _this.removeShape = function(obj) {
-          var _a2;
-          (_a2 = _this.shapes.get(obj)) === null || _a2 === void 0 ? void 0 : _a2.remove();
-          _this.shapes.delete(obj);
-        };
-        _this.removeBody = function(obj) {
-          var _a2;
-          (_a2 = _this.bodies.get(obj)) === null || _a2 === void 0 ? void 0 : _a2.remove();
-          _this.bodies.delete(obj);
-        };
-        _this.removeJoint = function(obj) {
-          var _a2;
-          (_a2 = _this.joints.get(obj)) === null || _a2 === void 0 ? void 0 : _a2.remove();
-          _this.joints.delete(obj);
-        };
-        _this.rerenderWorld = function() {
-          _this.renderWorld(true);
-        };
-        _this.renderWorld = function(clearCache) {
-          if (clearCache === void 0) {
-            clearCache = false;
-          }
-          if (clearCache === true) {
-            _this.empty();
-            _this.shapes = /* @__PURE__ */ new WeakMap();
-            _this.bodies = /* @__PURE__ */ new WeakMap();
-            _this.joints = /* @__PURE__ */ new WeakMap();
-          }
-          if (!_this.world)
-            return;
-          var world = _this.world;
-          for (var b2 = world.getBodyList(); b2; b2 = b2.getNext()) {
-            _this.renderBody(b2);
-          }
-          for (var j = world.getJointList(); j; j = j.getNext()) {
-            _this.renderJoint(j);
-          }
-        };
-        _this.pointerStart = { x: 0, y: 0 };
-        _this.pointerLast = { x: 0, y: 0 };
-        _this.pointerDragged = false;
-        _this.pointerDown = false;
-        _this.handlePointerDown = function(point2) {
-          var _a2;
-          if (!_this.world)
-            return;
-          var fixture = _this.findFixture(point2);
-          (_a2 = _this.emit) === null || _a2 === void 0 ? void 0 : _a2.call(_this, "world-pointer-down", {
-            point: point2,
-            fixture,
-            background: !fixture
-          });
-          _this.pointerStart.x = point2.x;
-          _this.pointerStart.y = point2.y;
-          _this.pointerLast.x = point2.x;
-          _this.pointerLast.y = point2.y;
-          _this.pointerDown = true;
-          _this.pointerDragged = false;
-        };
-        _this.handlePointerMove = function(point2) {
-          var _a2, _b, _c;
-          if (!_this.world)
-            return;
-          (_a2 = _this.emit) === null || _a2 === void 0 ? void 0 : _a2.call(_this, "world-pointer-move", {
-            point: point2
-          });
-          if (!_this.pointerDown)
-            return;
-          var move = {
-            x: point2.x - _this.pointerStart.x,
-            y: point2.y - _this.pointerStart.y
-          };
-          var delta = {
-            x: point2.x - _this.pointerLast.x,
-            y: point2.y - _this.pointerLast.y
-          };
-          if (_this.pointerDragged) {
-            _this.pointerLast.x = point2.x;
-            _this.pointerLast.y = point2.y;
-            (_b = _this.emit) === null || _b === void 0 ? void 0 : _b.call(_this, "world-drag-move", {
-              point: point2,
-              delta,
-              move
-            });
-          } else if (move.x !== 0 || move.y !== 0) {
-            _this.pointerDragged = true;
-            var fixture = _this.findFixture(point2);
-            (_c = _this.emit) === null || _c === void 0 ? void 0 : _c.call(_this, "world-drag-start", {
-              point: point2,
-              fixture,
-              background: !fixture
-            });
-          }
-        };
-        _this.handlePointerUp = function(point2) {
-          var _a2, _b, _c;
-          if (!_this.world)
-            return;
-          (_a2 = _this.emit) === null || _a2 === void 0 ? void 0 : _a2.call(_this, "world-pointer-up", {
-            point: point2
-          });
-          if (!_this.pointerDown)
-            return;
-          _this.pointerDown = false;
-          ({
-            x: point2.x - _this.pointerStart.x,
-            y: point2.y - _this.pointerStart.y
-          });
-          ({
-            x: point2.x - _this.pointerLast.x,
-            y: point2.y - _this.pointerLast.y
-          });
-          _this.pointerLast.x = point2.x;
-          _this.pointerLast.y = point2.y;
-          if (_this.pointerDragged) {
-            (_b = _this.emit) === null || _b === void 0 ? void 0 : _b.call(_this, "world-drag-end", {
-              point: point2
-            });
-            return;
-          }
-          var fixture = _this.findFixture(point2);
-          (_c = _this.emit) === null || _c === void 0 ? void 0 : _c.call(_this, "world-click", {
-            point: point2,
-            fixture,
-            background: !fixture
-          });
-        };
-        _this.handlePointerCancel = function() {
-          var _a2, _b;
-          if (!_this.world)
-            return;
-          (_a2 = _this.emit) === null || _a2 === void 0 ? void 0 : _a2.call(_this, "world-pointer-cancel");
-          if (!_this.pointerDown)
-            return;
-          _this.pointerDown = false;
-          if (_this.pointerDragged) {
-            (_b = _this.emit) === null || _b === void 0 ? void 0 : _b.call(_this, "world-drag-cancel");
-          }
-        };
-        _this.findFixture = function(point2, filter) {
-          var radius = _this.getHitRadius();
-          var fixture = findFixture(_this.world, point2, radius, filter);
-          return fixture;
-        };
-        _this.context = context;
-        _this.emit = emit;
-        _this.attr("spy", true);
-        _this.on(POINTER_DOWN, _this.handlePointerDown);
-        _this.on(POINTER_MOVE, _this.handlePointerMove);
-        _this.on(POINTER_UP, _this.handlePointerUp);
-        _this.on(POINTER_CANCEL, _this.handlePointerCancel);
-        _this.tick(_this.handleTick, true);
-        return _this;
-      }
-      WorldComponent2.prototype.renderBody = function(body) {
-        var bodyComponent = this.bodies.get(body);
-        if (!bodyComponent) {
-          bodyComponent = new BodyComponent(body);
-          bodyComponent.appendTo(this);
-          this.bodies.set(body, bodyComponent);
-        }
-        for (var fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-          this.renderFixture(bodyComponent, body, fixture);
-        }
-      };
-      WorldComponent2.prototype.renderFixture = function(bodyComponent, body, fixture) {
-        var shapeComponent = this.shapes.get(fixture);
-        if (shapeComponent) {
-          return;
-        }
-        var type = fixture.getType();
-        var shape = fixture.getShape();
-        var style = new ComputedShapeStyle(body, fixture, this.context);
-        if (type == "circle") {
-          shapeComponent = new CircleShapeComponent(shape, style);
-        } else if (type == "edge") {
-          shapeComponent = new EdgeShapeComponent(shape, style);
-        } else if (type == "polygon") {
-          shapeComponent = new PolygonShapeComponent(shape, style);
-        } else if (type == "chain") {
-          shapeComponent = new ChainShapeComponent(shape, style);
-        } else {
-          return;
-        }
-        shapeComponent.appendTo(bodyComponent);
-        this.shapes.set(fixture, shapeComponent);
-      };
-      WorldComponent2.prototype.renderJoint = function(joint) {
-        var component = this.joints.get(joint);
-        if (component) {
-          return;
-        }
-        var type = joint.getType();
-        var style = new ComputedJointStyle(joint, this.context);
-        if (type == PulleyJoint.TYPE) {
-          component = new PulleyJointComponent(joint, style);
-        } else {
-          component = new JointComponent(joint, style);
-        }
-        component.appendTo(this);
-        this.joints.set(joint, component);
-      };
-      return WorldComponent2;
-    })(Component)
-  );
-  function findFixture(world, point2, radius, filter) {
-    var bestFixture;
-    var bestDistance = radius;
-    var aabb = new AABB(point2, point2).extend(radius);
-    var distanceInput2 = new DistanceInput();
-    distanceInput2.useRadii = true;
-    distanceInput2.proxyB.set(new CircleShape(1e-5), 0);
-    distanceInput2.transformB.set(new Transform(point2));
-    world.queryAABB(aabb, function(fixture) {
-      if (filter && !filter(fixture)) {
-        return true;
-      }
-      if (fixture.testPoint(point2)) {
-        bestFixture = fixture;
-        bestDistance = 0;
-        return true;
-      }
-      for (var childIndex = fixture.getShape().getChildCount(); childIndex >= 0; childIndex--) {
-        distanceInput2.proxyA.set(fixture.getShape(), childIndex);
-        distanceInput2.transformA.set(fixture.getBody().getTransform());
-        var cache2 = new SimplexCache();
-        var output2 = new DistanceOutput();
-        Distance(output2, cache2, distanceInput2);
-        var distance = Vec2.distance(output2.pointA, output2.pointB);
-        if (distance < bestDistance) {
-          bestFixture = fixture;
-          bestDistance = distance;
-        }
-      }
-      return bestDistance == 0 ? false : true;
-    });
-    return bestFixture;
-  }
-  var math_PI = Math.PI;
-  var mounted = null;
-  Testbed.mount = function() {
-    if (mounted) {
-      return mounted;
-    }
-    mounted = new StageTestbed();
-    var playButton = document.getElementById("testbed-play");
-    var statusElement = document.getElementById("testbed-status");
-    var infoElement = document.getElementById("testbed-info");
-    if (playButton) {
-      playButton.addEventListener("click", function() {
-        if (mounted.isPaused()) {
-          mounted.resume();
-        } else {
-          mounted.pause();
-        }
-      });
-      mounted._pause = function() {
-        playButton.classList.add("pause");
-        playButton.classList.remove("play");
-      };
-      mounted._resume = function() {
-        playButton.classList.add("play");
-        playButton.classList.remove("pause");
-      };
-    } else {
-      console.log("Please create a button with id='testbed-play'");
-    }
-    var lastStatus = "";
-    if (statusElement) {
-      statusElement.innerText = lastStatus;
-    }
-    mounted._status = function(text) {
-      if (lastStatus === text) {
-        return;
-      }
-      lastStatus = text;
-      if (statusElement) {
-        statusElement.innerText = text;
-      }
-    };
-    var lastInfo = "";
-    if (infoElement) {
-      infoElement.innerText = lastInfo;
-    }
-    mounted._info = function(text) {
-      if (lastInfo === text) {
-        return;
-      }
-      lastInfo = text;
-      if (infoElement) {
-        infoElement.innerText = text;
-      }
-    };
-    return mounted;
-  };
-  var StageTestbed = (
-    /** @class */
-    (function() {
-      function StageTestbed2() {
-        this.width = 80;
-        this.height = 60;
-        this.x = 0;
-        this.y = -10;
-        this.scaleY = -1;
-        this.hz = 60;
-        this.speed = 1;
-        this.background = "#222222";
-        this.activeKeys = {};
-        this.step = function(dt, t) {
-          return;
-        };
-        this.keydown = function(keyCode, label) {
-          return;
-        };
-        this.keyup = function(keyCode, label) {
-          return;
-        };
-        this.paused = false;
-        this.lastDrawHash = "";
-        this.newDrawHash = "";
-        this.buffer = [];
-        this.statusText = "";
-        this.statusMap = {};
-        this.drawSegment = this.drawEdge;
-      }
-      StageTestbed2.prototype.color = function(r, g, b2) {
-        r = r * 256 | 0;
-        g = g * 256 | 0;
-        b2 = b2 * 256 | 0;
-        return "rgb(" + r + ", " + g + ", " + b2 + ")";
-      };
-      StageTestbed2.prototype.start = function(world) {
-        var _this = this;
-        var stage = this.stage = mount();
-        var canvas2 = this.canvas = stage.dom;
-        var testbed2 = this;
-        this.canvas = canvas2;
-        stage.on(POINTER_DOWN, function() {
-          var _a2;
-          window.focus();
-          (_a2 = document.activeElement) === null || _a2 === void 0 ? void 0 : _a2.blur();
-          canvas2.focus();
-        });
-        stage.MAX_ELAPSE = 1e3 / 30;
-        stage.flipY(true);
-        stage.on("resume", function() {
-          _this.paused = false;
-          _this._resume();
-        });
-        stage.on("pause", function() {
-          _this.paused = true;
-          _this._pause();
-        });
-        var drawingTexture = new CanvasTexture();
-        drawingTexture.draw = function(ctx) {
-          var pixelRatio = drawingTexture.getDevicePixelRatio();
-          ctx.save();
-          ctx.transform(1, 0, 0, 1, 0, 0);
-          ctx.lineWidth = 3 / pixelRatio;
-          ctx.lineCap = "round";
-          for (var drawing = _this.buffer.shift(); drawing; drawing = _this.buffer.shift()) {
-            drawing(ctx, pixelRatio);
-          }
-          ctx.restore();
-        };
-        var drawingElement = sprite(drawingTexture);
-        stage.append(drawingElement);
-        stage.tick(function() {
-          _this.buffer.length = 0;
-        }, true);
-        stage.background(this.background);
-        stage.viewbox(this.width, this.height);
-        stage.pin("alignX", -0.5);
-        stage.pin("alignY", -0.5);
-        var mouseGround = world.createBody();
-        var mouseJoint = null;
-        var targetBody = null;
-        var mouseMove = { x: 0, y: 0 };
-        var pointerStart = function(event) {
-          var point2 = event.point;
-          if (targetBody) {
-            return;
-          }
-          var fixture = worldNode.findFixture(point2);
-          if (!fixture) {
-            return;
-          }
-          var body = fixture.getBody();
-          if (_this.mouseForce) {
-            targetBody = body;
-          } else if (_this.mouseForce === 0) ;
-          else {
-            mouseJoint = new MouseJoint({ maxForce: 1e3 }, mouseGround, body, {
-              x: point2.x,
-              y: point2.y
-            });
-            world.createJoint(mouseJoint);
-          }
-        };
-        var pointerMove = function(event) {
-          var point2 = event.point;
-          if (mouseJoint) {
-            mouseJoint.setTarget(point2);
-          }
-          mouseMove.x = point2.x;
-          mouseMove.y = point2.y;
-        };
-        var pointerEnd = function(event) {
-          var point2 = event.point;
-          if (mouseJoint) {
-            world.destroyJoint(mouseJoint);
-            mouseJoint = null;
-          }
-          if (targetBody && _this.mouseForce) {
-            var target = targetBody.getPosition();
-            var force = {
-              x: (point2.x - target.x) * _this.mouseForce,
-              y: (point2.y - target.y) * _this.mouseForce
-            };
-            targetBody.applyForceToCenter(force, true);
-            targetBody = null;
-          }
-        };
-        var pointerCancel = function() {
-          if (mouseJoint) {
-            world.destroyJoint(mouseJoint);
-            mouseJoint = null;
-          }
-          if (targetBody) {
-            targetBody = null;
-          }
-        };
-        var worldNode = new WorldComponent(this, function(name, event) {
-          if (name === "world-drag-start") {
-            pointerStart(event);
-          } else if (name === "world-drag-move") {
-            pointerMove(event);
-          } else if (name === "world-drag-end") {
-            pointerEnd(event);
-          } else if (name === "world-pointer-cancel") {
-            pointerCancel();
-          }
-        });
-        worldNode.setWorld(world);
-        stage.prepend(worldNode);
-        var viewboxMemo = Memo.init();
-        stage.tick(function(dt, t) {
-          if (viewboxMemo.update(_this.x, _this.y, _this.width, _this.height)) {
-            stage.viewbox(_this);
-          }
-        });
-        worldNode.tick(function(dt, t) {
-          _this.step(dt, t);
-          if (targetBody) {
-            _this.drawSegment(targetBody.getPosition(), mouseMove, "rgba(255,255,255,0.2)");
-          }
-          if (_this.lastDrawHash !== _this.newDrawHash) {
-            _this.lastDrawHash = _this.newDrawHash;
-            stage.touch();
-          }
-          _this.newDrawHash = "";
-          return true;
-        });
-        var activeKeys = testbed2.activeKeys;
-        var downKeys = {};
-        function updateActiveKeys(keyCode, down) {
-          var char = String.fromCharCode(keyCode);
-          if (/\w/.test(char)) {
-            activeKeys[char] = down;
-          }
-          activeKeys.right = downKeys[39] || activeKeys["D"];
-          activeKeys.left = downKeys[37] || activeKeys["A"];
-          activeKeys.up = downKeys[38] || activeKeys["W"];
-          activeKeys.down = downKeys[40] || activeKeys["S"];
-          activeKeys.fire = downKeys[32] || downKeys[13];
-        }
-        window.addEventListener("keydown", function(e3) {
-          var _a2;
-          var keyCode = e3.keyCode;
-          downKeys[keyCode] = true;
-          updateActiveKeys(keyCode, true);
-          (_a2 = testbed2.keydown) === null || _a2 === void 0 ? void 0 : _a2.call(testbed2, keyCode, String.fromCharCode(keyCode));
-        });
-        window.addEventListener("keyup", function(e3) {
-          var _a2;
-          var keyCode = e3.keyCode;
-          downKeys[keyCode] = false;
-          updateActiveKeys(keyCode, false);
-          (_a2 = testbed2.keyup) === null || _a2 === void 0 ? void 0 : _a2.call(testbed2, keyCode, String.fromCharCode(keyCode));
-        });
-        this.resume();
-      };
-      StageTestbed2.prototype.focus = function() {
-        document.activeElement && document.activeElement.blur();
-        this.canvas.focus();
-      };
-      StageTestbed2.prototype._pause = function() {
-      };
-      StageTestbed2.prototype._resume = function() {
-      };
-      StageTestbed2.prototype.status = function(a2, b2) {
-        if (typeof b2 !== "undefined") {
-          var key_1 = a2;
-          var value_1 = b2;
-          if (typeof value_1 !== "function" && typeof value_1 !== "object") {
-            this.statusMap[key_1] = value_1;
-          }
-        } else if (a2 && typeof a2 === "object") {
-          for (var key_2 in a2) {
-            var value_2 = a2[key_2];
-            if (typeof value_2 !== "function" && typeof value_2 !== "object") {
-              this.statusMap[key_2] = value_2;
-            }
-          }
-        } else if (typeof a2 === "string") {
-          this.statusText = a2;
-        }
-        var newline = "\n";
-        var text = this.statusText || "";
-        for (var key in this.statusMap) {
-          var value = this.statusMap[key];
-          if (typeof value === "function")
-            continue;
-          text += (text && newline) + key + ": " + value;
-        }
-        this._status(text);
-      };
-      StageTestbed2.prototype.info = function(text) {
-        this._info(text);
-      };
-      StageTestbed2.prototype._status = function(string) {
-      };
-      StageTestbed2.prototype._info = function(text) {
-      };
-      StageTestbed2.prototype.isPaused = function() {
-        return this.paused;
-      };
-      StageTestbed2.prototype.togglePause = function() {
-        if (this.paused) {
-          this.resume();
-        } else {
-          this.pause();
-        }
-      };
-      StageTestbed2.prototype.pause = function() {
-        this.stage.pause();
-      };
-      StageTestbed2.prototype.resume = function() {
-        this.stage.resume();
-        this.focus();
-      };
-      StageTestbed2.prototype.drawPoint = function(p, r, color) {
-        this.buffer.push(function(ctx, ratio) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, 5 / ratio, 0, 2 * math_PI);
-          ctx.strokeStyle = color;
-          ctx.stroke();
-        });
-        this.newDrawHash += "point" + p.x + "," + p.y + "," + r + "," + color;
-      };
-      StageTestbed2.prototype.drawCircle = function(p, r, color) {
-        this.buffer.push(function(ctx) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, r, 0, 2 * math_PI);
-          ctx.strokeStyle = color;
-          ctx.stroke();
-        });
-        this.newDrawHash += "circle" + p.x + "," + p.y + "," + r + "," + color;
-      };
-      StageTestbed2.prototype.drawEdge = function(a2, b2, color) {
-        this.buffer.push(function(ctx) {
-          ctx.beginPath();
-          ctx.moveTo(a2.x, a2.y);
-          ctx.lineTo(b2.x, b2.y);
-          ctx.strokeStyle = color;
-          ctx.stroke();
-        });
-        this.newDrawHash += "segment" + a2.x + "," + a2.y + "," + b2.x + "," + b2.y + "," + color;
-      };
-      StageTestbed2.prototype.drawPolygon = function(points, color) {
-        if (!points || !points.length) {
-          return;
-        }
-        this.buffer.push(function(ctx) {
-          ctx.beginPath();
-          ctx.moveTo(points[0].x, points[0].y);
-          for (var i2 = 1; i2 < points.length; i2++) {
-            ctx.lineTo(points[i2].x, points[i2].y);
-          }
-          ctx.strokeStyle = color;
-          ctx.closePath();
-          ctx.stroke();
-        });
-        this.newDrawHash += "polygon";
-        for (var i = 1; i < points.length; i++) {
-          this.newDrawHash += points[i].x + "," + points[i].y + ",";
-        }
-        this.newDrawHash += color;
-      };
-      StageTestbed2.prototype.drawChain = function(points, color) {
-        if (!points || !points.length) {
-          return;
-        }
-        this.buffer.push(function(ctx) {
-          ctx.beginPath();
-          ctx.moveTo(points[0].x, points[0].y);
-          for (var i2 = 1; i2 < points.length; i2++) {
-            ctx.lineTo(points[i2].x, points[i2].y);
-          }
-          ctx.strokeStyle = color;
-          ctx.stroke();
-        });
-        this.newDrawHash += "chain";
-        for (var i = 1; i < points.length; i++) {
-          this.newDrawHash += points[i].x + "," + points[i].y + ",";
-        }
-        this.newDrawHash += color;
-      };
-      StageTestbed2.prototype.drawAABB = function(aabb, color) {
-        this.buffer.push(function(ctx) {
-          ctx.beginPath();
-          ctx.moveTo(aabb.lowerBound.x, aabb.lowerBound.y);
-          ctx.lineTo(aabb.upperBound.x, aabb.lowerBound.y);
-          ctx.lineTo(aabb.upperBound.x, aabb.upperBound.y);
-          ctx.lineTo(aabb.lowerBound.x, aabb.upperBound.y);
-          ctx.strokeStyle = color;
-          ctx.closePath();
-          ctx.stroke();
-        });
-        this.newDrawHash += "aabb";
-        this.newDrawHash += aabb.lowerBound.x + "," + aabb.lowerBound.y + ",";
-        this.newDrawHash += aabb.upperBound.x + "," + aabb.upperBound.y + ",";
-        this.newDrawHash += color;
-      };
-      StageTestbed2.prototype.findOne = function(query) {
-        throw new Error("Not implemented");
-      };
-      StageTestbed2.prototype.findAll = function(query) {
-        throw new Error("Not implemented");
-      };
-      return StageTestbed2;
-    })()
-  );
-  const planck = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    AABB,
-    Body,
-    Box: BoxShape,
-    BoxShape,
-    BroadPhase,
-    Chain: ChainShape,
-    ChainShape,
-    Circle: CircleShape,
-    CircleShape,
-    ClipVertex,
-    CollideCircles,
-    CollideEdgeCircle,
-    CollideEdgePolygon,
-    CollidePolygonCircle,
-    CollidePolygons,
-    Contact,
-    ContactEdge,
-    get ContactFeatureType() {
-      return exports2.ContactFeatureType;
-    },
-    ContactID,
-    ContactImpulse,
-    DataDriver,
-    Distance,
-    DistanceInput,
-    DistanceJoint,
-    DistanceOutput,
-    DistanceProxy,
-    DynamicTree,
-    Edge: EdgeShape,
-    EdgeShape,
-    Fixture,
-    FixtureProxy,
-    FrictionJoint,
-    GearJoint,
-    Joint,
-    JointEdge,
-    Manifold,
-    ManifoldPoint,
-    get ManifoldType() {
-      return exports2.ManifoldType;
-    },
-    Mat22,
-    Mat33,
-    Math: math$1,
-    MotorJoint,
-    MouseJoint,
-    get PointState() {
-      return exports2.PointState;
-    },
-    Polygon: PolygonShape,
-    PolygonShape,
-    PrismaticJoint,
-    PulleyJoint,
-    RevoluteJoint,
-    RopeJoint,
-    Rot,
-    Serializer,
-    Settings,
-    SettingsInternal,
-    Shape,
-    ShapeCast,
-    ShapeCastInput,
-    ShapeCastOutput,
-    SimplexCache,
-    Solver,
-    StageTestbed,
-    Sweep,
-    TOIInput,
-    TOIOutput,
-    get TOIOutputState() {
-      return exports2.TOIOutputState;
-    },
-    Testbed,
-    TimeOfImpact,
-    TimeStep,
-    Transform,
-    TreeNode,
-    Vec2,
-    Vec3,
-    VelocityConstraintPoint,
-    WeldJoint,
-    WheelJoint,
-    World,
-    WorldManifold,
-    clipSegmentToLine,
-    getPointStates,
-    internal,
-    mixFriction,
-    mixRestitution,
-    stats: stats$1,
-    testOverlap,
-    testbed
-  }, Symbol.toStringTag, { value: "Module" }));
   exports2.AABB = AABB;
   exports2.Body = Body;
   exports2.Box = BoxShape;
@@ -16692,7 +11778,7 @@
   exports2.ManifoldPoint = ManifoldPoint;
   exports2.Mat22 = Mat22;
   exports2.Mat33 = Mat33;
-  exports2.Math = math$1;
+  exports2.Math = math;
   exports2.MotorJoint = MotorJoint;
   exports2.MouseJoint = MouseJoint;
   exports2.Polygon = PolygonShape;
@@ -16711,7 +11797,6 @@
   exports2.ShapeCastOutput = ShapeCastOutput;
   exports2.SimplexCache = SimplexCache;
   exports2.Solver = Solver;
-  exports2.StageTestbed = StageTestbed;
   exports2.Sweep = Sweep;
   exports2.TOIInput = TOIInput;
   exports2.TOIOutput = TOIOutput;
@@ -16728,14 +11813,13 @@
   exports2.World = World;
   exports2.WorldManifold = WorldManifold;
   exports2.clipSegmentToLine = clipSegmentToLine;
-  exports2.default = planck;
   exports2.getPointStates = getPointStates;
   exports2.internal = internal;
   exports2.mixFriction = mixFriction;
   exports2.mixRestitution = mixRestitution;
-  exports2.stats = stats$1;
+  exports2.stats = stats;
   exports2.testOverlap = testOverlap;
   exports2.testbed = testbed;
-  Object.defineProperties(exports2, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
+  Object.defineProperty(exports2, Symbol.toStringTag, { value: "Module" });
 }));
 //# sourceMappingURL=planck-with-testbed.js.map

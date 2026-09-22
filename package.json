@@ -27,7 +27,7 @@
   ],
   "type": "commonjs",
   "sideEffects": [
-    "./dist/planck-with-testbed.*"
+    "./dist/testbed.*"
   ],
   "module": "dist/planck.mjs",
   "main": "dist/planck.js",
@@ -40,29 +40,54 @@
       "import": "./dist/planck.mjs",
       "default": "./dist/planck.js"
     },
+    "./dist/*": "./dist/*",
+    "./testbed": {
+      "types": "./dist/testbed.d.ts",
+      "import": "./dist/testbed.mjs",
+      "require": "./dist/testbed.js"
+    },
     "./with-testbed": {
       "types": "./dist/planck-with-testbed.d.ts",
       "import": "./dist/planck-with-testbed.mjs",
       "default": "./dist/planck-with-testbed.js"
-    },
-    "./dist/*": "./dist/*"
+    }
   },
   "engines": {
     "node": ">=24.0"
   },
   "peerDependencies": {
-    "stage-js": "^1.0.0-alpha.12"
+    "@egjs/hammerjs": "^2.0.17",
+    "@mantine/core": "^8.0.0",
+    "@mantine/hooks": "^8.0.0",
+    "@preact/signals": ">=2.0.0",
+    "polymatic": "^0.0.14",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0",
+    "react-icons": ">=5.0.0"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
+    "@egjs/hammerjs": "^2.0.17",
     "@eslint/js": "^9.39.2",
+    "@mantine/core": "^8.3.18",
+    "@mantine/hooks": "^8.3.18",
+    "@preact/preset-vite": "^2.10.6",
+    "@preact/signals": "^2.11.2",
     "@types/chai": "^5.2.3",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
     "@vitest/coverage-v8": "^4.0.18",
     "ajv": "^8.17.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
+    "polymatic": "^0.0.14",
+    "preact": "^10.29.8",
     "prettier": "^3.8.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.7.0",
     "rimraf": "^6.1.2",
+    "rollup-plugin-dts": "^6.5.1",
     "rollup-plugin-license": "^3.6.0",
     "sinon": "^21.0.1",
     "terser": "^5.46.0",
@@ -72,7 +97,7 @@
     "typedoc-plugin-markdown": "^4.10.0",
     "typescript-eslint": "^8.54.0",
     "vite": "^6.4.1",
-    "vite-plugin-dts-bundle-generator": "^2.1.2",
+    "vite-plugin-glsl": "^1.6.1",
     "vite-plugin-pages": "^0.33.3",
     "vite-plugin-typescript": "^1.0.4",
     "vite-plugin-typescript-transform": "^1.3.1",
@@ -80,8 +105,8 @@
     "vitest": "^4.0.18"
   },
   "scripts": {
-    "lint": "eslint './src/**/*.ts' './testbed/**/*.ts'",
-    "pretty": "prettier --write './src/**/*.ts' './testbed/**/*.ts'",
+    "lint": "eslint './src/**/*.ts' './testbed/**/*.ts' './testbed/**/*.tsx'",
+    "pretty": "prettier --write './src/**/*.ts' './testbed/**/*.ts' './testbed/**/*.tsx'",
     "lint:example": "eslint --fix './example/**/*.ts'",
     "pretty:example": "prettier --write './example/**/*.ts'",
     "test": "vitest run",
@@ -90,7 +115,8 @@
     "preflight": "npm run lint && npm run test:types && npm run test",
     "testbed": "npm run dev",
     "dev": "vite",
-    "build": "rimraf ./dist/* && vite build && BUILD_TESTBED=true vite build && npm run terser-core && npm run terser-testbed",
+    "dev:benchmark": "vite benchmark",
+    "build": "rimraf ./dist/* && npm run build:core && npm run build:testbed && npm run build:types",
     "terser-core": "terser ./dist/planck.js -o ./dist/planck.min.js --source-map",
     "terser-testbed": "terser ./dist/planck-with-testbed.js -o ./dist/planck-with-testbed.min.js --source-map",
     "watch": "vite build --watch",
@@ -102,6 +128,35 @@
     "typedoc": "typedoc --options typedoc.json && mv ./docs/pages/api/README.md ./docs/pages/api/index.md",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "build:core": "vite build && npm run terser-core",
+    "build:testbed": "BUILD_NAME=testbed vite build && BUILD_NAME=with-testbed vite build && npm run terser-testbed",
+    "build:types": "rollup -c rollup.dts.config.mjs"
+  },
+  "peerDependenciesMeta": {
+    "@egjs/hammerjs": {
+      "optional": true
+    },
+    "@mantine/core": {
+      "optional": true
+    },
+    "@mantine/hooks": {
+      "optional": true
+    },
+    "@preact/signals": {
+      "optional": true
+    },
+    "polymatic": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "react-icons": {
+      "optional": true
+    }
   }
 }
