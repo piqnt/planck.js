@@ -12,7 +12,7 @@ import { findModules, loadModule } from "planck/testbed/shell/Playlist";
 renderShell("runtime-shell");
 
 // setup playlist
-findModules(import.meta.glob("./*.ts"));
+findModules(import.meta.glob(["./**/*.ts", "!./index.ts"]));
 
 // load current play, this will load testbed canvas
 loadModule();
