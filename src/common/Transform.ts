@@ -37,7 +37,7 @@ export class Transform {
   /** rotation */
   q: Rot;
 
-  constructor(position?: Vec2Value, rotation?: number) {
+  constructor(position?: Vec2Value, rotation?: number | RotValue) {
     if (_CONSTRUCTOR_FACTORY && !(this instanceof Transform)) {
       return new Transform(position, rotation);
     }
@@ -46,8 +46,10 @@ export class Transform {
     if (typeof position !== "undefined") {
       this.p.setVec2(position);
     }
-    if (typeof rotation !== "undefined") {
+    if (typeof rotation === "number") {
       this.q.setAngle(rotation);
+    } else if (typeof rotation === "object") {
+      this.q.setRot(rotation)
     }
   }
 

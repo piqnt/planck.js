@@ -1,7 +1,7 @@
 /*
  * Planck.js
  *
- * Copyright (c) Erin Catto, Ali Shakiba
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -11,7 +11,7 @@ import type { MassData } from "../dynamics/Body";
 import { RayCastOutput, RayCastInput, AABBValue } from "./AABB";
 import { DistanceProxy } from "./Distance";
 import type { Transform, TransformValue } from "../common/Transform";
-import type { Vec2Value } from "../common/Vec2";
+import type { Vec2, Vec2Value } from "../common/Vec2";
 import { Style } from "../util/Testbed";
 
 // todo make shape an interface
@@ -77,6 +77,17 @@ export abstract class Shape {
    * @param p A point in world coordinates.
    */
   abstract testPoint(xf: TransformValue, p: Vec2Value): boolean;
+
+	/**
+   * LIQUID_FUN:
+   * 
+   * Compute the distance from the current shape to the specified point. This only works for convex shapes.
+   * @param xf the shape world transform.
+   * @param p a point in world coordinates.
+   * @param normal returns the direction in which the distance increases.
+   * @return returns the distance from the current shape.
+   */
+	abstract computeDistance(xf: Transform, p: Vec2Value, normal: Vec2, childIndex: number): number;
 
   /**
    * Cast a ray against a child shape.

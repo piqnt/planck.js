@@ -1,7 +1,7 @@
 /*
  * Planck.js
  *
- * Copyright (c) Erin Catto, Ali Shakiba
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -128,6 +128,24 @@ export class CircleShape extends Shape {
   testPoint(xf: TransformValue, p: Vec2Value): boolean {
     const center = matrix.transformVec2(temp, xf, this.m_p);
     return matrix.distSqrVec2(p, center) <= this.m_radius * this.m_radius;
+  }
+
+  /**
+   * LIQUID_FUN:
+   * 
+   * Compute the distance from the current shape to the specified point. This only works for convex shapes.
+   * @param transform the shape world transform.
+   * @param p a point in world coordinates.
+   * @param normal returns the direction in which the distance increases.
+   * @return returns the distance from the current shape.
+   */
+  computeDistance(transform: Transform, p: Vec2Value, normal: Vec2, childIndex: number) {
+    const center = Vec2.add(transform.p, Rot.mulVec2(transform.q, this.m_p));
+    const d = Vec2.sub(p, center);
+    const d1 = d.length();
+    normal.setMul(1 / d1, d);
+
+    return d1 - this.m_radius;
   }
 
   /**

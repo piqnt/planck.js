@@ -1,7 +1,7 @@
 /*
  * Planck.js
  *
- * Copyright (c) Erin Catto, Ali Shakiba
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -206,6 +206,36 @@ export class EdgeShape extends Shape {
    */
   testPoint(xf: TransformValue, p: Vec2Value): false {
     return false;
+  }
+
+  /**
+   * LIQUID_FUN:
+   * 
+   * Compute the distance from the current shape to the specified point. This only works for convex shapes.
+   * @param xf the shape world transform.
+   * @param p a point in world coordinates.
+   * @param normal returns the direction in which the distance increases.
+   * @return returns the distance from the current shape.
+   */
+  computeDistance(xf: Transform, p: Vec2Value, normal: Vec2, childIndex: number) {
+    const v1 = Transform.mulVec2(xf, this.m_vertex1);
+    const v2 = Transform.mulVec2(xf, this.m_vertex2);
+
+    let d = Vec2.sub(p, v1);
+    const s = Vec2.sub(v2, v1);
+    const ds = Vec2.dot(d, s);
+    if (ds > 0) {
+      const s2 = Vec2.dot(s, s);
+      if (ds > s2) {
+        d = Vec2.sub(p, v2);
+      } else {
+        d.subMul(ds / s2, s);
+      }
+    }
+
+    const d1 = d.length();
+    normal.set(d1 > 0 ? Vec2.mul(1 / d1, d) : Vec2.zero()); // TODO remove unnecessary object creations (wait for final method signature)
+    return d1;
   }
 
   /**

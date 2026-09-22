@@ -1,7 +1,7 @@
 /*
  * Planck.js
  *
- * Copyright (c) Erin Catto, Ali Shakiba
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -311,6 +311,22 @@ export class ChainShape extends Shape {
    */
   testPoint(xf: TransformValue, p: Vec2Value): false {
     return false;
+  }
+
+  /**
+   * LIQUID_FUN:
+   * 
+   * Compute the distance from the current shape to the specified point. This only works for convex shapes.
+   * @param xf the shape world transform.
+   * @param p a point in world coordinates.
+   * @param normal returns the direction in which the distance increases.
+   * @param childIndex The child shape index
+   * @return returns the distance from the current shape.
+   */
+  computeDistance(xf: Transform, p: Vec2Value, normal: Vec2, childIndex: number) {
+    const edge = new EdgeShape();
+    this.getChildEdge(edge, childIndex);
+    return edge.computeDistance(xf, p, normal, 0);
   }
 
   /**

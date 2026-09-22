@@ -1,7 +1,7 @@
 /*
  * Planck.js
  *
- * Copyright (c) Erin Catto, Ali Shakiba
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -16,6 +16,7 @@ import { Joint } from "./Joint";
 import { TimeOfImpact, TOIInput, TOIOutput, TOIOutputState } from "../collision/TimeOfImpact";
 import { Distance, DistanceInput, DistanceOutput, SimplexCache } from "../collision/Distance";
 import { World } from "./World";
+import { Transform } from "../common/Transform";
 import { Sweep } from "../common/Sweep";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
@@ -30,6 +31,8 @@ export class TimeStep {
   inv_dt: number = 0;
   velocityIterations: number = 0;
   positionIterations: number = 0;
+  // LIQUID_FUN:
+  particleIterations: number = 0;
   warmStarting: boolean = false;
   blockSolve: boolean = true;
 
@@ -150,6 +153,11 @@ export class Solver {
 
   solveWorld(step: TimeStep): void {
     const world = this.m_world;
+
+    // LIQUID_FUN: update previous transforms
+    for (let b = world.m_bodyList; b; b = b.m_next) {
+      b.m_xf0 = Transform.clone(b.m_xf); // TODO clone necessary?
+    }
 
     // Clear all the island flags.
     for (let b = world.m_bodyList; b; b = b.m_next) {
@@ -713,6 +721,8 @@ export class Solver {
       s_subStep.dtRatio = 1.0;
       s_subStep.positionIterations = 20;
       s_subStep.velocityIterations = step.velocityIterations;
+      // LIQUID_FUN:
+      s_subStep.particleIterations = step.particleIterations;
       s_subStep.warmStarting = false;
 
       this.solveIslandTOI(s_subStep, bA, bB);
