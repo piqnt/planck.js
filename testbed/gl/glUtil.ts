@@ -1,4 +1,4 @@
-import { LineProgram, PolygonProgram, ShapeProgram } from "./GLContext";
+import { LineProgram, PointProgram, PolygonProgram, ShapeProgram } from "./GLContext";
 
 export function compileShader(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader {
   const shader = gl.createShader(type);
@@ -122,6 +122,15 @@ export function createLineProgram(gl: WebGL2RenderingContext, vertexSrc: string,
   return {
     program,
     uProjectionMatrix: gl.getUniformLocation(program, "projectionMatrix"),
+  };
+}
+
+export function createPointProgram(gl: WebGL2RenderingContext, vertexSrc: string, fragmentSrc: string): PointProgram {
+  const program = compileProgram(gl, vertexSrc, fragmentSrc);
+  return {
+    program,
+    uProjectionMatrix: gl.getUniformLocation(program, "projectionMatrix"),
+    uPointScale: gl.getUniformLocation(program, "pointScale"),
   };
 }
 

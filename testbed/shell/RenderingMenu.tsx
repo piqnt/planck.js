@@ -9,6 +9,7 @@ const FLAGS: { key: keyof RenderConfig; label: string; group: string }[] = [
   { key: "bounds", label: "Bounds", group: "Rendering" },
   { key: "mass", label: "Mass", group: "Rendering" },
   { key: "bodyNames", label: "Body Names", group: "Rendering" },
+  { key: "particles", label: "Particles", group: "Rendering" },
   { key: "joints", label: "Joints", group: "Joints" },
   { key: "contact", label: "Contact Points", group: "Contacts" },
   { key: "contactNormals", label: "Contact Normals", group: "Contacts" },
