@@ -60,7 +60,7 @@
     "@mantine/core": "^8.0.0",
     "@mantine/hooks": "^8.0.0",
     "@preact/signals": ">=2.0.0",
-    "polymatic": "^0.0.14",
+    "polymatic": "^0.3.1",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
     "react-icons": ">=5.0.0"
@@ -80,7 +80,7 @@
     "ajv": "^8.17.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "polymatic": "^0.0.14",
+    "polymatic": "^0.3.1",
     "preact": "^10.29.8",
     "prettier": "^3.8.1",
     "react": "^18.3.1",

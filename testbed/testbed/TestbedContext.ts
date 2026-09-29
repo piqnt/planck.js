@@ -93,15 +93,16 @@ export interface TestbedContext {
   canvasElement: Signal<HTMLCanvasElement>;
   gl: Signal<GLResources>;
   worldMatrix: Mat2d;
-  pixelPerUnit?: number;
-  pointerRadius?: number;
+  pixelPerUnit: number;
+  pointerRadius: number;
   showOutline: Signal<boolean>;
   showToolbar: Signal<boolean>;
   activeKeys: ActiveKeys;
   /** what the outline and the inspect tool selected, by key */
   multiselect: Signal<Multiselect>;
   console: ConsoleInterface;
-  worldQuery?: WorldQuery;
+  /** set by the WorldQuery middleware */
+  worldQuery: WorldQuery;
 
   world: Signal<World>;
   simulation: ContextSimulation;
