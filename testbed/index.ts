@@ -19,6 +19,7 @@ export * from "./world-view/DrawBounds";
 export * from "./world-view/DrawBodyInfo";
 export * from "./world-view/DrawJoints";
 export * from "./world-view/DrawContacts";
+export * from "./world-view/DrawParticles";
 
 export * from "./world-view/WorldStep";
 

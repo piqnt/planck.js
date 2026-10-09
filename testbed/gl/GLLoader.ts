@@ -1,7 +1,13 @@
 import { Middleware, Memo } from "polymatic";
 import { effect, type Signal } from "@preact/signals";
 import { type Mat2d } from "../common/Mat2d";
-import { createShapeProgram, createPolygonProgram, createLineProgram, createUnitQuadBuffer } from "./glUtil";
+import {
+  createShapeProgram,
+  createPolygonProgram,
+  createLineProgram,
+  createPointProgram,
+  createUnitQuadBuffer,
+} from "./glUtil";
 import { type GLResources } from "./GLContext";
 import * as Shaders from "./shaders";
 
@@ -65,6 +71,7 @@ export class GLLoader extends Middleware<GLLoaderContext> {
           capsuleProgram: createShapeProgram(gl, Shaders.SOLID_CAPSULE_VERT, Shaders.SOLID_CAPSULE_FRAG),
           polygonProgram: createPolygonProgram(gl, Shaders.SOLID_POLYGON_VERT, Shaders.SOLID_POLYGON_FRAG),
           lineProgram: createLineProgram(gl, Shaders.LINE_VERT, Shaders.LINE_FRAG),
+          pointProgram: createPointProgram(gl, Shaders.PARTICLE_VERT, Shaders.PARTICLE_FRAG),
           projectionMatrix: new Float32Array(16),
           pixelScale: 1,
         };
@@ -93,6 +100,7 @@ export class GLLoader extends Middleware<GLLoaderContext> {
           gl.deleteProgram(this.resources.capsuleProgram.program);
           gl.deleteProgram(this.resources.polygonProgram.program);
           gl.deleteProgram(this.resources.lineProgram.program);
+          gl.deleteProgram(this.resources.pointProgram.program);
           gl.deleteBuffer(this.resources.quadBuffer);
           this.resources = null;
 

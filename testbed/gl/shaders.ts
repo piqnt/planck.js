@@ -9,3 +9,5 @@ export { default as SOLID_POLYGON_VERT } from "./shaders/solidPolygon.vert";
 export { default as SOLID_POLYGON_FRAG } from "./shaders/solidPolygon.frag";
 export { default as LINE_VERT } from "./shaders/line.vert";
 export { default as LINE_FRAG } from "./shaders/line.frag";
+export { default as PARTICLE_VERT } from "./shaders/particle.vert";
+export { default as PARTICLE_FRAG } from "./shaders/particle.frag";

@@ -17,6 +17,7 @@ import { DrawBounds } from "../world-view/DrawBounds";
 import { DrawBodyInfo } from "../world-view/DrawBodyInfo";
 import { DrawJoints } from "../world-view/DrawJoints";
 import { DrawContacts } from "../world-view/DrawContacts";
+import { DrawParticles } from "../world-view/DrawParticles";
 import { WorldStep } from "../world-view/WorldStep";
 import { WorldKeys } from "../world-view/WorldKeys";
 import { findAll, findOne } from "../common/FindLabel";
@@ -65,6 +66,7 @@ export class TestbedMain extends Middleware<TestbedContext> implements TestbedIn
     this.use(new DrawBodyInfo());
     this.use(new DrawJoints());
     this.use(new DrawContacts());
+    this.use(new DrawParticles());
     this.use(new WorldKeys());
     this.use(new SelectionManager());
     this.use(new PointerManager());

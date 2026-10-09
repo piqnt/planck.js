@@ -1804,18 +1804,14 @@ export class b2ParticleSystem {
   getVelocityBuffer() {
     return this.m_velocityBuffer.data;
   }
-/* TODO
-  /// Get the color of each particle
-  /// Array is length GetParticleCount()
-  /// @return the pointer to the head of the particle colors array.
-  getColorBuffer() {
-  return ((b2ParticleSystem*) this)->GetColorBuffer();
+  /**
+   * Get the color of each particle
+   * Array is length GetParticleCount(); null until a particle is given a color
+   * @return the particle colors array
+   */
+  getColorBuffer(): b2ParticleColor[] | null {
+    return this.m_colorBuffer.data;
   }
-  b2ParticleColor* b2ParticleSystem::GetColorBuffer()
-{
-	m_colorBuffer.data = RequestBuffer(m_colorBuffer.data);
-	return m_colorBuffer.data;
-}*/
 
   /**
    * Get the particle-group of each particle.
