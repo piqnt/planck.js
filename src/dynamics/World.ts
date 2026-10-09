@@ -1,7 +1,7 @@
 /*
  * Planck.js
  *
- * Copyright (c) Erin Catto, Ali Shakiba
+ * Copyright (c) Erin Catto, Ali Shakiba, Google, Inc.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -17,6 +17,9 @@ import { Contact } from "./Contact";
 import { AABBValue, RayCastInput, RayCastOutput } from "../collision/AABB";
 import { Fixture, FixtureProxy } from "./Fixture";
 import { Manifold } from "../collision/Manifold";
+import { b2CalculateParticleIterations } from "../particle/Particle";
+import { b2ParticleSystem, b2ParticleSystemDef, ParticleAABBQueryCallback, ParticleRayCastCallback } from "../particle/ParticleSystem";
+import { b2ParticleGroup } from "../particle/ParticleGroup";
 
 /** @internal */ const _ASSERT = typeof ASSERT === "undefined" ? false : ASSERT;
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
@@ -112,6 +115,7 @@ export class World {
   /** @internal */ m_bodyCount: number;
   /** @internal */ m_jointList: Joint | null;
   /** @internal */ m_jointCount: number;
+  /** @internal LIQUID_FUN: */ m_particleSystemList: b2ParticleSystem;
   /** @internal */ m_stepComplete: boolean;
   /** @internal */ m_allowSleep: boolean;
   /** @internal */ m_gravity: Vec2;
@@ -163,6 +167,9 @@ export class World {
 
     this.m_jointList = null;
     this.m_jointCount = 0;
+
+    // LIQUID_FUN:
+    this.m_particleSystemList = null;
 
     this.m_stepComplete = true;
 
@@ -251,6 +258,19 @@ export class World {
    */
   getJointList(): Joint | null {
     return this.m_jointList;
+  }
+
+  /**
+   * LIQUID_FUN:
+   *
+   * Get the world particle-system list. With the returned particle-system, use
+   * {@link b2ParticleSystem.getNext} to get the next particle-system in the world
+   * list. A null particle-system indicates the end of the list.
+   *
+   * @return the head of the world particle-system list.
+   */
+  getParticleSystemList(): b2ParticleSystem | null {
+    return this.m_particleSystemList;
   }
 
   /**
@@ -405,6 +425,40 @@ export class World {
   }
 
   /**
+   * LIQUID_FUN:
+   * 
+   * TODO
+   */
+  // TODO is API change ok?
+  queryAABBParticles(
+    aabb: AABBValue,
+    callback: ParticleAABBQueryCallback,
+    shouldQueryParticleSystem = (particleSystem: b2ParticleSystem) => true
+  ) {
+    for (let p = this.m_particleSystemList; p; p = p.getNext()) {
+      if (shouldQueryParticleSystem(p)) {
+        p.queryAABB(callback, aabb);
+      }
+    }
+  }
+
+  /**
+   * LIQUID_FUN:
+   *
+   * Query the world for all fixtures that potentially overlap the
+   * provided shape's AABB. Calls QueryAABB internally.
+   * @param callback a user implemented callback class.
+   * @param shape the query shape
+   * @param xf the transform of the AABB
+   */
+  // TODO is this method used internally?
+	// queryShapeAABB(callback: b2QueryCallback, shape: Shape, xf: Transform): void { // TODO switch parameters?
+  //   const aabb = new AABB();
+  //   shape.computeAABB(aabb, xf, 0);
+  //   this.queryAABB(aabb, callback);
+  // };
+
+  /**
    * Ray-cast the world for all fixtures in the path of the ray. Your callback
    * controls whether you get the closest point, any point, or n-points. The
    * ray-cast ignores shapes that contain the starting point.
@@ -439,6 +493,24 @@ export class World {
         return input.maxFraction;
       },
     );
+  }
+  /**
+   * LIQUID_FUN:
+   *
+   * TODO
+   */
+  // TODO API change ok?
+  rayCastParticles(
+    point1: Vec2,
+    point2: Vec2,
+    callback: ParticleRayCastCallback,
+    shouldQueryParticleSystem = (particleSystem: b2ParticleSystem) => true
+  ): void {
+    for (let p = this.m_particleSystemList; p; p = p.getNext()) {
+		  if (shouldQueryParticleSystem(p)) {
+        p.rayCast(callback, point1, point2);
+      }
+    }
   }
 
   /**
@@ -793,18 +865,82 @@ export class World {
     this.publish("remove-joint", joint);
   }
 
+  /**
+   * LIQUID_FUN:
+   *
+   * Create a particle system given a definition. No reference to the
+   * definition is retained.
+   *
+   * Warning: This function is locked during callbacks.
+   */
+  createParticleSystem(def: b2ParticleSystemDef = {}): b2ParticleSystem | null {
+    _ASSERT && console.assert(this.isLocked() == false);
+    if (this.isLocked()) {
+      return null;
+    }
+
+    const p = new b2ParticleSystem(def, this);
+
+    // Add to world doubly linked list.
+    p.m_prev = null;
+    p.m_next = this.m_particleSystemList;
+    if (this.m_particleSystemList) {
+      this.m_particleSystemList.m_prev = p;
+    }
+    this.m_particleSystemList = p;
+
+    return p;
+  }
+
+  /**
+   * LIQUID_FUN:
+   *
+   * Destroy a particle system.
+   * Warning: This function is locked during callbacks.
+   */
+  destroyParticleSystem(p: b2ParticleSystem): void {
+    _ASSERT && console.assert(this.m_particleSystemList != null);
+    _ASSERT && console.assert(this.isLocked() == false);
+    if (this.isLocked()) {
+      return;
+    }
+
+    // Remove world particleSystem list.
+    if (p.m_prev) {
+      p.m_prev.m_next = p.m_next;
+    }
+
+    if (p.m_next) {
+      p.m_next.m_prev = p.m_prev;
+    }
+
+    if (p == this.m_particleSystemList) {
+      this.m_particleSystemList = p.m_next;
+    }
+
+    // TODO if using WASM destroy particle-system
+    // TODO publish event
+  }
+
   /** @internal */
   s_step: TimeStep; // reuse
 
   /**
    * Take a time step. This performs collision detection, integration, and
    * constraint solution.
+   * 
+   * For the numerical stability of particles, minimize the following
+   * dimensionless gravity acceleration:
+   *     gravity / particleRadius * (timeStep / particleIterations)^2
+   * b2CalculateParticleIterations() or
+   * CalculateReasonableParticleIterations() help to determine the optimal
+   * particleIterations.
    *
    * Broad-phase, narrow-phase, solve and solve time of impacts.
    *
    * @param timeStep Time step, this should not vary.
    */
-  step(timeStep: number, velocityIterations?: number, positionIterations?: number): void {
+  step(timeStep: number, velocityIterations?: number, positionIterations?: number, particleIterations = 1): void {
     this.publish("pre-step", timeStep);
 
     if ((velocityIterations | 0) !== velocityIterations) {
@@ -826,6 +962,8 @@ export class World {
     this.s_step.reset(timeStep);
     this.s_step.velocityIterations = velocityIterations;
     this.s_step.positionIterations = positionIterations;
+    // LIQUID_FUN:
+    this.s_step.particleIterations = particleIterations;
     this.s_step.warmStarting = this.m_warmStarting;
     this.s_step.blockSolve = this.m_blockSolve;
 
@@ -834,6 +972,10 @@ export class World {
 
     // Integrate velocities, solve velocity constraints, and integrate positions.
     if (this.m_stepComplete && timeStep > 0.0) {
+      // LIQUID_FUN:
+      for (let p = this.m_particleSystemList; p; p = p.getNext()) {
+        p.solve(this.s_step); // Particle Simulation
+      }
       this.m_solver.solveWorld(this.s_step);
 
       // Synchronize fixtures, check for out of range bodies.
@@ -882,6 +1024,38 @@ export class World {
     } else {
       this.m_step_callback.push(callback);
     }
+  }
+
+  // LIQUID_FUN:
+  static getSmallestRadius(world: World): number {
+    let smallestRadius = Infinity;
+    for (let system = world.getParticleSystemList();
+      system != null;
+      system = system.getNext())
+    {
+      smallestRadius = Math.min(smallestRadius, system.getRadius());
+    }
+    return smallestRadius;
+  }
+
+  /**
+   * LIQUID_FUN:
+   *
+   * Recommend a value to be used in `Step` for `particleIterations`.
+   * This calculation is necessarily a simplification and should only be
+   * used as a starting point. Please see "Particle Iterations" in the
+   * Programmer's Guide for details.
+   * @param timeStep is the value to be passed into `Step`.
+   */
+	calculateReasonableParticleIterations(timeStep: number): number {
+    if (this.m_particleSystemList == null) {
+      return 1;
+    }
+
+    // Use the smallest radius, since that represents the worst-case.
+    return b2CalculateParticleIterations(this.m_gravity.length(),
+                      World.getSmallestRadius(this),
+                      timeStep);
   }
 
   /**
@@ -1097,6 +1271,8 @@ export class World {
   on(name: "add-joint", listener: (joint: Joint) => void): World;
   /** Listener is called when a fixture is added. */
   on(name: "add-fixture", listener: (fixture: Fixture) => void): World;
+  on(name: "remove-particle", listener: (system: b2ParticleSystem, index: number) => void): World;
+  on(name: "remove-particle-group", listener: (group: b2ParticleGroup) => void): World;
   /**
    * Register an event listener.
    */
@@ -1125,6 +1301,8 @@ export class World {
   off(name: "add-body", listener: (body: Body) => void): World;
   off(name: "add-joint", listener: (joint: Joint) => void): World;
   off(name: "add-fixture", listener: (fixture: Fixture) => void): World;
+  off(name: "remove-particle", listener: (system: b2ParticleSystem, index: number) => void): World;
+  off(name: "remove-particle-group", listener: (group: b2ParticleGroup) => void): World;
   /**
    * Remove an event listener.
    */
