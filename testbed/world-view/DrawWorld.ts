@@ -80,16 +80,20 @@ export class DrawWorld extends Middleware<DrawWorldContext> {
 
 const DEFAULT_FILL = "rgba(255,255,255,0.1)";
 
+/** a style that sets something; planck gives every shape, fixture and body an empty `{}` */
+const hasStyle = (value: unknown): value is Style =>
+  typeof value === "object" && value !== null && ("stroke" in value || "fill" in value);
+
+/**
+ * The style set on a shape, fixture or body, or undefined when it sets none,
+ * so the lookup goes on to the next one. An empty `style` (planck's default)
+ * must not end it: then a body's `render` or `style` was never reached and
+ * every shape drew in the default colors.
+ */
 function getStyle(obj: object): Style | undefined {
-  const render = obj["render"];
-  if (typeof render === "object" && render && ("stroke" in render || "fill" in render)) {
-    // this was used in planck before v1
-    return render;
-  }
-  const style = obj["style"];
-  if (typeof style === "object" && style) {
-    return style;
-  }
+  // `render` was used in planck before v1
+  if (hasStyle(obj["render"])) return obj["render"];
+  if (hasStyle(obj["style"])) return obj["style"];
 }
 
 function shapeColor(body: Body, fixture: Fixture): string {

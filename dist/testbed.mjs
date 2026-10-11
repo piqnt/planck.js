@@ -340,14 +340,12 @@ class ToolSwitch extends Middleware {
         } else if (!isMe && this.tool.activated) {
           this.unuse(this.tool);
         }
-        return () => {
-          this.unuse(this.tool);
-        };
       }));
     };
     this.handleDeactivate = () => {
       this.disposers.forEach((d) => d());
       this.disposers = [];
+      this.unuse(this.tool);
     };
     this.name = name;
     this.tool = tool;
@@ -1255,15 +1253,12 @@ class DrawWorld extends Middleware {
   }
 }
 const DEFAULT_FILL = "rgba(255,255,255,0.1)";
+const hasStyle = (value) => typeof value === "object" && value !== null && ("stroke" in value || "fill" in value);
 function getStyle(obj) {
-  const render = obj["render"];
-  if (typeof render === "object" && render && ("stroke" in render || "fill" in render)) {
-    return render;
-  }
-  const style = obj["style"];
-  if (typeof style === "object" && style) {
-    return style;
-  }
+  if (hasStyle(obj["render"]))
+    return obj["render"];
+  if (hasStyle(obj["style"]))
+    return obj["style"];
 }
 function shapeColor(body, fixture) {
   if (fixture.isSensor()) {
