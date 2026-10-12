@@ -703,9 +703,20 @@ class ContainerLoader extends Middleware {
       }
     };
     this.handleDomReady = () => {
-      const containerElement = document.getElementById("space");
+      let containerElement = document.getElementById("space");
       if (!containerElement) {
-        throw new Error("Runtime container element not available!");
+        containerElement = document.createElement("div");
+        containerElement.id = "space";
+        Object.assign(containerElement.style, {
+          position: "absolute",
+          top: "0",
+          left: "0",
+          bottom: "0",
+          right: "0",
+          width: "100%",
+          height: "100%"
+        });
+        document.body.insertBefore(containerElement, document.body.firstChild);
       }
       this.context.containerElement.value = containerElement;
     };
