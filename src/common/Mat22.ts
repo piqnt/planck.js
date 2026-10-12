@@ -47,7 +47,7 @@ export class Mat22 {
   }
 
   static assert(o: any): void {
-    if (_ASSERT) console.assert(!Mat22.isValid(o), "Invalid Mat22!", o);
+    if (_ASSERT) console.assert(Mat22.isValid(o), "Invalid Mat22!", o);
   }
 
   set(a: Mat22): void;

@@ -47,7 +47,7 @@ export class Mat33 {
   }
 
   static assert(o: any): void {
-    if (_ASSERT) console.assert(!Mat33.isValid(o), "Invalid Mat33!", o);
+    if (_ASSERT) console.assert(Mat33.isValid(o), "Invalid Mat33!", o);
   }
 
   /**

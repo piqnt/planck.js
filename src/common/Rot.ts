@@ -86,7 +86,7 @@ export class Rot {
   }
 
   static assert(o: any): void {
-    if (_ASSERT) console.assert(!Rot.isValid(o), "Invalid Rot!", o);
+    if (_ASSERT) console.assert(Rot.isValid(o), "Invalid Rot!", o);
   }
 
   /** Set to the identity rotation. */

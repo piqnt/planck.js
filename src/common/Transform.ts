@@ -112,7 +112,7 @@ export class Transform {
   }
 
   static assert(o: any): void {
-    if (_ASSERT) console.assert(!Transform.isValid(o), "Invalid Transform!", o);
+    if (_ASSERT) console.assert(Transform.isValid(o), "Invalid Transform!", o);
   }
 
   static mul(a: TransformValue, b: Vec2Value): Vec2;

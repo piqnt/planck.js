@@ -113,7 +113,7 @@ export class Vec3 {
   }
 
   static assert(o: any): void {
-    if (_ASSERT) console.assert(!Vec3.isValid(o), "Invalid Vec3!", o);
+    if (_ASSERT) console.assert(Vec3.isValid(o), "Invalid Vec3!", o);
   }
 
   setZero(): Vec3 {
