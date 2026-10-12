@@ -43,8 +43,7 @@
     "./dist/*": "./dist/*",
     "./testbed": {
       "types": "./dist/testbed.d.ts",
-      "import": "./dist/testbed.mjs",
-      "require": "./dist/testbed.js"
+      "import": "./dist/testbed.mjs"
     },
     "./with-testbed": {
       "types": "./dist/planck-with-testbed.d.ts",
