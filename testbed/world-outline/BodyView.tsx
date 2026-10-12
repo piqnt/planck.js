@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 
 import { WatchBoolean, WatchNumber, WatchText, WatchVec2 } from "../shell/WatchValue";
 import { Pair, PairKey, PairValue, Subtree, SubtreeBody, SubtreeHeader } from "../shell/Subtree";
@@ -19,6 +20,7 @@ interface PropsWithBody {
 }
 
 export const BodyView: React.FC<PropsWithBody> = ({ body }) => {
+  useSignals();
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
 

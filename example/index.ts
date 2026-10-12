@@ -5,6 +5,8 @@
 
 // the testbed implements Testbed.mount() for the examples, which import Testbed from "planck"
 import "planck/testbed";
+// the shell is Mantine, whose stylesheet the page loads
+import "@mantine/core/styles.css";
 import { renderShell } from "planck/testbed/shell/index";
 import { findModules, loadModule } from "planck/testbed/shell/Playlist";
 

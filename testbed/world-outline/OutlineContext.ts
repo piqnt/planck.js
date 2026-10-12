@@ -1,4 +1,4 @@
-import { type Signal } from "@preact/signals";
+import { type Signal } from "@preact/signals-core";
 import { World } from "planck";
 import { Multiselect } from "planck/testbed";
 

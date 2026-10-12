@@ -1,7 +1,5 @@
 import { ButtonProps, createTheme, MantineTheme } from "@mantine/core";
 
-import "@mantine/core/styles.css";
-
 export const theme = createTheme({
   primaryColor: "gray",
   components: {

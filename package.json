@@ -46,6 +46,10 @@
       "types": "./dist/testbed.d.ts",
       "import": "./dist/testbed.mjs"
     },
+    "./testbed/shell": {
+      "types": "./dist/shell.d.ts",
+      "import": "./dist/shell.mjs"
+    },
     "./with-testbed": {
       "types": "./dist/planck-with-testbed.d.ts",
       "import": "./dist/planck-with-testbed.mjs",
@@ -59,8 +63,8 @@
     "@egjs/hammerjs": "^2.0.17",
     "@mantine/core": "^8.0.0",
     "@mantine/hooks": "^8.0.0",
-    "@preact/signals": ">=2.0.0",
     "@preact/signals-core": "^1.0.0",
+    "@preact/signals-react": "^3.0.0",
     "polymatic": "^0.3.1",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
@@ -73,8 +77,8 @@
     "@mantine/core": "^8.3.18",
     "@mantine/hooks": "^8.3.18",
     "@preact/preset-vite": "^2.10.6",
-    "@preact/signals": "^2.11.2",
     "@preact/signals-core": "^1.14.4",
+    "@preact/signals-react": "^3.12.0",
     "@types/chai": "^5.2.3",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
@@ -132,7 +136,7 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "build:core": "vite build && npm run terser-core",
-    "build:testbed": "BUILD_NAME=testbed vite build && BUILD_NAME=with-testbed vite build && npm run terser-testbed",
+    "build:testbed": "BUILD_NAME=testbed vite build && BUILD_NAME=shell vite build && BUILD_NAME=with-testbed vite build && npm run terser-testbed",
     "build:types": "rollup -c rollup.dts.config.mjs"
   },
   "peerDependenciesMeta": {
@@ -145,10 +149,10 @@
     "@mantine/hooks": {
       "optional": true
     },
-    "@preact/signals": {
+    "@preact/signals-core": {
       "optional": true
     },
-    "@preact/signals-core": {
+    "@preact/signals-react": {
       "optional": true
     },
     "polymatic": {

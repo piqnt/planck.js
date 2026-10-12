@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 import { Affix } from "@mantine/core";
 
 import { runtime } from "planck/testbed";
@@ -31,6 +32,7 @@ interface OutlineComponentProps {
 }
 
 export const OutlineComponent: React.FC<OutlineComponentProps> = (props) => {
+  useSignals();
   const context = runtime.value?.context;
   if (!context?.showOutline?.value) return null;
 

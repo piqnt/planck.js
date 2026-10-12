@@ -10,10 +10,13 @@ export default function viteConfig(configEnv: ConfigEnv) {
   if (isServe) {
     return serveConfig(configEnv);
   }
-  // which bundle to build: the core (default), the testbed, or planck-with-testbed
+  // which bundle to build: the core (default), the testbed, its shell, or planck-with-testbed
   const buildName = process.env.BUILD_NAME;
   if (buildName === "with-testbed") {
     return buildWithTestbedConfig();
+  }
+  if (buildName === "shell") {
+    return buildShellConfig();
   }
   if (buildName === "testbed") {
     return buildTestbedConfig();
@@ -26,9 +29,23 @@ export default function viteConfig(configEnv: ConfigEnv) {
 //
 // the testbed's own entry, `planck/testbed`: ES2020 classes on top of polymatic (a native class,
 // which ES5 output could not extend), with planck itself and the testbed's peer dependencies left
-// to the consumer. Signals come from @preact/signals-core: @preact/signals loads preact to hook its
-// renders, so only the shell (shipped as source, not built here) imports it
+// to the consumer. Signals come from @preact/signals-core, not @preact/signals, which loads preact
+// to hook its renders
 const TESTBED_EXTERNAL = ["planck", "polymatic", "@preact/signals-core", "@egjs/hammerjs"];
+
+// the shell's entry, `planck/testbed/shell`: the toolbar and the outline, React components that
+// read the testbed's signals through useSignals(), so they run on React or on preact/compat.
+// planck/testbed stays external, so the shell and the user's code share one testbed (one `runtime`)
+const SHELL_EXTERNAL = [
+  ...TESTBED_EXTERNAL,
+  "planck/testbed",
+  "@preact/signals-react",
+  "react",
+  "react-dom",
+  "@mantine/core",
+  "@mantine/hooks",
+  "react-icons",
+];
 
 function buildConfig() {
   const entry = normalizePath(path.resolve(__dirname, "src", "main.ts"));
@@ -127,6 +144,38 @@ function buildTestbedConfig() {
     },
     plugins: [
       glsl(),
+      rollupLicensePlugin({
+        banner: getLicense(),
+      }) as Plugin,
+      typescript({ tsconfig }),
+    ],
+  });
+}
+
+function buildShellConfig() {
+  const entry = normalizePath(path.resolve(__dirname, "testbed", "shell", "index.tsx"));
+  const tsconfig = path.resolve(__dirname, "testbed", "tsconfig.json");
+
+  return defineConfig({
+    // classic JSX: React.createElement, which preact/compat provides as well
+    esbuild: { jsx: "transform", jsxFactory: "React.createElement", jsxFragment: "React.Fragment" },
+    build: {
+      lib: {
+        entry: entry,
+        name: "planckTestbedShell",
+        fileName: () => "shell.mjs",
+        formats: ["es"],
+      },
+      target: "es2020",
+      emptyOutDir: false,
+      minify: false,
+      sourcemap: true,
+      rollupOptions: {
+        // a package or any of its subpaths, e.g. react-dom/client, react-icons/md
+        external: (id) => SHELL_EXTERNAL.some((name) => id === name || id.startsWith(name + "/")),
+      },
+    },
+    plugins: [
       rollupLicensePlugin({
         banner: getLicense(),
       }) as Plugin,

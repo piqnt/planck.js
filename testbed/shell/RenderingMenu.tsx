@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 import { Button, Checkbox, Menu, Stack, Text } from "@mantine/core";
 import { MdOutlineVisibility as RenderingIcon } from "react-icons/md";
 
@@ -16,6 +17,7 @@ const FLAGS: { key: keyof RenderConfig; label: string; group: string }[] = [
 
 /** the debug-draw flags, as a menu in the toolbar */
 export const RenderingMenu: React.FC = () => {
+  useSignals();
   const context = runtime.value?.context;
   if (!context) return null;
 

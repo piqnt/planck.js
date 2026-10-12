@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 
 import { useMiddleware, EmitFunction } from "../shell/useRuntime";
 import { OutlineContext } from "./OutlineContext";
@@ -43,6 +44,7 @@ interface LiveJointProps {
 }
 
 export const LiveJoint = (props: LiveJointProps) => {
+  useSignals();
   const { context, emit } = useMiddleware<OutlineContext>();
   const jointKey = getKey(props.joint);
   const selected = isSelected(context.multiselect?.value, jointKey);

@@ -4,6 +4,10 @@
 import dts from "rollup-plugin-dts";
 
 const PEERS = ["polymatic", "@preact/signals-core", "@egjs/hammerjs"];
+const SHELL_PEERS = ["@preact/signals-react", "react", "react-dom", "@mantine/core", "@mantine/hooks", "react-icons"];
+
+// a package or any of its subpaths: planck covers planck/testbed, the shell's one testbed
+const externalOf = (names) => (id) => names.some((name) => id === name || id.startsWith(name + "/"));
 
 const bundle = (input, file, external, tsconfig) => ({
   input,
@@ -16,5 +20,11 @@ export default [
   bundle("src/main.ts", "dist/planck.d.ts", [], "tsconfig.json"),
   bundle("testbed/index.ts", "dist/testbed.d.ts", ["planck", ...PEERS], "testbed/tsconfig.json"),
   // self-contained: the core's declarations inlined
+  bundle(
+    "testbed/shell/index.tsx",
+    "dist/shell.d.ts",
+    externalOf(["planck", ...PEERS, ...SHELL_PEERS]),
+    "testbed/tsconfig.json",
+  ),
   bundle("testbed/with-testbed.ts", "dist/planck-with-testbed.d.ts", PEERS, "testbed/tsconfig.json"),
 ];

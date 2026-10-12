@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 
 import { useMiddleware } from "../shell/useRuntime";
 import { OutlineContext } from "./OutlineContext";
@@ -11,6 +12,7 @@ import { FixtureView } from "./FixtureView";
 import { WorldEdit } from "./WorldView";
 
 export const SelectionView: React.FC = () => {
+  useSignals();
   const { context } = useMiddleware<OutlineContext>();
   const world = context.world?.value;
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 
 import { WatchVec2 } from "../shell/WatchValue";
 
@@ -64,6 +65,7 @@ interface LiveBodyComponentProps {
 }
 
 export const LiveBody = (props: LiveBodyComponentProps) => {
+  useSignals();
   const { context, emit } = useMiddleware<OutlineContext>();
   const bodyKey = getKey(props.body);
   const selected = isSelected(context.multiselect?.value, bodyKey);

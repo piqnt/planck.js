@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 
 import { WatchInteger, WatchNumber, WatchText, WatchVec2 } from "../shell/WatchValue";
 import { Pair, PairKey, PairValue, Subtree, SubtreeBody, SubtreeHeader } from "../shell/Subtree";
@@ -39,6 +40,7 @@ export const FixtureView: React.FC<PropsWithFixture> = ({ fixture }) => {
 };
 
 export const MaterialView: React.FC<PropsWithFixture> = ({ fixture }) => {
+  useSignals();
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
 
@@ -72,6 +74,7 @@ export const MaterialView: React.FC<PropsWithFixture> = ({ fixture }) => {
 };
 
 export const FilterView: React.FC<PropsWithFixture> = ({ fixture }) => {
+  useSignals();
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
 
@@ -121,6 +124,7 @@ const ShapeView: React.FC<PropsWithFixture> = ({ fixture }) => {
 };
 
 const CircleView: React.FC<PropsWithFixture> = ({ fixture }) => {
+  useSignals();
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
   const shape = fixture.getShape() as CircleShape;
@@ -144,6 +148,7 @@ const CircleView: React.FC<PropsWithFixture> = ({ fixture }) => {
 };
 
 const EdgeView: React.FC<PropsWithFixture> = ({ fixture }) => {
+  useSignals();
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
   const shape = fixture.getShape() as EdgeShape;
@@ -168,6 +173,7 @@ const EdgeView: React.FC<PropsWithFixture> = ({ fixture }) => {
 };
 
 const ChainView: React.FC<PropsWithFixture> = ({ fixture }) => {
+  useSignals();
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
   const shape = fixture.getShape() as ChainShape;
@@ -191,6 +197,7 @@ const ChainView: React.FC<PropsWithFixture> = ({ fixture }) => {
 };
 
 const PolygonView: React.FC<PropsWithFixture> = ({ fixture }) => {
+  useSignals();
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
   const shape = fixture.getShape() as PolygonShape;

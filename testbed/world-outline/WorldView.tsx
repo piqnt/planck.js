@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 import { Tabs, Text } from "@mantine/core";
 
 import { useMiddleware } from "../shell/useRuntime";
@@ -23,6 +24,7 @@ const VISIBLE_ROWS = 10;
 const LIST_EVERY = 10;
 
 export const WorldSubtree = () => {
+  useSignals();
   const { context, emit } = useMiddleware<OutlineContext>();
   const world = context.world.value;
   const [, setReload] = React.useState(0);
@@ -140,6 +142,7 @@ export const WorldSubtree = () => {
 };
 
 export const WorldEdit = () => {
+  useSignals();
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
   const world = context.world.value;

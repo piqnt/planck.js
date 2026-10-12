@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 
 import { useMiddleware, EmitFunction } from "../shell/useRuntime";
 import { OutlineContext } from "./OutlineContext";
@@ -46,6 +47,7 @@ interface LiveFixtureProps {
 }
 
 export const LiveFixture = (props: LiveFixtureProps) => {
+  useSignals();
   const { context, emit } = useMiddleware<OutlineContext>();
   const fixtureKey = getKey(props.fixture);
   const selected = isSelected(context.multiselect?.value, fixtureKey);

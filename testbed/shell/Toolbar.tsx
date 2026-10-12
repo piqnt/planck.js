@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 import { Affix, Button, Group, Menu } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { TbTools as ToolsIcon } from "react-icons/tb";
@@ -24,6 +25,7 @@ const affixPosition = {
 };
 
 export const ToolbarComponent: React.FC = () => {
+  useSignals();
   const context = runtime.value?.context;
   const [playlistOpened, { open: openPlaylist, close: closePlaylist }] = useDisclosure(false);
 

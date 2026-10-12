@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 
 import { WatchBoolean, WatchNumber, WatchText, WatchVec2 } from "../shell/WatchValue";
 import { Pair, PairKey, PairValue, Subtree, SubtreeBody, SubtreeHeader } from "../shell/Subtree";
@@ -30,6 +31,7 @@ interface PropsWithJoint {
 }
 
 export const JointView: React.FC<PropsWithJoint> = ({ joint }) => {
+  useSignals();
   const { context, emit } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
 
@@ -89,6 +91,7 @@ type PropsWithJointBody = {
 };
 
 export const EditBodies: React.FC<PropsWithJointBody> = ({ joint, noAnchors }) => {
+  useSignals();
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 import { Group } from "@mantine/core";
 
 import { useMiddleware } from "../shell/useRuntime";
@@ -9,6 +10,7 @@ import { SelectionView } from "./SelectionView";
 import { WorldSubtree } from "./WorldView";
 
 export const LiveOutlinePanel = () => {
+  useSignals();
   const { context } = useMiddleware<OutlineContext>();
   if (context.activity?.value !== "mode:play") return;
   return (

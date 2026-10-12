@@ -1,4 +1,5 @@
 import React from "react";
+import { useSignals } from "@preact/signals-react/runtime";
 import { Modal, ScrollArea, NavLink, SimpleGrid, UnstyledButton, Group, Stack, Text } from "@mantine/core";
 
 import { PlayConfig, playlist, currentPlay } from "planck/testbed";
@@ -31,6 +32,7 @@ interface PlaylistModalProps {
 }
 
 export const PlaylistModal: React.FC<PlaylistModalProps> = ({ opened, onClose }) => {
+  useSignals();
   const folders = React.useMemo(() => buildPlaylistFolders(playlist), []);
   const [activeFolder, setActiveFolder] = React.useState(() => folders[0]?.label);
 

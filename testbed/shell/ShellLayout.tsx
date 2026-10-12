@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { effect } from "@preact/signals";
+import { effect } from "@preact/signals-core";
 import { IconContext } from "react-icons";
 import { MantineProvider } from "@mantine/core";
 
