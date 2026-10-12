@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "../shell/tracked";
 
 import { WatchVec2 } from "../shell/WatchValue";
 
@@ -64,8 +64,7 @@ interface LiveBodyComponentProps {
   every?: number;
 }
 
-export const LiveBody = (props: LiveBodyComponentProps) => {
-  useSignals();
+export const LiveBody = tracked((props: LiveBodyComponentProps) => {
   const { context, emit } = useMiddleware<OutlineContext>();
   const bodyKey = getKey(props.body);
   const selected = isSelected(context.multiselect?.value, bodyKey);
@@ -80,4 +79,4 @@ export const LiveBody = (props: LiveBodyComponentProps) => {
       selected={selected}
     />
   );
-};
+});

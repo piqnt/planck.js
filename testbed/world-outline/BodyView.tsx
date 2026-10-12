@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "../shell/tracked";
 
 import { WatchBoolean, WatchNumber, WatchText, WatchVec2 } from "../shell/WatchValue";
 import { Pair, PairKey, PairValue, Subtree, SubtreeBody, SubtreeHeader } from "../shell/Subtree";
@@ -19,8 +19,7 @@ interface PropsWithBody {
   fixture?: Fixture;
 }
 
-export const BodyView: React.FC<PropsWithBody> = ({ body }) => {
-  useSignals();
+export const BodyView: React.FC<PropsWithBody> = tracked(({ body }) => {
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
 
@@ -80,4 +79,4 @@ export const BodyView: React.FC<PropsWithBody> = ({ body }) => {
       </SubtreeBody>
     </Subtree>
   );
-};
+});

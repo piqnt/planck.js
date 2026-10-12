@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "../shell/tracked";
 import { Tabs, Text } from "@mantine/core";
 
 import { useMiddleware } from "../shell/useRuntime";
@@ -23,8 +23,7 @@ const ROW_HEIGHT = 24;
 const VISIBLE_ROWS = 10;
 const LIST_EVERY = 10;
 
-export const WorldSubtree = () => {
-  useSignals();
+export const WorldSubtree = tracked(() => {
   const { context, emit } = useMiddleware<OutlineContext>();
   const world = context.world.value;
   const [, setReload] = React.useState(0);
@@ -139,10 +138,9 @@ export const WorldSubtree = () => {
       </Tabs.Panel>
     </Tabs>
   );
-};
+});
 
-export const WorldEdit = () => {
-  useSignals();
+export const WorldEdit = tracked(() => {
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
   const world = context.world.value;
@@ -164,7 +162,7 @@ export const WorldEdit = () => {
       </Subtree>
     </>
   );
-};
+});
 
 export function bodyArray(world: World) {
   const list: Body[] = [];

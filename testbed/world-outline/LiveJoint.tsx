@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "../shell/tracked";
 
 import { useMiddleware, EmitFunction } from "../shell/useRuntime";
 import { OutlineContext } from "./OutlineContext";
@@ -43,11 +43,10 @@ interface LiveJointProps {
   selectable?: boolean;
 }
 
-export const LiveJoint = (props: LiveJointProps) => {
-  useSignals();
+export const LiveJoint = tracked((props: LiveJointProps) => {
   const { context, emit } = useMiddleware<OutlineContext>();
   const jointKey = getKey(props.joint);
   const selected = isSelected(context.multiselect?.value, jointKey);
 
   return <LiveJointComponent joint={props.joint} selectable={props.selectable} emit={emit} selected={selected} />;
-};
+});

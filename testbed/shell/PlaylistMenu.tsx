@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "./tracked";
 import { Modal, ScrollArea, NavLink, SimpleGrid, UnstyledButton, Group, Stack, Text } from "@mantine/core";
 
 import { PlayConfig, playlist, currentPlay } from "planck/testbed";
@@ -31,8 +31,7 @@ interface PlaylistModalProps {
   onClose: () => void;
 }
 
-export const PlaylistModal: React.FC<PlaylistModalProps> = ({ opened, onClose }) => {
-  useSignals();
+export const PlaylistModal: React.FC<PlaylistModalProps> = tracked(({ opened, onClose }) => {
   const folders = React.useMemo(() => buildPlaylistFolders(playlist), []);
   const [activeFolder, setActiveFolder] = React.useState(() => folders[0]?.label);
 
@@ -87,4 +86,4 @@ export const PlaylistModal: React.FC<PlaylistModalProps> = ({ opened, onClose })
       </Group>
     </Modal>
   );
-};
+});

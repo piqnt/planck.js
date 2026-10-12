@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "../shell/tracked";
 
 import { WatchInteger, WatchNumber, WatchText, WatchVec2 } from "../shell/WatchValue";
 import { Pair, PairKey, PairValue, Subtree, SubtreeBody, SubtreeHeader } from "../shell/Subtree";
@@ -39,8 +39,7 @@ export const FixtureView: React.FC<PropsWithFixture> = ({ fixture }) => {
   );
 };
 
-export const MaterialView: React.FC<PropsWithFixture> = ({ fixture }) => {
-  useSignals();
+export const MaterialView: React.FC<PropsWithFixture> = tracked(({ fixture }) => {
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
 
@@ -71,10 +70,9 @@ export const MaterialView: React.FC<PropsWithFixture> = ({ fixture }) => {
       </SubtreeBody>
     </Subtree>
   );
-};
+});
 
-export const FilterView: React.FC<PropsWithFixture> = ({ fixture }) => {
-  useSignals();
+export const FilterView: React.FC<PropsWithFixture> = tracked(({ fixture }) => {
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
 
@@ -105,7 +103,7 @@ export const FilterView: React.FC<PropsWithFixture> = ({ fixture }) => {
       </SubtreeBody>
     </Subtree>
   );
-};
+});
 
 const ShapeView: React.FC<PropsWithFixture> = ({ fixture }) => {
   const shape = fixture.getShape();
@@ -123,8 +121,7 @@ const ShapeView: React.FC<PropsWithFixture> = ({ fixture }) => {
   return comp;
 };
 
-const CircleView: React.FC<PropsWithFixture> = ({ fixture }) => {
-  useSignals();
+const CircleView: React.FC<PropsWithFixture> = tracked(({ fixture }) => {
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
   const shape = fixture.getShape() as CircleShape;
@@ -145,10 +142,9 @@ const CircleView: React.FC<PropsWithFixture> = ({ fixture }) => {
       </Pair>
     </>
   );
-};
+});
 
-const EdgeView: React.FC<PropsWithFixture> = ({ fixture }) => {
-  useSignals();
+const EdgeView: React.FC<PropsWithFixture> = tracked(({ fixture }) => {
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
   const shape = fixture.getShape() as EdgeShape;
@@ -170,10 +166,9 @@ const EdgeView: React.FC<PropsWithFixture> = ({ fixture }) => {
       </Pair>
     </>
   );
-};
+});
 
-const ChainView: React.FC<PropsWithFixture> = ({ fixture }) => {
-  useSignals();
+const ChainView: React.FC<PropsWithFixture> = tracked(({ fixture }) => {
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
   const shape = fixture.getShape() as ChainShape;
@@ -194,10 +189,9 @@ const ChainView: React.FC<PropsWithFixture> = ({ fixture }) => {
       </SubtreeBody>
     </Subtree>
   );
-};
+});
 
-const PolygonView: React.FC<PropsWithFixture> = ({ fixture }) => {
-  useSignals();
+const PolygonView: React.FC<PropsWithFixture> = tracked(({ fixture }) => {
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
   const shape = fixture.getShape() as PolygonShape;
@@ -218,4 +212,4 @@ const PolygonView: React.FC<PropsWithFixture> = ({ fixture }) => {
       </SubtreeBody>
     </Subtree>
   );
-};
+});

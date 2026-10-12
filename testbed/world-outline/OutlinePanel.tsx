@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "../shell/tracked";
 import { Group } from "@mantine/core";
 
 import { useMiddleware } from "../shell/useRuntime";
@@ -9,8 +9,7 @@ import { OutlineContext } from "./OutlineContext";
 import { SelectionView } from "./SelectionView";
 import { WorldSubtree } from "./WorldView";
 
-export const LiveOutlinePanel = () => {
-  useSignals();
+export const LiveOutlinePanel = tracked(() => {
   const { context } = useMiddleware<OutlineContext>();
   if (context.activity?.value !== "mode:play") return;
   return (
@@ -24,4 +23,4 @@ export const LiveOutlinePanel = () => {
       </OutlineSection>
     </>
   );
-};
+});

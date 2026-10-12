@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "../shell/tracked";
 
 import { WatchBoolean, WatchNumber, WatchText, WatchVec2 } from "../shell/WatchValue";
 import { Pair, PairKey, PairValue, Subtree, SubtreeBody, SubtreeHeader } from "../shell/Subtree";
@@ -30,8 +30,7 @@ interface PropsWithJoint {
   isDraft?: boolean;
 }
 
-export const JointView: React.FC<PropsWithJoint> = ({ joint }) => {
-  useSignals();
+export const JointView: React.FC<PropsWithJoint> = tracked(({ joint }) => {
   const { context, emit } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
 
@@ -83,15 +82,14 @@ export const JointView: React.FC<PropsWithJoint> = ({ joint }) => {
       </SubtreeBody>
     </Subtree>
   );
-};
+});
 
 type PropsWithJointBody = {
   joint: Joint;
   noAnchors?: boolean;
 };
 
-export const EditBodies: React.FC<PropsWithJointBody> = ({ joint, noAnchors }) => {
-  useSignals();
+export const EditBodies: React.FC<PropsWithJointBody> = tracked(({ joint, noAnchors }) => {
   const { context } = useMiddleware<OutlineContext>();
   const editable = context.editable.value;
 
@@ -127,7 +125,7 @@ export const EditBodies: React.FC<PropsWithJointBody> = ({ joint, noAnchors }) =
       )}
     </>
   );
-};
+});
 
 const EditDistanceJoint: React.FC<{
   editable: boolean;

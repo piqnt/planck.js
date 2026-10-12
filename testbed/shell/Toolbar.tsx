@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "./tracked";
 import { Affix, Button, Group, Menu } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { TbTools as ToolsIcon } from "react-icons/tb";
@@ -24,8 +24,7 @@ const affixPosition = {
   right: 0,
 };
 
-export const ToolbarComponent: React.FC = () => {
-  useSignals();
+export const ToolbarComponent: React.FC = tracked(() => {
   const context = runtime.value?.context;
   const [playlistOpened, { open: openPlaylist, close: closePlaylist }] = useDisclosure(false);
 
@@ -90,4 +89,4 @@ export const ToolbarComponent: React.FC = () => {
       </Group>
     </Affix>
   );
-};
+});

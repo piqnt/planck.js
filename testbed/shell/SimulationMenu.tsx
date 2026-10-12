@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "./tracked";
 import { Button, Menu, Slider, Stack, Text } from "@mantine/core";
 import { MdTune as SimulationIcon } from "react-icons/md";
 
@@ -16,8 +16,7 @@ function toNumber(value: number | string) {
 }
 
 /** speed and step frequency, as a menu in the toolbar */
-export const SimulationMenu: React.FC = () => {
-  useSignals();
+export const SimulationMenu: React.FC = tracked(() => {
   const context = runtime.value?.context;
   if (!context) return null;
 
@@ -86,4 +85,4 @@ export const SimulationMenu: React.FC = () => {
       </Menu.Dropdown>
     </Menu>
   );
-};
+});

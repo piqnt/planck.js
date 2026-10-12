@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "./tracked";
 import { Affix } from "@mantine/core";
 
 import { runtime } from "planck/testbed";
@@ -31,8 +31,7 @@ interface OutlineComponentProps {
   top?: number;
 }
 
-export const OutlineComponent: React.FC<OutlineComponentProps> = (props) => {
-  useSignals();
+export const OutlineComponent: React.FC<OutlineComponentProps> = tracked((props) => {
   const context = runtime.value?.context;
   if (!context?.showOutline?.value) return null;
 
@@ -43,4 +42,4 @@ export const OutlineComponent: React.FC<OutlineComponentProps> = (props) => {
       </div>
     </Affix>
   );
-};
+});

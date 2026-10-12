@@ -1,5 +1,5 @@
 import React from "react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { tracked } from "../shell/tracked";
 
 import { useMiddleware } from "../shell/useRuntime";
 import { OutlineContext } from "./OutlineContext";
@@ -11,8 +11,7 @@ import { JointView } from "./JointView";
 import { FixtureView } from "./FixtureView";
 import { WorldEdit } from "./WorldView";
 
-export const SelectionView: React.FC = () => {
-  useSignals();
+export const SelectionView: React.FC = tracked(() => {
   const { context } = useMiddleware<OutlineContext>();
   const world = context.world?.value;
 
@@ -46,4 +45,4 @@ export const SelectionView: React.FC = () => {
   }
 
   return <WorldEdit />;
-};
+});
