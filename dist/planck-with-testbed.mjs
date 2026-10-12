@@ -48,7 +48,7 @@ var extendStatics = function(d2, b2) {
   extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d3, b3) {
     d3.__proto__ = b3;
   } || function(d3, b3) {
-    for (var p in b3) if (Object.prototype.hasOwnProperty.call(b3, p)) d3[p] = b3[p];
+    for (var p2 in b3) if (Object.prototype.hasOwnProperty.call(b3, p2)) d3[p2] = b3[p2];
   };
   return extendStatics(d2, b2);
 };
@@ -62,12 +62,12 @@ function __extends(d2, b2) {
   d2.prototype = b2 === null ? Object.create(b2) : (__.prototype = b2.prototype, new __());
 }
 var __assign = function() {
-  __assign = Object.assign || function __assign2(t) {
-    for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
-      s2 = arguments[i];
-      for (var p in s2) if (Object.prototype.hasOwnProperty.call(s2, p)) t[p] = s2[p];
+  __assign = Object.assign || function __assign2(t2) {
+    for (var s2, i2 = 1, n2 = arguments.length; i2 < n2; i2++) {
+      s2 = arguments[i2];
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2)) t2[p2] = s2[p2];
     }
-    return t;
+    return t2;
   };
   return __assign.apply(this, arguments);
 };
@@ -87,8 +87,8 @@ var options = function(input2, defaults) {
   }
   if (typeof Object.getOwnPropertySymbols === "function") {
     var symbols = Object.getOwnPropertySymbols(defaults);
-    for (var i = 0; i < symbols.length; i++) {
-      var symbol = symbols[i];
+    for (var i2 = 0; i2 < symbols.length; i2++) {
+      var symbol = symbols[i2];
       if (defaults.propertyIsEnumerable(symbol) && typeof input2[symbol] === "undefined") {
         output2[symbol] = defaults[symbol];
       }
@@ -135,7 +135,7 @@ function clamp(num, min, max) {
     return num;
   }
 }
-function random(min, max) {
+function random$1(min, max) {
   if (typeof min === "undefined") {
     max = 1;
     min = 0;
@@ -152,7 +152,7 @@ math.nextPowerOfTwo = nextPowerOfTwo;
 math.isPowerOfTwo = isPowerOfTwo;
 math.mod = mod;
 math.clamp = clamp;
-math.random = random;
+math.random = random$1;
 var math_abs$9 = Math.abs;
 var math_sqrt$5 = Math.sqrt;
 var math_max$8 = Math.max;
@@ -160,9 +160,9 @@ var math_min$8 = Math.min;
 var Vec2 = (
   /** @class */
   (function() {
-    function Vec22(x2, y) {
+    function Vec22(x2, y2) {
       if (!(this instanceof Vec22)) {
-        return new Vec22(x2, y);
+        return new Vec22(x2, y2);
       }
       if (typeof x2 === "undefined") {
         this.x = 0;
@@ -172,7 +172,7 @@ var Vec2 = (
         this.y = x2.y;
       } else {
         this.x = x2;
-        this.y = y;
+        this.y = y2;
       }
     }
     Vec22.prototype._serialize = function() {
@@ -193,10 +193,10 @@ var Vec2 = (
       obj.y = 0;
       return obj;
     };
-    Vec22.neo = function(x2, y) {
+    Vec22.neo = function(x2, y2) {
       var obj = Object.create(Vec22.prototype);
       obj.x = x2;
-      obj.y = y;
+      obj.y = y2;
       return obj;
     };
     Vec22.clone = function(v3) {
@@ -211,7 +211,7 @@ var Vec2 = (
       }
       return Number.isFinite(obj.x) && Number.isFinite(obj.y);
     };
-    Vec22.assert = function(o) {
+    Vec22.assert = function(o2) {
     };
     Vec22.prototype.clone = function() {
       return Vec22.clone(this);
@@ -221,19 +221,19 @@ var Vec2 = (
       this.y = 0;
       return this;
     };
-    Vec22.prototype.set = function(x2, y) {
+    Vec22.prototype.set = function(x2, y2) {
       if (typeof x2 === "object") {
         this.x = x2.x;
         this.y = x2.y;
       } else {
         this.x = x2;
-        this.y = y;
+        this.y = y2;
       }
       return this;
     };
-    Vec22.prototype.setNum = function(x2, y) {
+    Vec22.prototype.setNum = function(x2, y2) {
       this.x = x2;
-      this.y = y;
+      this.y = y2;
       return this;
     };
     Vec22.prototype.setVec2 = function(value) {
@@ -241,82 +241,82 @@ var Vec2 = (
       this.y = value.y;
       return this;
     };
-    Vec22.prototype.wSet = function(a2, v3, b2, w) {
-      if (typeof b2 !== "undefined" || typeof w !== "undefined") {
-        return this.setCombine(a2, v3, b2, w);
+    Vec22.prototype.wSet = function(a2, v3, b2, w2) {
+      if (typeof b2 !== "undefined" || typeof w2 !== "undefined") {
+        return this.setCombine(a2, v3, b2, w2);
       } else {
         return this.setMul(a2, v3);
       }
     };
-    Vec22.prototype.setCombine = function(a2, v3, b2, w) {
-      var x2 = a2 * v3.x + b2 * w.x;
-      var y = a2 * v3.y + b2 * w.y;
+    Vec22.prototype.setCombine = function(a2, v3, b2, w2) {
+      var x2 = a2 * v3.x + b2 * w2.x;
+      var y2 = a2 * v3.y + b2 * w2.y;
       this.x = x2;
-      this.y = y;
+      this.y = y2;
       return this;
     };
     Vec22.prototype.setMul = function(a2, v3) {
       var x2 = a2 * v3.x;
-      var y = a2 * v3.y;
+      var y2 = a2 * v3.y;
       this.x = x2;
-      this.y = y;
+      this.y = y2;
       return this;
     };
-    Vec22.prototype.add = function(w) {
-      this.x += w.x;
-      this.y += w.y;
+    Vec22.prototype.add = function(w2) {
+      this.x += w2.x;
+      this.y += w2.y;
       return this;
     };
-    Vec22.prototype.wAdd = function(a2, v3, b2, w) {
-      if (typeof b2 !== "undefined" || typeof w !== "undefined") {
-        return this.addCombine(a2, v3, b2, w);
+    Vec22.prototype.wAdd = function(a2, v3, b2, w2) {
+      if (typeof b2 !== "undefined" || typeof w2 !== "undefined") {
+        return this.addCombine(a2, v3, b2, w2);
       } else {
         return this.addMul(a2, v3);
       }
     };
-    Vec22.prototype.addCombine = function(a2, v3, b2, w) {
-      var x2 = a2 * v3.x + b2 * w.x;
-      var y = a2 * v3.y + b2 * w.y;
+    Vec22.prototype.addCombine = function(a2, v3, b2, w2) {
+      var x2 = a2 * v3.x + b2 * w2.x;
+      var y2 = a2 * v3.y + b2 * w2.y;
       this.x += x2;
-      this.y += y;
+      this.y += y2;
       return this;
     };
     Vec22.prototype.addMul = function(a2, v3) {
       var x2 = a2 * v3.x;
-      var y = a2 * v3.y;
+      var y2 = a2 * v3.y;
       this.x += x2;
-      this.y += y;
+      this.y += y2;
       return this;
     };
-    Vec22.prototype.wSub = function(a2, v3, b2, w) {
-      if (typeof b2 !== "undefined" || typeof w !== "undefined") {
-        return this.subCombine(a2, v3, b2, w);
+    Vec22.prototype.wSub = function(a2, v3, b2, w2) {
+      if (typeof b2 !== "undefined" || typeof w2 !== "undefined") {
+        return this.subCombine(a2, v3, b2, w2);
       } else {
         return this.subMul(a2, v3);
       }
     };
-    Vec22.prototype.subCombine = function(a2, v3, b2, w) {
-      var x2 = a2 * v3.x + b2 * w.x;
-      var y = a2 * v3.y + b2 * w.y;
+    Vec22.prototype.subCombine = function(a2, v3, b2, w2) {
+      var x2 = a2 * v3.x + b2 * w2.x;
+      var y2 = a2 * v3.y + b2 * w2.y;
       this.x -= x2;
-      this.y -= y;
+      this.y -= y2;
       return this;
     };
     Vec22.prototype.subMul = function(a2, v3) {
       var x2 = a2 * v3.x;
-      var y = a2 * v3.y;
+      var y2 = a2 * v3.y;
       this.x -= x2;
-      this.y -= y;
+      this.y -= y2;
       return this;
     };
-    Vec22.prototype.sub = function(w) {
-      this.x -= w.x;
-      this.y -= w.y;
+    Vec22.prototype.sub = function(w2) {
+      this.x -= w2.x;
+      this.y -= w2.y;
       return this;
     };
-    Vec22.prototype.mul = function(m) {
-      this.x *= m;
-      this.y *= m;
+    Vec22.prototype.mul = function(m2) {
+      this.x *= m2;
+      this.y *= m2;
       return this;
     };
     Vec22.prototype.length = function() {
@@ -349,71 +349,71 @@ var Vec2 = (
     Vec22.lengthSquared = function(v3) {
       return v3.x * v3.x + v3.y * v3.y;
     };
-    Vec22.distance = function(v3, w) {
-      var dx = v3.x - w.x;
-      var dy = v3.y - w.y;
+    Vec22.distance = function(v3, w2) {
+      var dx = v3.x - w2.x;
+      var dy = v3.y - w2.y;
       return math_sqrt$5(dx * dx + dy * dy);
     };
-    Vec22.distanceSquared = function(v3, w) {
-      var dx = v3.x - w.x;
-      var dy = v3.y - w.y;
+    Vec22.distanceSquared = function(v3, w2) {
+      var dx = v3.x - w2.x;
+      var dy = v3.y - w2.y;
       return dx * dx + dy * dy;
     };
-    Vec22.areEqual = function(v3, w) {
-      return v3 === w || typeof w === "object" && w !== null && v3.x === w.x && v3.y === w.y;
+    Vec22.areEqual = function(v3, w2) {
+      return v3 === w2 || typeof w2 === "object" && w2 !== null && v3.x === w2.x && v3.y === w2.y;
     };
     Vec22.skew = function(v3) {
       return Vec22.neo(-v3.y, v3.x);
     };
-    Vec22.dot = function(v3, w) {
-      return v3.x * w.x + v3.y * w.y;
+    Vec22.dot = function(v3, w2) {
+      return v3.x * w2.x + v3.y * w2.y;
     };
-    Vec22.cross = function(v3, w) {
-      if (typeof w === "number") {
-        return Vec22.neo(w * v3.y, -w * v3.x);
+    Vec22.cross = function(v3, w2) {
+      if (typeof w2 === "number") {
+        return Vec22.neo(w2 * v3.y, -w2 * v3.x);
       } else if (typeof v3 === "number") {
-        return Vec22.neo(-v3 * w.y, v3 * w.x);
+        return Vec22.neo(-v3 * w2.y, v3 * w2.x);
       } else {
-        return v3.x * w.y - v3.y * w.x;
+        return v3.x * w2.y - v3.y * w2.x;
       }
     };
-    Vec22.crossVec2Vec2 = function(v3, w) {
-      return v3.x * w.y - v3.y * w.x;
+    Vec22.crossVec2Vec2 = function(v3, w2) {
+      return v3.x * w2.y - v3.y * w2.x;
     };
-    Vec22.crossVec2Num = function(v3, w) {
-      return Vec22.neo(w * v3.y, -w * v3.x);
+    Vec22.crossVec2Num = function(v3, w2) {
+      return Vec22.neo(w2 * v3.y, -w2 * v3.x);
     };
-    Vec22.crossNumVec2 = function(v3, w) {
-      return Vec22.neo(-v3 * w.y, v3 * w.x);
+    Vec22.crossNumVec2 = function(v3, w2) {
+      return Vec22.neo(-v3 * w2.y, v3 * w2.x);
     };
-    Vec22.addCross = function(a2, v3, w) {
-      if (typeof w === "number") {
-        return Vec22.neo(w * v3.y + a2.x, -w * v3.x + a2.y);
+    Vec22.addCross = function(a2, v3, w2) {
+      if (typeof w2 === "number") {
+        return Vec22.neo(w2 * v3.y + a2.x, -w2 * v3.x + a2.y);
       } else if (typeof v3 === "number") {
-        return Vec22.neo(-v3 * w.y + a2.x, v3 * w.x + a2.y);
+        return Vec22.neo(-v3 * w2.y + a2.x, v3 * w2.x + a2.y);
       }
     };
-    Vec22.addCrossVec2Num = function(a2, v3, w) {
-      return Vec22.neo(w * v3.y + a2.x, -w * v3.x + a2.y);
+    Vec22.addCrossVec2Num = function(a2, v3, w2) {
+      return Vec22.neo(w2 * v3.y + a2.x, -w2 * v3.x + a2.y);
     };
-    Vec22.addCrossNumVec2 = function(a2, v3, w) {
-      return Vec22.neo(-v3 * w.y + a2.x, v3 * w.x + a2.y);
+    Vec22.addCrossNumVec2 = function(a2, v3, w2) {
+      return Vec22.neo(-v3 * w2.y + a2.x, v3 * w2.x + a2.y);
     };
-    Vec22.add = function(v3, w) {
-      return Vec22.neo(v3.x + w.x, v3.y + w.y);
+    Vec22.add = function(v3, w2) {
+      return Vec22.neo(v3.x + w2.x, v3.y + w2.y);
     };
-    Vec22.wAdd = function(a2, v3, b2, w) {
-      if (typeof b2 !== "undefined" || typeof w !== "undefined") {
-        return Vec22.combine(a2, v3, b2, w);
+    Vec22.wAdd = function(a2, v3, b2, w2) {
+      if (typeof b2 !== "undefined" || typeof w2 !== "undefined") {
+        return Vec22.combine(a2, v3, b2, w2);
       } else {
         return Vec22.mulNumVec2(a2, v3);
       }
     };
-    Vec22.combine = function(a2, v3, b2, w) {
-      return Vec22.zero().setCombine(a2, v3, b2, w);
+    Vec22.combine = function(a2, v3, b2, w2) {
+      return Vec22.zero().setCombine(a2, v3, b2, w2);
     };
-    Vec22.sub = function(v3, w) {
-      return Vec22.neo(v3.x - w.x, v3.y - w.y);
+    Vec22.sub = function(v3, w2) {
+      return Vec22.neo(v3.x - w2.x, v3.y - w2.y);
     };
     Vec22.mul = function(a2, b2) {
       if (typeof a2 === "object") {
@@ -439,14 +439,14 @@ var Vec2 = (
     Vec22.abs = function(v3) {
       return Vec22.neo(math_abs$9(v3.x), math_abs$9(v3.y));
     };
-    Vec22.mid = function(v3, w) {
-      return Vec22.neo((v3.x + w.x) * 0.5, (v3.y + w.y) * 0.5);
+    Vec22.mid = function(v3, w2) {
+      return Vec22.neo((v3.x + w2.x) * 0.5, (v3.y + w2.y) * 0.5);
     };
-    Vec22.upper = function(v3, w) {
-      return Vec22.neo(math_max$8(v3.x, w.x), math_max$8(v3.y, w.y));
+    Vec22.upper = function(v3, w2) {
+      return Vec22.neo(math_max$8(v3.x, w2.x), math_max$8(v3.y, w2.y));
     };
-    Vec22.lower = function(v3, w) {
-      return Vec22.neo(math_min$8(v3.x, w.x), math_min$8(v3.y, w.y));
+    Vec22.lower = function(v3, w2) {
+      return Vec22.neo(math_min$8(v3.x, w2.x), math_min$8(v3.y, w2.y));
     };
     Vec22.prototype.clamp = function(max) {
       var lengthSqr = this.x * this.x + this.y * this.y;
@@ -458,9 +458,9 @@ var Vec2 = (
       return this;
     };
     Vec22.clamp = function(v3, max) {
-      var r = Vec22.neo(v3.x, v3.y);
-      r.clamp(max);
-      return r;
+      var r2 = Vec22.neo(v3.x, v3.y);
+      r2.clamp(max);
+      return r2;
     };
     Vec22.clampVec2 = function(v3, min, max) {
       return {
@@ -468,14 +468,14 @@ var Vec2 = (
         y: clamp(v3.y, min === null || min === void 0 ? void 0 : min.y, max === null || max === void 0 ? void 0 : max.y)
       };
     };
-    Vec22.scaleFn = function(x2, y) {
+    Vec22.scaleFn = function(x2, y2) {
       return function(v3) {
-        return Vec22.neo(v3.x * x2, v3.y * y);
+        return Vec22.neo(v3.x * x2, v3.y * y2);
       };
     };
-    Vec22.translateFn = function(x2, y) {
+    Vec22.translateFn = function(x2, y2) {
       return function(v3) {
-        return Vec22.neo(v3.x + x2, v3.y + y);
+        return Vec22.neo(v3.x + x2, v3.y + y2);
       };
     };
     return Vec22;
@@ -510,7 +510,7 @@ var AABB = (
       }
       return Vec2.isValid(obj.lowerBound) && Vec2.isValid(obj.upperBound) && Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() >= 0;
     };
-    AABB2.assert = function(o) {
+    AABB2.assert = function(o2) {
     };
     AABB2.prototype.getCenter = function() {
       return Vec2.neo((this.lowerBound.x + this.upperBound.x) * 0.5, (this.lowerBound.y + this.upperBound.y) * 0.5);
@@ -586,19 +586,19 @@ var AABB = (
     AABB2.prototype.rayCast = function(output2, input2) {
       var tmin = -Infinity;
       var tmax = Infinity;
-      var p = input2.p1;
+      var p2 = input2.p1;
       var d2 = Vec2.sub(input2.p2, input2.p1);
       var absD = Vec2.abs(d2);
       var normal3 = Vec2.zero();
       {
         if (absD.x < EPSILON) {
-          if (p.x < this.lowerBound.x || this.upperBound.x < p.x) {
+          if (p2.x < this.lowerBound.x || this.upperBound.x < p2.x) {
             return false;
           }
         } else {
           var inv_d = 1 / d2.x;
-          var t1 = (this.lowerBound.x - p.x) * inv_d;
-          var t2 = (this.upperBound.x - p.x) * inv_d;
+          var t1 = (this.lowerBound.x - p2.x) * inv_d;
+          var t2 = (this.upperBound.x - p2.x) * inv_d;
           var s2 = -1;
           if (t1 > t2) {
             var temp3 = t1;
@@ -619,13 +619,13 @@ var AABB = (
       }
       {
         if (absD.y < EPSILON) {
-          if (p.y < this.lowerBound.y || this.upperBound.y < p.y) {
+          if (p2.y < this.lowerBound.y || this.upperBound.y < p2.y) {
             return false;
           }
         } else {
           var inv_d = 1 / d2.y;
-          var t1 = (this.lowerBound.y - p.y) * inv_d;
-          var t2 = (this.upperBound.y - p.y) * inv_d;
+          var t1 = (this.lowerBound.y - p2.y) * inv_d;
+          var t2 = (this.upperBound.y - p2.y) * inv_d;
           var s2 = -1;
           if (t1 > t2) {
             var temp3 = t1;
@@ -1209,76 +1209,76 @@ var DynamicTree = (
       if (A.isLeaf() || A.height < 2) {
         return iA;
       }
-      var B = A.child1;
-      var C = A.child2;
-      var balance = C.height - B.height;
+      var B2 = A.child1;
+      var C2 = A.child2;
+      var balance = C2.height - B2.height;
       if (balance > 1) {
-        var F = C.child1;
-        var G = C.child2;
-        C.child1 = A;
-        C.parent = A.parent;
-        A.parent = C;
-        if (C.parent != null) {
-          if (C.parent.child1 === iA) {
-            C.parent.child1 = C;
+        var F2 = C2.child1;
+        var G = C2.child2;
+        C2.child1 = A;
+        C2.parent = A.parent;
+        A.parent = C2;
+        if (C2.parent != null) {
+          if (C2.parent.child1 === iA) {
+            C2.parent.child1 = C2;
           } else {
-            C.parent.child2 = C;
+            C2.parent.child2 = C2;
           }
         } else {
-          this.m_root = C;
+          this.m_root = C2;
         }
-        if (F.height > G.height) {
-          C.child2 = F;
+        if (F2.height > G.height) {
+          C2.child2 = F2;
           A.child2 = G;
           G.parent = A;
-          A.aabb.combine(B.aabb, G.aabb);
-          C.aabb.combine(A.aabb, F.aabb);
-          A.height = 1 + math_max$6(B.height, G.height);
-          C.height = 1 + math_max$6(A.height, F.height);
+          A.aabb.combine(B2.aabb, G.aabb);
+          C2.aabb.combine(A.aabb, F2.aabb);
+          A.height = 1 + math_max$6(B2.height, G.height);
+          C2.height = 1 + math_max$6(A.height, F2.height);
         } else {
-          C.child2 = G;
-          A.child2 = F;
-          F.parent = A;
-          A.aabb.combine(B.aabb, F.aabb);
-          C.aabb.combine(A.aabb, G.aabb);
-          A.height = 1 + math_max$6(B.height, F.height);
-          C.height = 1 + math_max$6(A.height, G.height);
+          C2.child2 = G;
+          A.child2 = F2;
+          F2.parent = A;
+          A.aabb.combine(B2.aabb, F2.aabb);
+          C2.aabb.combine(A.aabb, G.aabb);
+          A.height = 1 + math_max$6(B2.height, F2.height);
+          C2.height = 1 + math_max$6(A.height, G.height);
         }
-        return C;
+        return C2;
       }
       if (balance < -1) {
-        var D = B.child1;
-        var E = B.child2;
-        B.child1 = A;
-        B.parent = A.parent;
-        A.parent = B;
-        if (B.parent != null) {
-          if (B.parent.child1 === A) {
-            B.parent.child1 = B;
+        var D = B2.child1;
+        var E2 = B2.child2;
+        B2.child1 = A;
+        B2.parent = A.parent;
+        A.parent = B2;
+        if (B2.parent != null) {
+          if (B2.parent.child1 === A) {
+            B2.parent.child1 = B2;
           } else {
-            B.parent.child2 = B;
+            B2.parent.child2 = B2;
           }
         } else {
-          this.m_root = B;
+          this.m_root = B2;
         }
-        if (D.height > E.height) {
-          B.child2 = D;
-          A.child1 = E;
-          E.parent = A;
-          A.aabb.combine(C.aabb, E.aabb);
-          B.aabb.combine(A.aabb, D.aabb);
-          A.height = 1 + math_max$6(C.height, E.height);
-          B.height = 1 + math_max$6(A.height, D.height);
+        if (D.height > E2.height) {
+          B2.child2 = D;
+          A.child1 = E2;
+          E2.parent = A;
+          A.aabb.combine(C2.aabb, E2.aabb);
+          B2.aabb.combine(A.aabb, D.aabb);
+          A.height = 1 + math_max$6(C2.height, E2.height);
+          B2.height = 1 + math_max$6(A.height, D.height);
         } else {
-          B.child2 = E;
+          B2.child2 = E2;
           A.child1 = D;
           D.parent = A;
-          A.aabb.combine(C.aabb, D.aabb);
-          B.aabb.combine(A.aabb, E.aabb);
-          A.height = 1 + math_max$6(C.height, D.height);
-          B.height = 1 + math_max$6(A.height, E.height);
+          A.aabb.combine(C2.aabb, D.aabb);
+          B2.aabb.combine(A.aabb, E2.aabb);
+          A.height = 1 + math_max$6(C2.height, D.height);
+          B2.height = 1 + math_max$6(A.height, E2.height);
         }
-        return B;
+        return B2;
       }
       return A;
     };
@@ -1384,14 +1384,14 @@ var DynamicTree = (
         var minCost = Infinity;
         var iMin = -1;
         var jMin = -1;
-        for (var i = 0; i < count; ++i) {
-          var aabbi = nodes[i].aabb;
-          for (var j = i + 1; j < count; ++j) {
-            var aabbj = nodes[j].aabb;
+        for (var i2 = 0; i2 < count; ++i2) {
+          var aabbi = nodes[i2].aabb;
+          for (var j2 = i2 + 1; j2 < count; ++j2) {
+            var aabbj = nodes[j2].aabb;
             var cost = AABB.combinedPerimeter(aabbi, aabbj);
             if (cost < minCost) {
-              iMin = i;
-              jMin = j;
+              iMin = i2;
+              jMin = j2;
               minCost = cost;
             }
           }
@@ -1449,14 +1449,14 @@ var DynamicTree = (
     DynamicTree2.prototype.rayCast = function(input2, rayCastCallback) {
       var p1 = input2.p1;
       var p2 = input2.p2;
-      var r = Vec2.sub(p2, p1);
-      r.normalize();
-      var v3 = Vec2.crossNumVec2(1, r);
+      var r2 = Vec2.sub(p2, p1);
+      r2.normalize();
+      var v3 = Vec2.crossNumVec2(1, r2);
       var abs_v = Vec2.abs(v3);
       var maxFraction = input2.maxFraction;
       var segmentAABB = new AABB();
-      var t = Vec2.combine(1 - maxFraction, p1, maxFraction, p2);
-      segmentAABB.combinePoints(p1, t);
+      var t2 = Vec2.combine(1 - maxFraction, p1, maxFraction, p2);
+      segmentAABB.combinePoints(p1, t2);
       var stack = this.stackPool.allocate();
       var subInput = this.inputPool.allocate();
       stack.push(this.m_root);
@@ -1469,8 +1469,8 @@ var DynamicTree = (
           continue;
         }
         var c2 = node.aabb.getCenter();
-        var h = node.aabb.getExtents();
-        var separation = math_abs$8(Vec2.dot(v3, Vec2.sub(p1, c2))) - Vec2.dot(abs_v, h);
+        var h2 = node.aabb.getExtents();
+        var separation = math_abs$8(Vec2.dot(v3, Vec2.sub(p1, c2))) - Vec2.dot(abs_v, h2);
         if (separation > 0) {
           continue;
         }
@@ -1483,8 +1483,8 @@ var DynamicTree = (
             break;
           } else if (value > 0) {
             maxFraction = value;
-            t = Vec2.combine(1 - maxFraction, p1, maxFraction, p2);
-            segmentAABB.combinePoints(p1, t);
+            t2 = Vec2.combine(1 - maxFraction, p1, maxFraction, p2);
+            segmentAABB.combinePoints(p1, t2);
           }
         } else {
           stack.push(node.child1);
@@ -1513,22 +1513,22 @@ var Iterator = (
     };
     Iterator2.prototype.next = function() {
       while (this.parents.length > 0) {
-        var i = this.parents.length - 1;
-        var node = this.parents[i];
-        if (this.states[i] === 0) {
-          this.states[i] = 1;
+        var i2 = this.parents.length - 1;
+        var node = this.parents[i2];
+        if (this.states[i2] === 0) {
+          this.states[i2] = 1;
           return node;
         }
-        if (this.states[i] === 1) {
-          this.states[i] = 2;
+        if (this.states[i2] === 1) {
+          this.states[i2] = 2;
           if (node.child1) {
             this.parents.push(node.child1);
             this.states.push(1);
             return node.child1;
           }
         }
-        if (this.states[i] === 2) {
-          this.states[i] = 3;
+        if (this.states[i2] === 2) {
+          this.states[i2] = 3;
           if (node.child2) {
             this.parents.push(node.child2);
             this.states.push(1);
@@ -1620,9 +1620,9 @@ var BroadPhase = (
       this.m_moveBuffer.push(proxyId);
     };
     BroadPhase2.prototype.unbufferMove = function(proxyId) {
-      for (var i = 0; i < this.m_moveBuffer.length; ++i) {
-        if (this.m_moveBuffer[i] === proxyId) {
-          this.m_moveBuffer[i] = null;
+      for (var i2 = 0; i2 < this.m_moveBuffer.length; ++i2) {
+        if (this.m_moveBuffer[i2] === proxyId) {
+          this.m_moveBuffer[i2] = null;
         }
       }
     };
@@ -1643,20 +1643,20 @@ var BroadPhase = (
 var math_sin$2 = Math.sin;
 var math_cos$2 = Math.cos;
 var math_sqrt$4 = Math.sqrt;
-function vec2(x2, y) {
-  return { x: x2, y };
+function vec2(x2, y2) {
+  return { x: x2, y: y2 };
 }
 function rotation(angle) {
   return { s: math_sin$2(angle), c: math_cos$2(angle) };
 }
-function setVec2(out, x2, y) {
+function setVec2(out, x2, y2) {
   out.x = x2;
-  out.y = y;
+  out.y = y2;
   return out;
 }
-function copyVec2(out, w) {
-  out.x = w.x;
-  out.y = w.y;
+function copyVec2(out, w2) {
+  out.x = w2.x;
+  out.y = w2.y;
   return out;
 }
 function zeroVec2(out) {
@@ -1669,44 +1669,44 @@ function negVec2(out) {
   out.y = -out.y;
   return out;
 }
-function plusVec2(out, w) {
-  out.x += w.x;
-  out.y += w.y;
+function plusVec2(out, w2) {
+  out.x += w2.x;
+  out.y += w2.y;
   return out;
 }
-function addVec2(out, v3, w) {
-  out.x = v3.x + w.x;
-  out.y = v3.y + w.y;
+function addVec2(out, v3, w2) {
+  out.x = v3.x + w2.x;
+  out.y = v3.y + w2.y;
   return out;
 }
-function minusVec2(out, w) {
-  out.x -= w.x;
-  out.y -= w.y;
+function minusVec2(out, w2) {
+  out.x -= w2.x;
+  out.y -= w2.y;
   return out;
 }
-function subVec2(out, v3, w) {
-  out.x = v3.x - w.x;
-  out.y = v3.y - w.y;
+function subVec2(out, v3, w2) {
+  out.x = v3.x - w2.x;
+  out.y = v3.y - w2.y;
   return out;
 }
-function mulVec2(out, m) {
-  out.x *= m;
-  out.y *= m;
+function mulVec2(out, m2) {
+  out.x *= m2;
+  out.y *= m2;
   return out;
 }
-function scaleVec2(out, m, w) {
-  out.x = m * w.x;
-  out.y = m * w.y;
+function scaleVec2(out, m2, w2) {
+  out.x = m2 * w2.x;
+  out.y = m2 * w2.y;
   return out;
 }
-function plusScaleVec2(out, m, w) {
-  out.x += m * w.x;
-  out.y += m * w.y;
+function plusScaleVec2(out, m2, w2) {
+  out.x += m2 * w2.x;
+  out.y += m2 * w2.y;
   return out;
 }
-function minusScaleVec2(out, m, w) {
-  out.x -= m * w.x;
-  out.y -= m * w.y;
+function minusScaleVec2(out, m2, w2) {
+  out.x -= m2 * w2.x;
+  out.y -= m2 * w2.y;
   return out;
 }
 function combine2Vec2(out, am, a2, bm, b2) {
@@ -1737,18 +1737,18 @@ function normalizeVec2(out) {
   }
   return out;
 }
-function crossVec2Num(out, v3, w) {
-  var x2 = w * v3.y;
-  var y = -w * v3.x;
+function crossVec2Num(out, v3, w2) {
+  var x2 = w2 * v3.y;
+  var y2 = -w2 * v3.x;
   out.x = x2;
-  out.y = y;
+  out.y = y2;
   return out;
 }
-function crossNumVec2(out, w, v3) {
-  var x2 = -w * v3.y;
-  var y = w * v3.x;
+function crossNumVec2(out, w2, v3) {
+  var x2 = -w2 * v3.y;
+  var y2 = w2 * v3.x;
   out.x = x2;
-  out.y = y;
+  out.y = y2;
   return out;
 }
 function crossVec2Vec2(a2, b2) {
@@ -1775,29 +1775,29 @@ function setRotAngle(out, a2) {
   out.s = math_sin$2(a2);
   return out;
 }
-function rotVec2(out, q, v3) {
-  out.x = q.c * v3.x - q.s * v3.y;
-  out.y = q.s * v3.x + q.c * v3.y;
+function rotVec2(out, q2, v3) {
+  out.x = q2.c * v3.x - q2.s * v3.y;
+  out.y = q2.s * v3.x + q2.c * v3.y;
   return out;
 }
-function derotVec2(out, q, v3) {
-  var x2 = q.c * v3.x + q.s * v3.y;
-  var y = -q.s * v3.x + q.c * v3.y;
+function derotVec2(out, q2, v3) {
+  var x2 = q2.c * v3.x + q2.s * v3.y;
+  var y2 = -q2.s * v3.x + q2.c * v3.y;
   out.x = x2;
-  out.y = y;
+  out.y = y2;
   return out;
 }
 function rerotVec2(out, before, after, v3) {
   var x0 = before.c * v3.x + before.s * v3.y;
   var y0 = -before.s * v3.x + before.c * v3.y;
   var x2 = after.c * x0 - after.s * y0;
-  var y = after.s * x0 + after.c * y0;
+  var y2 = after.s * x0 + after.c * y0;
   out.x = x2;
-  out.y = y;
+  out.y = y2;
   return out;
 }
-function transform(x2, y, a2) {
-  return { p: vec2(x2, y), q: rotation(a2) };
+function transform(x2, y2, a2) {
+  return { p: vec2(x2, y2), q: rotation(a2) };
 }
 function copyTransform(out, transform2) {
   out.p.x = transform2.p.x;
@@ -1806,20 +1806,20 @@ function copyTransform(out, transform2) {
   out.q.c = transform2.q.c;
   return out;
 }
-function transformVec2(out, xf2, v3) {
+function transformVec2$1(out, xf2, v3) {
   var x2 = xf2.q.c * v3.x - xf2.q.s * v3.y + xf2.p.x;
-  var y = xf2.q.s * v3.x + xf2.q.c * v3.y + xf2.p.y;
+  var y2 = xf2.q.s * v3.x + xf2.q.c * v3.y + xf2.p.y;
   out.x = x2;
-  out.y = y;
+  out.y = y2;
   return out;
 }
 function detransformVec2(out, xf2, v3) {
   var px = v3.x - xf2.p.x;
   var py = v3.y - xf2.p.y;
   var x2 = xf2.q.c * px + xf2.q.s * py;
-  var y = -xf2.q.s * px + xf2.q.c * py;
+  var y2 = -xf2.q.s * px + xf2.q.c * py;
   out.x = x2;
-  out.y = y;
+  out.y = y2;
   return out;
 }
 function retransformVec2(out, from, to, v3) {
@@ -1828,20 +1828,20 @@ function retransformVec2(out, from, to, v3) {
   var px = x0 - to.p.x;
   var py = y0 - to.p.y;
   var x2 = to.q.c * px + to.q.s * py;
-  var y = -to.q.s * px + to.q.c * py;
+  var y2 = -to.q.s * px + to.q.c * py;
   out.x = x2;
-  out.y = y;
+  out.y = y2;
   return out;
 }
 function detransformTransform(out, a2, b2) {
   var c2 = a2.q.c * b2.q.c + a2.q.s * b2.q.s;
   var s2 = a2.q.c * b2.q.s - a2.q.s * b2.q.c;
   var x2 = a2.q.c * (b2.p.x - a2.p.x) + a2.q.s * (b2.p.y - a2.p.y);
-  var y = -a2.q.s * (b2.p.x - a2.p.x) + a2.q.c * (b2.p.y - a2.p.y);
+  var y2 = -a2.q.s * (b2.p.x - a2.p.x) + a2.q.c * (b2.p.y - a2.p.y);
   out.q.c = c2;
   out.q.s = s2;
   out.p.x = x2;
-  out.p.y = y;
+  out.p.y = y2;
   return out;
 }
 var math_sin$1 = Math.sin;
@@ -1885,7 +1885,7 @@ var Rot = (
       }
       return Number.isFinite(obj.s) && Number.isFinite(obj.c);
     };
-    Rot2.assert = function(o) {
+    Rot2.assert = function(o2) {
     };
     Rot2.prototype.setIdentity = function() {
       this.s = 0;
@@ -1917,48 +1917,48 @@ var Rot = (
     Rot2.prototype.getYAxis = function() {
       return Vec2.neo(-this.s, this.c);
     };
-    Rot2.mul = function(rot, m) {
-      if ("c" in m && "s" in m) {
+    Rot2.mul = function(rot, m2) {
+      if ("c" in m2 && "s" in m2) {
         var qr = Rot2.identity();
-        qr.s = rot.s * m.c + rot.c * m.s;
-        qr.c = rot.c * m.c - rot.s * m.s;
+        qr.s = rot.s * m2.c + rot.c * m2.s;
+        qr.c = rot.c * m2.c - rot.s * m2.s;
         return qr;
-      } else if ("x" in m && "y" in m) {
-        return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
+      } else if ("x" in m2 && "y" in m2) {
+        return Vec2.neo(rot.c * m2.x - rot.s * m2.y, rot.s * m2.x + rot.c * m2.y);
       }
     };
-    Rot2.mulRot = function(rot, m) {
+    Rot2.mulRot = function(rot, m2) {
       var qr = Rot2.identity();
-      qr.s = rot.s * m.c + rot.c * m.s;
-      qr.c = rot.c * m.c - rot.s * m.s;
+      qr.s = rot.s * m2.c + rot.c * m2.s;
+      qr.c = rot.c * m2.c - rot.s * m2.s;
       return qr;
     };
-    Rot2.mulVec2 = function(rot, m) {
-      return Vec2.neo(rot.c * m.x - rot.s * m.y, rot.s * m.x + rot.c * m.y);
+    Rot2.mulVec2 = function(rot, m2) {
+      return Vec2.neo(rot.c * m2.x - rot.s * m2.y, rot.s * m2.x + rot.c * m2.y);
     };
-    Rot2.mulSub = function(rot, v3, w) {
-      var x2 = rot.c * (v3.x - w.x) - rot.s * (v3.y - w.y);
-      var y = rot.s * (v3.x - w.x) + rot.c * (v3.y - w.y);
-      return Vec2.neo(x2, y);
+    Rot2.mulSub = function(rot, v3, w2) {
+      var x2 = rot.c * (v3.x - w2.x) - rot.s * (v3.y - w2.y);
+      var y2 = rot.s * (v3.x - w2.x) + rot.c * (v3.y - w2.y);
+      return Vec2.neo(x2, y2);
     };
-    Rot2.mulT = function(rot, m) {
-      if ("c" in m && "s" in m) {
+    Rot2.mulT = function(rot, m2) {
+      if ("c" in m2 && "s" in m2) {
         var qr = Rot2.identity();
-        qr.s = rot.c * m.s - rot.s * m.c;
-        qr.c = rot.c * m.c + rot.s * m.s;
+        qr.s = rot.c * m2.s - rot.s * m2.c;
+        qr.c = rot.c * m2.c + rot.s * m2.s;
         return qr;
-      } else if ("x" in m && "y" in m) {
-        return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
+      } else if ("x" in m2 && "y" in m2) {
+        return Vec2.neo(rot.c * m2.x + rot.s * m2.y, -rot.s * m2.x + rot.c * m2.y);
       }
     };
-    Rot2.mulTRot = function(rot, m) {
+    Rot2.mulTRot = function(rot, m2) {
       var qr = Rot2.identity();
-      qr.s = rot.c * m.s - rot.s * m.c;
-      qr.c = rot.c * m.c + rot.s * m.s;
+      qr.s = rot.c * m2.s - rot.s * m2.c;
+      qr.c = rot.c * m2.c + rot.s * m2.s;
       return qr;
     };
-    Rot2.mulTVec2 = function(rot, m) {
-      return Vec2.neo(rot.c * m.x + rot.s * m.y, -rot.s * m.x + rot.c * m.y);
+    Rot2.mulTVec2 = function(rot, m2) {
+      return Vec2.neo(rot.c * m2.x + rot.s * m2.y, -rot.s * m2.x + rot.c * m2.y);
     };
     return Rot2;
   })()
@@ -1986,14 +1986,14 @@ var Sweep = (
       this.a0 = 0;
     };
     Sweep2.prototype.setTransform = function(xf2) {
-      transformVec2(temp$7, xf2, this.localCenter);
+      transformVec2$1(temp$7, xf2, this.localCenter);
       copyVec2(this.c, temp$7);
       copyVec2(this.c0, temp$7);
       this.a = this.a0 = math_atan2(xf2.q.s, xf2.q.c);
     };
     Sweep2.prototype.setLocalCenter = function(localCenter2, xf2) {
       copyVec2(this.localCenter, localCenter2);
-      transformVec2(temp$7, xf2, this.localCenter);
+      transformVec2$1(temp$7, xf2, this.localCenter);
       copyVec2(this.c, temp$7);
       copyVec2(this.c0, temp$7);
     };
@@ -2095,13 +2095,13 @@ var Transform = (
       }
       return Vec2.isValid(obj.p) && Rot.isValid(obj.q);
     };
-    Transform2.assert = function(o) {
+    Transform2.assert = function(o2) {
     };
     Transform2.mul = function(a2, b2) {
       if (Array.isArray(b2)) {
         var arr = [];
-        for (var i = 0; i < b2.length; i++) {
-          arr[i] = Transform2.mul(a2, b2[i]);
+        for (var i2 = 0; i2 < b2.length; i2++) {
+          arr[i2] = Transform2.mul(a2, b2[i2]);
         }
         return arr;
       } else if ("x" in b2 && "y" in b2) {
@@ -2112,8 +2112,8 @@ var Transform = (
     };
     Transform2.mulAll = function(a2, b2) {
       var arr = [];
-      for (var i = 0; i < b2.length; i++) {
-        arr[i] = Transform2.mul(a2, b2[i]);
+      for (var i2 = 0; i2 < b2.length; i2++) {
+        arr[i2] = Transform2.mul(a2, b2[i2]);
       }
       return arr;
     };
@@ -2124,8 +2124,8 @@ var Transform = (
     };
     Transform2.mulVec2 = function(a2, b2) {
       var x2 = a2.q.c * b2.x - a2.q.s * b2.y + a2.p.x;
-      var y = a2.q.s * b2.x + a2.q.c * b2.y + a2.p.y;
-      return Vec2.neo(x2, y);
+      var y2 = a2.q.s * b2.x + a2.q.c * b2.y + a2.p.y;
+      return Vec2.neo(x2, y2);
     };
     Transform2.mulXf = function(a2, b2) {
       var xf2 = Transform2.identity();
@@ -2144,8 +2144,8 @@ var Transform = (
       var px = b2.x - a2.p.x;
       var py = b2.y - a2.p.y;
       var x2 = a2.q.c * px + a2.q.s * py;
-      var y = -a2.q.s * px + a2.q.c * py;
-      return Vec2.neo(x2, y);
+      var y2 = -a2.q.s * px + a2.q.c * py;
+      return Vec2.neo(x2, y2);
     };
     Transform2.mulTXf = function(a2, b2) {
       var xf2 = Transform2.identity();
@@ -2175,21 +2175,21 @@ var Position = (
       this.c = Vec2.zero();
       this.a = 0;
     }
-    Position2.prototype.getTransform = function(xf2, p) {
+    Position2.prototype.getTransform = function(xf2, p2) {
       xf2.q.c = math_cos(this.a);
       xf2.q.s = math_sin(this.a);
-      xf2.p.x = this.c.x - (xf2.q.c * p.x - xf2.q.s * p.y);
-      xf2.p.y = this.c.y - (xf2.q.s * p.x + xf2.q.c * p.y);
+      xf2.p.x = this.c.x - (xf2.q.c * p2.x - xf2.q.s * p2.y);
+      xf2.p.y = this.c.y - (xf2.q.s * p2.x + xf2.q.c * p2.y);
       return xf2;
     };
     return Position2;
   })()
 );
-function getTransform(xf2, p, c2, a2) {
+function getTransform(xf2, p2, c2, a2) {
   xf2.q.c = math_cos(a2);
   xf2.q.s = math_sin(a2);
-  xf2.p.x = c2.x - (xf2.q.c * p.x - xf2.q.s * p.y);
-  xf2.p.y = c2.y - (xf2.q.s * p.x + xf2.q.c * p.y);
+  xf2.p.x = c2.x - (xf2.q.c * p2.x - xf2.q.s * p2.y);
+  xf2.p.y = c2.y - (xf2.q.s * p2.x + xf2.q.c * p2.y);
   return xf2;
 }
 var Shape = (
@@ -2258,8 +2258,8 @@ var Fixture = (
       this.m_proxies = [];
       this.m_proxyCount = 0;
       var childCount = this.m_shape.getChildCount();
-      for (var i = 0; i < childCount; ++i) {
-        this.m_proxies[i] = new FixtureProxy(this, i);
+      for (var i2 = 0; i2 < childCount; ++i2) {
+        this.m_proxies[i2] = new FixtureProxy(this, i2);
       }
       this.m_userData = def.userData;
       if (typeof def.style === "object" && def.style !== null) {
@@ -2274,8 +2274,8 @@ var Fixture = (
         this.m_shape._reset();
       }
       var childCount = this.m_shape.getChildCount();
-      for (var i = 0; i < childCount; ++i) {
-        this.m_proxies[i] = new FixtureProxy(this, i);
+      for (var i2 = 0; i2 < childCount; ++i2) {
+        this.m_proxies[i2] = new FixtureProxy(this, i2);
       }
       this.createProxies(broadPhase, body.m_xf);
       body.resetMassData();
@@ -2342,8 +2342,8 @@ var Fixture = (
     Fixture2.prototype.setRestitution = function(restitution) {
       this.m_restitution = restitution;
     };
-    Fixture2.prototype.testPoint = function(p) {
-      return this.m_shape.testPoint(this.m_body.getTransform(), p);
+    Fixture2.prototype.testPoint = function(p2) {
+      return this.m_shape.testPoint(this.m_body.getTransform(), p2);
     };
     Fixture2.prototype.rayCast = function(output2, input2, childIndex) {
       return this.m_shape.rayCast(output2, input2, this.m_body.getTransform(), childIndex);
@@ -2356,23 +2356,23 @@ var Fixture = (
     };
     Fixture2.prototype.createProxies = function(broadPhase, xf2) {
       this.m_proxyCount = this.m_shape.getChildCount();
-      for (var i = 0; i < this.m_proxyCount; ++i) {
-        var proxy = this.m_proxies[i];
-        this.m_shape.computeAABB(proxy.aabb, xf2, i);
+      for (var i2 = 0; i2 < this.m_proxyCount; ++i2) {
+        var proxy = this.m_proxies[i2];
+        this.m_shape.computeAABB(proxy.aabb, xf2, i2);
         proxy.proxyId = broadPhase.createProxy(proxy.aabb, proxy);
       }
     };
     Fixture2.prototype.destroyProxies = function(broadPhase) {
-      for (var i = 0; i < this.m_proxyCount; ++i) {
-        var proxy = this.m_proxies[i];
+      for (var i2 = 0; i2 < this.m_proxyCount; ++i2) {
+        var proxy = this.m_proxies[i2];
         broadPhase.destroyProxy(proxy.proxyId);
         proxy.proxyId = null;
       }
       this.m_proxyCount = 0;
     };
     Fixture2.prototype.synchronize = function(broadPhase, xf1, xf2) {
-      for (var i = 0; i < this.m_proxyCount; ++i) {
-        var proxy = this.m_proxies[i];
+      for (var i2 = 0; i2 < this.m_proxyCount; ++i2) {
+        var proxy = this.m_proxies[i2];
         this.m_shape.computeAABB(synchronize_aabb1, xf1, proxy.childIndex);
         this.m_shape.computeAABB(synchronize_aabb2, xf2, proxy.childIndex);
         proxy.aabb.combine(synchronize_aabb1, synchronize_aabb2);
@@ -2426,8 +2426,8 @@ var Fixture = (
         return;
       }
       var broadPhase = world.m_broadPhase;
-      for (var i = 0; i < this.m_proxyCount; ++i) {
-        broadPhase.touchProxy(this.m_proxies[i].proxyId);
+      for (var i2 = 0; i2 < this.m_proxyCount; ++i2) {
+        broadPhase.touchProxy(this.m_proxies[i2].proxyId);
       }
     };
     Fixture2.prototype.shouldCollide = function(that) {
@@ -2519,8 +2519,8 @@ var Body = (
     }
     Body2.prototype._serialize = function() {
       var fixtures = [];
-      for (var f = this.m_fixtureList; f; f = f.m_next) {
-        fixtures.push(f);
+      for (var f2 = this.m_fixtureList; f2; f2 = f2.m_next) {
+        fixtures.push(f2);
       }
       return {
         type: this.m_type,
@@ -2536,8 +2536,8 @@ var Body = (
     Body2._deserialize = function(data, world, restore) {
       var body = new Body2(world, data);
       if (data.fixtures) {
-        for (var i = data.fixtures.length - 1; i >= 0; i--) {
-          var fixture = restore(Fixture, data.fixtures[i], body);
+        for (var i2 = data.fixtures.length - 1; i2 >= 0; i2--) {
+          var fixture = restore(Fixture, data.fixtures[i2], body);
           body._addFixture(fixture);
         }
       }
@@ -2617,9 +2617,9 @@ var Body = (
       }
       this.m_contactList = null;
       var broadPhase = this.m_world.m_broadPhase;
-      for (var f = this.m_fixtureList; f; f = f.m_next) {
-        for (var i = 0; i < f.m_proxyCount; ++i) {
-          broadPhase.touchProxy(f.m_proxies[i].proxyId);
+      for (var f2 = this.m_fixtureList; f2; f2 = f2.m_next) {
+        for (var i2 = 0; i2 < f2.m_proxyCount; ++i2) {
+          broadPhase.touchProxy(f2.m_proxies[i2].proxyId);
         }
       }
     };
@@ -2664,14 +2664,14 @@ var Body = (
       this.m_activeFlag = !!flag;
       if (this.m_activeFlag) {
         var broadPhase = this.m_world.m_broadPhase;
-        for (var f = this.m_fixtureList; f; f = f.m_next) {
-          f.createProxies(broadPhase, this.m_xf);
+        for (var f2 = this.m_fixtureList; f2; f2 = f2.m_next) {
+          f2.createProxies(broadPhase, this.m_xf);
         }
         this.m_world.m_newFixture = true;
       } else {
         var broadPhase = this.m_world.m_broadPhase;
-        for (var f = this.m_fixtureList; f; f = f.m_next) {
-          f.destroyProxies(broadPhase);
+        for (var f2 = this.m_fixtureList; f2; f2 = f2.m_next) {
+          f2.destroyProxies(broadPhase);
         }
         var ce = this.m_contactList;
         while (ce) {
@@ -2707,8 +2707,8 @@ var Body = (
       }
       this.m_sweep.setTransform(this.m_xf);
       var broadPhase = this.m_world.m_broadPhase;
-      for (var f = this.m_fixtureList; f; f = f.m_next) {
-        f.synchronize(broadPhase, this.m_xf, this.m_xf);
+      for (var f2 = this.m_fixtureList; f2; f2 = f2.m_next) {
+        f2.synchronize(broadPhase, this.m_xf, this.m_xf);
       }
       this.setAwake(true);
     };
@@ -2718,8 +2718,8 @@ var Body = (
     Body2.prototype.synchronizeFixtures = function() {
       this.m_sweep.getTransform(xf$2, 0);
       var broadPhase = this.m_world.m_broadPhase;
-      for (var f = this.m_fixtureList; f; f = f.m_next) {
-        f.synchronize(broadPhase, xf$2, this.m_xf);
+      for (var f2 = this.m_fixtureList; f2; f2 = f2.m_next) {
+        f2.synchronize(broadPhase, xf$2, this.m_xf);
       }
     };
     Body2.prototype.advance = function(alpha) {
@@ -2731,8 +2731,8 @@ var Body = (
     Body2.prototype.getPosition = function() {
       return this.m_xf.p;
     };
-    Body2.prototype.setPosition = function(p) {
-      this.setTransform(p, this.m_sweep.a);
+    Body2.prototype.setPosition = function(p2) {
+      this.setTransform(p2, this.m_sweep.a);
     };
     Body2.prototype.getAngle = function() {
       return this.m_sweep.a;
@@ -2768,14 +2768,14 @@ var Body = (
     Body2.prototype.getAngularVelocity = function() {
       return this.m_angularVelocity;
     };
-    Body2.prototype.setAngularVelocity = function(w) {
+    Body2.prototype.setAngularVelocity = function(w2) {
       if (this.m_type == STATIC) {
         return;
       }
-      if (w * w > 0) {
+      if (w2 * w2 > 0) {
         this.setAwake(true);
       }
-      this.m_angularVelocity = w;
+      this.m_angularVelocity = w2;
     };
     Body2.prototype.getLinearDamping = function() {
       return this.m_linearDamping;
@@ -2819,8 +2819,8 @@ var Body = (
         return;
       }
       zeroVec2(localCenter);
-      for (var f = this.m_fixtureList; f; f = f.m_next) {
-        if (f.m_density == 0) {
+      for (var f2 = this.m_fixtureList; f2; f2 = f2.m_next) {
+        if (f2.m_density == 0) {
           continue;
         }
         var massData = {
@@ -2828,7 +2828,7 @@ var Body = (
           center: vec2(0, 0),
           I: 0
         };
-        f.getMassData(massData);
+        f2.getMassData(massData);
         this.m_mass += massData.mass;
         plusScaleVec2(localCenter, massData.mass, massData.center);
         this.m_I += massData.I;
@@ -3145,8 +3145,8 @@ var normal$4 = vec2(0, 0);
 var e12 = vec2(0, 0);
 var e13 = vec2(0, 0);
 var e23 = vec2(0, 0);
-var temp1 = vec2(0, 0);
-var temp2 = vec2(0, 0);
+var temp1$1 = vec2(0, 0);
+var temp2$1 = vec2(0, 0);
 stats.gjkCalls = 0;
 stats.gjkIters = 0;
 stats.gjkMaxIters = 0;
@@ -3222,9 +3222,9 @@ var Distance = function(output2, cache2, input2) {
   var iter = 0;
   while (iter < k_maxIters) {
     saveCount = simplex.m_count;
-    for (var i = 0; i < saveCount; ++i) {
-      saveA[i] = vertices[i].indexA;
-      saveB[i] = vertices[i].indexB;
+    for (var i2 = 0; i2 < saveCount; ++i2) {
+      saveA[i2] = vertices[i2].indexA;
+      saveB[i2] = vertices[i2].indexB;
     }
     simplex.solve();
     if (simplex.m_count === 3) {
@@ -3236,15 +3236,15 @@ var Distance = function(output2, cache2, input2) {
     }
     var vertex = vertices[simplex.m_count];
     vertex.indexA = proxyA.getSupport(derotVec2(temp$5, xfA2.q, scaleVec2(temp$5, -1, d2)));
-    transformVec2(vertex.wA, xfA2, proxyA.getVertex(vertex.indexA));
+    transformVec2$1(vertex.wA, xfA2, proxyA.getVertex(vertex.indexA));
     vertex.indexB = proxyB.getSupport(derotVec2(temp$5, xfB2.q, d2));
-    transformVec2(vertex.wB, xfB2, proxyB.getVertex(vertex.indexB));
+    transformVec2$1(vertex.wB, xfB2, proxyB.getVertex(vertex.indexB));
     subVec2(vertex.w, vertex.wB, vertex.wA);
     ++iter;
     ++stats.gjkIters;
     var duplicate = false;
-    for (var i = 0; i < saveCount; ++i) {
-      if (vertex.indexA === saveA[i] && vertex.indexB === saveB[i]) {
+    for (var i2 = 0; i2 < saveCount; ++i2) {
+      if (vertex.indexA === saveA[i2] && vertex.indexB === saveB[i2]) {
         duplicate = true;
         break;
       }
@@ -3269,9 +3269,9 @@ var Distance = function(output2, cache2, input2) {
       plusScaleVec2(output2.pointA, rA2, normal$4);
       minusScaleVec2(output2.pointB, rB2, normal$4);
     } else {
-      var p = subVec2(temp$5, output2.pointA, output2.pointB);
-      copyVec2(output2.pointA, p);
-      copyVec2(output2.pointB, p);
+      var p2 = subVec2(temp$5, output2.pointA, output2.pointB);
+      copyVec2(output2.pointA, p2);
+      copyVec2(output2.pointB, p2);
       output2.distance = 0;
     }
   }
@@ -3298,10 +3298,10 @@ var DistanceProxy = (
     DistanceProxy2.prototype.getSupport = function(d2) {
       var bestIndex = 0;
       var bestValue = -Infinity;
-      for (var i = 0; i < this.m_count; ++i) {
-        var value = dotVec2(this.m_vertices[i], d2);
+      for (var i2 = 0; i2 < this.m_count; ++i2) {
+        var value = dotVec2(this.m_vertices[i2], d2);
         if (value > bestValue) {
-          bestIndex = i;
+          bestIndex = i2;
           bestValue = value;
         }
       }
@@ -3417,14 +3417,14 @@ var Simplex = (
     };
     Simplex2.prototype.readCache = function(cache2, proxyA, transformA, proxyB, transformB) {
       this.m_count = cache2.count;
-      for (var i = 0; i < this.m_count; ++i) {
-        var v3 = this.m_v[i];
-        v3.indexA = cache2.indexA[i];
-        v3.indexB = cache2.indexB[i];
+      for (var i2 = 0; i2 < this.m_count; ++i2) {
+        var v3 = this.m_v[i2];
+        v3.indexA = cache2.indexA[i2];
+        v3.indexB = cache2.indexB[i2];
         var wALocal = proxyA.getVertex(v3.indexA);
         var wBLocal = proxyB.getVertex(v3.indexB);
-        transformVec2(v3.wA, transformA, wALocal);
-        transformVec2(v3.wB, transformB, wBLocal);
+        transformVec2$1(v3.wA, transformA, wALocal);
+        transformVec2$1(v3.wB, transformB, wBLocal);
         subVec2(v3.w, v3.wB, v3.wA);
         v3.a = 0;
       }
@@ -3441,8 +3441,8 @@ var Simplex = (
         v3.indexB = 0;
         var wALocal = proxyA.getVertex(0);
         var wBLocal = proxyB.getVertex(0);
-        transformVec2(v3.wA, transformA, wALocal);
-        transformVec2(v3.wB, transformB, wBLocal);
+        transformVec2$1(v3.wA, transformA, wALocal);
+        transformVec2$1(v3.wB, transformB, wBLocal);
         subVec2(v3.w, v3.wB, v3.wA);
         v3.a = 1;
         this.m_count = 1;
@@ -3451,9 +3451,9 @@ var Simplex = (
     Simplex2.prototype.writeCache = function(cache2) {
       cache2.metric = this.getMetric();
       cache2.count = this.m_count;
-      for (var i = 0; i < this.m_count; ++i) {
-        cache2.indexA[i] = this.m_v[i].indexA;
-        cache2.indexB[i] = this.m_v[i].indexB;
+      for (var i2 = 0; i2 < this.m_count; ++i2) {
+        cache2.indexA[i2] = this.m_v[i2].indexA;
+        cache2.indexB[i2] = this.m_v[i2].indexB;
       }
     };
     Simplex2.prototype.getSearchDirection = function() {
@@ -3521,7 +3521,7 @@ var Simplex = (
         case 2:
           return distVec2(this.m_v1.w, this.m_v2.w);
         case 3:
-          return crossVec2Vec2(subVec2(temp1, this.m_v2.w, this.m_v1.w), subVec2(temp2, this.m_v3.w, this.m_v1.w));
+          return crossVec2Vec2(subVec2(temp1$1, this.m_v2.w, this.m_v1.w), subVec2(temp2$1, this.m_v3.w, this.m_v1.w));
         default:
           return 0;
       }
@@ -3697,15 +3697,15 @@ var ShapeCast = function(output2, input2) {
   var radius = radiusA + radiusB;
   var xfA2 = input2.transformA;
   var xfB2 = input2.transformB;
-  var r = input2.translationB;
+  var r2 = input2.translationB;
   var n2 = Vec2.zero();
   var lambda = 0;
   var simplex2 = new Simplex();
   simplex2.m_count = 0;
   var vertices = simplex2.m_v;
-  var indexA = proxyA.getSupport(Rot.mulTVec2(xfA2.q, Vec2.neg(r)));
+  var indexA = proxyA.getSupport(Rot.mulTVec2(xfA2.q, Vec2.neg(r2)));
   var wA = Transform.mulVec2(xfA2, proxyA.getVertex(indexA));
-  var indexB = proxyB.getSupport(Rot.mulTVec2(xfB2.q, r));
+  var indexB = proxyB.getSupport(Rot.mulTVec2(xfB2.q, r2));
   var wB = Transform.mulVec2(xfB2, proxyB.getVertex(indexB));
   var v3 = Vec2.sub(wA, wB);
   var sigma = math_max$4(SettingsInternal.polygonRadius, radius - SettingsInternal.polygonRadius);
@@ -3718,10 +3718,10 @@ var ShapeCast = function(output2, input2) {
     wA = Transform.mulVec2(xfA2, proxyA.getVertex(indexA));
     indexB = proxyB.getSupport(Rot.mulTVec2(xfB2.q, v3));
     wB = Transform.mulVec2(xfB2, proxyB.getVertex(indexB));
-    var p = Vec2.sub(wA, wB);
+    var p2 = Vec2.sub(wA, wB);
     v3.normalize();
-    var vp = Vec2.dot(v3, p);
-    var vr = Vec2.dot(v3, r);
+    var vp = Vec2.dot(v3, p2);
+    var vr = Vec2.dot(v3, r2);
     if (vp - sigma > lambda * vr) {
       if (vr <= 0) {
         return false;
@@ -3735,7 +3735,7 @@ var ShapeCast = function(output2, input2) {
     }
     var vertex = vertices[simplex2.m_count];
     vertex.indexA = indexB;
-    vertex.wA = Vec2.combine(1, wB, lambda, r);
+    vertex.wA = Vec2.combine(1, wB, lambda, r2);
     vertex.indexB = indexA;
     vertex.wB = wA;
     vertex.w = Vec2.sub(vertex.wB, vertex.wA);
@@ -3912,24 +3912,24 @@ var TimeOfImpact = function(output2, input2) {
       var a1 = t1;
       var a2 = t2;
       while (true) {
-        var t = void 0;
+        var t3 = void 0;
         if (rootIterCount & 1) {
-          t = a1 + (target - s1) * (a2 - a1) / (s2 - s1);
+          t3 = a1 + (target - s1) * (a2 - a1) / (s2 - s1);
         } else {
-          t = 0.5 * (a1 + a2);
+          t3 = 0.5 * (a1 + a2);
         }
         ++rootIterCount;
         ++stats.toiRootIters;
-        var s3 = separationFunction.evaluate(t);
+        var s3 = separationFunction.evaluate(t3);
         if (math_abs$7(s3 - target) < tolerance) {
-          t2 = t;
+          t2 = t3;
           break;
         }
         if (s3 > target) {
-          a1 = t;
+          a1 = t3;
           s1 = s3;
         } else {
-          a2 = t;
+          a2 = t3;
           s2 = s3;
         }
         if (rootIterCount === 50) {
@@ -4003,8 +4003,8 @@ var SeparationFunction = (
         this.m_type = SeparationFunctionType.e_points;
         var localPointA_1 = this.m_proxyA.getVertex(cache2.indexA[0]);
         var localPointB_1 = this.m_proxyB.getVertex(cache2.indexB[0]);
-        transformVec2(pointA$2, xfA$1, localPointA_1);
-        transformVec2(pointB$2, xfB$1, localPointB_1);
+        transformVec2$1(pointA$2, xfA$1, localPointA_1);
+        transformVec2$1(pointB$2, xfB$1, localPointB_1);
         subVec2(this.m_axis, pointB$2, pointA$2);
         var s2 = normalizeVec2Length(this.m_axis);
         return s2;
@@ -4016,7 +4016,7 @@ var SeparationFunction = (
         normalizeVec2(this.m_axis);
         rotVec2(normal$3, xfB$1.q, this.m_axis);
         combine2Vec2(this.m_localPoint, 0.5, localPointB1, 0.5, localPointB2);
-        transformVec2(pointB$2, xfB$1, this.m_localPoint);
+        transformVec2$1(pointB$2, xfB$1, this.m_localPoint);
         var localPointA_2 = proxyA.getVertex(cache2.indexA[0]);
         var pointA_1 = Transform.mulVec2(xfA$1, localPointA_2);
         var s2 = dotVec2(pointA_1, normal$3) - dotVec2(pointB$2, normal$3);
@@ -4033,9 +4033,9 @@ var SeparationFunction = (
         normalizeVec2(this.m_axis);
         rotVec2(normal$3, xfA$1.q, this.m_axis);
         combine2Vec2(this.m_localPoint, 0.5, localPointA1, 0.5, localPointA2);
-        transformVec2(pointA$2, xfA$1, this.m_localPoint);
+        transformVec2$1(pointA$2, xfA$1, this.m_localPoint);
         var localPointB_2 = this.m_proxyB.getVertex(cache2.indexB[0]);
-        transformVec2(pointB$2, xfB$1, localPointB_2);
+        transformVec2$1(pointB$2, xfB$1, localPointB_2);
         var s2 = dotVec2(pointB$2, normal$3) - dotVec2(pointA$2, normal$3);
         if (s2 < 0) {
           negVec2(this.m_axis);
@@ -4044,9 +4044,9 @@ var SeparationFunction = (
         return s2;
       }
     };
-    SeparationFunction2.prototype.compute = function(find, t) {
-      this.m_sweepA.getTransform(xfA$1, t);
-      this.m_sweepB.getTransform(xfB$1, t);
+    SeparationFunction2.prototype.compute = function(find, t2) {
+      this.m_sweepA.getTransform(xfA$1, t2);
+      this.m_sweepB.getTransform(xfB$1, t2);
       switch (this.m_type) {
         case SeparationFunctionType.e_points: {
           if (find) {
@@ -4057,34 +4057,34 @@ var SeparationFunction = (
           }
           copyVec2(localPointA, this.m_proxyA.getVertex(this.indexA));
           copyVec2(localPointB, this.m_proxyB.getVertex(this.indexB));
-          transformVec2(pointA$2, xfA$1, localPointA);
-          transformVec2(pointB$2, xfB$1, localPointB);
+          transformVec2$1(pointA$2, xfA$1, localPointA);
+          transformVec2$1(pointB$2, xfB$1, localPointB);
           var sep = dotVec2(pointB$2, this.m_axis) - dotVec2(pointA$2, this.m_axis);
           return sep;
         }
         case SeparationFunctionType.e_faceA: {
           rotVec2(normal$3, xfA$1.q, this.m_axis);
-          transformVec2(pointA$2, xfA$1, this.m_localPoint);
+          transformVec2$1(pointA$2, xfA$1, this.m_localPoint);
           if (find) {
             derotVec2(axisB, xfB$1.q, scaleVec2(temp$4, -1, normal$3));
             this.indexA = -1;
             this.indexB = this.m_proxyB.getSupport(axisB);
           }
           copyVec2(localPointB, this.m_proxyB.getVertex(this.indexB));
-          transformVec2(pointB$2, xfB$1, localPointB);
+          transformVec2$1(pointB$2, xfB$1, localPointB);
           var sep = dotVec2(pointB$2, normal$3) - dotVec2(pointA$2, normal$3);
           return sep;
         }
         case SeparationFunctionType.e_faceB: {
           rotVec2(normal$3, xfB$1.q, this.m_axis);
-          transformVec2(pointB$2, xfB$1, this.m_localPoint);
+          transformVec2$1(pointB$2, xfB$1, this.m_localPoint);
           if (find) {
             derotVec2(axisA, xfA$1.q, scaleVec2(temp$4, -1, normal$3));
             this.indexB = -1;
             this.indexA = this.m_proxyA.getSupport(axisA);
           }
           copyVec2(localPointA, this.m_proxyA.getVertex(this.indexA));
-          transformVec2(pointA$2, xfA$1, localPointA);
+          transformVec2$1(pointA$2, xfA$1, localPointA);
           var sep = dotVec2(pointA$2, normal$3) - dotVec2(pointB$2, normal$3);
           return sep;
         }
@@ -4096,11 +4096,11 @@ var SeparationFunction = (
           return 0;
       }
     };
-    SeparationFunction2.prototype.findMinSeparation = function(t) {
-      return this.compute(true, t);
+    SeparationFunction2.prototype.findMinSeparation = function(t2) {
+      return this.compute(true, t2);
     };
-    SeparationFunction2.prototype.evaluate = function(t) {
-      return this.compute(false, t);
+    SeparationFunction2.prototype.evaluate = function(t2) {
+      return this.compute(false, t2);
     };
     return SeparationFunction2;
   })()
@@ -4136,8 +4136,8 @@ var TimeStep = (
   })()
 );
 var s_subStep = new TimeStep();
-var c = vec2(0, 0);
-var v = vec2(0, 0);
+var c$2 = vec2(0, 0);
+var v$2 = vec2(0, 0);
 var translation = vec2(0, 0);
 var input = new TOIInput();
 var output = new TOIOutput();
@@ -4161,8 +4161,8 @@ var ContactImpulse = (
         var contact = this.contact;
         var normals = this.normals;
         normals.length = 0;
-        for (var p = 0; p < contact.v_points.length; ++p) {
-          normals.push(contact.v_points[p].normalImpulse);
+        for (var p2 = 0; p2 < contact.v_points.length; ++p2) {
+          normals.push(contact.v_points[p2].normalImpulse);
         }
         return normals;
       },
@@ -4174,8 +4174,8 @@ var ContactImpulse = (
         var contact = this.contact;
         var tangents = this.tangents;
         tangents.length = 0;
-        for (var p = 0; p < contact.v_points.length; ++p) {
-          tangents.push(contact.v_points[p].tangentImpulse);
+        for (var p2 = 0; p2 < contact.v_points.length; ++p2) {
+          tangents.push(contact.v_points[p2].tangentImpulse);
         }
         return tangents;
       },
@@ -4218,8 +4218,8 @@ var Solver = (
       for (var c_1 = world.m_contactList; c_1; c_1 = c_1.m_next) {
         c_1.m_islandFlag = false;
       }
-      for (var j = world.m_jointList; j; j = j.m_next) {
-        j.m_islandFlag = false;
+      for (var j2 = world.m_jointList; j2; j2 = j2.m_next) {
+        j2.m_islandFlag = false;
       }
       var stack = this.m_stack;
       for (var seed = world.m_bodyList; seed; seed = seed.m_next) {
@@ -4282,8 +4282,8 @@ var Solver = (
           }
         }
         this.solveIsland(step);
-        for (var i = 0; i < this.m_bodies.length; ++i) {
-          var b2 = this.m_bodies[i];
+        for (var i2 = 0; i2 < this.m_bodies.length; ++i2) {
+          var b2 = this.m_bodies[i2];
           if (b2.isStatic()) {
             b2.m_islandFlag = false;
           }
@@ -4294,95 +4294,95 @@ var Solver = (
       var world = this.m_world;
       var gravity = world.m_gravity;
       var allowSleep = world.m_allowSleep;
-      var h = step.dt;
-      for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
-        copyVec2(c, body.m_sweep.c);
+      var h2 = step.dt;
+      for (var i2 = 0; i2 < this.m_bodies.length; ++i2) {
+        var body = this.m_bodies[i2];
+        copyVec2(c$2, body.m_sweep.c);
         var a2 = body.m_sweep.a;
-        copyVec2(v, body.m_linearVelocity);
-        var w = body.m_angularVelocity;
+        copyVec2(v$2, body.m_linearVelocity);
+        var w2 = body.m_angularVelocity;
         copyVec2(body.m_sweep.c0, body.m_sweep.c);
         body.m_sweep.a0 = body.m_sweep.a;
         if (body.isDynamic()) {
-          plusScaleVec2(v, h * body.m_gravityScale, gravity);
-          plusScaleVec2(v, h * body.m_invMass, body.m_force);
-          w += h * body.m_invI * body.m_torque;
-          scaleVec2(v, 1 / (1 + h * body.m_linearDamping), v);
-          w *= 1 / (1 + h * body.m_angularDamping);
+          plusScaleVec2(v$2, h2 * body.m_gravityScale, gravity);
+          plusScaleVec2(v$2, h2 * body.m_invMass, body.m_force);
+          w2 += h2 * body.m_invI * body.m_torque;
+          scaleVec2(v$2, 1 / (1 + h2 * body.m_linearDamping), v$2);
+          w2 *= 1 / (1 + h2 * body.m_angularDamping);
         }
-        copyVec2(body.c_position.c, c);
+        copyVec2(body.c_position.c, c$2);
         body.c_position.a = a2;
-        copyVec2(body.c_velocity.v, v);
-        body.c_velocity.w = w;
+        copyVec2(body.c_velocity.v, v$2);
+        body.c_velocity.w = w2;
       }
-      for (var i = 0; i < this.m_contacts.length; ++i) {
-        var contact = this.m_contacts[i];
+      for (var i2 = 0; i2 < this.m_contacts.length; ++i2) {
+        var contact = this.m_contacts[i2];
         contact.initConstraint(step);
       }
-      for (var i = 0; i < this.m_contacts.length; ++i) {
-        var contact = this.m_contacts[i];
+      for (var i2 = 0; i2 < this.m_contacts.length; ++i2) {
+        var contact = this.m_contacts[i2];
         contact.initVelocityConstraint(step);
       }
       if (step.warmStarting) {
-        for (var i = 0; i < this.m_contacts.length; ++i) {
-          var contact = this.m_contacts[i];
+        for (var i2 = 0; i2 < this.m_contacts.length; ++i2) {
+          var contact = this.m_contacts[i2];
           contact.warmStartConstraint(step);
         }
       }
-      for (var i = 0; i < this.m_joints.length; ++i) {
-        var joint = this.m_joints[i];
+      for (var i2 = 0; i2 < this.m_joints.length; ++i2) {
+        var joint = this.m_joints[i2];
         joint.initVelocityConstraints(step);
       }
-      for (var i = 0; i < step.velocityIterations; ++i) {
-        for (var j = 0; j < this.m_joints.length; ++j) {
-          var joint = this.m_joints[j];
+      for (var i2 = 0; i2 < step.velocityIterations; ++i2) {
+        for (var j2 = 0; j2 < this.m_joints.length; ++j2) {
+          var joint = this.m_joints[j2];
           joint.solveVelocityConstraints(step);
         }
-        for (var j = 0; j < this.m_contacts.length; ++j) {
-          var contact = this.m_contacts[j];
+        for (var j2 = 0; j2 < this.m_contacts.length; ++j2) {
+          var contact = this.m_contacts[j2];
           contact.solveVelocityConstraint(step);
         }
       }
-      for (var i = 0; i < this.m_contacts.length; ++i) {
-        var contact = this.m_contacts[i];
+      for (var i2 = 0; i2 < this.m_contacts.length; ++i2) {
+        var contact = this.m_contacts[i2];
         contact.storeConstraintImpulses(step);
       }
-      for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
-        copyVec2(c, body.c_position.c);
+      for (var i2 = 0; i2 < this.m_bodies.length; ++i2) {
+        var body = this.m_bodies[i2];
+        copyVec2(c$2, body.c_position.c);
         var a2 = body.c_position.a;
-        copyVec2(v, body.c_velocity.v);
-        var w = body.c_velocity.w;
-        scaleVec2(translation, h, v);
+        copyVec2(v$2, body.c_velocity.v);
+        var w2 = body.c_velocity.w;
+        scaleVec2(translation, h2, v$2);
         var translationLengthSqr = lengthSqrVec2(translation);
         if (translationLengthSqr > SettingsInternal.maxTranslationSquared) {
           var ratio = SettingsInternal.maxTranslation / math_sqrt$3(translationLengthSqr);
-          mulVec2(v, ratio);
+          mulVec2(v$2, ratio);
         }
-        var rotation2 = h * w;
+        var rotation2 = h2 * w2;
         if (rotation2 * rotation2 > SettingsInternal.maxRotationSquared) {
           var ratio = SettingsInternal.maxRotation / math_abs$6(rotation2);
-          w *= ratio;
+          w2 *= ratio;
         }
-        plusScaleVec2(c, h, v);
-        a2 += h * w;
-        copyVec2(body.c_position.c, c);
+        plusScaleVec2(c$2, h2, v$2);
+        a2 += h2 * w2;
+        copyVec2(body.c_position.c, c$2);
         body.c_position.a = a2;
-        copyVec2(body.c_velocity.v, v);
-        body.c_velocity.w = w;
+        copyVec2(body.c_velocity.v, v$2);
+        body.c_velocity.w = w2;
       }
       var positionSolved = false;
-      for (var i = 0; i < step.positionIterations; ++i) {
+      for (var i2 = 0; i2 < step.positionIterations; ++i2) {
         var minSeparation = 0;
-        for (var j = 0; j < this.m_contacts.length; ++j) {
-          var contact = this.m_contacts[j];
+        for (var j2 = 0; j2 < this.m_contacts.length; ++j2) {
+          var contact = this.m_contacts[j2];
           var separation = contact.solvePositionConstraint(step);
           minSeparation = math_min$5(minSeparation, separation);
         }
         var contactsOkay = minSeparation >= -3 * SettingsInternal.linearSlop;
         var jointsOkay = true;
-        for (var j = 0; j < this.m_joints.length; ++j) {
-          var joint = this.m_joints[j];
+        for (var j2 = 0; j2 < this.m_joints.length; ++j2) {
+          var joint = this.m_joints[j2];
           var jointOkay = joint.solvePositionConstraints(step);
           jointsOkay = jointsOkay && jointOkay;
         }
@@ -4391,8 +4391,8 @@ var Solver = (
           break;
         }
       }
-      for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
+      for (var i2 = 0; i2 < this.m_bodies.length; ++i2) {
+        var body = this.m_bodies[i2];
         copyVec2(body.m_sweep.c, body.c_position.c);
         body.m_sweep.a = body.c_position.a;
         copyVec2(body.m_linearVelocity, body.c_velocity.v);
@@ -4404,8 +4404,8 @@ var Solver = (
         var minSleepTime = Infinity;
         var linTolSqr = SettingsInternal.linearSleepToleranceSqr;
         var angTolSqr = SettingsInternal.angularSleepToleranceSqr;
-        for (var i = 0; i < this.m_bodies.length; ++i) {
-          var body = this.m_bodies[i];
+        for (var i2 = 0; i2 < this.m_bodies.length; ++i2) {
+          var body = this.m_bodies[i2];
           if (body.isStatic()) {
             continue;
           }
@@ -4413,13 +4413,13 @@ var Solver = (
             body.m_sleepTime = 0;
             minSleepTime = 0;
           } else {
-            body.m_sleepTime += h;
+            body.m_sleepTime += h2;
             minSleepTime = math_min$5(minSleepTime, body.m_sleepTime);
           }
         }
         if (minSleepTime >= SettingsInternal.timeToSleep && positionSolved) {
-          for (var i = 0; i < this.m_bodies.length; ++i) {
-            var body = this.m_bodies[i];
+          for (var i2 = 0; i2 < this.m_bodies.length; ++i2) {
+            var body = this.m_bodies[i2];
             body.setAwake(false);
           }
         }
@@ -4533,8 +4533,8 @@ var Solver = (
         bB.m_islandFlag = true;
         minContact.m_islandFlag = true;
         var bodies = [bA, bB];
-        for (var i = 0; i < bodies.length; ++i) {
-          var body = bodies[i];
+        for (var i2 = 0; i2 < bodies.length; ++i2) {
+          var body = bodies[i2];
           if (body.isDynamic()) {
             for (var ce = body.m_contactList; ce; ce = ce.next) {
               var contact = ce.contact;
@@ -4579,8 +4579,8 @@ var Solver = (
         s_subStep.velocityIterations = step.velocityIterations;
         s_subStep.warmStarting = false;
         this.solveIslandTOI(s_subStep, bA, bB);
-        for (var i = 0; i < this.m_bodies.length; ++i) {
-          var body = this.m_bodies[i];
+        for (var i2 = 0; i2 < this.m_bodies.length; ++i2) {
+          var body = this.m_bodies[i2];
           body.m_islandFlag = false;
           if (!body.isDynamic()) {
             continue;
@@ -4599,21 +4599,21 @@ var Solver = (
       }
     };
     Solver2.prototype.solveIslandTOI = function(subStep, toiA, toiB) {
-      for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
+      for (var i2 = 0; i2 < this.m_bodies.length; ++i2) {
+        var body = this.m_bodies[i2];
         copyVec2(body.c_position.c, body.m_sweep.c);
         body.c_position.a = body.m_sweep.a;
         copyVec2(body.c_velocity.v, body.m_linearVelocity);
         body.c_velocity.w = body.m_angularVelocity;
       }
-      for (var i = 0; i < this.m_contacts.length; ++i) {
-        var contact = this.m_contacts[i];
+      for (var i2 = 0; i2 < this.m_contacts.length; ++i2) {
+        var contact = this.m_contacts[i2];
         contact.initConstraint(subStep);
       }
-      for (var i = 0; i < subStep.positionIterations; ++i) {
+      for (var i2 = 0; i2 < subStep.positionIterations; ++i2) {
         var minSeparation = 0;
-        for (var j = 0; j < this.m_contacts.length; ++j) {
-          var contact = this.m_contacts[j];
+        for (var j2 = 0; j2 < this.m_contacts.length; ++j2) {
+          var contact = this.m_contacts[j2];
           var separation = contact.solvePositionConstraintTOI(subStep, toiA, toiB);
           minSeparation = math_min$5(minSeparation, separation);
         }
@@ -4622,49 +4622,49 @@ var Solver = (
           break;
         }
       }
-      var i;
+      var i2;
       copyVec2(toiA.m_sweep.c0, toiA.c_position.c);
       toiA.m_sweep.a0 = toiA.c_position.a;
       copyVec2(toiB.m_sweep.c0, toiB.c_position.c);
       toiB.m_sweep.a0 = toiB.c_position.a;
-      for (var i = 0; i < this.m_contacts.length; ++i) {
-        var contact = this.m_contacts[i];
+      for (var i2 = 0; i2 < this.m_contacts.length; ++i2) {
+        var contact = this.m_contacts[i2];
         contact.initVelocityConstraint(subStep);
       }
-      for (var i = 0; i < subStep.velocityIterations; ++i) {
-        for (var j = 0; j < this.m_contacts.length; ++j) {
-          var contact = this.m_contacts[j];
+      for (var i2 = 0; i2 < subStep.velocityIterations; ++i2) {
+        for (var j2 = 0; j2 < this.m_contacts.length; ++j2) {
+          var contact = this.m_contacts[j2];
           contact.solveVelocityConstraint(subStep);
         }
       }
-      var h = subStep.dt;
-      for (var i = 0; i < this.m_bodies.length; ++i) {
-        var body = this.m_bodies[i];
-        copyVec2(c, body.c_position.c);
+      var h2 = subStep.dt;
+      for (var i2 = 0; i2 < this.m_bodies.length; ++i2) {
+        var body = this.m_bodies[i2];
+        copyVec2(c$2, body.c_position.c);
         var a2 = body.c_position.a;
-        copyVec2(v, body.c_velocity.v);
-        var w = body.c_velocity.w;
-        scaleVec2(translation, h, v);
+        copyVec2(v$2, body.c_velocity.v);
+        var w2 = body.c_velocity.w;
+        scaleVec2(translation, h2, v$2);
         var translationLengthSqr = lengthSqrVec2(translation);
         if (translationLengthSqr > SettingsInternal.maxTranslationSquared) {
           var ratio = SettingsInternal.maxTranslation / math_sqrt$3(translationLengthSqr);
-          mulVec2(v, ratio);
+          mulVec2(v$2, ratio);
         }
-        var rotation2 = h * w;
+        var rotation2 = h2 * w2;
         if (rotation2 * rotation2 > SettingsInternal.maxRotationSquared) {
           var ratio = SettingsInternal.maxRotation / math_abs$6(rotation2);
-          w *= ratio;
+          w2 *= ratio;
         }
-        plusScaleVec2(c, h, v);
-        a2 += h * w;
-        copyVec2(body.c_position.c, c);
+        plusScaleVec2(c$2, h2, v$2);
+        a2 += h2 * w2;
+        copyVec2(body.c_position.c, c$2);
         body.c_position.a = a2;
-        copyVec2(body.c_velocity.v, v);
-        body.c_velocity.w = w;
-        copyVec2(body.m_sweep.c, c);
+        copyVec2(body.c_velocity.v, v$2);
+        body.c_velocity.w = w2;
+        copyVec2(body.m_sweep.c, c$2);
         body.m_sweep.a = a2;
-        copyVec2(body.m_linearVelocity, v);
-        body.m_angularVelocity = w;
+        copyVec2(body.m_linearVelocity, v$2);
+        body.m_angularVelocity = w2;
         body.synchronizeTransform();
       }
       this.postSolveIsland();
@@ -4703,7 +4703,7 @@ var Mat22 = (
       }
       return Vec2.isValid(obj.ex) && Vec2.isValid(obj.ey);
     };
-    Mat222.assert = function(o) {
+    Mat222.assert = function(o2) {
     };
     Mat222.prototype.set = function(a2, b2, c2, d2) {
       if (typeof a2 === "number" && typeof b2 === "number" && typeof c2 === "number" && typeof d2 === "number") {
@@ -4754,16 +4754,16 @@ var Mat22 = (
       if (det !== 0) {
         det = 1 / det;
       }
-      var w = Vec2.zero();
-      w.x = det * (d2 * v3.x - b2 * v3.y);
-      w.y = det * (a2 * v3.y - c2 * v3.x);
-      return w;
+      var w2 = Vec2.zero();
+      w2.x = det * (d2 * v3.x - b2 * v3.y);
+      w2.y = det * (a2 * v3.y - c2 * v3.x);
+      return w2;
     };
     Mat222.mul = function(mx, v3) {
       if (v3 && "x" in v3 && "y" in v3) {
         var x2 = mx.ex.x * v3.x + mx.ey.x * v3.y;
-        var y = mx.ex.y * v3.x + mx.ey.y * v3.y;
-        return Vec2.neo(x2, y);
+        var y2 = mx.ex.y * v3.x + mx.ey.y * v3.y;
+        return Vec2.neo(x2, y2);
       } else if (v3 && "ex" in v3 && "ey" in v3) {
         var a2 = mx.ex.x * v3.ex.x + mx.ey.x * v3.ex.y;
         var b2 = mx.ex.x * v3.ey.x + mx.ey.x * v3.ey.y;
@@ -4774,8 +4774,8 @@ var Mat22 = (
     };
     Mat222.mulVec2 = function(mx, v3) {
       var x2 = mx.ex.x * v3.x + mx.ey.x * v3.y;
-      var y = mx.ex.y * v3.x + mx.ey.y * v3.y;
-      return Vec2.neo(x2, y);
+      var y2 = mx.ex.y * v3.x + mx.ey.y * v3.y;
+      return Vec2.neo(x2, y2);
     };
     Mat222.mulMat22 = function(mx, v3) {
       var a2 = mx.ex.x * v3.ex.x + mx.ey.x * v3.ex.y;
@@ -4846,9 +4846,9 @@ var ClipVertex = (
       this.v = vec2(0, 0);
       this.id = new ContactID();
     }
-    ClipVertex2.prototype.set = function(o) {
-      copyVec2(this.v, o.v);
-      this.id.set(o.id);
+    ClipVertex2.prototype.set = function(o2) {
+      copyVec2(this.v, o2.v);
+      this.id.set(o2.id);
     };
     ClipVertex2.prototype.recycle = function() {
       zeroVec2(this.v);
@@ -4895,8 +4895,8 @@ var Manifold = (
         case ManifoldType.e_circles: {
           setVec2(normal3, 1, 0);
           var manifoldPoint = this.points[0];
-          transformVec2(pointA$1, xfA2, this.localPoint);
-          transformVec2(pointB$1, xfB2, manifoldPoint.localPoint);
+          transformVec2$1(pointA$1, xfA2, this.localPoint);
+          transformVec2$1(pointB$1, xfB2, manifoldPoint.localPoint);
           subVec2(dist, pointB$1, pointA$1);
           var lengthSqr = lengthSqrVec2(dist);
           if (lengthSqr > EPSILON * EPSILON) {
@@ -4911,27 +4911,27 @@ var Manifold = (
         }
         case ManifoldType.e_faceA: {
           rotVec2(normal3, xfA2.q, this.localNormal);
-          transformVec2(planePoint$2, xfA2, this.localPoint);
-          for (var i = 0; i < this.pointCount; ++i) {
-            var manifoldPoint = this.points[i];
-            transformVec2(clipPoint$1, xfB2, manifoldPoint.localPoint);
+          transformVec2$1(planePoint$2, xfA2, this.localPoint);
+          for (var i2 = 0; i2 < this.pointCount; ++i2) {
+            var manifoldPoint = this.points[i2];
+            transformVec2$1(clipPoint$1, xfB2, manifoldPoint.localPoint);
             combine2Vec2(cA$1, 1, clipPoint$1, radiusA - dotVec2(subVec2(temp$3, clipPoint$1, planePoint$2), normal3), normal3);
             combine2Vec2(cB$1, 1, clipPoint$1, -radiusB, normal3);
-            combine2Vec2(points[i], 0.5, cA$1, 0.5, cB$1);
-            separations[i] = dotVec2(subVec2(temp$3, cB$1, cA$1), normal3);
+            combine2Vec2(points[i2], 0.5, cA$1, 0.5, cB$1);
+            separations[i2] = dotVec2(subVec2(temp$3, cB$1, cA$1), normal3);
           }
           break;
         }
         case ManifoldType.e_faceB: {
           rotVec2(normal3, xfB2.q, this.localNormal);
-          transformVec2(planePoint$2, xfB2, this.localPoint);
-          for (var i = 0; i < this.pointCount; ++i) {
-            var manifoldPoint = this.points[i];
-            transformVec2(clipPoint$1, xfA2, manifoldPoint.localPoint);
+          transformVec2$1(planePoint$2, xfB2, this.localPoint);
+          for (var i2 = 0; i2 < this.pointCount; ++i2) {
+            var manifoldPoint = this.points[i2];
+            transformVec2$1(clipPoint$1, xfA2, manifoldPoint.localPoint);
             combine2Vec2(cB$1, 1, clipPoint$1, radiusB - dotVec2(subVec2(temp$3, clipPoint$1, planePoint$2), normal3), normal3);
             combine2Vec2(cA$1, 1, clipPoint$1, -radiusA, normal3);
-            combine2Vec2(points[i], 0.5, cA$1, 0.5, cB$1);
-            separations[i] = dotVec2(subVec2(temp$3, cA$1, cB$1), normal3);
+            combine2Vec2(points[i2], 0.5, cA$1, 0.5, cB$1);
+            separations[i2] = dotVec2(subVec2(temp$3, cA$1, cB$1), normal3);
           }
           negVec2(normal3);
           break;
@@ -5036,22 +5036,22 @@ var WorldManifold = (
   })()
 );
 function getPointStates(state1, state2, manifold1, manifold2) {
-  for (var i = 0; i < manifold1.pointCount; ++i) {
-    var id = manifold1.points[i].id;
-    state1[i] = PointState.removeState;
-    for (var j = 0; j < manifold2.pointCount; ++j) {
-      if (manifold2.points[j].id.key === id.key) {
-        state1[i] = PointState.persistState;
+  for (var i2 = 0; i2 < manifold1.pointCount; ++i2) {
+    var id = manifold1.points[i2].id;
+    state1[i2] = PointState.removeState;
+    for (var j2 = 0; j2 < manifold2.pointCount; ++j2) {
+      if (manifold2.points[j2].id.key === id.key) {
+        state1[i2] = PointState.persistState;
         break;
       }
     }
   }
-  for (var i = 0; i < manifold2.pointCount; ++i) {
-    var id = manifold2.points[i].id;
-    state2[i] = PointState.addState;
-    for (var j = 0; j < manifold1.pointCount; ++j) {
-      if (manifold1.points[j].id.key === id.key) {
-        state2[i] = PointState.persistState;
+  for (var i2 = 0; i2 < manifold2.pointCount; ++i2) {
+    var id = manifold2.points[i2].id;
+    state2[i2] = PointState.addState;
+    for (var j2 = 0; j2 < manifold1.pointCount; ++j2) {
+      if (manifold1.points[j2].id.key === id.key) {
+        state2[i2] = PointState.persistState;
         break;
       }
     }
@@ -5153,10 +5153,10 @@ var point = vec2(0, 0);
 var dv = vec2(0, 0);
 var dv1 = vec2(0, 0);
 var dv2 = vec2(0, 0);
-var b = vec2(0, 0);
-var a = vec2(0, 0);
-var x = vec2(0, 0);
-var d = vec2(0, 0);
+var b$2 = vec2(0, 0);
+var a$2 = vec2(0, 0);
+var x$2 = vec2(0, 0);
+var d$2 = vec2(0, 0);
 var P1 = vec2(0, 0);
 var P2 = vec2(0, 0);
 var temp$2 = vec2(0, 0);
@@ -5313,18 +5313,18 @@ var Contact = (
       copyVec2(this.p_localNormal, manifold.localNormal);
       copyVec2(this.p_localPoint, manifold.localPoint);
       this.p_pointCount = pointCount;
-      for (var j = 0; j < SettingsInternal.maxManifoldPoints; ++j) {
-        this.v_points[j].recycle();
-        zeroVec2(this.p_localPoints[j]);
+      for (var j2 = 0; j2 < SettingsInternal.maxManifoldPoints; ++j2) {
+        this.v_points[j2].recycle();
+        zeroVec2(this.p_localPoints[j2]);
       }
-      for (var j = 0; j < pointCount; ++j) {
-        var cp = manifold.points[j];
-        var vcp = this.v_points[j];
+      for (var j2 = 0; j2 < pointCount; ++j2) {
+        var cp = manifold.points[j2];
+        var vcp = this.v_points[j2];
         if (step.warmStarting) {
           vcp.normalImpulse = step.dtRatio * cp.normalImpulse;
           vcp.tangentImpulse = step.dtRatio * cp.tangentImpulse;
         }
-        copyVec2(this.p_localPoints[j], cp.localPoint);
+        copyVec2(this.p_localPoints[j2], cp.localPoint);
       }
     };
     Contact2.prototype.getManifold = function() {
@@ -5441,12 +5441,12 @@ var Contact = (
         this.m_manifold.recycle();
         this.evaluate(this.m_manifold, xfA2, xfB2);
         touching = this.m_manifold.pointCount > 0;
-        for (var i = 0; i < this.m_manifold.pointCount; ++i) {
-          var nmp = this.m_manifold.points[i];
+        for (var i2 = 0; i2 < this.m_manifold.pointCount; ++i2) {
+          var nmp = this.m_manifold.points[i2];
           nmp.normalImpulse = 0;
           nmp.tangentImpulse = 0;
-          for (var j = 0; j < oldManifold.pointCount; ++j) {
-            var omp = oldManifold.points[j];
+          for (var j2 = 0; j2 < oldManifold.pointCount; ++j2) {
+            var omp = oldManifold.points[j2];
             if (omp.id.key === nmp.id.key) {
               nmp.normalImpulse = omp.normalImpulse;
               nmp.tangentImpulse = omp.tangentImpulse;
@@ -5508,14 +5508,14 @@ var Contact = (
       var aA = positionA.a;
       copyVec2(cB, positionB.c);
       var aB = positionB.a;
-      for (var j = 0; j < this.p_pointCount; ++j) {
+      for (var j2 = 0; j2 < this.p_pointCount; ++j2) {
         getTransform(xfA, localCenterA, cA, aA);
         getTransform(xfB, localCenterB, cB, aB);
         var separation = void 0;
         switch (this.p_type) {
           case ManifoldType.e_circles: {
-            transformVec2(pointA, xfA, this.p_localPoint);
-            transformVec2(pointB, xfB, this.p_localPoints[0]);
+            transformVec2$1(pointA, xfA, this.p_localPoint);
+            transformVec2$1(pointB, xfB, this.p_localPoints[0]);
             subVec2(normal$2, pointB, pointA);
             normalizeVec2(normal$2);
             combine2Vec2(point, 0.5, pointA, 0.5, pointB);
@@ -5524,16 +5524,16 @@ var Contact = (
           }
           case ManifoldType.e_faceA: {
             rotVec2(normal$2, xfA.q, this.p_localNormal);
-            transformVec2(planePoint$1, xfA, this.p_localPoint);
-            transformVec2(clipPoint, xfB, this.p_localPoints[j]);
+            transformVec2$1(planePoint$1, xfA, this.p_localPoint);
+            transformVec2$1(clipPoint, xfB, this.p_localPoints[j2]);
             separation = dotVec2(clipPoint, normal$2) - dotVec2(planePoint$1, normal$2) - this.p_radiusA - this.p_radiusB;
             copyVec2(point, clipPoint);
             break;
           }
           case ManifoldType.e_faceB: {
             rotVec2(normal$2, xfB.q, this.p_localNormal);
-            transformVec2(planePoint$1, xfB, this.p_localPoint);
-            transformVec2(clipPoint, xfA, this.p_localPoints[j]);
+            transformVec2$1(planePoint$1, xfB, this.p_localPoint);
+            transformVec2$1(clipPoint, xfA, this.p_localPoints[j2]);
             separation = dotVec2(clipPoint, normal$2) - dotVec2(planePoint$1, normal$2) - this.p_radiusA - this.p_radiusB;
             copyVec2(point, clipPoint);
             negVec2(normal$2);
@@ -5550,11 +5550,11 @@ var Contact = (
         var baumgarte = toi ? SettingsInternal.toiBaugarte : SettingsInternal.baumgarte;
         var linearSlop = SettingsInternal.linearSlop;
         var maxLinearCorrection = SettingsInternal.maxLinearCorrection;
-        var C = clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0);
+        var C2 = clamp(baumgarte * (separation + linearSlop), -maxLinearCorrection, 0);
         var rnA = crossVec2Vec2(rA, normal$2);
         var rnB = crossVec2Vec2(rB, normal$2);
         var K = mA + mB + iA * rnA * rnA + iB * rnB * rnB;
-        var impulse = K > 0 ? -C / K : 0;
+        var impulse = K > 0 ? -C2 / K : 0;
         scaleVec2(P$1, impulse, normal$2);
         minusScaleVec2(cA, mA, P$1);
         aA -= iA * crossVec2Vec2(rA, P$1);
@@ -5602,9 +5602,9 @@ var Contact = (
       worldManifold.recycle();
       manifold.getWorldManifold(worldManifold, xfA, radiusA, xfB, radiusB);
       copyVec2(this.v_normal, worldManifold.normal);
-      for (var j = 0; j < this.v_pointCount; ++j) {
-        var vcp = this.v_points[j];
-        var wmp = worldManifold.points[j];
+      for (var j2 = 0; j2 < this.v_pointCount; ++j2) {
+        var vcp = this.v_points[j2];
+        var wmp = worldManifold.points[j2];
         subVec2(vcp.rA, wmp, cA);
         subVec2(vcp.rB, wmp, cB);
         var rnA = crossVec2Vec2(vcp.rA, this.v_normal);
@@ -5686,8 +5686,8 @@ var Contact = (
       var wB = velocityB.w;
       copyVec2(normal$2, this.v_normal);
       crossVec2Num(tangent$1, normal$2, 1);
-      for (var j = 0; j < this.v_pointCount; ++j) {
-        var vcp = this.v_points[j];
+      for (var j2 = 0; j2 < this.v_pointCount; ++j2) {
+        var vcp = this.v_points[j2];
         combine2Vec2(P$1, vcp.normalImpulse, normal$2, vcp.tangentImpulse, tangent$1);
         wA -= iA * crossVec2Vec2(vcp.rA, P$1);
         minusScaleVec2(vA, mA, P$1);
@@ -5701,9 +5701,9 @@ var Contact = (
     };
     Contact2.prototype.storeConstraintImpulses = function(step) {
       var manifold = this.m_manifold;
-      for (var j = 0; j < this.v_pointCount; ++j) {
-        manifold.points[j].normalImpulse = this.v_points[j].normalImpulse;
-        manifold.points[j].tangentImpulse = this.v_points[j].tangentImpulse;
+      for (var j2 = 0; j2 < this.v_pointCount; ++j2) {
+        manifold.points[j2].normalImpulse = this.v_points[j2].normalImpulse;
+        manifold.points[j2].tangentImpulse = this.v_points[j2].tangentImpulse;
       }
     };
     Contact2.prototype.solveVelocityConstraint = function(step) {
@@ -5728,8 +5728,8 @@ var Contact = (
       copyVec2(normal$2, this.v_normal);
       crossVec2Num(tangent$1, normal$2, 1);
       var friction = this.v_friction;
-      for (var j = 0; j < this.v_pointCount; ++j) {
-        var vcp = this.v_points[j];
+      for (var j2 = 0; j2 < this.v_pointCount; ++j2) {
+        var vcp = this.v_points[j2];
         zeroVec2(dv);
         plusVec2(dv, vB);
         plusVec2(dv, crossNumVec2(temp$2, wB, vcp.rB));
@@ -5748,8 +5748,8 @@ var Contact = (
         wB += iB * crossVec2Vec2(vcp.rB, P$1);
       }
       if (this.v_pointCount == 1 || step.blockSolve == false) {
-        for (var i = 0; i < this.v_pointCount; ++i) {
-          var vcp = this.v_points[i];
+        for (var i2 = 0; i2 < this.v_pointCount; ++i2) {
+          var vcp = this.v_points[i2];
           zeroVec2(dv);
           plusVec2(dv, vB);
           plusVec2(dv, crossNumVec2(temp$2, wB, vcp.rB));
@@ -5769,7 +5769,7 @@ var Contact = (
       } else {
         var vcp1 = this.v_points[0];
         var vcp2 = this.v_points[1];
-        setVec2(a, vcp1.normalImpulse, vcp2.normalImpulse);
+        setVec2(a$2, vcp1.normalImpulse, vcp2.normalImpulse);
         zeroVec2(dv1);
         plusVec2(dv1, vB);
         plusVec2(dv1, crossNumVec2(temp$2, wB, vcp1.rB));
@@ -5782,71 +5782,71 @@ var Contact = (
         minusVec2(dv2, crossNumVec2(temp$2, wA, vcp2.rA));
         var vn1 = dotVec2(dv1, normal$2);
         var vn2 = dotVec2(dv2, normal$2);
-        setVec2(b, vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
-        b.x -= this.v_K.ex.x * a.x + this.v_K.ey.x * a.y;
-        b.y -= this.v_K.ex.y * a.x + this.v_K.ey.y * a.y;
+        setVec2(b$2, vn1 - vcp1.velocityBias, vn2 - vcp2.velocityBias);
+        b$2.x -= this.v_K.ex.x * a$2.x + this.v_K.ey.x * a$2.y;
+        b$2.y -= this.v_K.ex.y * a$2.x + this.v_K.ey.y * a$2.y;
         while (true) {
-          zeroVec2(x);
-          x.x = -(this.v_normalMass.ex.x * b.x + this.v_normalMass.ey.x * b.y);
-          x.y = -(this.v_normalMass.ex.y * b.x + this.v_normalMass.ey.y * b.y);
-          if (x.x >= 0 && x.y >= 0) {
-            subVec2(d, x, a);
-            scaleVec2(P1, d.x, normal$2);
-            scaleVec2(P2, d.y, normal$2);
+          zeroVec2(x$2);
+          x$2.x = -(this.v_normalMass.ex.x * b$2.x + this.v_normalMass.ey.x * b$2.y);
+          x$2.y = -(this.v_normalMass.ex.y * b$2.x + this.v_normalMass.ey.y * b$2.y);
+          if (x$2.x >= 0 && x$2.y >= 0) {
+            subVec2(d$2, x$2, a$2);
+            scaleVec2(P1, d$2.x, normal$2);
+            scaleVec2(P2, d$2.y, normal$2);
             combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
             wA -= iA * (crossVec2Vec2(vcp1.rA, P1) + crossVec2Vec2(vcp2.rA, P2));
             combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
             wB += iB * (crossVec2Vec2(vcp1.rB, P1) + crossVec2Vec2(vcp2.rB, P2));
-            vcp1.normalImpulse = x.x;
-            vcp2.normalImpulse = x.y;
+            vcp1.normalImpulse = x$2.x;
+            vcp2.normalImpulse = x$2.y;
             break;
           }
-          x.x = -vcp1.normalMass * b.x;
-          x.y = 0;
+          x$2.x = -vcp1.normalMass * b$2.x;
+          x$2.y = 0;
           vn1 = 0;
-          vn2 = this.v_K.ex.y * x.x + b.y;
-          if (x.x >= 0 && vn2 >= 0) {
-            subVec2(d, x, a);
-            scaleVec2(P1, d.x, normal$2);
-            scaleVec2(P2, d.y, normal$2);
+          vn2 = this.v_K.ex.y * x$2.x + b$2.y;
+          if (x$2.x >= 0 && vn2 >= 0) {
+            subVec2(d$2, x$2, a$2);
+            scaleVec2(P1, d$2.x, normal$2);
+            scaleVec2(P2, d$2.y, normal$2);
             combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
             wA -= iA * (crossVec2Vec2(vcp1.rA, P1) + crossVec2Vec2(vcp2.rA, P2));
             combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
             wB += iB * (crossVec2Vec2(vcp1.rB, P1) + crossVec2Vec2(vcp2.rB, P2));
-            vcp1.normalImpulse = x.x;
-            vcp2.normalImpulse = x.y;
+            vcp1.normalImpulse = x$2.x;
+            vcp2.normalImpulse = x$2.y;
             break;
           }
-          x.x = 0;
-          x.y = -vcp2.normalMass * b.y;
-          vn1 = this.v_K.ey.x * x.y + b.x;
+          x$2.x = 0;
+          x$2.y = -vcp2.normalMass * b$2.y;
+          vn1 = this.v_K.ey.x * x$2.y + b$2.x;
           vn2 = 0;
-          if (x.y >= 0 && vn1 >= 0) {
-            subVec2(d, x, a);
-            scaleVec2(P1, d.x, normal$2);
-            scaleVec2(P2, d.y, normal$2);
+          if (x$2.y >= 0 && vn1 >= 0) {
+            subVec2(d$2, x$2, a$2);
+            scaleVec2(P1, d$2.x, normal$2);
+            scaleVec2(P2, d$2.y, normal$2);
             combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
             wA -= iA * (crossVec2Vec2(vcp1.rA, P1) + crossVec2Vec2(vcp2.rA, P2));
             combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
             wB += iB * (crossVec2Vec2(vcp1.rB, P1) + crossVec2Vec2(vcp2.rB, P2));
-            vcp1.normalImpulse = x.x;
-            vcp2.normalImpulse = x.y;
+            vcp1.normalImpulse = x$2.x;
+            vcp2.normalImpulse = x$2.y;
             break;
           }
-          x.x = 0;
-          x.y = 0;
-          vn1 = b.x;
-          vn2 = b.y;
+          x$2.x = 0;
+          x$2.y = 0;
+          vn1 = b$2.x;
+          vn2 = b$2.y;
           if (vn1 >= 0 && vn2 >= 0) {
-            subVec2(d, x, a);
-            scaleVec2(P1, d.x, normal$2);
-            scaleVec2(P2, d.y, normal$2);
+            subVec2(d$2, x$2, a$2);
+            scaleVec2(P1, d$2.x, normal$2);
+            scaleVec2(P2, d$2.y, normal$2);
             combine3Vec2(vA, -mA, P1, -mA, P2, 1, vA);
             wA -= iA * (crossVec2Vec2(vcp1.rA, P1) + crossVec2Vec2(vcp2.rA, P2));
             combine3Vec2(vB, mB, P1, mB, P2, 1, vB);
             wB += iB * (crossVec2Vec2(vcp1.rB, P1) + crossVec2Vec2(vcp2.rB, P2));
-            vcp1.normalImpulse = x.x;
-            vcp2.normalImpulse = x.y;
+            vcp1.normalImpulse = x$2.x;
+            vcp2.normalImpulse = x$2.y;
             break;
           }
           break;
@@ -5993,9 +5993,9 @@ var World = (
       for (var b2 = this.getBodyList(); b2; b2 = b2.getNext()) {
         bodies.push(b2);
       }
-      for (var j = this.getJointList(); j; j = j.getNext()) {
-        if (typeof j._serialize === "function") {
-          joints.push(j);
+      for (var j2 = this.getJointList(); j2; j2 = j2.getNext()) {
+        if (typeof j2._serialize === "function") {
+          joints.push(j2);
         }
       }
       return {
@@ -6010,13 +6010,13 @@ var World = (
       }
       var world = new World2(data.gravity);
       if (data.bodies) {
-        for (var i = data.bodies.length - 1; i >= 0; i -= 1) {
-          world._addBody(restore(Body, data.bodies[i], world));
+        for (var i2 = data.bodies.length - 1; i2 >= 0; i2 -= 1) {
+          world._addBody(restore(Body, data.bodies[i2], world));
         }
       }
       if (data.joints) {
-        for (var i = data.joints.length - 1; i >= 0; i--) {
-          world.createJoint(restore(Joint, data.joints[i], world));
+        for (var i2 = data.joints.length - 1; i2 >= 0; i2--) {
+          world.createJoint(restore(Joint, data.joints[i2], world));
         }
       }
       return world;
@@ -6140,8 +6140,8 @@ var World = (
         b2.m_sweep.c0.sub(newOrigin);
         b2.m_sweep.c.sub(newOrigin);
       }
-      for (var j = this.m_jointList; j; j = j.m_next) {
-        j.shiftOrigin(newOrigin);
+      for (var j2 = this.m_jointList; j2; j2 = j2.m_next) {
+        j2.shiftOrigin(newOrigin);
       }
       this.m_broadPhase.shiftOrigin(newOrigin);
     };
@@ -6219,13 +6219,13 @@ var World = (
         b2.m_contactList = ce;
       }
       b2.m_contactList = null;
-      var f = b2.m_fixtureList;
-      while (f) {
-        var f0 = f;
-        f = f.m_next;
+      var f2 = b2.m_fixtureList;
+      while (f2) {
+        var f0 = f2;
+        f2 = f2.m_next;
         this.publish("remove-fixture", f0);
         f0.destroyProxies(this.m_broadPhase);
-        b2.m_fixtureList = f;
+        b2.m_fixtureList = f2;
       }
       b2.m_fixtureList = null;
       if (b2.m_prev) {
@@ -6511,8 +6511,8 @@ var World = (
       if (!listeners || !listeners.length) {
         return 0;
       }
-      for (var l = 0; l < listeners.length; l++) {
-        listeners[l].call(this, arg1, arg2, arg3);
+      for (var l2 = 0; l2 < listeners.length; l2++) {
+        listeners[l2].call(this, arg1, arg2, arg3);
       }
       return listeners.length;
     };
@@ -6534,9 +6534,9 @@ var World = (
 var Vec3 = (
   /** @class */
   (function() {
-    function Vec32(x2, y, z) {
+    function Vec32(x2, y2, z2) {
       if (!(this instanceof Vec32)) {
-        return new Vec32(x2, y, z);
+        return new Vec32(x2, y2, z2);
       }
       if (typeof x2 === "undefined") {
         this.x = 0;
@@ -6548,8 +6548,8 @@ var Vec3 = (
         this.z = x2.z;
       } else {
         this.x = x2;
-        this.y = y;
-        this.z = z;
+        this.y = y2;
+        this.z = z2;
       }
     }
     Vec32.prototype._serialize = function() {
@@ -6566,11 +6566,11 @@ var Vec3 = (
       obj.z = data.z;
       return obj;
     };
-    Vec32.neo = function(x2, y, z) {
+    Vec32.neo = function(x2, y2, z2) {
       var obj = Object.create(Vec32.prototype);
       obj.x = x2;
-      obj.y = y;
-      obj.z = z;
+      obj.y = y2;
+      obj.z = z2;
       return obj;
     };
     Vec32.zero = function() {
@@ -6592,7 +6592,7 @@ var Vec3 = (
       }
       return Number.isFinite(obj.x) && Number.isFinite(obj.y) && Number.isFinite(obj.z);
     };
-    Vec32.assert = function(o) {
+    Vec32.assert = function(o2) {
     };
     Vec32.prototype.setZero = function() {
       this.x = 0;
@@ -6600,47 +6600,47 @@ var Vec3 = (
       this.z = 0;
       return this;
     };
-    Vec32.prototype.set = function(x2, y, z) {
+    Vec32.prototype.set = function(x2, y2, z2) {
       this.x = x2;
-      this.y = y;
-      this.z = z;
+      this.y = y2;
+      this.z = z2;
       return this;
     };
-    Vec32.prototype.add = function(w) {
-      this.x += w.x;
-      this.y += w.y;
-      this.z += w.z;
+    Vec32.prototype.add = function(w2) {
+      this.x += w2.x;
+      this.y += w2.y;
+      this.z += w2.z;
       return this;
     };
-    Vec32.prototype.sub = function(w) {
-      this.x -= w.x;
-      this.y -= w.y;
-      this.z -= w.z;
+    Vec32.prototype.sub = function(w2) {
+      this.x -= w2.x;
+      this.y -= w2.y;
+      this.z -= w2.z;
       return this;
     };
-    Vec32.prototype.mul = function(m) {
-      this.x *= m;
-      this.y *= m;
-      this.z *= m;
+    Vec32.prototype.mul = function(m2) {
+      this.x *= m2;
+      this.y *= m2;
+      this.z *= m2;
       return this;
     };
-    Vec32.areEqual = function(v3, w) {
-      return v3 === w || typeof v3 === "object" && v3 !== null && typeof w === "object" && w !== null && v3.x === w.x && v3.y === w.y && v3.z === w.z;
+    Vec32.areEqual = function(v3, w2) {
+      return v3 === w2 || typeof v3 === "object" && v3 !== null && typeof w2 === "object" && w2 !== null && v3.x === w2.x && v3.y === w2.y && v3.z === w2.z;
     };
-    Vec32.dot = function(v3, w) {
-      return v3.x * w.x + v3.y * w.y + v3.z * w.z;
+    Vec32.dot = function(v3, w2) {
+      return v3.x * w2.x + v3.y * w2.y + v3.z * w2.z;
     };
-    Vec32.cross = function(v3, w) {
-      return new Vec32(v3.y * w.z - v3.z * w.y, v3.z * w.x - v3.x * w.z, v3.x * w.y - v3.y * w.x);
+    Vec32.cross = function(v3, w2) {
+      return new Vec32(v3.y * w2.z - v3.z * w2.y, v3.z * w2.x - v3.x * w2.z, v3.x * w2.y - v3.y * w2.x);
     };
-    Vec32.add = function(v3, w) {
-      return new Vec32(v3.x + w.x, v3.y + w.y, v3.z + w.z);
+    Vec32.add = function(v3, w2) {
+      return new Vec32(v3.x + w2.x, v3.y + w2.y, v3.z + w2.z);
     };
-    Vec32.sub = function(v3, w) {
-      return new Vec32(v3.x - w.x, v3.y - w.y, v3.z - w.z);
+    Vec32.sub = function(v3, w2) {
+      return new Vec32(v3.x - w2.x, v3.y - w2.y, v3.z - w2.z);
     };
-    Vec32.mul = function(v3, m) {
-      return new Vec32(m * v3.x, m * v3.y, m * v3.z);
+    Vec32.mul = function(v3, m2) {
+      return new Vec32(m2 * v3.x, m2 * v3.y, m2 * v3.z);
     };
     Vec32.prototype.neg = function() {
       this.x = -this.x;
@@ -6757,7 +6757,7 @@ var EdgeShape = (
     EdgeShape2.prototype.getChildCount = function() {
       return 1;
     };
-    EdgeShape2.prototype.testPoint = function(xf2, p) {
+    EdgeShape2.prototype.testPoint = function(xf2, p2) {
       return false;
     };
     EdgeShape2.prototype.rayCast = function(output2, input2, xf2, childIndex) {
@@ -6774,21 +6774,21 @@ var EdgeShape = (
       if (denominator == 0) {
         return false;
       }
-      var t = numerator / denominator;
-      if (t < 0 || input2.maxFraction < t) {
+      var t2 = numerator / denominator;
+      if (t2 < 0 || input2.maxFraction < t2) {
         return false;
       }
-      var q = Vec2.add(p1, Vec2.mulNumVec2(t, d2));
-      var r = Vec2.sub(v22, v122);
-      var rr = Vec2.dot(r, r);
+      var q2 = Vec2.add(p1, Vec2.mulNumVec2(t2, d2));
+      var r2 = Vec2.sub(v22, v122);
+      var rr = Vec2.dot(r2, r2);
       if (rr == 0) {
         return false;
       }
-      var s2 = Vec2.dot(Vec2.sub(q, v122), r) / rr;
+      var s2 = Vec2.dot(Vec2.sub(q2, v122), r2) / rr;
       if (s2 < 0 || 1 < s2) {
         return false;
       }
-      output2.fraction = t;
+      output2.fraction = t2;
       if (numerator > 0) {
         output2.normal = Rot.mulVec2(xf2.q, normal3).neg();
       } else {
@@ -6797,8 +6797,8 @@ var EdgeShape = (
       return true;
     };
     EdgeShape2.prototype.computeAABB = function(aabb, xf2, childIndex) {
-      transformVec2(v1$2, xf2, this.m_vertex1);
-      transformVec2(v2$1, xf2, this.m_vertex2);
+      transformVec2$1(v1$2, xf2, this.m_vertex1);
+      transformVec2$1(v2$1, xf2, this.m_vertex2);
       AABB.combinePoints(aabb, v1$2, v2$1);
       AABB.extend(aabb, this.m_radius);
     };
@@ -6869,8 +6869,8 @@ var ChainShape = (
     ChainShape2._deserialize = function(data, fixture, restore) {
       var vertices = [];
       if (data.vertices) {
-        for (var i = 0; i < data.vertices.length; i++) {
-          vertices.push(data.vertices[i]);
+        for (var i2 = 0; i2 < data.vertices.length; i2++) {
+          vertices.push(data.vertices[i2]);
         }
       }
       var shape = new ChainShape2(vertices, data.isLoop);
@@ -6892,11 +6892,11 @@ var ChainShape = (
       if (vertices.length < 3) {
         return;
       }
-      var i;
+      var i2;
       this.m_vertices = [];
       this.m_count = vertices.length + 1;
-      for (var i = 0; i < vertices.length; ++i) {
-        this.m_vertices[i] = Vec2.clone(vertices[i]);
+      for (var i2 = 0; i2 < vertices.length; ++i2) {
+        this.m_vertices[i2] = Vec2.clone(vertices[i2]);
       }
       this.m_vertices[vertices.length] = Vec2.clone(vertices[0]);
       this.m_prevVertex = this.m_vertices[this.m_count - 2];
@@ -6906,11 +6906,11 @@ var ChainShape = (
       return this;
     };
     ChainShape2.prototype._createChain = function(vertices) {
-      var i;
+      var i2;
       this.m_vertices = [];
       this.m_count = vertices.length;
-      for (var i = 0; i < vertices.length; ++i) {
-        this.m_vertices[i] = Vec2.clone(vertices[i]);
+      for (var i2 = 0; i2 < vertices.length; ++i2) {
+        this.m_vertices[i2] = Vec2.clone(vertices[i2]);
       }
       this.m_prevVertex = null;
       this.m_nextVertex = null;
@@ -6983,7 +6983,7 @@ var ChainShape = (
     ChainShape2.prototype.isLoop = function() {
       return this.m_isLoop;
     };
-    ChainShape2.prototype.testPoint = function(xf2, p) {
+    ChainShape2.prototype.testPoint = function(xf2, p2) {
       return false;
     };
     ChainShape2.prototype.rayCast = function(output2, input2, xf2, childIndex) {
@@ -6991,8 +6991,8 @@ var ChainShape = (
       return edgeShape.rayCast(output2, input2, xf2, 0);
     };
     ChainShape2.prototype.computeAABB = function(aabb, xf2, childIndex) {
-      transformVec2(v1$1, xf2, this.getVertex(childIndex));
-      transformVec2(v2, xf2, this.getVertex(childIndex + 1));
+      transformVec2$1(v1$1, xf2, this.getVertex(childIndex));
+      transformVec2$1(v2, xf2, this.getVertex(childIndex + 1));
       AABB.combinePoints(aabb, v1$1, v2);
     };
     ChainShape2.prototype.computeMass = function(massData, density) {
@@ -7013,11 +7013,11 @@ var ChainShape = (
 var math_max$1 = Math.max;
 var math_min$3 = Math.min;
 var temp$1 = vec2(0, 0);
-var e$1 = vec2(0, 0);
+var e$1$1 = vec2(0, 0);
 var e1$1 = vec2(0, 0);
 var e2$1 = vec2(0, 0);
 var center = vec2(0, 0);
-var s = vec2(0, 0);
+var s$2 = vec2(0, 0);
 var PolygonShape = (
   /** @class */
   (function(_super) {
@@ -7048,8 +7048,8 @@ var PolygonShape = (
     PolygonShape2._deserialize = function(data, fixture, restore) {
       var vertices = [];
       if (data.vertices) {
-        for (var i = 0; i < data.vertices.length; i++) {
-          vertices.push(data.vertices[i]);
+        for (var i2 = 0; i2 < data.vertices.length; i2++) {
+          vertices.push(data.vertices[i2]);
         }
       }
       var shape = new PolygonShape2(vertices);
@@ -7067,11 +7067,11 @@ var PolygonShape = (
       clone.m_radius = this.m_radius;
       clone.m_count = this.m_count;
       clone.m_centroid.setVec2(this.m_centroid);
-      for (var i = 0; i < this.m_count; i++) {
-        clone.m_vertices.push(this.m_vertices[i].clone());
+      for (var i2 = 0; i2 < this.m_count; i2++) {
+        clone.m_vertices.push(this.m_vertices[i2].clone());
       }
-      for (var i = 0; i < this.m_normals.length; i++) {
-        clone.m_normals.push(this.m_normals[i].clone());
+      for (var i2 = 0; i2 < this.m_normals.length; i2++) {
+        clone.m_normals.push(this.m_normals[i2].clone());
       }
       return clone;
     };
@@ -7088,11 +7088,11 @@ var PolygonShape = (
       }
       var n2 = math_min$3(vertices.length, SettingsInternal.maxPolygonVertices);
       var ps = [];
-      for (var i = 0; i < n2; ++i) {
-        var v3 = vertices[i];
+      for (var i2 = 0; i2 < n2; ++i2) {
+        var v3 = vertices[i2];
         var unique = true;
-        for (var j = 0; j < ps.length; ++j) {
-          if (Vec2.distanceSquared(v3, ps[j]) < 0.25 * SettingsInternal.linearSlopSquared) {
+        for (var j2 = 0; j2 < ps.length; ++j2) {
+          if (Vec2.distanceSquared(v3, ps[j2]) < 0.25 * SettingsInternal.linearSlopSquared) {
             unique = false;
             break;
           }
@@ -7108,57 +7108,57 @@ var PolygonShape = (
       }
       var i0 = 0;
       var x0 = ps[0].x;
-      for (var i = 1; i < n2; ++i) {
-        var x2 = ps[i].x;
-        if (x2 > x0 || x2 === x0 && ps[i].y < ps[i0].y) {
-          i0 = i;
+      for (var i2 = 1; i2 < n2; ++i2) {
+        var x2 = ps[i2].x;
+        if (x2 > x0 || x2 === x0 && ps[i2].y < ps[i0].y) {
+          i0 = i2;
           x0 = x2;
         }
       }
       var hull = [];
-      var m = 0;
+      var m2 = 0;
       var ih = i0;
       while (true) {
-        hull[m] = ih;
+        hull[m2] = ih;
         var ie2 = 0;
-        for (var j = 1; j < n2; ++j) {
+        for (var j2 = 1; j2 < n2; ++j2) {
           if (ie2 === ih) {
-            ie2 = j;
+            ie2 = j2;
             continue;
           }
-          var r = Vec2.sub(ps[ie2], ps[hull[m]]);
-          var v3 = Vec2.sub(ps[j], ps[hull[m]]);
-          var c2 = Vec2.crossVec2Vec2(r, v3);
+          var r2 = Vec2.sub(ps[ie2], ps[hull[m2]]);
+          var v3 = Vec2.sub(ps[j2], ps[hull[m2]]);
+          var c2 = Vec2.crossVec2Vec2(r2, v3);
           if (c2 < 0) {
-            ie2 = j;
+            ie2 = j2;
           }
-          if (c2 === 0 && v3.lengthSquared() > r.lengthSquared()) {
-            ie2 = j;
+          if (c2 === 0 && v3.lengthSquared() > r2.lengthSquared()) {
+            ie2 = j2;
           }
         }
-        ++m;
+        ++m2;
         ih = ie2;
         if (ie2 === i0) {
           break;
         }
       }
-      if (m < 3) {
+      if (m2 < 3) {
         this._setAsBox(1, 1);
         return;
       }
-      this.m_count = m;
+      this.m_count = m2;
       this.m_vertices = [];
-      for (var i = 0; i < m; ++i) {
-        this.m_vertices[i] = ps[hull[i]];
+      for (var i2 = 0; i2 < m2; ++i2) {
+        this.m_vertices[i2] = ps[hull[i2]];
       }
-      for (var i = 0; i < m; ++i) {
-        var i1 = i;
-        var i2 = i + 1 < m ? i + 1 : 0;
-        var edge = Vec2.sub(this.m_vertices[i2], this.m_vertices[i1]);
-        this.m_normals[i] = Vec2.crossVec2Num(edge, 1);
-        this.m_normals[i].normalize();
+      for (var i2 = 0; i2 < m2; ++i2) {
+        var i1 = i2;
+        var i22 = i2 + 1 < m2 ? i2 + 1 : 0;
+        var edge = Vec2.sub(this.m_vertices[i22], this.m_vertices[i1]);
+        this.m_normals[i2] = Vec2.crossVec2Num(edge, 1);
+        this.m_normals[i2].normalize();
       }
-      this.m_centroid = computeCentroid(this.m_vertices, m);
+      this.m_centroid = computeCentroid(this.m_vertices, m2);
     };
     PolygonShape2.prototype._setAsBox = function(hx, hy, center2, angle) {
       this.m_vertices[0] = Vec2.neo(hx, -hy);
@@ -7176,16 +7176,16 @@ var PolygonShape = (
         var xf2 = Transform.identity();
         xf2.p.setVec2(center2);
         xf2.q.setAngle(angle);
-        for (var i = 0; i < this.m_count; ++i) {
-          this.m_vertices[i] = Transform.mulVec2(xf2, this.m_vertices[i]);
-          this.m_normals[i] = Rot.mulVec2(xf2.q, this.m_normals[i]);
+        for (var i2 = 0; i2 < this.m_count; ++i2) {
+          this.m_vertices[i2] = Transform.mulVec2(xf2, this.m_vertices[i2]);
+          this.m_normals[i2] = Rot.mulVec2(xf2.q, this.m_normals[i2]);
         }
       }
     };
-    PolygonShape2.prototype.testPoint = function(xf2, p) {
-      var pLocal = detransformVec2(temp$1, xf2, p);
-      for (var i = 0; i < this.m_count; ++i) {
-        var dot = dotVec2(this.m_normals[i], pLocal) - dotVec2(this.m_normals[i], this.m_vertices[i]);
+    PolygonShape2.prototype.testPoint = function(xf2, p2) {
+      var pLocal = detransformVec2(temp$1, xf2, p2);
+      for (var i2 = 0; i2 < this.m_count; ++i2) {
+        var dot = dotVec2(this.m_normals[i2], pLocal) - dotVec2(this.m_normals[i2], this.m_vertices[i2]);
         if (dot > 0) {
           return false;
         }
@@ -7199,9 +7199,9 @@ var PolygonShape = (
       var lower = 0;
       var upper = input2.maxFraction;
       var index = -1;
-      for (var i = 0; i < this.m_count; ++i) {
-        var numerator = Vec2.dot(this.m_normals[i], Vec2.sub(this.m_vertices[i], p1));
-        var denominator = Vec2.dot(this.m_normals[i], d2);
+      for (var i2 = 0; i2 < this.m_count; ++i2) {
+        var numerator = Vec2.dot(this.m_normals[i2], Vec2.sub(this.m_vertices[i2], p1));
+        var denominator = Vec2.dot(this.m_normals[i2], d2);
         if (denominator == 0) {
           if (numerator < 0) {
             return false;
@@ -7209,7 +7209,7 @@ var PolygonShape = (
         } else {
           if (denominator < 0 && numerator < lower * denominator) {
             lower = numerator / denominator;
-            index = i;
+            index = i2;
           } else if (denominator > 0 && numerator < upper * denominator) {
             upper = numerator / denominator;
           }
@@ -7230,8 +7230,8 @@ var PolygonShape = (
       var minY = Infinity;
       var maxX = -Infinity;
       var maxY = -Infinity;
-      for (var i = 0; i < this.m_count; ++i) {
-        var v3 = transformVec2(temp$1, xf2, this.m_vertices[i]);
+      for (var i2 = 0; i2 < this.m_count; ++i2) {
+        var v3 = transformVec2$1(temp$1, xf2, this.m_vertices[i2]);
         minX = math_min$3(minX, v3.x);
         maxX = math_max$1(maxX, v3.x);
         minY = math_min$3(minY, v3.y);
@@ -7244,18 +7244,18 @@ var PolygonShape = (
       zeroVec2(center);
       var area = 0;
       var I = 0;
-      zeroVec2(s);
-      for (var i = 0; i < this.m_count; ++i) {
-        plusVec2(s, this.m_vertices[i]);
+      zeroVec2(s$2);
+      for (var i2 = 0; i2 < this.m_count; ++i2) {
+        plusVec2(s$2, this.m_vertices[i2]);
       }
-      scaleVec2(s, 1 / this.m_count, s);
+      scaleVec2(s$2, 1 / this.m_count, s$2);
       var k_inv3 = 1 / 3;
-      for (var i = 0; i < this.m_count; ++i) {
-        subVec2(e1$1, this.m_vertices[i], s);
-        if (i + 1 < this.m_count) {
-          subVec2(e2$1, this.m_vertices[i + 1], s);
+      for (var i2 = 0; i2 < this.m_count; ++i2) {
+        subVec2(e1$1, this.m_vertices[i2], s$2);
+        if (i2 + 1 < this.m_count) {
+          subVec2(e2$1, this.m_vertices[i2 + 1], s$2);
         } else {
-          subVec2(e2$1, this.m_vertices[0], s);
+          subVec2(e2$1, this.m_vertices[0], s$2);
         }
         var D = crossVec2Vec2(e1$1, e2$1);
         var triangleArea = 0.5 * D;
@@ -7272,21 +7272,21 @@ var PolygonShape = (
       }
       massData.mass = density * area;
       scaleVec2(center, 1 / area, center);
-      addVec2(massData.center, center, s);
+      addVec2(massData.center, center, s$2);
       massData.I = density * I;
       massData.I += massData.mass * (dotVec2(massData.center, massData.center) - dotVec2(center, center));
     };
     PolygonShape2.prototype.validate = function() {
-      for (var i = 0; i < this.m_count; ++i) {
-        var i1 = i;
-        var i2 = i < this.m_count - 1 ? i1 + 1 : 0;
-        var p = this.m_vertices[i1];
-        subVec2(e$1, this.m_vertices[i2], p);
-        for (var j = 0; j < this.m_count; ++j) {
-          if (j == i1 || j == i2) {
+      for (var i2 = 0; i2 < this.m_count; ++i2) {
+        var i1 = i2;
+        var i22 = i2 < this.m_count - 1 ? i1 + 1 : 0;
+        var p2 = this.m_vertices[i1];
+        subVec2(e$1$1, this.m_vertices[i22], p2);
+        for (var j2 = 0; j2 < this.m_count; ++j2) {
+          if (j2 == i1 || j2 == i22) {
             continue;
           }
-          var c2 = crossVec2Vec2(e$1, subVec2(temp$1, this.m_vertices[j], p));
+          var c2 = crossVec2Vec2(e$1$1, subVec2(temp$1, this.m_vertices[j2], p2));
           if (c2 < 0) {
             return false;
           }
@@ -7295,8 +7295,8 @@ var PolygonShape = (
       return true;
     };
     PolygonShape2.prototype.computeDistanceProxy = function(proxy) {
-      for (var i = 0; i < this.m_count; ++i) {
-        proxy.m_vertices[i] = this.m_vertices[i];
+      for (var i2 = 0; i2 < this.m_count; ++i2) {
+        proxy.m_vertices[i2] = this.m_vertices[i2];
       }
       proxy.m_vertices.length = this.m_count;
       proxy.m_count = this.m_count;
@@ -7310,12 +7310,12 @@ function computeCentroid(vs, count) {
   var c2 = Vec2.zero();
   var area = 0;
   var pRef = Vec2.zero();
-  var i;
+  var i2;
   var inv3 = 1 / 3;
-  for (var i = 0; i < count; ++i) {
+  for (var i2 = 0; i2 < count; ++i2) {
     var p1 = pRef;
-    var p2 = vs[i];
-    var p3 = i + 1 < count ? vs[i + 1] : vs[0];
+    var p2 = vs[i2];
+    var p3 = i2 + 1 < count ? vs[i2 + 1] : vs[0];
     var e1_1 = Vec2.sub(p2, p1);
     var e2_1 = Vec2.sub(p3, p1);
     var D = Vec2.crossVec2Vec2(e1_1, e2_1);
@@ -7384,17 +7384,17 @@ var CircleShape = (
     CircleShape2.prototype.getChildCount = function() {
       return 1;
     };
-    CircleShape2.prototype.testPoint = function(xf2, p) {
-      var center2 = transformVec2(temp, xf2, this.m_p);
-      return distSqrVec2(p, center2) <= this.m_radius * this.m_radius;
+    CircleShape2.prototype.testPoint = function(xf2, p2) {
+      var center2 = transformVec2$1(temp, xf2, this.m_p);
+      return distSqrVec2(p2, center2) <= this.m_radius * this.m_radius;
     };
     CircleShape2.prototype.rayCast = function(output2, input2, xf2, childIndex) {
       var position = Vec2.add(xf2.p, Rot.mulVec2(xf2.q, this.m_p));
       var s2 = Vec2.sub(input2.p1, position);
       var b2 = Vec2.dot(s2, s2) - this.m_radius * this.m_radius;
-      var r = Vec2.sub(input2.p2, input2.p1);
-      var c2 = Vec2.dot(s2, r);
-      var rr = Vec2.dot(r, r);
+      var r2 = Vec2.sub(input2.p2, input2.p1);
+      var c2 = Vec2.dot(s2, r2);
+      var rr = Vec2.dot(r2, r2);
       var sigma = c2 * c2 - rr * b2;
       if (sigma < 0 || rr < EPSILON) {
         return false;
@@ -7403,16 +7403,16 @@ var CircleShape = (
       if (0 <= a2 && a2 <= input2.maxFraction * rr) {
         a2 /= rr;
         output2.fraction = a2;
-        output2.normal = Vec2.add(s2, Vec2.mulNumVec2(a2, r));
+        output2.normal = Vec2.add(s2, Vec2.mulNumVec2(a2, r2));
         output2.normal.normalize();
         return true;
       }
       return false;
     };
     CircleShape2.prototype.computeAABB = function(aabb, xf2, childIndex) {
-      var p = transformVec2(temp, xf2, this.m_p);
-      setVec2(aabb.lowerBound, p.x - this.m_radius, p.y - this.m_radius);
-      setVec2(aabb.upperBound, p.x + this.m_radius, p.y + this.m_radius);
+      var p2 = transformVec2$1(temp, xf2, this.m_p);
+      setVec2(aabb.lowerBound, p2.x - this.m_radius, p2.y - this.m_radius);
+      setVec2(aabb.upperBound, p2.x + this.m_radius, p2.y + this.m_radius);
     };
     CircleShape2.prototype.computeMass = function(massData, density) {
       massData.mass = density * math_PI$4 * this.m_radius * this.m_radius;
@@ -7575,14 +7575,14 @@ var DistanceJoint = (
       var invMass = this.m_invMassA + this.m_invIA * crAu * crAu + this.m_invMassB + this.m_invIB * crBu * crBu;
       this.m_mass = invMass != 0 ? 1 / invMass : 0;
       if (this.m_frequencyHz > 0) {
-        var C = length - this.m_length;
+        var C2 = length - this.m_length;
         var omega = 2 * math_PI$3 * this.m_frequencyHz;
         var d2 = 2 * this.m_mass * this.m_dampingRatio * omega;
-        var k = this.m_mass * omega * omega;
-        var h = step.dt;
-        this.m_gamma = h * (d2 + h * k);
+        var k2 = this.m_mass * omega * omega;
+        var h2 = step.dt;
+        this.m_gamma = h2 * (d2 + h2 * k2);
         this.m_gamma = this.m_gamma != 0 ? 1 / this.m_gamma : 0;
-        this.m_bias = C * h * k * this.m_gamma;
+        this.m_bias = C2 * h2 * k2 * this.m_gamma;
         invMass += this.m_gamma;
         this.m_mass = invMass != 0 ? 1 / invMass : 0;
       } else {
@@ -7636,11 +7636,11 @@ var DistanceJoint = (
       var qB = Rot.neo(aB);
       var rA2 = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
       var rB2 = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
-      var u = Vec2.sub(Vec2.add(cB2, rB2), Vec2.add(cA2, rA2));
-      var length = u.normalize();
-      var C = clamp(length - this.m_length, -SettingsInternal.maxLinearCorrection, SettingsInternal.maxLinearCorrection);
-      var impulse = -this.m_mass * C;
-      var P3 = Vec2.mulNumVec2(impulse, u);
+      var u2 = Vec2.sub(Vec2.add(cB2, rB2), Vec2.add(cA2, rA2));
+      var length = u2.normalize();
+      var C2 = clamp(length - this.m_length, -SettingsInternal.maxLinearCorrection, SettingsInternal.maxLinearCorrection);
+      var impulse = -this.m_mass * C2;
+      var P3 = Vec2.mulNumVec2(impulse, u2);
       cA2.subMul(this.m_invMassA, P3);
       aA -= this.m_invIA * Vec2.crossVec2Vec2(rA2, P3);
       cB2.addMul(this.m_invMassB, P3);
@@ -7649,7 +7649,7 @@ var DistanceJoint = (
       this.m_bodyA.c_position.a = aA;
       this.m_bodyB.c_position.c.setVec2(cB2);
       this.m_bodyB.c_position.a = aB;
-      return math_abs$5(C) < SettingsInternal.linearSlop;
+      return math_abs$5(C2) < SettingsInternal.linearSlop;
     };
     DistanceJoint2.TYPE = "distance-joint";
     return DistanceJoint2;
@@ -7805,12 +7805,12 @@ var FrictionJoint = (
       var mB = this.m_invMassB;
       var iA = this.m_invIA;
       var iB = this.m_invIB;
-      var h = step.dt;
+      var h2 = step.dt;
       {
         var Cdot = wB - wA;
         var impulse = -this.m_angularMass * Cdot;
         var oldImpulse = this.m_angularImpulse;
-        var maxImpulse = h * this.m_maxTorque;
+        var maxImpulse = h2 * this.m_maxTorque;
         this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
         impulse = this.m_angularImpulse - oldImpulse;
         wA -= iA * impulse;
@@ -7821,7 +7821,7 @@ var FrictionJoint = (
         var impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
         var oldImpulse = this.m_linearImpulse;
         this.m_linearImpulse.add(impulse);
-        var maxImpulse = h * this.m_maxForce;
+        var maxImpulse = h2 * this.m_maxForce;
         if (this.m_linearImpulse.lengthSquared() > maxImpulse * maxImpulse) {
           this.m_linearImpulse.normalize();
           this.m_linearImpulse.mul(maxImpulse);
@@ -7867,7 +7867,7 @@ var Mat33 = (
       }
       return Vec3.isValid(obj.ex) && Vec3.isValid(obj.ey) && Vec3.isValid(obj.ez);
     };
-    Mat332.assert = function(o) {
+    Mat332.assert = function(o2) {
     };
     Mat332.prototype.setZero = function() {
       this.ex.setZero();
@@ -7883,20 +7883,20 @@ var Mat33 = (
       if (det !== 0) {
         det = 1 / det;
       }
-      var r = new Vec3();
+      var r2 = new Vec3();
       cross_x = this.ey.y * this.ez.z - this.ey.z * this.ez.y;
       cross_y = this.ey.z * this.ez.x - this.ey.x * this.ez.z;
       cross_z = this.ey.x * this.ez.y - this.ey.y * this.ez.x;
-      r.x = det * (v3.x * cross_x + v3.y * cross_y + v3.z * cross_z);
+      r2.x = det * (v3.x * cross_x + v3.y * cross_y + v3.z * cross_z);
       cross_x = v3.y * this.ez.z - v3.z * this.ez.y;
       cross_y = v3.z * this.ez.x - v3.x * this.ez.z;
       cross_z = v3.x * this.ez.y - v3.y * this.ez.x;
-      r.y = det * (this.ex.x * cross_x + this.ex.y * cross_y + this.ex.z * cross_z);
+      r2.y = det * (this.ex.x * cross_x + this.ex.y * cross_y + this.ex.z * cross_z);
       cross_x = this.ey.y * v3.z - this.ey.z * v3.y;
       cross_y = this.ey.z * v3.x - this.ey.x * v3.z;
       cross_z = this.ey.x * v3.y - this.ey.y * v3.x;
-      r.z = det * (this.ex.x * cross_x + this.ex.y * cross_y + this.ex.z * cross_z);
-      return r;
+      r2.z = det * (this.ex.x * cross_x + this.ex.y * cross_y + this.ex.z * cross_z);
+      return r2;
     };
     Mat332.prototype.solve22 = function(v3) {
       var a11 = this.ex.x;
@@ -7907,10 +7907,10 @@ var Mat33 = (
       if (det !== 0) {
         det = 1 / det;
       }
-      var r = Vec2.zero();
-      r.x = det * (a22 * v3.x - a12 * v3.y);
-      r.y = det * (a11 * v3.y - a21 * v3.x);
-      return r;
+      var r2 = Vec2.zero();
+      r2.x = det * (a22 * v3.x - a12 * v3.y);
+      r2.y = det * (a11 * v3.y - a21 * v3.x);
+      return r2;
     };
     Mat332.prototype.getInverse22 = function(M) {
       var a2 = this.ex.x;
@@ -7955,25 +7955,25 @@ var Mat33 = (
     Mat332.mul = function(a2, b2) {
       if (b2 && "z" in b2 && "y" in b2 && "x" in b2) {
         var x2 = a2.ex.x * b2.x + a2.ey.x * b2.y + a2.ez.x * b2.z;
-        var y = a2.ex.y * b2.x + a2.ey.y * b2.y + a2.ez.y * b2.z;
-        var z = a2.ex.z * b2.x + a2.ey.z * b2.y + a2.ez.z * b2.z;
-        return new Vec3(x2, y, z);
+        var y2 = a2.ex.y * b2.x + a2.ey.y * b2.y + a2.ez.y * b2.z;
+        var z2 = a2.ex.z * b2.x + a2.ey.z * b2.y + a2.ez.z * b2.z;
+        return new Vec3(x2, y2, z2);
       } else if (b2 && "y" in b2 && "x" in b2) {
         var x2 = a2.ex.x * b2.x + a2.ey.x * b2.y;
-        var y = a2.ex.y * b2.x + a2.ey.y * b2.y;
-        return Vec2.neo(x2, y);
+        var y2 = a2.ex.y * b2.x + a2.ey.y * b2.y;
+        return Vec2.neo(x2, y2);
       }
     };
     Mat332.mulVec3 = function(a2, b2) {
       var x2 = a2.ex.x * b2.x + a2.ey.x * b2.y + a2.ez.x * b2.z;
-      var y = a2.ex.y * b2.x + a2.ey.y * b2.y + a2.ez.y * b2.z;
-      var z = a2.ex.z * b2.x + a2.ey.z * b2.y + a2.ez.z * b2.z;
-      return new Vec3(x2, y, z);
+      var y2 = a2.ex.y * b2.x + a2.ey.y * b2.y + a2.ez.y * b2.z;
+      var z2 = a2.ex.z * b2.x + a2.ey.z * b2.y + a2.ez.z * b2.z;
+      return new Vec3(x2, y2, z2);
     };
     Mat332.mulVec2 = function(a2, b2) {
       var x2 = a2.ex.x * b2.x + a2.ey.x * b2.y;
-      var y = a2.ex.y * b2.x + a2.ey.y * b2.y;
-      return Vec2.neo(x2, y);
+      var y2 = a2.ex.y * b2.x + a2.ey.y * b2.y;
+      return Vec2.neo(x2, y2);
     };
     Mat332.add = function(a2, b2) {
       return new Mat332(Vec3.add(a2.ex, b2.ex), Vec3.add(a2.ey, b2.ey), Vec3.add(a2.ez, b2.ez));
@@ -8360,19 +8360,19 @@ var RevoluteJoint = (
         var angle = aB - aA - this.m_referenceAngle;
         var limitImpulse = 0;
         if (this.m_limitState == LimitState$2.equalLimits) {
-          var C = clamp(angle - this.m_lowerAngle, -SettingsInternal.maxAngularCorrection, SettingsInternal.maxAngularCorrection);
-          limitImpulse = -this.m_motorMass * C;
-          angularError = math_abs$4(C);
+          var C2 = clamp(angle - this.m_lowerAngle, -SettingsInternal.maxAngularCorrection, SettingsInternal.maxAngularCorrection);
+          limitImpulse = -this.m_motorMass * C2;
+          angularError = math_abs$4(C2);
         } else if (this.m_limitState == LimitState$2.atLowerLimit) {
-          var C = angle - this.m_lowerAngle;
-          angularError = -C;
-          C = clamp(C + SettingsInternal.angularSlop, -SettingsInternal.maxAngularCorrection, 0);
-          limitImpulse = -this.m_motorMass * C;
+          var C2 = angle - this.m_lowerAngle;
+          angularError = -C2;
+          C2 = clamp(C2 + SettingsInternal.angularSlop, -SettingsInternal.maxAngularCorrection, 0);
+          limitImpulse = -this.m_motorMass * C2;
         } else if (this.m_limitState == LimitState$2.atUpperLimit) {
-          var C = angle - this.m_upperAngle;
-          angularError = C;
-          C = clamp(C - SettingsInternal.angularSlop, 0, SettingsInternal.maxAngularCorrection);
-          limitImpulse = -this.m_motorMass * C;
+          var C2 = angle - this.m_upperAngle;
+          angularError = C2;
+          C2 = clamp(C2 - SettingsInternal.angularSlop, 0, SettingsInternal.maxAngularCorrection);
+          limitImpulse = -this.m_motorMass * C2;
         }
         aA -= this.m_invIA * limitImpulse;
         aB += this.m_invIB * limitImpulse;
@@ -8382,10 +8382,10 @@ var RevoluteJoint = (
         qB.setAngle(aB);
         var rA2 = Rot.mulVec2(qA, Vec2.sub(this.m_localAnchorA, this.m_localCenterA));
         var rB2 = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
-        var C = Vec2.zero();
-        C.addCombine(1, cB2, 1, rB2);
-        C.subCombine(1, cA2, 1, rA2);
-        positionError = C.length();
+        var C2 = Vec2.zero();
+        C2.addCombine(1, cB2, 1, rB2);
+        C2.subCombine(1, cA2, 1, rA2);
+        positionError = C2.length();
         var mA = this.m_invMassA;
         var mB = this.m_invMassB;
         var iA = this.m_invIA;
@@ -8395,7 +8395,7 @@ var RevoluteJoint = (
         K.ex.y = -iA * rA2.x * rA2.y - iB * rB2.x * rB2.y;
         K.ey.x = K.ex.y;
         K.ey.y = mA + mB + iA * rA2.x * rA2.x + iB * rB2.x * rB2.x;
-        var impulse = Vec2.neg(K.solve(C));
+        var impulse = Vec2.neg(K.solve(C2));
         cA2.subMul(mA, impulse);
         aA -= iA * Vec2.crossVec2Vec2(rA2, impulse);
         cB2.addMul(mB, impulse);
@@ -8861,11 +8861,11 @@ var PrismaticJoint = (
         K.ex.set(k11, k12, k13);
         K.ey.set(k12, k22, k23);
         K.ez.set(k13, k23, k33);
-        var C = new Vec3();
-        C.x = C1.x;
-        C.y = C1.y;
-        C.z = C2;
-        impulse = K.solve33(Vec3.neg(C));
+        var C3 = new Vec3();
+        C3.x = C1.x;
+        C3.y = C1.y;
+        C3.z = C2;
+        impulse = K.solve33(Vec3.neg(C3));
       } else {
         var k11 = mA + mB + iA * s1 * s1 + iB * s2 * s2;
         var k12 = iA * s1 + iB * s2;
@@ -9059,12 +9059,12 @@ var GearJoint = (
         this.m_JwC = 1;
         this.m_mass += this.m_iA + this.m_iC;
       } else {
-        var u = Rot.mulVec2(qC, this.m_localAxisC);
+        var u2 = Rot.mulVec2(qC, this.m_localAxisC);
         var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC);
         var rA2 = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA);
-        this.m_JvAC = u;
-        this.m_JwC = Vec2.crossVec2Vec2(rC, u);
-        this.m_JwA = Vec2.crossVec2Vec2(rA2, u);
+        this.m_JvAC = u2;
+        this.m_JwC = Vec2.crossVec2Vec2(rC, u2);
+        this.m_JwA = Vec2.crossVec2Vec2(rA2, u2);
         this.m_mass += this.m_mC + this.m_mA + this.m_iC * this.m_JwC * this.m_JwC + this.m_iA * this.m_JwA * this.m_JwA;
       }
       if (this.m_type2 == RevoluteJoint.TYPE) {
@@ -9073,12 +9073,12 @@ var GearJoint = (
         this.m_JwD = this.m_ratio;
         this.m_mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
       } else {
-        var u = Rot.mulVec2(qD, this.m_localAxisD);
+        var u2 = Rot.mulVec2(qD, this.m_localAxisD);
         var rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
         var rB2 = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
-        this.m_JvBD = Vec2.mulNumVec2(this.m_ratio, u);
-        this.m_JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
-        this.m_JwB = this.m_ratio * Vec2.crossVec2Vec2(rB2, u);
+        this.m_JvBD = Vec2.mulNumVec2(this.m_ratio, u2);
+        this.m_JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u2);
+        this.m_JwB = this.m_ratio * Vec2.crossVec2Vec2(rB2, u2);
         this.m_mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD * this.m_JwD * this.m_JwD + this.m_iB * this.m_JwB * this.m_JwB;
       }
       this.m_mass = this.m_mass > 0 ? 1 / this.m_mass : 0;
@@ -9163,12 +9163,12 @@ var GearJoint = (
         mass += this.m_iA + this.m_iC;
         coordinateA = aA - aC - this.m_referenceAngleA;
       } else {
-        var u = Rot.mulVec2(qC, this.m_localAxisC);
+        var u2 = Rot.mulVec2(qC, this.m_localAxisC);
         var rC = Rot.mulSub(qC, this.m_localAnchorC, this.m_lcC);
         var rA2 = Rot.mulSub(qA, this.m_localAnchorA, this.m_lcA);
-        JvAC = u;
-        JwC = Vec2.crossVec2Vec2(rC, u);
-        JwA = Vec2.crossVec2Vec2(rA2, u);
+        JvAC = u2;
+        JwC = Vec2.crossVec2Vec2(rC, u2);
+        JwA = Vec2.crossVec2Vec2(rA2, u2);
         mass += this.m_mC + this.m_mA + this.m_iC * JwC * JwC + this.m_iA * JwA * JwA;
         var pC = Vec2.sub(this.m_localAnchorC, this.m_lcC);
         var pA2 = Rot.mulTVec2(qC, Vec2.add(rA2, Vec2.sub(cA2, cC)));
@@ -9181,21 +9181,21 @@ var GearJoint = (
         mass += this.m_ratio * this.m_ratio * (this.m_iB + this.m_iD);
         coordinateB = aB - aD - this.m_referenceAngleB;
       } else {
-        var u = Rot.mulVec2(qD, this.m_localAxisD);
+        var u2 = Rot.mulVec2(qD, this.m_localAxisD);
         var rD = Rot.mulSub(qD, this.m_localAnchorD, this.m_lcD);
         var rB2 = Rot.mulSub(qB, this.m_localAnchorB, this.m_lcB);
-        JvBD = Vec2.mulNumVec2(this.m_ratio, u);
-        JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u);
-        JwB = this.m_ratio * Vec2.crossVec2Vec2(rB2, u);
+        JvBD = Vec2.mulNumVec2(this.m_ratio, u2);
+        JwD = this.m_ratio * Vec2.crossVec2Vec2(rD, u2);
+        JwB = this.m_ratio * Vec2.crossVec2Vec2(rB2, u2);
         mass += this.m_ratio * this.m_ratio * (this.m_mD + this.m_mB) + this.m_iD * JwD * JwD + this.m_iB * JwB * JwB;
         var pD = Vec2.sub(this.m_localAnchorD, this.m_lcD);
         var pB2 = Rot.mulTVec2(qD, Vec2.add(rB2, Vec2.sub(cB2, cD)));
         coordinateB = Vec2.dot(pB2, this.m_localAxisD) - Vec2.dot(pD, this.m_localAxisD);
       }
-      var C = coordinateA + this.m_ratio * coordinateB - this.m_constant;
+      var C2 = coordinateA + this.m_ratio * coordinateB - this.m_constant;
       var impulse = 0;
       if (mass > 0) {
-        impulse = -C / mass;
+        impulse = -C2 / mass;
       }
       cA2.addMul(this.m_mA * impulse, JvAC);
       aA += this.m_iA * impulse * JwA;
@@ -9397,13 +9397,13 @@ var MotorJoint = (
       var mB = this.m_invMassB;
       var iA = this.m_invIA;
       var iB = this.m_invIB;
-      var h = step.dt;
+      var h2 = step.dt;
       var inv_h = step.inv_dt;
       {
         var Cdot = wB - wA + inv_h * this.m_correctionFactor * this.m_angularError;
         var impulse = -this.m_angularMass * Cdot;
         var oldImpulse = this.m_angularImpulse;
-        var maxImpulse = h * this.m_maxTorque;
+        var maxImpulse = h2 * this.m_maxTorque;
         this.m_angularImpulse = clamp(this.m_angularImpulse + impulse, -maxImpulse, maxImpulse);
         impulse = this.m_angularImpulse - oldImpulse;
         wA -= iA * impulse;
@@ -9417,7 +9417,7 @@ var MotorJoint = (
         var impulse = Vec2.neg(Mat22.mulVec2(this.m_linearMass, Cdot));
         var oldImpulse = Vec2.clone(this.m_linearImpulse);
         this.m_linearImpulse.add(impulse);
-        var maxImpulse = h * this.m_maxForce;
+        var maxImpulse = h2 * this.m_maxForce;
         this.m_linearImpulse.clamp(maxImpulse);
         impulse = Vec2.sub(this.m_linearImpulse, oldImpulse);
         vA2.subMul(mA, impulse);
@@ -9570,13 +9570,13 @@ var MouseJoint = (
       var mass = this.m_bodyB.getMass();
       var omega = 2 * math_PI$2 * this.m_frequencyHz;
       var d2 = 2 * mass * this.m_dampingRatio * omega;
-      var k = mass * (omega * omega);
-      var h = step.dt;
-      this.m_gamma = h * (d2 + h * k);
+      var k2 = mass * (omega * omega);
+      var h2 = step.dt;
+      this.m_gamma = h2 * (d2 + h2 * k2);
       if (this.m_gamma != 0) {
         this.m_gamma = 1 / this.m_gamma;
       }
-      this.m_beta = h * k * this.m_gamma;
+      this.m_beta = h2 * k2 * this.m_gamma;
       this.m_rB = Rot.mulVec2(qB, Vec2.sub(this.m_localAnchorB, this.m_localCenterB));
       var K = new Mat22();
       K.ex.x = this.m_invMassB + this.m_invIB * this.m_rB.y * this.m_rB.y + this.m_gamma;
@@ -9718,14 +9718,14 @@ var PulleyJoint = (
       return this.m_ratio;
     };
     PulleyJoint2.prototype.getCurrentLengthA = function() {
-      var p = this.m_bodyA.getWorldPoint(this.m_localAnchorA);
+      var p2 = this.m_bodyA.getWorldPoint(this.m_localAnchorA);
       var s2 = this.m_groundAnchorA;
-      return Vec2.distance(p, s2);
+      return Vec2.distance(p2, s2);
     };
     PulleyJoint2.prototype.getCurrentLengthB = function() {
-      var p = this.m_bodyB.getWorldPoint(this.m_localAnchorB);
+      var p2 = this.m_bodyB.getWorldPoint(this.m_localAnchorB);
       var s2 = this.m_groundAnchorB;
-      return Vec2.distance(p, s2);
+      return Vec2.distance(p2, s2);
     };
     PulleyJoint2.prototype.shiftOrigin = function(newOrigin) {
       this.m_groundAnchorA.sub(newOrigin);
@@ -9852,9 +9852,9 @@ var PulleyJoint = (
       if (mass > 0) {
         mass = 1 / mass;
       }
-      var C = this.m_constant - lengthA - this.m_ratio * lengthB;
-      var linearError = math_abs$2(C);
-      var impulse = -mass * C;
+      var C2 = this.m_constant - lengthA - this.m_ratio * lengthB;
+      var linearError = math_abs$2(C2);
+      var impulse = -mass * C2;
       var PA = Vec2.mulNumVec2(-impulse, uA);
       var PB = Vec2.mulNumVec2(-this.m_ratio * impulse, uB);
       cA2.addMul(this.m_invMassA, PA);
@@ -9978,8 +9978,8 @@ var RopeJoint = (
       this.m_u.addCombine(1, cB2, 1, this.m_rB);
       this.m_u.subCombine(1, cA2, 1, this.m_rA);
       this.m_length = this.m_u.length();
-      var C = this.m_length - this.m_maxLength;
-      if (C > 0) {
+      var C2 = this.m_length - this.m_maxLength;
+      if (C2 > 0) {
         this.m_state = LimitState.atUpperLimit;
       } else {
         this.m_state = LimitState.inactiveLimit;
@@ -10018,10 +10018,10 @@ var RopeJoint = (
       var wB = this.m_bodyB.c_velocity.w;
       var vpA = Vec2.addCrossNumVec2(vA2, wA, this.m_rA);
       var vpB = Vec2.addCrossNumVec2(vB2, wB, this.m_rB);
-      var C = this.m_length - this.m_maxLength;
+      var C2 = this.m_length - this.m_maxLength;
       var Cdot = Vec2.dot(this.m_u, Vec2.sub(vpB, vpA));
-      if (C < 0) {
-        Cdot += step.inv_dt * C;
+      if (C2 < 0) {
+        Cdot += step.inv_dt * C2;
       }
       var impulse = -this.m_mass * Cdot;
       var oldImpulse = this.m_impulse;
@@ -10046,14 +10046,14 @@ var RopeJoint = (
       var qB = Rot.neo(aB);
       var rA2 = Rot.mulSub(qA, this.m_localAnchorA, this.m_localCenterA);
       var rB2 = Rot.mulSub(qB, this.m_localAnchorB, this.m_localCenterB);
-      var u = Vec2.zero();
-      u.addCombine(1, cB2, 1, rB2);
-      u.subCombine(1, cA2, 1, rA2);
-      var length = u.normalize();
-      var C = length - this.m_maxLength;
-      C = clamp(C, 0, SettingsInternal.maxLinearCorrection);
-      var impulse = -this.m_mass * C;
-      var P3 = Vec2.mulNumVec2(impulse, u);
+      var u2 = Vec2.zero();
+      u2.addCombine(1, cB2, 1, rB2);
+      u2.subCombine(1, cA2, 1, rA2);
+      var length = u2.normalize();
+      var C2 = length - this.m_maxLength;
+      C2 = clamp(C2, 0, SettingsInternal.maxLinearCorrection);
+      var impulse = -this.m_mass * C2;
+      var P3 = Vec2.mulNumVec2(impulse, u2);
       cA2.subMul(this.m_invMassA, P3);
       aA -= this.m_invIA * Vec2.crossVec2Vec2(rA2, P3);
       cB2.addMul(this.m_invMassB, P3);
@@ -10204,15 +10204,15 @@ var WeldJoint = (
       if (this.m_frequencyHz > 0) {
         K.getInverse22(this.m_mass);
         var invM = iA + iB;
-        var m = invM > 0 ? 1 / invM : 0;
-        var C = aB - aA - this.m_referenceAngle;
+        var m2 = invM > 0 ? 1 / invM : 0;
+        var C2 = aB - aA - this.m_referenceAngle;
         var omega = 2 * math_PI$1 * this.m_frequencyHz;
-        var d2 = 2 * m * this.m_dampingRatio * omega;
-        var k = m * omega * omega;
-        var h = step.dt;
-        this.m_gamma = h * (d2 + h * k);
+        var d2 = 2 * m2 * this.m_dampingRatio * omega;
+        var k2 = m2 * omega * omega;
+        var h2 = step.dt;
+        this.m_gamma = h2 * (d2 + h2 * k2);
         this.m_gamma = this.m_gamma != 0 ? 1 / this.m_gamma : 0;
-        this.m_bias = C * h * k * this.m_gamma;
+        this.m_bias = C2 * h2 * k2 * this.m_gamma;
         invM += this.m_gamma;
         this.m_mass.ez.z = invM != 0 ? 1 / invM : 0;
       } else if (K.ez.z == 0) {
@@ -10327,10 +10327,10 @@ var WeldJoint = (
         var C2 = aB - aA - this.m_referenceAngle;
         positionError = C1.length();
         angularError = math_abs$1(C2);
-        var C = new Vec3(C1.x, C1.y, C2);
+        var C3 = new Vec3(C1.x, C1.y, C2);
         var impulse = new Vec3();
         if (K.ez.z > 0) {
-          impulse = Vec3.neg(K.solve33(C));
+          impulse = Vec3.neg(K.solve33(C3));
         } else {
           var impulse2 = Vec2.neg(K.solve22(C1));
           impulse.set(impulse2.x, impulse2.y, 0);
@@ -10353,7 +10353,7 @@ var WeldJoint = (
 );
 var math_abs = Math.abs;
 var math_PI = Math.PI;
-var DEFAULTS = {
+var DEFAULTS$c = {
   enableMotor: false,
   maxMotorTorque: 0,
   motorSpeed: 0,
@@ -10369,7 +10369,7 @@ var WheelJoint = (
       if (!(_this instanceof WheelJoint2)) {
         return new WheelJoint2(def, bodyA, bodyB, anchor, axis);
       }
-      def = options(def, DEFAULTS);
+      def = options(def, DEFAULTS$c);
       _this = _super.call(this, def, bodyA, bodyB) || this;
       bodyA = _this.m_bodyA;
       bodyB = _this.m_bodyB;
@@ -10583,16 +10583,16 @@ var WheelJoint = (
         var invMass = mA + mB + iA * this.m_sAx * this.m_sAx + iB * this.m_sBx * this.m_sBx;
         if (invMass > 0) {
           this.m_springMass = 1 / invMass;
-          var C = Vec2.dot(d2, this.m_ax);
+          var C2 = Vec2.dot(d2, this.m_ax);
           var omega = 2 * math_PI * this.m_frequencyHz;
           var damp = 2 * this.m_springMass * this.m_dampingRatio * omega;
-          var k = this.m_springMass * omega * omega;
-          var h = step.dt;
-          this.m_gamma = h * (damp + h * k);
+          var k2 = this.m_springMass * omega * omega;
+          var h2 = step.dt;
+          this.m_gamma = h2 * (damp + h2 * k2);
           if (this.m_gamma > 0) {
             this.m_gamma = 1 / this.m_gamma;
           }
-          this.m_bias = C * h * k * this.m_gamma;
+          this.m_bias = C2 * h2 * k2 * this.m_gamma;
           this.m_springMass = invMass + this.m_gamma;
           if (this.m_springMass > 0) {
             this.m_springMass = 1 / this.m_springMass;
@@ -10694,9 +10694,9 @@ var WheelJoint = (
       var ay = Rot.mulVec2(qA, this.m_localYAxisA);
       var sAy = Vec2.crossVec2Vec2(Vec2.add(d2, rA2), ay);
       var sBy = Vec2.crossVec2Vec2(rB2, ay);
-      var C = Vec2.dot(d2, ay);
-      var k = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy;
-      var impulse = k != 0 ? -C / k : 0;
+      var C2 = Vec2.dot(d2, ay);
+      var k2 = this.m_invMassA + this.m_invMassB + this.m_invIA * this.m_sAy * this.m_sAy + this.m_invIB * this.m_sBy * this.m_sBy;
+      var impulse = k2 != 0 ? -C2 / k2 : 0;
       var P3 = Vec2.mulNumVec2(impulse, ay);
       var LA = impulse * sAy;
       var LB = impulse * sBy;
@@ -10708,7 +10708,7 @@ var WheelJoint = (
       this.m_bodyA.c_position.a = aA;
       this.m_bodyB.c_position.c.setVec2(cB2);
       this.m_bodyB.c_position.a = aB;
-      return math_abs(C) <= SettingsInternal.linearSlop;
+      return math_abs(C2) <= SettingsInternal.linearSlop;
     };
     WheelJoint2.TYPE = "wheel-joint";
     return WheelJoint2;
@@ -10930,8 +10930,8 @@ var pA = vec2(0, 0);
 var pB = vec2(0, 0);
 var CollideCircles = function(manifold, circleA, xfA2, circleB, xfB2) {
   manifold.pointCount = 0;
-  transformVec2(pA, xfA2, circleA.m_p);
-  transformVec2(pB, xfB2, circleB.m_p);
+  transformVec2$1(pA, xfA2, circleA.m_p);
+  transformVec2$1(pB, xfB2, circleB.m_p);
   var distSqr = distSqrVec2(pB, pA);
   var rA2 = circleA.m_radius;
   var rB2 = circleB.m_radius;
@@ -10961,7 +10961,7 @@ function ChainCircleContact(manifold, xfA2, fixtureA, indexA, xfB2, fixtureB, in
   var shapeB = fixtureB.getShape();
   CollideEdgeCircle(manifold, shapeA, xfA2, shapeB, xfB2);
 }
-var e = vec2(0, 0);
+var e$2 = vec2(0, 0);
 var e1 = vec2(0, 0);
 var e2 = vec2(0, 0);
 var Q = vec2(0, 0);
@@ -10971,10 +10971,10 @@ var CollideEdgeCircle = function(manifold, edgeA, xfA2, circleB, xfB2) {
   manifold.pointCount = 0;
   retransformVec2(Q, xfB2, xfA2, circleB.m_p);
   var A = edgeA.m_vertex1;
-  var B = edgeA.m_vertex2;
-  subVec2(e, B, A);
-  var u = dotVec2(e, B) - dotVec2(e, Q);
-  var v3 = dotVec2(e, Q) - dotVec2(e, A);
+  var B2 = edgeA.m_vertex2;
+  subVec2(e$2, B2, A);
+  var u2 = dotVec2(e$2, B2) - dotVec2(e$2, Q);
+  var v3 = dotVec2(e$2, Q) - dotVec2(e$2, A);
   var radius = edgeA.m_radius + circleB.m_radius;
   if (v3 <= 0) {
     copyVec2(P, A);
@@ -10999,16 +10999,16 @@ var CollideEdgeCircle = function(manifold, edgeA, xfA2, circleB, xfB2) {
     manifold.points[0].id.setFeatures(0, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
     return;
   }
-  if (u <= 0) {
-    copyVec2(P, B);
+  if (u2 <= 0) {
+    copyVec2(P, B2);
     var dd_2 = distSqrVec2(Q, P);
     if (dd_2 > radius * radius) {
       return;
     }
     if (edgeA.m_hasVertex3) {
-      var B2 = edgeA.m_vertex3;
-      var A2 = B;
-      subVec2(e2, B2, A2);
+      var B22 = edgeA.m_vertex3;
+      var A2 = B2;
+      subVec2(e2, B22, A2);
       var v22 = dotVec2(e2, Q) - dotVec2(e2, A2);
       if (v22 > 0) {
         return;
@@ -11022,13 +11022,13 @@ var CollideEdgeCircle = function(manifold, edgeA, xfA2, circleB, xfB2) {
     manifold.points[0].id.setFeatures(1, ContactFeatureType.e_vertex, 0, ContactFeatureType.e_vertex);
     return;
   }
-  var den = lengthSqrVec2(e);
-  combine2Vec2(P, u / den, A, v3 / den, B);
+  var den = lengthSqrVec2(e$2);
+  combine2Vec2(P, u2 / den, A, v3 / den, B2);
   var dd = distSqrVec2(Q, P);
   if (dd > radius * radius) {
     return;
   }
-  crossNumVec2(n$2, 1, e);
+  crossNumVec2(n$2, 1, e$2);
   if (dotVec2(n$2, Q) - dotVec2(n$2, A) < 0) {
     negVec2(n$2);
   }
@@ -11068,19 +11068,19 @@ function findMaxSeparation(poly1, xf1, poly2, xf2, output2) {
   detransformTransform(xf$1, xf2, xf1);
   var bestIndex = 0;
   var maxSeparation2 = -Infinity;
-  for (var i = 0; i < count1; ++i) {
-    rotVec2(n$1, xf$1.q, n1s[i]);
-    transformVec2(v1, xf$1, v1s[i]);
+  for (var i2 = 0; i2 < count1; ++i2) {
+    rotVec2(n$1, xf$1.q, n1s[i2]);
+    transformVec2$1(v1, xf$1, v1s[i2]);
     var si = Infinity;
-    for (var j = 0; j < count2; ++j) {
-      var sij = dotVec2(n$1, v2s[j]) - dotVec2(n$1, v1);
+    for (var j2 = 0; j2 < count2; ++j2) {
+      var sij = dotVec2(n$1, v2s[j2]) - dotVec2(n$1, v1);
       if (sij < si) {
         si = sij;
       }
     }
     if (si > maxSeparation2) {
       maxSeparation2 = si;
-      bestIndex = i;
+      bestIndex = i2;
     }
   }
   output2.maxSeparation = maxSeparation2;
@@ -11094,19 +11094,19 @@ function findIncidentEdge(clipVertex, poly1, xf1, edge12, poly2, xf2) {
   rerotVec2(normal1$1, xf2.q, xf1.q, normals1[edge12]);
   var index = 0;
   var minDot = Infinity;
-  for (var i = 0; i < count2; ++i) {
-    var dot = dotVec2(normal1$1, normals2[i]);
+  for (var i2 = 0; i2 < count2; ++i2) {
+    var dot = dotVec2(normal1$1, normals2[i2]);
     if (dot < minDot) {
       minDot = dot;
-      index = i;
+      index = i2;
     }
   }
   var i1 = index;
-  var i2 = i1 + 1 < count2 ? i1 + 1 : 0;
-  transformVec2(clipVertex[0].v, xf2, vertices2[i1]);
+  var i22 = i1 + 1 < count2 ? i1 + 1 : 0;
+  transformVec2$1(clipVertex[0].v, xf2, vertices2[i1]);
   clipVertex[0].id.setFeatures(edge12, ContactFeatureType.e_face, i1, ContactFeatureType.e_vertex);
-  transformVec2(clipVertex[1].v, xf2, vertices2[i2]);
-  clipVertex[1].id.setFeatures(edge12, ContactFeatureType.e_face, i2, ContactFeatureType.e_vertex);
+  transformVec2$1(clipVertex[1].v, xf2, vertices2[i22]);
+  clipVertex[1].id.setFeatures(edge12, ContactFeatureType.e_face, i22, ContactFeatureType.e_vertex);
 }
 var maxSeparation = {
   maxSeparation: 0,
@@ -11164,8 +11164,8 @@ var CollidePolygons = function(manifold, polyA, xfA2, polyB, xfB2) {
   combine2Vec2(planePoint, 0.5, v11, 0.5, v12);
   rotVec2(tangent, xf1.q, localTangent);
   crossVec2Num(normal$1, tangent, 1);
-  transformVec2(v11, xf1, v11);
-  transformVec2(v12, xf1, v12);
+  transformVec2$1(v11, xf1, v11);
+  transformVec2$1(v12, xf1, v12);
   var frontOffset = dotVec2(normal$1, v11);
   var sideOffset1 = -dotVec2(tangent, v11) + totalRadius;
   var sideOffset2 = dotVec2(tangent, v12) + totalRadius;
@@ -11186,12 +11186,12 @@ var CollidePolygons = function(manifold, polyA, xfA2, polyB, xfB2) {
   copyVec2(manifold.localNormal, localNormal);
   copyVec2(manifold.localPoint, planePoint);
   var pointCount = 0;
-  for (var i = 0; i < clipPoints2$1.length; ++i) {
-    var separation = dotVec2(normal$1, clipPoints2$1[i].v) - frontOffset;
+  for (var i2 = 0; i2 < clipPoints2$1.length; ++i2) {
+    var separation = dotVec2(normal$1, clipPoints2$1[i2].v) - frontOffset;
     if (separation <= totalRadius) {
       var cp = manifold.points[pointCount];
-      detransformVec2(cp.localPoint, xf2, clipPoints2$1[i].v);
-      cp.id.set(clipPoints2$1[i].id);
+      detransformVec2(cp.localPoint, xf2, clipPoints2$1[i2].v);
+      cp.id.set(clipPoints2$1[i2].id);
       if (flip) {
         cp.id.swapFeatures();
       }
@@ -11215,14 +11215,14 @@ var CollidePolygonCircle = function(manifold, polygonA, xfA2, circleB, xfB2) {
   var vertexCount = polygonA.m_count;
   var vertices = polygonA.m_vertices;
   var normals = polygonA.m_normals;
-  for (var i = 0; i < vertexCount; ++i) {
-    var s2 = dotVec2(normals[i], cLocal) - dotVec2(normals[i], vertices[i]);
+  for (var i2 = 0; i2 < vertexCount; ++i2) {
+    var s2 = dotVec2(normals[i2], cLocal) - dotVec2(normals[i2], vertices[i2]);
     if (s2 > radius) {
       return;
     }
     if (s2 > separation) {
       separation = s2;
-      normalIndex = i;
+      normalIndex = i2;
     }
   }
   var vertIndex1 = normalIndex;
@@ -11315,7 +11315,7 @@ var TempPolygon = (
       this.vertices = [];
       this.normals = [];
       this.count = 0;
-      for (var i = 0; i < SettingsInternal.maxPolygonVertices; i++) {
+      for (var i2 = 0; i2 < SettingsInternal.maxPolygonVertices; i2++) {
         this.vertices.push(vec2(0, 0));
         this.normals.push(vec2(0, 0));
       }
@@ -11362,10 +11362,10 @@ var normal2 = vec2(0, 0);
 var lowerLimit = vec2(0, 0);
 var upperLimit = vec2(0, 0);
 var perp = vec2(0, 0);
-var n = vec2(0, 0);
+var n$3 = vec2(0, 0);
 var CollideEdgePolygon = function(manifold, edgeA, xfA2, polygonB, xfB2) {
   detransformTransform(xf, xfA2, xfB2);
-  transformVec2(centroidB, xf, polygonB.m_centroid);
+  transformVec2$1(centroidB, xf, polygonB.m_centroid);
   var v0 = edgeA.m_vertex0;
   var v13 = edgeA.m_vertex1;
   var v22 = edgeA.m_vertex2;
@@ -11507,9 +11507,9 @@ var CollideEdgePolygon = function(manifold, edgeA, xfA2, polygonB, xfB2) {
     }
   }
   polygonBA.count = polygonB.m_count;
-  for (var i = 0; i < polygonB.m_count; ++i) {
-    transformVec2(polygonBA.vertices[i], xf, polygonB.m_vertices[i]);
-    rotVec2(polygonBA.normals[i], xf.q, polygonB.m_normals[i]);
+  for (var i2 = 0; i2 < polygonB.m_count; ++i2) {
+    transformVec2$1(polygonBA.vertices[i2], xf, polygonB.m_vertices[i2]);
+    rotVec2(polygonBA.normals[i2], xf.q, polygonB.m_normals[i2]);
   }
   var radius = polygonB.m_radius + edgeA.m_radius;
   manifold.pointCount = 0;
@@ -11517,8 +11517,8 @@ var CollideEdgePolygon = function(manifold, edgeA, xfA2, polygonB, xfB2) {
     edgeAxis.type = EPAxisType.e_edgeA;
     edgeAxis.index = front ? 0 : 1;
     edgeAxis.separation = Infinity;
-    for (var i = 0; i < polygonBA.count; ++i) {
-      var v4 = polygonBA.vertices[i];
+    for (var i2 = 0; i2 < polygonBA.count; ++i2) {
+      var v4 = polygonBA.vertices[i2];
       var s2 = dotVec2(normal, v4) - dotVec2(normal, v13);
       if (s2 < edgeAxis.separation) {
         edgeAxis.separation = s2;
@@ -11536,29 +11536,29 @@ var CollideEdgePolygon = function(manifold, edgeA, xfA2, polygonB, xfB2) {
     polygonAxis.index = -1;
     polygonAxis.separation = -Infinity;
     setVec2(perp, -normal.y, normal.x);
-    for (var i = 0; i < polygonBA.count; ++i) {
-      scaleVec2(n, -1, polygonBA.normals[i]);
-      var s1 = dotVec2(n, polygonBA.vertices[i]) - dotVec2(n, v13);
-      var s22 = dotVec2(n, polygonBA.vertices[i]) - dotVec2(n, v22);
+    for (var i2 = 0; i2 < polygonBA.count; ++i2) {
+      scaleVec2(n$3, -1, polygonBA.normals[i2]);
+      var s1 = dotVec2(n$3, polygonBA.vertices[i2]) - dotVec2(n$3, v13);
+      var s22 = dotVec2(n$3, polygonBA.vertices[i2]) - dotVec2(n$3, v22);
       var s2 = math_min(s1, s22);
       if (s2 > radius) {
         polygonAxis.type = EPAxisType.e_edgeB;
-        polygonAxis.index = i;
+        polygonAxis.index = i2;
         polygonAxis.separation = s2;
         break;
       }
-      if (dotVec2(n, perp) >= 0) {
-        if (dotVec2(n, normal) - dotVec2(upperLimit, normal) < -SettingsInternal.angularSlop) {
+      if (dotVec2(n$3, perp) >= 0) {
+        if (dotVec2(n$3, normal) - dotVec2(upperLimit, normal) < -SettingsInternal.angularSlop) {
           continue;
         }
       } else {
-        if (dotVec2(n, normal) - dotVec2(lowerLimit, normal) < -SettingsInternal.angularSlop) {
+        if (dotVec2(n$3, normal) - dotVec2(lowerLimit, normal) < -SettingsInternal.angularSlop) {
           continue;
         }
       }
       if (s2 > polygonAxis.separation) {
         polygonAxis.type = EPAxisType.e_edgeB;
-        polygonAxis.index = i;
+        polygonAxis.index = i2;
         polygonAxis.separation = s2;
       }
     }
@@ -11582,19 +11582,19 @@ var CollideEdgePolygon = function(manifold, edgeA, xfA2, polygonB, xfB2) {
     manifold.type = ManifoldType.e_faceA;
     var bestIndex = 0;
     var bestValue = dotVec2(normal, polygonBA.normals[0]);
-    for (var i = 1; i < polygonBA.count; ++i) {
-      var value = dotVec2(normal, polygonBA.normals[i]);
+    for (var i2 = 1; i2 < polygonBA.count; ++i2) {
+      var value = dotVec2(normal, polygonBA.normals[i2]);
       if (value < bestValue) {
         bestValue = value;
-        bestIndex = i;
+        bestIndex = i2;
       }
     }
     var i1 = bestIndex;
-    var i2 = i1 + 1 < polygonBA.count ? i1 + 1 : 0;
+    var i22 = i1 + 1 < polygonBA.count ? i1 + 1 : 0;
     copyVec2(ie[0].v, polygonBA.vertices[i1]);
     ie[0].id.setFeatures(0, ContactFeatureType.e_face, i1, ContactFeatureType.e_vertex);
-    copyVec2(ie[1].v, polygonBA.vertices[i2]);
-    ie[1].id.setFeatures(0, ContactFeatureType.e_face, i2, ContactFeatureType.e_vertex);
+    copyVec2(ie[1].v, polygonBA.vertices[i22]);
+    ie[1].id.setFeatures(0, ContactFeatureType.e_face, i22, ContactFeatureType.e_vertex);
     if (front) {
       rf.i1 = 0;
       rf.i2 = 1;
@@ -11644,16 +11644,16 @@ var CollideEdgePolygon = function(manifold, edgeA, xfA2, polygonB, xfB2) {
     copyVec2(manifold.localPoint, polygonB.m_vertices[rf.i1]);
   }
   var pointCount = 0;
-  for (var i = 0; i < SettingsInternal.maxManifoldPoints; ++i) {
-    var separation = dotVec2(rf.normal, clipPoints2[i].v) - dotVec2(rf.normal, rf.v1);
+  for (var i2 = 0; i2 < SettingsInternal.maxManifoldPoints; ++i2) {
+    var separation = dotVec2(rf.normal, clipPoints2[i2].v) - dotVec2(rf.normal, rf.v1);
     if (separation <= radius) {
       var cp = manifold.points[pointCount];
       if (primaryAxis.type == EPAxisType.e_edgeA) {
-        detransformVec2(cp.localPoint, xf, clipPoints2[i].v);
-        cp.id.set(clipPoints2[i].id);
+        detransformVec2(cp.localPoint, xf, clipPoints2[i2].v);
+        cp.id.set(clipPoints2[i2].id);
       } else {
-        copyVec2(cp.localPoint, clipPoints2[i].v);
-        cp.id.set(clipPoints2[i].id);
+        copyVec2(cp.localPoint, clipPoints2[i2].v);
+        cp.id.set(clipPoints2[i2].id);
         cp.id.swapFeatures();
       }
       ++pointCount;
@@ -11690,17 +11690,17 @@ var DataDriver = (
       this._entered.length = 0;
       this._exited.length = 0;
       this._data.length = data.length;
-      for (var i = 0; i < data.length; i++) {
-        if (typeof data[i] !== "object" || data[i] === null)
+      for (var i2 = 0; i2 < data.length; i2++) {
+        if (typeof data[i2] !== "object" || data[i2] === null)
           continue;
-        var d2 = data[i];
+        var d2 = data[i2];
         var id = this._key(d2);
         if (!this._map[id]) {
           this._entered.push(d2);
         } else {
           delete this._map[id];
         }
-        this._data[i] = d2;
+        this._data[i2] = d2;
         this._xmap[id] = d2;
       }
       for (var id in this._map) {
@@ -11710,25 +11710,25 @@ var DataDriver = (
       var temp3 = this._map;
       this._map = this._xmap;
       this._xmap = temp3;
-      for (var i = 0; i < this._exited.length; i++) {
-        var d2 = this._exited[i];
+      for (var i2 = 0; i2 < this._exited.length; i2++) {
+        var d2 = this._exited[i2];
         var key = this._key(d2);
         var ref = this._refMap[key];
         this._listener.exit(d2, ref);
         delete this._refMap[key];
       }
-      for (var i = 0; i < this._entered.length; i++) {
-        var d2 = this._entered[i];
+      for (var i2 = 0; i2 < this._entered.length; i2++) {
+        var d2 = this._entered[i2];
         var key = this._key(d2);
         var ref = this._listener.enter(d2);
         if (ref) {
           this._refMap[key] = ref;
         }
       }
-      for (var i = 0; i < this._data.length; i++) {
-        if (typeof data[i] !== "object" || data[i] === null)
+      for (var i2 = 0; i2 < this._data.length; i2++) {
+        if (typeof data[i2] !== "object" || data[i2] === null)
           continue;
-        var d2 = this._data[i];
+        var d2 = this._data[i2];
         var key = this._key(d2);
         var ref = this._refMap[key];
         this._listener.update(d2, ref);
@@ -11743,6 +11743,3186 @@ var DataDriver = (
     return DataDriver2;
   })()
 );
+var l$3, t$2;
+function S$1(n2) {
+  return n2.children;
+}
+l$3 = { __e: function(n2, l2, u2, t2) {
+  for (var i2, r2, o2; l2 = l2.__; ) if ((i2 = l2.__c) && !i2.__) try {
+    if ((r2 = i2.constructor) && null != r2.getDerivedStateFromError && (i2.setState(r2.getDerivedStateFromError(n2)), o2 = i2.__d), null != i2.componentDidCatch && (i2.componentDidCatch(n2, t2 || {}), o2 = i2.__d), o2) return i2.__E = i2;
+  } catch (l3) {
+    n2 = l3;
+  }
+  throw n2;
+} }, t$2 = function(n2) {
+  return null != n2 && void 0 === n2.constructor;
+}, "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, Math.random().toString(8);
+var t$1, r$1, u$1, i$1, o$1 = 0, f$1 = [], c$1 = l$3, e$1 = c$1.__b, a$1 = c$1.__r, v$1 = c$1.diffed, l$2 = c$1.__c, m$1 = c$1.unmount, p$2 = c$1.__;
+function s$1(n2, t2) {
+  c$1.__h && c$1.__h(r$1, n2, o$1 || t2), o$1 = 0;
+  var u2 = r$1.__H || (r$1.__H = { __: [], __h: [] });
+  return n2 >= u2.__.length && u2.__.push({}), u2.__[n2];
+}
+function T(n2, r2) {
+  var u2 = s$1(t$1++, 7);
+  return C(u2.__H, r2) && (u2.__ = n2(), u2.__H = r2, u2.__h = n2), u2.__;
+}
+function j$1() {
+  for (var n2; n2 = f$1.shift(); ) {
+    var t2 = n2.__H;
+    if (n2.__P && t2) try {
+      t2.__h.some(z), t2.__h.some(B), t2.__h = [];
+    } catch (r2) {
+      t2.__h = [], c$1.__e(r2, n2.__v);
+    }
+  }
+}
+c$1.__b = function(n2) {
+  r$1 = null, e$1 && e$1(n2);
+}, c$1.__ = function(n2, t2) {
+  n2 && t2.__k && t2.__k.__m && (n2.__m = t2.__k.__m), p$2 && p$2(n2, t2);
+}, c$1.__r = function(n2) {
+  a$1 && a$1(n2), t$1 = 0;
+  var i2 = (r$1 = n2.__c).__H;
+  i2 && (u$1 === r$1 ? (i2.__h = [], r$1.__h = [], i2.__.some(function(n3) {
+    n3.__N && (n3.__ = n3.__N), n3.u = n3.__N = void 0;
+  })) : (i2.__h.some(z), i2.__h.some(B), i2.__h = [], t$1 = 0)), u$1 = r$1;
+}, c$1.diffed = function(n2) {
+  v$1 && v$1(n2);
+  var t2 = n2.__c;
+  t2 && t2.__H && (t2.__H.__h.length && (1 !== f$1.push(t2) && i$1 === c$1.requestAnimationFrame || ((i$1 = c$1.requestAnimationFrame) || w$2)(j$1)), t2.__H.__.some(function(n3) {
+    n3.u && (n3.__H = n3.u, n3.u = void 0);
+  })), u$1 = r$1 = null;
+}, c$1.__c = function(n2, t2) {
+  t2.some(function(n3) {
+    try {
+      n3.__h.some(z), n3.__h = n3.__h.filter(function(n4) {
+        return !n4.__ || B(n4);
+      });
+    } catch (r2) {
+      t2.some(function(n4) {
+        n4.__h && (n4.__h = []);
+      }), t2 = [], c$1.__e(r2, n3.__v);
+    }
+  }), l$2 && l$2(n2, t2);
+}, c$1.unmount = function(n2) {
+  m$1 && m$1(n2);
+  var t2, r2 = n2.__c;
+  r2 && r2.__H && (r2.__H.__.some(function(n3) {
+    try {
+      z(n3);
+    } catch (n4) {
+      t2 = n4;
+    }
+  }), r2.__H = void 0, t2 && c$1.__e(t2, r2.__v));
+};
+var k = "function" == typeof requestAnimationFrame;
+function w$2(n2) {
+  var t2, r2 = function() {
+    clearTimeout(u2), k && cancelAnimationFrame(t2), setTimeout(n2);
+  }, u2 = setTimeout(r2, 35);
+  k && (t2 = requestAnimationFrame(r2));
+}
+function z(n2) {
+  var t2 = r$1, u2 = n2.__c;
+  "function" == typeof u2 && (n2.__c = void 0, u2()), r$1 = t2;
+}
+function B(n2) {
+  var t2 = r$1;
+  n2.__c = n2.__(), r$1 = t2;
+}
+function C(n2, t2) {
+  return !n2 || n2.length !== t2.length || t2.some(function(t3, r2) {
+    return t3 !== n2[r2];
+  });
+}
+var i = Symbol.for("preact-signals");
+function t() {
+  if (!(v > 1)) {
+    var i2, t2 = false;
+    !(function() {
+      var i3 = c;
+      c = void 0;
+      while (void 0 !== i3) {
+        var t3 = i3.S;
+        if (t3.v === i3.v) {
+          for (var n3 = t3.t; void 0 !== n3; n3 = n3.x) if (n3.i === i3.i) n3.i = t3.i;
+        }
+        i3 = i3.o;
+      }
+    })();
+    while (void 0 !== h) {
+      var n2 = h;
+      h = void 0;
+      s++;
+      while (void 0 !== n2) {
+        var r2 = n2.u;
+        n2.u = void 0;
+        n2.f &= -3;
+        if (!(8 & n2.f) && w$1(n2)) try {
+          n2.c();
+        } catch (n3) {
+          if (!t2) {
+            i2 = n3;
+            t2 = true;
+          }
+        }
+        n2 = r2;
+      }
+    }
+    s = 0;
+    v--;
+    if (t2) throw i2;
+  } else v--;
+}
+function n(i2) {
+  if (v > 0) return i2();
+  e = ++u;
+  v++;
+  try {
+    return i2();
+  } finally {
+    t();
+  }
+}
+var r, o = void 0;
+function f(i2) {
+  var t2 = o, n2 = r;
+  o = void 0;
+  r = void 0;
+  try {
+    return i2();
+  } finally {
+    o = t2;
+    r = n2;
+  }
+}
+var h = void 0, v = 0, s = 0, u = 0, e = 0, c = void 0, d$1 = 0;
+function a(i2) {
+  if (void 0 !== o) {
+    var t2 = i2.n;
+    if (void 0 === t2 || t2.t !== o) {
+      t2 = { i: 0, S: i2, p: o.s, n: void 0, t: o, e: void 0, x: void 0, r: t2 };
+      if (void 0 !== o.s) o.s.n = t2;
+      o.s = t2;
+      i2.n = t2;
+      if (32 & o.f) i2.S(t2);
+      return t2;
+    } else if (-1 === t2.i) {
+      t2.i = 0;
+      if (void 0 !== t2.n) {
+        t2.n.p = t2.p;
+        if (void 0 !== t2.p) t2.p.n = t2.n;
+        t2.p = o.s;
+        t2.n = void 0;
+        o.s.n = t2;
+        o.s = t2;
+      }
+      return t2;
+    }
+  }
+}
+function l$1(i2, t2) {
+  this.v = i2;
+  this.i = 0;
+  this.n = void 0;
+  this.t = void 0;
+  this.l = 0;
+  this.W = null == t2 ? void 0 : t2.watched;
+  this.Z = null == t2 ? void 0 : t2.unwatched;
+  this.name = null == t2 ? void 0 : t2.name;
+}
+l$1.prototype.brand = i;
+l$1.prototype.h = function() {
+  return true;
+};
+l$1.prototype.S = function(i2) {
+  var t2 = this, n2 = this.t;
+  if (n2 !== i2 && void 0 === i2.e) {
+    i2.x = n2;
+    this.t = i2;
+    if (void 0 !== n2) n2.e = i2;
+    else f(function() {
+      var i3;
+      null == (i3 = t2.W) || i3.call(t2);
+    });
+  }
+};
+l$1.prototype.U = function(i2) {
+  var t2 = this;
+  if (void 0 !== this.t) {
+    var n2 = i2.e, r2 = i2.x;
+    if (void 0 !== n2) {
+      n2.x = r2;
+      i2.e = void 0;
+    }
+    if (void 0 !== r2) {
+      r2.e = n2;
+      i2.x = void 0;
+    }
+    if (i2 === this.t) {
+      this.t = r2;
+      if (void 0 === r2) f(function() {
+        var i3;
+        null == (i3 = t2.Z) || i3.call(t2);
+      });
+    }
+  }
+};
+l$1.prototype.subscribe = function(i2) {
+  var t2 = this;
+  return j(function() {
+    var n2 = t2.value;
+    f(function() {
+      return i2(n2);
+    });
+  }, { name: "sub" });
+};
+l$1.prototype.valueOf = function() {
+  return this.value;
+};
+l$1.prototype.toString = function() {
+  return this.value + "";
+};
+l$1.prototype.toJSON = function() {
+  return this.value;
+};
+l$1.prototype.peek = function() {
+  var i2 = this;
+  return f(function() {
+    return i2.value;
+  });
+};
+Object.defineProperty(l$1.prototype, "value", { get: function() {
+  var i2 = a(this);
+  if (void 0 !== i2) i2.i = this.i;
+  return this.v;
+}, set: function(i2) {
+  if (i2 !== this.v) {
+    if (s > 100) throw new Error("Cycle detected");
+    !(function(i3) {
+      if (0 !== v && 0 === s) {
+        if (i3.l !== e) {
+          i3.l = e;
+          c = { S: i3, v: i3.v, i: i3.i, o: c };
+        }
+      }
+    })(this);
+    this.v = i2;
+    this.i++;
+    d$1++;
+    v++;
+    try {
+      for (var n2 = this.t; void 0 !== n2; n2 = n2.x) n2.t.N();
+    } finally {
+      t();
+    }
+  }
+} });
+function y$1(i2, t2) {
+  return new l$1(i2, t2);
+}
+function w$1(i2) {
+  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) if (t2.S.i !== t2.i || !t2.S.h() || t2.S.i !== t2.i) return true;
+  return false;
+}
+function _$1(i2) {
+  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) {
+    var n2 = t2.S.n;
+    if (void 0 !== n2) t2.r = n2;
+    t2.S.n = t2;
+    t2.i = -1;
+    if (void 0 === t2.n) {
+      i2.s = t2;
+      break;
+    }
+  }
+}
+function b$1(i2) {
+  var t2 = i2.s, n2 = void 0;
+  while (void 0 !== t2) {
+    var r2 = t2.p;
+    if (-1 === t2.i) {
+      t2.S.U(t2);
+      if (void 0 !== r2) r2.n = t2.n;
+      if (void 0 !== t2.n) t2.n.p = r2;
+    } else n2 = t2;
+    t2.S.n = t2.r;
+    if (void 0 !== t2.r) t2.r = void 0;
+    t2 = r2;
+  }
+  i2.s = n2;
+}
+function p$1(i2, t2) {
+  l$1.call(this, void 0, t2);
+  this.x = i2;
+  this.s = void 0;
+  this.g = d$1 - 1;
+  this.f = 4;
+}
+p$1.prototype = new l$1();
+p$1.prototype.h = function() {
+  this.f &= -3;
+  if (1 & this.f) return false;
+  if (32 == (36 & this.f)) return true;
+  this.f &= -5;
+  if (this.g === d$1) return true;
+  this.g = d$1;
+  this.f |= 1;
+  if (this.i > 0 && !w$1(this)) {
+    this.f &= -2;
+    return true;
+  }
+  var i2 = o;
+  try {
+    _$1(this);
+    o = this;
+    var t2 = this.x();
+    if (16 & this.f || this.v !== t2 || 0 === this.i) {
+      this.v = t2;
+      this.f &= -17;
+      this.i++;
+    }
+  } catch (i3) {
+    this.v = i3;
+    this.f |= 16;
+    this.i++;
+  }
+  o = i2;
+  b$1(this);
+  this.f &= -2;
+  return true;
+};
+p$1.prototype.S = function(i2) {
+  if (void 0 === this.t) {
+    this.f |= 36;
+    for (var t2 = this.s; void 0 !== t2; t2 = t2.n) t2.S.S(t2);
+  }
+  l$1.prototype.S.call(this, i2);
+};
+p$1.prototype.U = function(i2) {
+  if (void 0 !== this.t) {
+    l$1.prototype.U.call(this, i2);
+    if (void 0 === this.t) {
+      this.f &= -33;
+      for (var t2 = this.s; void 0 !== t2; t2 = t2.n) t2.S.U(t2);
+    }
+  }
+};
+p$1.prototype.N = function() {
+  if (!(2 & this.f)) {
+    this.f |= 6;
+    for (var i2 = this.t; void 0 !== i2; i2 = i2.x) i2.t.N();
+  }
+};
+Object.defineProperty(p$1.prototype, "value", { get: function() {
+  if (1 & this.f) throw new Error("Cycle detected");
+  var i2 = a(this);
+  this.h();
+  if (void 0 !== i2) i2.i = this.i;
+  if (16 & this.f) throw this.v;
+  return this.v;
+} });
+function g$1(i2, t2) {
+  return new p$1(i2, t2);
+}
+function S(i2) {
+  var n2 = i2.m;
+  i2.m = void 0;
+  if ("function" == typeof n2) {
+    v++;
+    var r2 = o;
+    o = void 0;
+    try {
+      n2();
+    } catch (t2) {
+      i2.f &= -2;
+      i2.f |= 8;
+      m(i2);
+      throw t2;
+    } finally {
+      o = r2;
+      t();
+    }
+  }
+}
+function m(i2) {
+  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) t2.S.U(t2);
+  i2.x = void 0;
+  i2.s = void 0;
+  S(i2);
+}
+function x$1(i2) {
+  if (o !== this) throw new Error("Out-of-order effect");
+  b$1(this);
+  o = i2;
+  this.f &= -2;
+  if (8 & this.f) m(this);
+  t();
+}
+function E(i2, t2) {
+  this.x = i2;
+  this.m = void 0;
+  this.s = void 0;
+  this.u = void 0;
+  this.f = 32;
+  this.name = null == t2 ? void 0 : t2.name;
+  if (r) r.push(this);
+}
+E.prototype.c = function() {
+  var i2 = this.S();
+  try {
+    if (8 & this.f) return;
+    if (void 0 === this.x) return;
+    var t2 = this.x();
+    if ("function" == typeof t2) this.m = t2;
+  } finally {
+    i2();
+  }
+};
+E.prototype.S = function() {
+  if (1 & this.f) throw new Error("Cycle detected");
+  this.f |= 1;
+  this.f &= -9;
+  S(this);
+  _$1(this);
+  v++;
+  var i2 = o;
+  o = this;
+  return x$1.bind(this, i2);
+};
+E.prototype.N = function() {
+  if (!(2 & this.f)) {
+    this.f |= 2;
+    this.u = h;
+    h = this;
+  }
+};
+E.prototype.d = function() {
+  this.f |= 8;
+  if (!(1 & this.f)) m(this);
+};
+E.prototype.dispose = function() {
+  this.d();
+};
+function j(i2, t2) {
+  var n2 = new E(i2, t2);
+  try {
+    n2.c();
+  } catch (i3) {
+    n2.d();
+    throw i3;
+  }
+  var r2 = n2.d.bind(n2);
+  r2[Symbol.dispose] = r2;
+  return r2;
+}
+var l, d, p = "undefined" != typeof window && !!window.__PREACT_SIGNALS_DEVTOOLS__, _ = [];
+j(function() {
+  l = this.N;
+})();
+function g(i2, r2) {
+  l$3[i2] = r2.bind(null, l$3[i2] || function() {
+  });
+}
+function b(i2) {
+  if (d) {
+    var n2 = d;
+    d = void 0;
+    n2();
+  }
+  d = i2 && i2.S();
+}
+function y(i2) {
+  var n2 = this, t2 = i2.data, f2 = useSignal(t2);
+  f2.name = "ReactiveDom";
+  f2.value = t2;
+  var e3 = T(function() {
+    var i3 = n2, t3 = n2.__v;
+    while (t3 = t3.__) if (t3.__c) {
+      t3.__c.__$f |= 4;
+      break;
+    }
+    var o2 = g$1(function() {
+      var i4 = f2.value.value;
+      return 0 === i4 ? 0 : true === i4 ? "" : i4 || "";
+    }), e4 = g$1(function() {
+      return !Array.isArray(o2.value) && !t$2(o2.value);
+    }), a3 = j(function() {
+      this.N = F;
+      if (e4.value) {
+        var n3 = o2.value;
+        if (i3.__v && i3.__v.__e && 3 === i3.__v.__e.nodeType) i3.__v.__e.data = n3;
+      }
+    }), v4 = n2.__$u.d;
+    n2.__$u.d = function() {
+      a3();
+      v4.call(this);
+    };
+    return [e4, o2];
+  }, []), a2 = e3[0], v3 = e3[1];
+  return a2.value ? v3.peek() : v3.value;
+}
+y.displayName = "ReactiveTextNode";
+Object.defineProperties(l$1.prototype, { constructor: { configurable: true, value: void 0 }, type: { configurable: true, value: y }, props: { configurable: true, get: function() {
+  var i2 = this;
+  return { data: { get value() {
+    return i2.value;
+  } } };
+} }, __b: { configurable: true, value: 1 } });
+g("__b", function(i2, n2) {
+  b();
+  if ("string" == typeof n2.type) {
+    var r2, t2 = n2.props;
+    for (var o2 in t2) if ("children" !== o2) {
+      var f2 = t2[o2];
+      if (f2 instanceof l$1) {
+        if (!r2) n2.__np = r2 = {};
+        r2[o2] = f2;
+        t2[o2] = f2.peek();
+      }
+    }
+  }
+  i2(n2);
+});
+g("__r", function(i2, n2) {
+  i2(n2);
+  if (n2.type !== S$1) {
+    b();
+    var r2, o2 = n2.__c;
+    if (o2) {
+      o2.__$f &= -2;
+      if (void 0 === (r2 = o2.__$u)) o2.__$u = r2 = (function(i3, n3) {
+        var r3;
+        j(function() {
+          r3 = this;
+        }, { name: n3 });
+        r3.c = i3;
+        return r3;
+      })(/* @__PURE__ */ (function(i3) {
+        return function() {
+          var n3;
+          if (p) null == (n3 = this.y) || n3.call(this);
+          i3.__$f |= 1;
+          i3.setState({});
+        };
+      })(o2), "function" == typeof n2.type ? n2.type.displayName || n2.type.name : "");
+    }
+    b(r2);
+  }
+});
+g("__e", function(i2, n2, r2, t2) {
+  b();
+  i2(n2, r2, t2);
+});
+g("diffed", function(i2, n2) {
+  b();
+  var r2;
+  if ("string" == typeof n2.type && (r2 = n2.__e)) {
+    var t2 = n2.__np, o2 = n2.props, f2 = r2.U;
+    if (f2) for (var e3 in f2) {
+      var u2 = f2[e3];
+      if (!(void 0 === u2 || t2 && e3 in t2)) {
+        u2.d();
+        f2[e3] = void 0;
+      }
+    }
+    if (t2) {
+      if (!f2) {
+        f2 = {};
+        r2.U = f2;
+      }
+      for (var a2 in t2) {
+        var c2 = f2[a2], v3 = t2[a2];
+        if (void 0 === c2) {
+          c2 = w(r2, a2, v3, o2);
+          f2[a2] = c2;
+        } else c2.o(v3, o2);
+      }
+    }
+  }
+  i2(n2);
+});
+function w(i2, n2, r2, t2) {
+  var o2 = n2 in i2 && void 0 === i2.ownerSVGElement, f2 = y$1(r2);
+  return { o: function(i3, n3) {
+    f2.value = i3;
+    t2 = n3;
+  }, d: j(function() {
+    this.N = F;
+    var r3 = f2.value.value;
+    if (t2[n2] !== r3) {
+      t2[n2] = r3;
+      if (o2) i2[n2] = r3;
+      else if (null != r3 && (false !== r3 || "-" === n2[4])) i2.setAttribute(n2, r3);
+      else i2.removeAttribute(n2);
+    }
+  }) };
+}
+g("unmount", function(i2, n2) {
+  if ("string" == typeof n2.type) {
+    var r2 = n2.__e;
+    if (r2) {
+      var t2 = r2.U;
+      if (t2) {
+        r2.U = void 0;
+        for (var o2 in t2) {
+          var f2 = t2[o2];
+          if (f2) f2.d();
+        }
+      }
+    }
+    var e3 = n2.__np;
+    if (e3) {
+      var u2 = n2.props;
+      for (var a2 in e3) u2[a2] = e3[a2];
+    }
+    n2.__np = void 0;
+  } else {
+    var c2 = n2.__c;
+    if (c2) {
+      var v3 = c2.__$u;
+      if (v3) {
+        c2.__$u = void 0;
+        v3.d();
+      }
+    }
+  }
+  i2(n2);
+});
+g("__h", function(i2, n2, r2, t2) {
+  if (t2 < 3) n2.__$f |= 2;
+  i2(n2, r2, t2);
+});
+function useSignal(i2, n2) {
+  return T(function() {
+    return y$1(i2, n2);
+  }, []);
+}
+var q = function(i2) {
+  queueMicrotask(function() {
+    queueMicrotask(i2);
+  });
+};
+function x() {
+  n(function() {
+    var i2;
+    while (i2 = _.shift()) l.call(i2);
+  });
+}
+function F() {
+  if (1 === _.push(this)) (l$3.requestAnimationFrame || q)(x);
+}
+class ProviderCollection {
+  constructor() {
+    this.list = [];
+  }
+  register(provider) {
+    this.list.push(provider);
+  }
+}
+y$1();
+const toolbarTool = new ProviderCollection();
+const runtime = y$1();
+let random = (bytes) => crypto.getRandomValues(new Uint8Array(bytes));
+let customRandom = (alphabet, defaultSize, getRandom) => {
+  let mask = (2 << Math.log(alphabet.length - 1) / Math.LN2) - 1;
+  let step = -~(1.6 * mask * defaultSize / alphabet.length);
+  return (size = defaultSize) => {
+    let id = "";
+    while (true) {
+      let bytes = getRandom(step);
+      let j2 = step | 0;
+      while (j2--) {
+        id += alphabet[bytes[j2] & mask] || "";
+        if (id.length === size) return id;
+      }
+    }
+  };
+};
+let customAlphabet = (alphabet, size = 21) => customRandom(alphabet, size, random);
+const generateKey = customAlphabet("0123456789abcdefghijklmnopqrstuvwxyz", 16);
+function getKey(obj) {
+  if (obj && typeof obj["__key"] === "string") {
+    return obj["__key"];
+  }
+}
+function setKey(obj, key) {
+  if (!obj)
+    return;
+  if (!obj["__key"]) {
+    obj["__key"] = generateKey();
+  }
+  return obj["__key"];
+}
+const getLabel = (obj) => {
+  if (obj.lookupId) {
+    return obj.lookupId;
+  }
+  if (obj.spaceName) {
+    return obj.spaceName;
+  }
+  return null;
+};
+const findOne = (world, query) => {
+  if (query.indexOf("#")) {
+    const [type, label] = query.split("#", 2);
+    if (type === "body") {
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        if (getLabel(body) === label) {
+          return body;
+        }
+      }
+    } else if (type === "fixture") {
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
+          if (getLabel(fixture) === label) {
+            return fixture;
+          }
+        }
+      }
+    } else if (type === "joint") {
+      for (let joint = world.getJointList(); joint; joint = joint.getNext()) {
+        if (getLabel(joint) === label) {
+          return joint;
+        }
+      }
+    }
+  }
+  return null;
+};
+const findAll = (world, query) => {
+  const result = [];
+  if (query.indexOf("#")) {
+    const [type, label] = query.split("#", 2);
+    if (type === "body") {
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        if (getLabel(body) === label) {
+          result.push(body);
+        }
+      }
+    } else if (type === "fixture") {
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
+          if (getLabel(fixture) === label) {
+            result.push(fixture);
+          }
+        }
+      }
+    } else if (type === "joint") {
+      for (let joint = world.getJointList(); joint; joint = joint.getNext()) {
+        if (getLabel(joint) === label) {
+          result.push(joint);
+        }
+      }
+    }
+  }
+  return result;
+};
+class Multiselect {
+  constructor(selected = []) {
+    this.selected = [];
+    this.selected = selected;
+  }
+}
+function isSelected(selection, key) {
+  return !!selection?.selected.some((s2) => s2.key === key);
+}
+function setSelection(context, selection) {
+  context.multiselect.value = new Multiselect(selection?.key ? [selection] : []);
+}
+function emptySelection(context) {
+  setSelection(context, null);
+}
+function removeSelection(context, selection) {
+  if (isSelected(context.multiselect.value, selection.key))
+    emptySelection(context);
+}
+function selectBody(body) {
+  return { type: "body", key: body };
+}
+function selectFixture(fixture, body) {
+  return { type: "fixture", key: fixture, up: { type: "body", key: body } };
+}
+function selectJoint(joint) {
+  return { type: "joint", key: joint };
+}
+/**
+ * Polymatic v0.3.1
+ * @copyright Copyright 2026 Ali Shakiba
+ * @license Licensed under the MIT (https://github.com/piqnt/polymatic/blob/main/LICENSE.md)
+ */
+class EventType {
+  static create(name) {
+    return new EventType(name);
+  }
+  constructor(name) {
+    this.name = name;
+  }
+}
+const Failure = EventType.create("polymatic:failure");
+const INSPECTOR_KEY = "__POLYMATIC_INSPECTOR__";
+function inspector() {
+  return globalThis[INSPECTOR_KEY];
+}
+let bubbling = false;
+let handled = 0;
+function next(children, i2, child) {
+  if (children[i2] === child)
+    return i2;
+  const at = children.indexOf(child);
+  return at >= 0 ? at : i2 - 1;
+}
+class Middleware {
+  constructor() {
+    this.__handlers = {};
+    this.__children = [];
+    this.__parent = null;
+    this.__pendingActivate = false;
+    this.__deactivated = false;
+    this._swap = (children) => {
+      const current = this.__children;
+      const removed = [];
+      const added = [];
+      for (const child of children) {
+        if (current.indexOf(child) === -1) {
+          added.push(child);
+        }
+      }
+      for (const child of current) {
+        if (children.indexOf(child) === -1) {
+          removed.push(child);
+        }
+      }
+      this.__children.length = 0;
+      this.__children.push(...children);
+      for (const child of removed) {
+        child.__deactivate();
+        child.__detach();
+      }
+      if (this.activated) {
+        for (const child of added) {
+          child.__attach(this);
+          child.__activate();
+        }
+      }
+    };
+  }
+  get activated() {
+    return this.__parent ? this.__parent.activated : false;
+  }
+  /**
+   * Add a child middleware.
+   *
+   * The child's context type is what it needs, and this middleware's context type must provide
+   * all of it: fields it declares with the same types. A middleware that uses children with
+   * different needs declares all of them in its own context type.
+   */
+  use(middleware) {
+    const index = this.__children.indexOf(middleware);
+    if (index !== -1)
+      return;
+    if (this.activated) {
+      middleware.__attach(this);
+      middleware.__activate();
+    }
+    this.__children.push(middleware);
+  }
+  unuse(middleware) {
+    const index = this.__children.indexOf(middleware);
+    if (index !== -1) {
+      this.__children.splice(index, 1);
+      middleware === null || middleware === void 0 ? void 0 : middleware.__deactivate();
+      middleware === null || middleware === void 0 ? void 0 : middleware.__detach();
+    }
+  }
+  /**
+   * Activation runs in two passes over the subtree: `__attach` links every middleware to its
+   * parent, then `__activate` calls activate handlers, parents before children. So an activate
+   * handler can rely on the whole subtree being attached. Deactivation mirrors it: `__deactivate`
+   * calls deactivate handlers while the subtree is still attached, then `__detach` unlinks it.
+   *
+   * @internal @hidden
+   */
+  __attach(parent) {
+    if (this.__parent) {
+      return;
+    }
+    this.__parent = parent;
+    this.__pendingActivate = true;
+    this.__deactivated = false;
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      this.__children[i2].__attach(this);
+    }
+  }
+  /** @internal @hidden */
+  __activate() {
+    var _a2, _b;
+    if (!this.__pendingActivate) {
+      return;
+    }
+    this.__pendingActivate = false;
+    (_b = (_a2 = inspector()) === null || _a2 === void 0 ? void 0 : _a2.activate) === null || _b === void 0 ? void 0 : _b.call(_a2, this);
+    this._handle("activate");
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      const child = this.__children[i2];
+      child.__activate();
+      i2 = next(this.__children, i2, child);
+    }
+  }
+  /** @internal @hidden */
+  __deactivate() {
+    var _a2, _b;
+    if (!this.__parent || this.__deactivated) {
+      return;
+    }
+    this.__deactivated = true;
+    if (!this.__pendingActivate) {
+      (_b = (_a2 = inspector()) === null || _a2 === void 0 ? void 0 : _a2.deactivate) === null || _b === void 0 ? void 0 : _b.call(_a2, this);
+      this._handle("deactivate");
+    }
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      const child = this.__children[i2];
+      child.__deactivate();
+      i2 = next(this.__children, i2, child);
+    }
+  }
+  /** @internal @hidden */
+  __detach() {
+    if (!this.__parent) {
+      return;
+    }
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      this.__children[i2].__detach();
+    }
+    this.__pendingActivate = false;
+    this.__deactivated = false;
+    this.__parent = null;
+  }
+  get context() {
+    if (this.__parent) {
+      return this.__parent.context;
+    } else {
+      return null;
+    }
+  }
+  /** @hidden @deprecated Set context directly */
+  setContext(setter) {
+    if (this.__parent) {
+      this.__parent.setContext(setter);
+    } else {
+      console.error("Middleware is not activated");
+    }
+  }
+  /**
+   * Add an event handler.
+   *
+   * If an event handler function returns true, it will stop propagation to any other middlewares.
+   *
+   * If it throws, or returns a promise that is rejected, the event is still delivered to the other
+   * middlewares, and the error goes to `Failure` handlers up the parent chain.
+   *
+   * A middleware can have up to one handler for each event `type`.
+   *
+   * `type` is an event type, and the handler receives its payload type, or an event name.
+   */
+  on(type, handler) {
+    const name = typeof type === "string" ? type : type.name;
+    if (this.__handlers[name])
+      throw Error(`Handler for ${name} already exists`);
+    this.__handlers[name] = handler;
+  }
+  /**
+   * This is used internally, calls event handler and passes down event to children.
+   */
+  _consume(type, ev) {
+    const stop = this._handle(type, ev);
+    if (stop)
+      return true;
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      const child = this.__children[i2];
+      const stop2 = child._consume(type, ev);
+      if (stop2)
+        return true;
+      i2 = next(this.__children, i2, child);
+    }
+    return false;
+  }
+  /**
+   * This is used internally, calls event handler.
+   */
+  _handle(type, ev) {
+    var _a2;
+    if (!this.activated)
+      return;
+    const handler = this.__handlers && this.__handlers[type];
+    if (handler) {
+      if (typeof handler === "function") {
+        handled++;
+        const inspect2 = inspector();
+        const start = (inspect2 === null || inspect2 === void 0 ? void 0 : inspect2.handle) ? performance.now() : 0;
+        let result;
+        let failed = false;
+        let error;
+        try {
+          result = handler.call(this, ev);
+        } catch (e3) {
+          failed = true;
+          error = e3;
+        }
+        const stop = result === true;
+        (_a2 = inspect2 === null || inspect2 === void 0 ? void 0 : inspect2.handle) === null || _a2 === void 0 ? void 0 : _a2.call(inspect2, type, ev, this, performance.now() - start, stop);
+        if (failed) {
+          fail({ error, middleware: this, type, ev });
+        } else if (result && typeof result.then === "function") {
+          result.then(void 0, (e3) => fail({ error: e3, middleware: this, type, ev }));
+        }
+        return stop;
+      }
+    }
+    return false;
+  }
+  /**
+   * Send an event to all active middlewares.
+   *
+   * An event is first bubbled to the runtime through middleware parent chain.
+   * Runtime queues events as microtask -- they are asynchronously but in the same animation frame.
+   * Events are then recursively passed down to all active middlewares and their children.
+   *
+   * If an event handler returns true, delivering the event is stopped.
+   *
+   * `type` is an event type, and `ev` must be its payload type, or an event name.
+   */
+  emit(type, ...[ev]) {
+    var _a2, _b;
+    if (!this.activated)
+      return;
+    const name = typeof type === "string" ? type : type.name;
+    if (!bubbling)
+      (_b = (_a2 = inspector()) === null || _a2 === void 0 ? void 0 : _a2.emit) === null || _b === void 0 ? void 0 : _b.call(_a2, name, ev, this);
+    if (this.__parent) {
+      const outer = bubbling;
+      bubbling = true;
+      try {
+        this.__parent.emit(name, ev);
+      } finally {
+        bubbling = outer;
+      }
+    } else {
+      console.error(Error("Not active!"));
+    }
+  }
+  /** @hidden @deprecated */
+  static activate(middleware, context) {
+    return Runtime.activate(middleware, context);
+  }
+}
+function fail(failure) {
+  var _a2, _b, _c;
+  let stoppedBy = null;
+  let m2 = failure.middleware.__parent;
+  while (m2 && !stoppedBy) {
+    const handler = m2.activated && ((_a2 = m2.__handlers) === null || _a2 === void 0 ? void 0 : _a2[Failure.name]);
+    if (typeof handler === "function") {
+      try {
+        if (handler.call(m2, failure) === true)
+          stoppedBy = m2;
+      } catch (e3) {
+        report(e3);
+      }
+    }
+    m2 = m2.__parent;
+  }
+  (_c = (_b = inspector()) === null || _b === void 0 ? void 0 : _b.failure) === null || _c === void 0 ? void 0 : _c.call(_b, failure, stoppedBy);
+  if (!stoppedBy)
+    report(failure.error);
+}
+function report(error) {
+  const reportError = globalThis.reportError;
+  if (typeof reportError === "function")
+    reportError(error);
+  else
+    console.error(error);
+}
+class Runtime extends Middleware {
+  constructor() {
+    super(...arguments);
+    this.displayName = "Runtime";
+    this.__handlers = {};
+    this.__children = [];
+    this._activated = false;
+    this.contextUpdateEmit = () => {
+      this.emit("context-change");
+    };
+    this._microtask = Promise.resolve();
+  }
+  get activated() {
+    return this._activated;
+  }
+  _activate(context) {
+    var _a2, _b;
+    if (this._activated) {
+      return;
+    }
+    this._context = context;
+    this._activated = true;
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      this.__children[i2].__attach(this);
+    }
+    (_b = (_a2 = inspector()) === null || _a2 === void 0 ? void 0 : _a2.activate) === null || _b === void 0 ? void 0 : _b.call(_a2, this);
+    this._handle("activate");
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      const child = this.__children[i2];
+      child.__activate();
+      i2 = next(this.__children, i2, child);
+    }
+  }
+  _deactivate() {
+    var _a2, _b;
+    if (!this._activated) {
+      return;
+    }
+    (_b = (_a2 = inspector()) === null || _a2 === void 0 ? void 0 : _a2.deactivate) === null || _b === void 0 ? void 0 : _b.call(_a2, this);
+    this._handle("deactivate");
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      const child = this.__children[i2];
+      child.__deactivate();
+      i2 = next(this.__children, i2, child);
+    }
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      this.__children[i2].__detach();
+    }
+    this._activated = false;
+  }
+  get context() {
+    return this._context;
+  }
+  setContext(setter) {
+    if (typeof setter !== "function") {
+      console.error("Setter is not a function: ", setter);
+      return;
+    }
+    setter(this.context);
+    clearTimeout(this.contextUpdateEmitTimeout);
+    this.contextUpdateEmitTimeout = setTimeout(this.contextUpdateEmit);
+  }
+  emit(type, ...[ev]) {
+    var _a2, _b;
+    const name = typeof type === "string" ? type : type.name;
+    if (!bubbling)
+      (_b = (_a2 = inspector()) === null || _a2 === void 0 ? void 0 : _a2.emit) === null || _b === void 0 ? void 0 : _b.call(_a2, name, ev, this);
+    this._microtask.then(() => this.__dispatch(name, ev));
+  }
+  /** @internal @hidden delivers a queued event down the tree */
+  __dispatch(name, ev) {
+    var _a2, _b;
+    const inspect2 = inspector();
+    if (!inspect2) {
+      this._consume(name, ev);
+      return;
+    }
+    (_a2 = inspect2.dispatch) === null || _a2 === void 0 ? void 0 : _a2.call(inspect2, name, ev, this);
+    const outer = handled;
+    handled = 0;
+    try {
+      this._consume(name, ev);
+    } finally {
+      const count = handled;
+      handled = outer;
+      (_b = inspect2.dispatched) === null || _b === void 0 ? void 0 : _b.call(inspect2, name, ev, count);
+    }
+  }
+  static activate(middleware, context) {
+    const manager = new Runtime();
+    manager.use(middleware);
+    manager._activate(context);
+  }
+  static deactivate(middleware) {
+    if ("_deactivate" in middleware && typeof middleware._deactivate === "function") {
+      middleware._deactivate();
+      return true;
+    }
+    const parent = middleware.__parent;
+    if (parent && "_deactivate" in parent && typeof parent._deactivate === "function") {
+      parent._deactivate();
+      return true;
+    }
+    return false;
+  }
+}
+class Memo {
+  constructor() {
+    this.memory = [];
+  }
+  static init(...args) {
+    const memo = new Memo();
+    if (args.length)
+      memo.update(...args);
+    return memo;
+  }
+  /**
+   * Returns true if args are updated.
+   */
+  update(...args) {
+    let equal = this.memory.length === args.length;
+    for (let i2 = 0; i2 < args.length; i2++) {
+      equal = equal && this.memory[i2] === args[i2];
+      this.memory[i2] = args[i2];
+    }
+    this.memory.length = args.length;
+    return !equal;
+  }
+  clear() {
+    this.memory.length = 0;
+  }
+}
+function makeMat2d() {
+  return { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 };
+}
+function identityMat2d(out) {
+  out.a = 1;
+  out.b = 0;
+  out.c = 0;
+  out.d = 1;
+  out.e = 0;
+  out.f = 0;
+}
+function translateMat2d(m2, x2, y2) {
+  m2.e += x2;
+  m2.f += y2;
+}
+function scaleMat2d(m2, x2, y2) {
+  m2.a *= x2;
+  m2.c *= x2;
+  m2.e *= x2;
+  m2.b *= y2;
+  m2.d *= y2;
+  m2.f *= y2;
+}
+function mulMat2ds(out, A, B2) {
+  const a2 = A.a * B2.a + A.c * B2.b;
+  const b2 = A.b * B2.a + A.d * B2.b;
+  const c2 = A.a * B2.c + A.c * B2.d;
+  const d2 = A.b * B2.c + A.d * B2.d;
+  const e3 = A.a * B2.e + A.c * B2.f + A.e;
+  const f2 = A.b * B2.e + A.d * B2.f + A.f;
+  out.a = a2;
+  out.b = b2;
+  out.c = c2;
+  out.d = d2;
+  out.e = e3;
+  out.f = f2;
+}
+function mulMat2dVec2(out, m2, v3) {
+  const x2 = v3.x;
+  const y2 = v3.y;
+  out.x = m2.a * x2 + m2.c * y2 + m2.e;
+  out.y = m2.b * x2 + m2.d * y2 + m2.f;
+}
+function invMat2dVec2(out, m2, v3) {
+  const id = 1 / (m2.a * m2.d - m2.c * m2.b);
+  const x2 = v3.x;
+  const y2 = v3.y;
+  out.x = m2.d * id * x2 - m2.c * id * y2 + (m2.f * m2.c - m2.e * m2.d) * id;
+  out.y = m2.a * id * y2 - m2.b * id * x2 + (m2.e * m2.b - m2.f * m2.a) * id;
+}
+function mat2dToProjection(out, m2, screenWidth, screenHeight) {
+  const sx = 2 / screenWidth;
+  const sy = -2 / screenHeight;
+  const a2 = sx * m2.a;
+  const b2 = sy * m2.b;
+  const c2 = sx * m2.c;
+  const d2 = sy * m2.d;
+  const tx = sx * m2.e - 1;
+  const ty = sy * m2.f + 1;
+  out.fill(0);
+  out[0] = a2;
+  out[1] = b2;
+  out[4] = c2;
+  out[5] = d2;
+  out[10] = 1;
+  out[12] = tx;
+  out[13] = ty;
+  out[15] = 1;
+}
+function initTestbedContext() {
+  const ctx = {};
+  ctx.activity = y$1("mode:play");
+  ctx.activeTool = y$1(void 0);
+  ctx.paused = y$1(false);
+  ctx.editable = y$1(false);
+  ctx.pointerCaptured = false;
+  ctx.style = { background: "#111" };
+  ctx.camera = {
+    x: 0,
+    y: 10,
+    width: 80,
+    height: 60
+  };
+  ctx.containerElement = y$1(void 0);
+  ctx.canvasElement = y$1(void 0);
+  ctx.gl = y$1(void 0);
+  ctx.worldMatrix = makeMat2d();
+  ctx.mouseForce = y$1(1e3);
+  ctx.pixelPerUnit = 1;
+  ctx.pointerRadius = 20;
+  ctx.showOutline = y$1(true);
+  ctx.showToolbar = y$1(true);
+  ctx.activeKeys = {};
+  ctx.multiselect = y$1(new Multiselect([]));
+  ctx.world = y$1();
+  ctx.simulation = {
+    speed: 1,
+    hz: 60,
+    velocityIterations: 8,
+    positionIterations: 3
+  };
+  ctx.renderConfig = y$1({
+    shapes: true,
+    bounds: false,
+    mass: false,
+    bodyNames: false,
+    joints: true,
+    contact: false,
+    contactNormals: false
+  });
+  ctx.textOverlay = y$1(void 0);
+  return ctx;
+}
+class ToolSwitch extends Middleware {
+  constructor(name, tool) {
+    super();
+    this.disposers = [];
+    this.handleActivate = () => {
+      this.disposers.push(j(() => {
+        const activeTool = this.context.activeTool.value;
+        const isMe = activeTool?.name === this.name;
+        if (isMe && !this.tool.activated) {
+          this.use(this.tool);
+        } else if (!isMe && this.tool.activated) {
+          this.unuse(this.tool);
+        }
+      }));
+    };
+    this.handleDeactivate = () => {
+      this.disposers.forEach((d2) => d2());
+      this.disposers = [];
+      this.unuse(this.tool);
+    };
+    this.name = name;
+    this.tool = tool;
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+  }
+}
+function compileShader(gl, type, source) {
+  const shader = gl.createShader(type);
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    const info = gl.getShaderInfoLog(shader);
+    gl.deleteShader(shader);
+    throw new Error(`Shader compile error: ${info}`);
+  }
+  return shader;
+}
+function compileProgram(gl, vertexSrc, fragmentSrc) {
+  const vertexShader = compileShader(gl, gl.VERTEX_SHADER, vertexSrc);
+  const fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, fragmentSrc);
+  const program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+  gl.deleteShader(vertexShader);
+  gl.deleteShader(fragmentShader);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    const info = gl.getProgramInfoLog(program);
+    gl.deleteProgram(program);
+    throw new Error(`Program link error: ${info}`);
+  }
+  return program;
+}
+function createUnitQuadBuffer(gl) {
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    1
+  ]), gl.STATIC_DRAW);
+  return buffer;
+}
+function createInstancedVAO(gl, quadBuffer, instanceBuffer, instanceAttribSizes) {
+  const vao = gl.createVertexArray();
+  gl.bindVertexArray(vao);
+  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+  gl.enableVertexAttribArray(0);
+  gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+  const stride = instanceAttribSizes.reduce((sum, size) => sum + size, 0) * 4;
+  gl.bindBuffer(gl.ARRAY_BUFFER, instanceBuffer);
+  let offset = 0;
+  for (let i2 = 0; i2 < instanceAttribSizes.length; i2++) {
+    const location = i2 + 1;
+    const size = instanceAttribSizes[i2];
+    gl.enableVertexAttribArray(location);
+    gl.vertexAttribPointer(location, size, gl.FLOAT, false, stride, offset);
+    gl.vertexAttribDivisor(location, 1);
+    offset += size * 4;
+  }
+  gl.bindVertexArray(null);
+  return vao;
+}
+function createShapeProgram(gl, vertexSrc, fragmentSrc) {
+  const program = compileProgram(gl, vertexSrc, fragmentSrc);
+  return {
+    program,
+    uProjectionMatrix: gl.getUniformLocation(program, "projectionMatrix"),
+    uPixelScale: gl.getUniformLocation(program, "pixelScale")
+  };
+}
+function createPolygonProgram(gl, vertexSrc, fragmentSrc) {
+  const program = compileProgram(gl, vertexSrc, fragmentSrc);
+  return {
+    program,
+    uProjectionMatrix: gl.getUniformLocation(program, "projectionMatrix"),
+    uPixelScale: gl.getUniformLocation(program, "pixelScale"),
+    uVertexTex: gl.getUniformLocation(program, "uVertexTex"),
+    uVertexTexWidth: gl.getUniformLocation(program, "uVertexTexWidth")
+  };
+}
+function createDataTexture(gl) {
+  const texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.bindTexture(gl.TEXTURE_2D, null);
+  return texture;
+}
+function createLineProgram(gl, vertexSrc, fragmentSrc) {
+  const program = compileProgram(gl, vertexSrc, fragmentSrc);
+  return {
+    program,
+    uProjectionMatrix: gl.getUniformLocation(program, "projectionMatrix")
+  };
+}
+const colorCache = /* @__PURE__ */ new Map();
+let colorCanvasCtx = null;
+function parseColor(css) {
+  const cached = colorCache.get(css);
+  if (cached)
+    return cached;
+  if (!colorCanvasCtx) {
+    colorCanvasCtx = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+    colorCanvasCtx.canvas.width = 1;
+    colorCanvasCtx.canvas.height = 1;
+  }
+  colorCanvasCtx.clearRect(0, 0, 1, 1);
+  colorCanvasCtx.fillStyle = css;
+  colorCanvasCtx.fillRect(0, 0, 1, 1);
+  const [r2, g2, b2, a2] = colorCanvasCtx.getImageData(0, 0, 1, 1).data;
+  const parsed = [r2 / 255, g2 / 255, b2 / 255, a2 / 255];
+  colorCache.set(css, parsed);
+  return parsed;
+}
+var solidCircle_default$1 = "#version 300 es\nuniform mat4 projectionMatrix;\nuniform float pixelScale;\n\nlayout(location = 0) in vec2 v_localPosition;\nlayout(location = 1) in vec4 v_instanceTransform;\nlayout(location = 2) in float v_instanceRadius;\nlayout(location = 3) in vec4 v_instanceColor;\nlayout(location = 4) in vec4 v_instanceFillColor;\n\nout vec2 f_position;\nout float f_radius;\nout float f_thickness;\nout vec4 f_color;\nout vec4 f_fillColor;\n\nvoid main() {\n  f_color = v_instanceColor;\n  f_fillColor = v_instanceFillColor;\n  float radius = v_instanceRadius;\n  \n  float thicknessWorld = 3.0 / pixelScale;\n\n  \n  \n  \n  \n  \n  float scale = radius + thicknessWorld;\n\n  f_position = v_localPosition;\n  f_radius = radius / scale;\n  f_thickness = thicknessWorld / scale;\n\n  float x = v_instanceTransform.x;\n  float y = v_instanceTransform.y;\n  float c = v_instanceTransform.z;\n  float s = v_instanceTransform.w;\n  vec2 p = vec2(scale * v_localPosition.x, scale * v_localPosition.y);\n  p = vec2((c * p.x - s * p.y) + x, (s * p.x + c * p.y) + y);\n  gl_Position = projectionMatrix * vec4(p, 0.0, 1.0);\n}";
+var solidCircle_default = "#version 300 es\nprecision highp float;\n\nin vec2 f_position;\nin float f_radius;\nin float f_thickness;\nin vec4 f_color;\nin vec4 f_fillColor;\n\nout vec4 fragColor;\n\nvec4 blend_colors(vec4 front, vec4 back) {\n  vec3 cSrc = front.rgb;\n  float alphaSrc = front.a;\n  vec3 cDst = back.rgb;\n  float alphaDst = back.a;\n  vec3 cOut = cSrc * alphaSrc + cDst * alphaDst * (1.0 - alphaSrc);\n  float alphaOut = alphaSrc + alphaDst * (1.0 - alphaSrc);\n  cOut = cOut / alphaOut;\n  return vec4(cOut, alphaOut);\n}\n\nvoid main() {\n  float radius = f_radius;\n\n  \n  vec2 e = vec2(radius, 0.0);\n  vec2 w = f_position;\n  float we = dot(w, e);\n  vec2 b = w - e * clamp(we / dot(e, e), 0.0, 1.0);\n  float da = length(b);\n\n  \n  float dw = length(w);\n  float dc = abs(dw - radius);\n\n  \n  float d = min(da, dc);\n\n  vec4 borderColor = f_color;\n  vec4 fillColor = f_fillColor;\n\n  vec4 back = vec4(fillColor.rgb, fillColor.a * smoothstep(radius + f_thickness, radius, dw));\n  vec4 front = vec4(borderColor.rgb, smoothstep(f_thickness, 0.0, d));\n\n  fragColor = blend_colors(front, back);\n}";
+var solidCapsule_default$1 = "#version 300 es\nuniform mat4 projectionMatrix;\nuniform float pixelScale;\n\nlayout(location = 0) in vec2 v_localPosition;\nlayout(location = 1) in vec4 v_instanceTransform;\nlayout(location = 2) in float v_instanceRadius;\nlayout(location = 3) in float v_instanceLength;\nlayout(location = 4) in vec4 v_instanceColor;\nlayout(location = 5) in vec4 v_instanceFillColor;\n\nout vec2 f_position;\nout float f_length;\nout float f_radius;\nout float f_thickness;\nout vec4 f_color;\nout vec4 f_fillColor;\n\nvoid main() {\n  f_position = v_localPosition;\n  f_color = v_instanceColor;\n  f_fillColor = v_instanceFillColor;\n\n  float radius = v_instanceRadius;\n  float capsuleLength = v_instanceLength;\n  float thicknessWorld = 3.0 / pixelScale;\n\n  \n  \n  float scale = radius + 0.5 * capsuleLength + thicknessWorld;\n\n  \n  f_length = capsuleLength / scale;\n  f_radius = radius / scale;\n  f_thickness = thicknessWorld / scale;\n\n  float x = v_instanceTransform.x;\n  float y = v_instanceTransform.y;\n  float c = v_instanceTransform.z;\n  float s = v_instanceTransform.w;\n  vec2 p = vec2(scale * v_localPosition.x, scale * v_localPosition.y);\n  p = vec2((c * p.x - s * p.y) + x, (s * p.x + c * p.y) + y);\n  gl_Position = projectionMatrix * vec4(p, 0.0, 1.0);\n}";
+var solidCapsule_default = "#version 300 es\nprecision highp float;\n\nin vec2 f_position;\nin float f_length;\nin float f_radius;\nin float f_thickness;\nin vec4 f_color;\nin vec4 f_fillColor;\n\nout vec4 fragColor;\n\nvec4 blend_colors(vec4 front, vec4 back) {\n  vec3 cSrc = front.rgb;\n  float alphaSrc = front.a;\n  vec3 cDst = back.rgb;\n  float alphaDst = back.a;\n  vec3 cOut = cSrc * alphaSrc + cDst * alphaDst * (1.0 - alphaSrc);\n  float alphaOut = alphaSrc + alphaDst * (1.0 - alphaSrc);\n  cOut = cOut / alphaOut;\n  return vec4(cOut, alphaOut);\n}\n\nvoid main() {\n  float radius = f_radius;\n\n  vec4 borderColor = f_color;\n  vec4 fillColor = f_fillColor;\n\n  vec2 v1 = vec2(-0.5 * f_length, 0.0);\n  vec2 v2 = vec2(0.5 * f_length, 0.0);\n\n  \n  vec2 e = v2 - v1;\n  vec2 w = f_position - v1;\n  float we = dot(w, e);\n  vec2 b = w - e * clamp(we / dot(e, e), 0.0, 1.0);\n  float dw = length(b);\n\n  \n  float d = min(dw, abs(dw - radius));\n\n  vec4 back = vec4(fillColor.rgb, fillColor.a * smoothstep(radius + f_thickness, radius, dw));\n  vec4 front = vec4(borderColor.rgb, smoothstep(f_thickness, 0.0, d));\n\n  fragColor = blend_colors(front, back);\n}";
+var solidPolygon_default$1 = "#version 300 es\nuniform mat4 projectionMatrix;\nuniform float pixelScale;\n\nuniform sampler2D uVertexTex;\n\nuniform highp int uVertexTexWidth;\n\nlayout(location = 0) in vec2 v_localPosition;\nlayout(location = 1) in vec4 v_instanceTransform;\nlayout(location = 2) in float v_instanceVertexOffset;\nlayout(location = 3) in float v_instanceVertexCount;\nlayout(location = 4) in float v_instanceRadius;\nlayout(location = 5) in vec4 v_instanceColor;\nlayout(location = 6) in vec4 v_instanceFillColor;\n\nout vec2 f_position;\nflat out highp int f_vertexOffset;\nflat out highp int f_vertexCount;\nout vec2 f_center;\nout float f_invScale;\nout float f_radius;\nout float f_thickness;\nout vec4 f_color;\nout vec4 f_fillColor;\n\nvec2 fetchVertex(int index) {\n  return texelFetch(uVertexTex, ivec2(index % uVertexTexWidth, index / uVertexTexWidth), 0).rg;\n}\n\nvoid main() {\n  f_position = v_localPosition;\n  f_color = v_instanceColor;\n  f_fillColor = v_instanceFillColor;\n\n  int offset = int(v_instanceVertexOffset + 0.5);\n  int count = int(v_instanceVertexCount + 0.5);\n  f_vertexOffset = offset;\n  f_vertexCount = count;\n\n  \n  vec2 lower = fetchVertex(offset);\n  vec2 upper = lower;\n  for (int i = 1; i < count; ++i) {\n    vec2 v = fetchVertex(offset + i);\n    lower = min(lower, v);\n    upper = max(upper, v);\n  }\n\n  vec2 center = 0.5 * (lower + upper);\n  vec2 width = upper - lower;\n  float maxWidth = max(width.x, width.y);\n  float thicknessWorld = 3.0 / pixelScale;\n\n  \n  \n  float scale = v_instanceRadius + 0.5 * maxWidth + thicknessWorld;\n  float invScale = 1.0 / scale;\n\n  \n  \n  \n  f_center = center;\n  f_invScale = invScale;\n  f_radius = invScale * v_instanceRadius;\n  f_thickness = thicknessWorld * invScale;\n\n  \n  float x = v_instanceTransform.x;\n  float y = v_instanceTransform.y;\n  float c = v_instanceTransform.z;\n  float s = v_instanceTransform.w;\n  vec2 p = vec2(scale * v_localPosition.x, scale * v_localPosition.y) + center;\n  p = vec2((c * p.x - s * p.y) + x, (s * p.x + c * p.y) + y);\n  gl_Position = projectionMatrix * vec4(p, 0.0, 1.0);\n}";
+var solidPolygon_default = "#version 300 es\nprecision highp float;\n\nuniform sampler2D uVertexTex;\n\nuniform highp int uVertexTexWidth;\n\nin vec2 f_position;\nflat in highp int f_vertexOffset;\nflat in highp int f_vertexCount;\nin vec2 f_center;\nin float f_invScale;\nin float f_radius;\nin float f_thickness;\nin vec4 f_color;\nin vec4 f_fillColor;\n\nout vec4 fragColor;\n\nvec4 blend_colors(vec4 front, vec4 back) {\n  vec3 cSrc = front.rgb;\n  float alphaSrc = front.a;\n  vec3 cDst = back.rgb;\n  float alphaDst = back.a;\n  vec3 cOut = cSrc * alphaSrc + cDst * alphaDst * (1.0 - alphaSrc);\n  float alphaOut = alphaSrc + alphaDst * (1.0 - alphaSrc);\n  cOut = cOut / alphaOut;\n  return vec4(cOut, alphaOut);\n}\n\nfloat cross2d(in vec2 v1, in vec2 v2) {\n  return v1.x * v2.y - v1.y * v2.x;\n}\n\nvec2 fetchVertex(in int index, in vec2 center, in float invScale) {\n  vec2 raw = texelFetch(uVertexTex, ivec2(index % uVertexTexWidth, index / uVertexTexWidth), 0).rg;\n  return invScale * (raw - center);\n}\n\nfloat sdConvexPolygon(in vec2 p, in int offset, in int count, in vec2 center, in float invScale) {\n  vec2 v0 = fetchVertex(offset, center, invScale);\n  float d = dot(p - v0, p - v0);\n\n  \n  float side = -1.0;\n  vec2 vj = fetchVertex(offset + count - 1, center, invScale);\n  for (int i = 0; i < count; ++i) {\n    vec2 vi = fetchVertex(offset + i, center, invScale);\n    vec2 e = vi - vj;\n    vec2 w = p - vj;\n    float we = dot(w, e);\n    vec2 b = w - e * clamp(we / dot(e, e), 0.0, 1.0);\n    float bb = dot(b, b);\n\n    if (bb < d) {\n      d = bb;\n    }\n\n    \n    \n    float s = cross2d(w, e);\n    if (s >= 0.0) {\n      side = 1.0;\n    }\n\n    vj = vi;\n  }\n\n  return side * sqrt(d);\n}\n\nvoid main() {\n  vec4 borderColor = f_color;\n  vec4 fillColor = f_fillColor;\n\n  float dw = sdConvexPolygon(f_position, f_vertexOffset, f_vertexCount, f_center, f_invScale);\n  float d = abs(dw - f_radius);\n\n  vec4 back = vec4(fillColor.rgb, fillColor.a * smoothstep(f_radius + f_thickness, f_radius, dw));\n  vec4 front = vec4(borderColor.rgb, smoothstep(f_thickness, 0.0, d));\n\n  fragColor = blend_colors(front, back);\n}";
+var line_default$1 = "#version 300 es\nuniform mat4 projectionMatrix;\n\nlayout(location = 0) in vec2 v_position;\nlayout(location = 1) in vec4 v_color;\n\nout vec4 f_color;\n\nvoid main() {\n  f_color = v_color;\n  gl_Position = projectionMatrix * vec4(v_position, 0.0, 1.0);\n}";
+var line_default = "#version 300 es\nprecision highp float;\n\nin vec4 f_color;\nout vec4 fragColor;\n\nvoid main() {\n  fragColor = f_color;\n}";
+class GLLoader extends Middleware {
+  constructor() {
+    super();
+    this.disposers = [];
+    this.backgroundMemo = Memo.init();
+    this.handleActivate = () => {
+      this.disposers.push(j(() => {
+        const containerElement = this.context.containerElement?.value;
+        if (!containerElement)
+          return;
+        const canvas = document.createElement("canvas");
+        canvas.tabIndex = 1;
+        containerElement.appendChild(canvas);
+        this.canvas = canvas;
+        this.context.canvasElement.value = canvas;
+        const gl = canvas.getContext("webgl2", {
+          alpha: true,
+          antialias: true,
+          premultipliedAlpha: false
+        });
+        if (!gl) {
+          throw new Error("WebGL2 is not supported by this browser");
+        }
+        this.resources = {
+          gl,
+          quadBuffer: createUnitQuadBuffer(gl),
+          circleProgram: createShapeProgram(gl, solidCircle_default$1, solidCircle_default),
+          capsuleProgram: createShapeProgram(gl, solidCapsule_default$1, solidCapsule_default),
+          polygonProgram: createPolygonProgram(gl, solidPolygon_default$1, solidPolygon_default),
+          lineProgram: createLineProgram(gl, line_default$1, line_default),
+          projectionMatrix: new Float32Array(16),
+          pixelScale: 1
+        };
+        gl.clearColor(0, 0, 0, 0);
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        this.resizeObserver = new ResizeObserver(this.handleResize);
+        this.resizeObserver.observe(containerElement);
+        this.handleResize();
+        this.handleUpdateState();
+        this.context.gl.value = this.resources;
+        this.emit("stage-ready");
+        return () => {
+          this.resizeObserver.disconnect();
+          this.resizeObserver = null;
+          this.context.canvasElement.value = null;
+          this.context.gl.value = null;
+          gl.deleteProgram(this.resources.circleProgram.program);
+          gl.deleteProgram(this.resources.capsuleProgram.program);
+          gl.deleteProgram(this.resources.polygonProgram.program);
+          gl.deleteProgram(this.resources.lineProgram.program);
+          gl.deleteBuffer(this.resources.quadBuffer);
+          this.resources = null;
+          canvas.remove();
+          this.canvas = null;
+        };
+      }));
+    };
+    this.handleDeactivate = () => {
+      this.disposers.forEach((d2) => d2());
+      this.disposers = [];
+    };
+    this.handleResize = () => {
+      if (!this.canvas || !this.resources)
+        return;
+      const containerElement = this.context.containerElement.peek();
+      const ratio = window.devicePixelRatio || 1;
+      const pixelWidth = Math.max(1, Math.round(containerElement.clientWidth * ratio));
+      const pixelHeight = Math.max(1, Math.round(containerElement.clientHeight * ratio));
+      if (this.canvas.width !== pixelWidth || this.canvas.height !== pixelHeight) {
+        this.canvas.width = pixelWidth;
+        this.canvas.height = pixelHeight;
+      }
+      this.resources.gl.viewport(0, 0, pixelWidth, pixelHeight);
+    };
+    this.handleUpdateState = () => {
+      if (!this.resources)
+        return;
+      const background = this.context.style.background;
+      if (this.backgroundMemo.update(background)) {
+        if (background)
+          this.canvas.style.backgroundColor = background;
+      }
+    };
+    this.handleFrameBefore = () => {
+      this.handleUpdateState();
+      if (!this.resources)
+        return;
+      const m2 = this.context.worldMatrix;
+      this.context.pixelPerUnit = Math.max(m2.a, m2.d) || 1;
+      this.context.pointerRadius = 20 / this.context.pixelPerUnit;
+      this.resources.pixelScale = this.context.pixelPerUnit;
+      const gl = this.resources.gl;
+      gl.clear(gl.COLOR_BUFFER_BIT);
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+    this.on("frame-before", this.handleFrameBefore);
+  }
+}
+class CameraTransform extends Middleware {
+  constructor() {
+    super();
+    this.disposers = [];
+    this.viewboxMemo = Memo.init();
+    this.panZoom = makeMat2d();
+    this.fitMatrix = makeMat2d();
+    this.handleActivate = () => {
+      this.disposers.push(j(() => {
+        const canvas = this.context.canvasElement.value;
+        const resources = this.context.gl.value;
+        if (!canvas || !resources)
+          return;
+        this.canvas = canvas;
+        this.resizeObserver = new ResizeObserver(this.rescale);
+        this.resizeObserver.observe(canvas);
+        this.rescale();
+        return () => {
+          this.resizeObserver.disconnect();
+          this.resizeObserver = null;
+          this.canvas = null;
+        };
+      }));
+    };
+    this.handleDeactivate = () => {
+      this.disposers.forEach((d2) => d2());
+      this.disposers = [];
+    };
+    this.handleFrameBefore = () => {
+      const camera = this.context.camera;
+      if (this.viewboxMemo.update(camera.x, camera.y, camera.width, camera.height)) {
+        this.rescale();
+      }
+    };
+    this.rescale = () => {
+      if (!this.canvas)
+        return;
+      const camera = this.context.camera;
+      const screenWidth = this.canvas.clientWidth;
+      const screenHeight = this.canvas.clientHeight;
+      const fitScale = Math.min(screenWidth / camera.width, screenHeight / camera.height) || 1;
+      identityMat2d(this.fitMatrix);
+      scaleMat2d(this.fitMatrix, fitScale, -fitScale);
+      translateMat2d(this.fitMatrix, screenWidth / 2 - camera.x * fitScale, screenHeight / 2 + camera.y * fitScale);
+      this.applyTransform();
+    };
+    this.applyTransform = () => {
+      const resources = this.context.gl.peek();
+      if (!this.canvas || !resources)
+        return;
+      mulMat2ds(this.context.worldMatrix, this.panZoom, this.fitMatrix);
+      mat2dToProjection(resources.projectionMatrix, this.context.worldMatrix, this.canvas.clientWidth, this.canvas.clientHeight);
+    };
+    this.handleZoom = ({ center: center2, zoom }) => {
+      translateMat2d(this.panZoom, -center2.x, -center2.y);
+      scaleMat2d(this.panZoom, zoom, zoom);
+      translateMat2d(this.panZoom, center2.x, center2.y);
+      this.applyTransform();
+    };
+    this.handlePan = ({ delta }) => {
+      translateMat2d(this.panZoom, -delta.x, -delta.y);
+      this.applyTransform();
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+    this.on("frame-before", this.handleFrameBefore);
+    this.on("display-zoom", this.handleZoom);
+    this.on("display-pan", this.handlePan);
+  }
+}
+class AutoFocus extends Middleware {
+  constructor() {
+    super();
+    this.disposers = [];
+    this.pausedMemo = Memo.init();
+    this.handleActivate = () => {
+      this.disposers.push(j(() => {
+        const canvas = this.context.canvasElement.value;
+        if (!canvas)
+          return;
+        this.canvas = canvas;
+        canvas.addEventListener("mousedown", this.focus);
+        canvas.addEventListener("touchstart", this.focus);
+        return () => {
+          canvas.removeEventListener("mousedown", this.focus);
+          canvas.removeEventListener("touchstart", this.focus);
+          this.canvas = null;
+        };
+      }));
+    };
+    this.handleDeactivate = () => {
+      this.disposers.forEach((d2) => d2());
+      this.disposers = [];
+    };
+    this.handleFrameBefore = () => {
+      const paused = this.context.paused.peek();
+      if (this.pausedMemo.update(paused)) {
+        if (!paused)
+          this.focus();
+      }
+    };
+    this.focus = () => {
+      window.focus();
+      document.activeElement?.blur?.();
+      this.canvas?.focus();
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+    this.on("frame-before", this.handleFrameBefore);
+  }
+}
+class ContainerLoader extends Middleware {
+  constructor() {
+    super();
+    this.handleActivate = () => {
+      if (document.readyState !== "loading") {
+        this.handleDomReady();
+      } else {
+        document.addEventListener("DOMContentLoaded", this.handleDomReady);
+      }
+    };
+    this.handleDomReady = () => {
+      const containerElement = document.getElementById("space");
+      if (!containerElement) {
+        throw new Error("Runtime container element not available!");
+      }
+      this.context.containerElement.value = containerElement;
+    };
+    this.on("activate", this.handleActivate);
+  }
+}
+const DEFAULTS = {
+  speed: 1,
+  hz: 60,
+  velocityIterations: 8,
+  positionIterations: 3
+};
+class FrameLoop extends Middleware {
+  constructor() {
+    super();
+    this.lastTime = 0;
+    this.timeBuffer = 0;
+    this.event = {
+      dt: 0,
+      now: 0
+    };
+    this.stepEvent = {
+      timeStep: 0,
+      velocityIterations: 0,
+      positionIterations: 0
+    };
+    this.handleActivate = () => {
+      this.lastTime = performance.now();
+      this.requestFrame();
+    };
+    this.handleFrame = () => {
+      if (!this.activated)
+        return;
+      const now2 = performance.now();
+      const delta = now2 - this.lastTime;
+      this.lastTime = now2;
+      this.event.now = now2;
+      this.event.dt = delta;
+      this.emit("frame-before", this.event);
+      if (this.context.world?.value && !this.context.paused?.value) {
+        const config = this.context.simulation;
+        const speed = config?.speed ?? DEFAULTS.speed;
+        let hz = config?.hz ?? DEFAULTS.hz;
+        if (Math.abs(hz) < 1) {
+          hz = 1 / hz;
+        }
+        const timeStep = 1 / hz;
+        this.stepEvent.timeStep = timeStep;
+        this.stepEvent.velocityIterations = config?.velocityIterations ?? DEFAULTS.velocityIterations;
+        this.stepEvent.positionIterations = config?.positionIterations ?? DEFAULTS.positionIterations;
+        this.timeBuffer += delta * 1e-3 * speed;
+        while (this.timeBuffer > timeStep) {
+          this.timeBuffer -= timeStep;
+          this.emit("step-before", this.stepEvent);
+          this.emit("step-physics", this.stepEvent);
+          this.emit("step-after", this.stepEvent);
+        }
+      }
+      this.emit("frame-update", this.event);
+      this.emit("frame-render", this.event);
+      this.emit("frame-after", this.event);
+      this.requestFrame();
+    };
+    this.requestFrame = () => {
+      if (!this.activated)
+        return;
+      window.requestAnimationFrame(this.handleFrame);
+    };
+    this.on("activate", this.handleActivate);
+  }
+}
+class PointerManager extends Middleware {
+  constructor() {
+    super();
+    this.disposers = [];
+    this.handleActivate = () => {
+      this.disposers.push(j(() => {
+        const canvas = this.context.canvasElement.value;
+        if (!canvas)
+          return;
+        canvas.addEventListener("pointerdown", this.handlePointerDown);
+        canvas.addEventListener("pointermove", this.handlePointerMove);
+        canvas.addEventListener("pointerup", this.handlePointerUp);
+        canvas.addEventListener("pointercancel", this.handlePointerCancel);
+        return () => {
+          canvas.removeEventListener("pointerdown", this.handlePointerDown);
+          canvas.removeEventListener("pointermove", this.handlePointerMove);
+          canvas.removeEventListener("pointerup", this.handlePointerUp);
+          canvas.removeEventListener("pointercancel", this.handlePointerCancel);
+        };
+      }));
+    };
+    this.handleDeactivate = () => {
+      this.disposers.forEach((d2) => d2());
+      this.disposers = [];
+    };
+    this.handleCapturePointer = () => {
+      this.context.pointerCaptured = true;
+    };
+    this.handleReleasePointer = () => {
+      this.context.pointerCaptured = false;
+    };
+    this.pointerStart = { x: 0, y: 0 };
+    this.pointerLast = { x: 0, y: 0 };
+    this.pointerDragged = false;
+    this.pointerDown = false;
+    this.toWorldPoint = (raw) => {
+      const canvas = this.context.canvasElement.value;
+      const rect = canvas.getBoundingClientRect();
+      const point2 = { x: raw.clientX - rect.left, y: raw.clientY - rect.top };
+      invMat2dVec2(point2, this.context.worldMatrix, point2);
+      return point2;
+    };
+    this.handlePointerDown = (raw) => {
+      const point2 = this.toWorldPoint(raw);
+      this.emit("pointer-down", { point: point2, raw });
+      this.pointerStart.x = point2.x;
+      this.pointerStart.y = point2.y;
+      this.pointerLast.x = point2.x;
+      this.pointerLast.y = point2.y;
+      this.pointerDown = true;
+      this.pointerDragged = false;
+    };
+    this.handlePointerMove = (raw) => {
+      const point2 = this.toWorldPoint(raw);
+      this.emit("pointer-move", { point: point2, raw });
+      if (!this.pointerDown)
+        return;
+      const move = {
+        x: point2.x - this.pointerStart.x,
+        y: point2.y - this.pointerStart.y
+      };
+      const delta = {
+        x: point2.x - this.pointerLast.x,
+        y: point2.y - this.pointerLast.y
+      };
+      if (this.pointerDragged) {
+        this.pointerLast.x = point2.x;
+        this.pointerLast.y = point2.y;
+        this.emit("pointer-drag-move", {
+          point: point2,
+          raw,
+          delta,
+          move
+        });
+      } else if (move.x !== 0 || move.y !== 0) {
+        this.pointerDragged = true;
+        this.emit("pointer-drag-start", { point: point2, raw });
+      }
+    };
+    this.handlePointerUp = (raw) => {
+      const point2 = this.toWorldPoint(raw);
+      this.emit("pointer-up", { point: point2, raw });
+      if (!this.pointerDown)
+        return;
+      this.pointerDown = false;
+      const move = {
+        x: point2.x - this.pointerStart.x,
+        y: point2.y - this.pointerStart.y
+      };
+      const delta = {
+        x: point2.x - this.pointerLast.x,
+        y: point2.y - this.pointerLast.y
+      };
+      this.pointerLast.x = point2.x;
+      this.pointerLast.y = point2.y;
+      if (this.pointerDragged) {
+        this.emit("pointer-drag-end", {
+          point: point2,
+          raw,
+          delta,
+          move
+        });
+      } else {
+        this.emit("pointer-click", { point: point2, raw });
+      }
+      this.emit("release-pointer");
+    };
+    this.handlePointerCancel = (raw) => {
+      this.emit("pointer-cancel", { raw });
+      if (!this.pointerDown)
+        return;
+      this.pointerDown = false;
+      if (this.pointerDragged) {
+        this.emit("pointer-drag-cancel");
+      }
+      this.emit("release-pointer");
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+    this.on("capture-pointer", this.handleCapturePointer);
+    this.on("release-pointer", this.handleReleasePointer);
+  }
+}
+class KeyboardManager extends Middleware {
+  constructor() {
+    super();
+    this.handleActivate = () => {
+      window.addEventListener("keydown", this.handleKeydown);
+      window.addEventListener("keyup", this.handleKeyup);
+      window.addEventListener("keypress", this.handleKeypress);
+    };
+    this.handleDeactivate = () => {
+      window.removeEventListener("keydown", this.handleKeydown);
+      window.removeEventListener("keyup", this.handleKeyup);
+      window.removeEventListener("keypress", this.handleKeypress);
+    };
+    this.downKeys = {};
+    this.handleKeydown = (ev) => {
+      this.downKeys[ev.keyCode] = true;
+      this.updateActiveKeys(ev.keyCode, true);
+      this.emit("keydown", ev);
+    };
+    this.handleKeyup = (ev) => {
+      this.downKeys[ev.keyCode] = false;
+      this.updateActiveKeys(ev.keyCode, false);
+      this.emit("keyup", ev);
+    };
+    this.handleKeypress = (ev) => {
+      this.emit("keypress", ev);
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+  }
+  // `left`/`right`/`up`/`down` (arrows or WASD), `fire` (space or enter), and characters
+  updateActiveKeys(keyCode, down) {
+    const activeKeys = this.context.activeKeys;
+    const downKeys = this.downKeys;
+    const char = String.fromCharCode(keyCode);
+    if (/[A-Z0-9]/.test(char)) {
+      activeKeys[char] = down;
+    }
+    activeKeys.right = downKeys[39] || activeKeys["D"];
+    activeKeys.left = downKeys[37] || activeKeys["A"];
+    activeKeys.up = downKeys[38] || activeKeys["W"];
+    activeKeys.down = downKeys[40] || activeKeys["S"];
+    activeKeys.fire = downKeys[32] || downKeys[13];
+  }
+}
+const IDLE_TIMEOUT = 15e3;
+class AutoPause extends Middleware {
+  constructor() {
+    super();
+    this.handleActivate = () => {
+      window.addEventListener("pointerdown", this.handleInteraction);
+      window.addEventListener("pointermove", this.handleInteraction);
+      window.addEventListener("keydown", this.handleInteraction);
+      window.addEventListener("wheel", this.handleInteraction);
+      window.addEventListener("touchstart", this.handleInteraction);
+      this.resetIdleTimeout();
+    };
+    this.handleDeactivate = () => {
+      window.removeEventListener("pointerdown", this.handleInteraction);
+      window.removeEventListener("pointermove", this.handleInteraction);
+      window.removeEventListener("keydown", this.handleInteraction);
+      window.removeEventListener("wheel", this.handleInteraction);
+      window.removeEventListener("touchstart", this.handleInteraction);
+      clearTimeout(this.idleTimeout);
+    };
+    this.handleInteraction = () => {
+      this.resetIdleTimeout();
+    };
+    this.handleIdleTimeout = () => {
+      this.context.paused.value = true;
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+  }
+  resetIdleTimeout() {
+    clearTimeout(this.idleTimeout);
+    this.idleTimeout = setTimeout(this.handleIdleTimeout, IDLE_TIMEOUT);
+  }
+}
+const noxf = { p: { x: 0, y: 0 }, q: { c: 1, s: 0 } };
+const transformVec2 = (out, xf2, v3) => {
+  const x2 = xf2.q.c * v3.x - xf2.q.s * v3.y + xf2.p.x;
+  const y2 = xf2.q.s * v3.x + xf2.q.c * v3.y + xf2.p.y;
+  out.x = x2;
+  out.y = y2;
+};
+const temp1 = { x: 0, y: 0 };
+const temp2 = { x: 0, y: 0 };
+const POLYGON_VERTEX_TEX_WIDTH = 1024;
+const dimmedCache = /* @__PURE__ */ new Map();
+function fillColorOf(color, fill) {
+  if (fill)
+    return parseColor(fill);
+  let dimmed = dimmedCache.get(color);
+  if (!dimmed) {
+    const [r2, g2, b2, a2] = parseColor(color);
+    dimmed = [0.6 * r2, 0.6 * g2, 0.6 * b2, 0.6 * a2];
+    dimmedCache.set(color, dimmed);
+  }
+  return dimmed;
+}
+class GLDraw extends Middleware {
+  constructor() {
+    super();
+    this.disposers = [];
+    this.resources = null;
+    this.circleVAO = null;
+    this.circleBuffer = null;
+    this.circleCapacity = 0;
+    this.circleData = [];
+    this.capsuleVAO = null;
+    this.capsuleBuffer = null;
+    this.capsuleCapacity = 0;
+    this.capsuleData = [];
+    this.polygonVAO = null;
+    this.polygonBuffer = null;
+    this.polygonCapacity = 0;
+    this.polygonData = [];
+    this.polygonVertexTexture = null;
+    this.polygonVertexTexHeight = 0;
+    this.polygonVertexData = [];
+    this.handleActivate = () => {
+      this.disposers.push(j(() => {
+        const resources = this.context.gl.value;
+        if (!resources)
+          return;
+        const gl = resources.gl;
+        this.resources = resources;
+        this.circleBuffer = gl.createBuffer();
+        this.circleVAO = createInstancedVAO(gl, resources.quadBuffer, this.circleBuffer, [4, 1, 4, 4]);
+        this.capsuleBuffer = gl.createBuffer();
+        this.capsuleVAO = createInstancedVAO(gl, resources.quadBuffer, this.capsuleBuffer, [4, 1, 1, 4, 4]);
+        this.polygonBuffer = gl.createBuffer();
+        this.polygonVAO = createInstancedVAO(gl, resources.quadBuffer, this.polygonBuffer, [4, 1, 1, 1, 4, 4]);
+        this.polygonVertexTexture = createDataTexture(gl);
+        return () => {
+          gl.deleteVertexArray(this.circleVAO);
+          gl.deleteBuffer(this.circleBuffer);
+          gl.deleteVertexArray(this.capsuleVAO);
+          gl.deleteBuffer(this.capsuleBuffer);
+          gl.deleteVertexArray(this.polygonVAO);
+          gl.deleteBuffer(this.polygonBuffer);
+          gl.deleteTexture(this.polygonVertexTexture);
+          this.circleVAO = this.capsuleVAO = this.polygonVAO = null;
+          this.circleBuffer = this.capsuleBuffer = this.polygonBuffer = null;
+          this.circleCapacity = this.capsuleCapacity = this.polygonCapacity = 0;
+          this.polygonVertexTexture = null;
+          this.polygonVertexTexHeight = 0;
+          this.resources = null;
+        };
+      }));
+    };
+    this.handleDeactivate = () => {
+      this.disposers.forEach((d2) => d2());
+      this.disposers = [];
+    };
+    this.handleFrameBefore = () => {
+      this.circleData.length = 0;
+      this.capsuleData.length = 0;
+      this.polygonData.length = 0;
+      this.polygonVertexData.length = 0;
+    };
+    this.handleFrameRender = () => {
+      if (!this.resources)
+        return;
+      this.uploadAndDraw(this.resources.circleProgram, this.circleVAO, this.circleBuffer, this.circleData, 13, () => this.circleCapacity, (n2) => this.circleCapacity = n2);
+      this.uploadAndDraw(this.resources.capsuleProgram, this.capsuleVAO, this.capsuleBuffer, this.capsuleData, 14, () => this.capsuleCapacity, (n2) => this.capsuleCapacity = n2);
+      this.uploadPolygonVertexTexture();
+      this.uploadAndDraw(this.resources.polygonProgram, this.polygonVAO, this.polygonBuffer, this.polygonData, 15, () => this.polygonCapacity, (n2) => this.polygonCapacity = n2, () => {
+        const gl = this.resources.gl;
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, this.polygonVertexTexture);
+        gl.uniform1i(this.resources.polygonProgram.uVertexTex, 0);
+        gl.uniform1i(this.resources.polygonProgram.uVertexTexWidth, POLYGON_VERTEX_TEX_WIDTH);
+      });
+    };
+    this.drawCircle = (p2, r2, color, xf2 = noxf, fill) => {
+      transformVec2(temp1, xf2, p2);
+      const [cr, cg, cb, ca] = parseColor(color);
+      const [fr, fg, fb, fa] = fillColorOf(color, fill);
+      this.circleData.push(temp1.x, temp1.y, xf2.q.c, xf2.q.s, r2, cr, cg, cb, ca, fr, fg, fb, fa);
+    };
+    this.drawPoint = this.drawCircle;
+    this.drawScreenPoint = (p2, pixelSize, color, xf2 = noxf) => {
+      const pixelScale = this.resources?.pixelScale || 1;
+      this.drawCircle(p2, pixelSize / pixelScale, color, xf2);
+    };
+    this.drawCapsule = (a2, b2, r2, color, xf2 = noxf, fill) => {
+      this.pushCapsule(xf2, a2, b2, r2, color, fill);
+    };
+    this.drawEdge = (a2, b2, color, xf2 = noxf) => {
+      this.pushCapsule(xf2, a2, b2, 0, color);
+    };
+    this.drawSegment = this.drawEdge;
+    this.drawPolygon = (points, color, xf2 = noxf, fill) => {
+      this.pushPolygon(xf2, points, 0, color, fill);
+    };
+    this.drawRoundedPolygon = (points, count, r2, color, xf2 = noxf, fill) => {
+      this.pushPolygon(xf2, points.slice(0, count), r2, color, fill);
+    };
+    this.drawChain = (points, color, xf2 = noxf) => {
+      for (let i2 = 0; i2 < points.length - 1; i2++) {
+        this.pushCapsule(xf2, points[i2], points[i2 + 1], 0, color);
+      }
+    };
+    this.drawAABB = (aabb, color, xf2 = noxf) => {
+      const { lowerBound: lo, upperBound: hi } = aabb;
+      this.pushPolygon(xf2, [lo, { x: hi.x, y: lo.y }, hi, { x: lo.x, y: hi.y }], 0, color);
+    };
+    this.drawHollowPolygon = (points, color, xf2 = noxf) => {
+      let prev = points[points.length - 1];
+      for (const p2 of points) {
+        this.pushCapsule(xf2, prev, p2, 0, color);
+        prev = p2;
+      }
+    };
+    this.drawHollowAABB = (aabb, color, xf2 = noxf) => {
+      const { lowerBound: lo, upperBound: hi } = aabb;
+      this.drawHollowPolygon([lo, { x: hi.x, y: lo.y }, hi, { x: lo.x, y: hi.y }], color, xf2);
+    };
+    this.drawHollowCircle = (center2, radius, color, xf2 = noxf, segments = 24) => {
+      const points = [];
+      for (let i2 = 0; i2 < segments; i2++) {
+        const a2 = i2 / segments * Math.PI * 2;
+        points.push({ x: center2.x + radius * Math.cos(a2), y: center2.y + radius * Math.sin(a2) });
+      }
+      this.drawHollowPolygon(points, color, xf2);
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+    this.on("frame-before", this.handleFrameBefore);
+    this.on("frame-render", this.handleFrameRender);
+  }
+  // Uploads this frame's flat vertex list into polygonVertexTexture, growing its height (in
+  // POLYGON_VERTEX_TEX_WIDTH-wide rows) only when the existing allocation is too small - mirrors
+  // uploadAndDraw's grow-only buffer capacity pattern below.
+  uploadPolygonVertexTexture() {
+    const vertexCount = this.polygonVertexData.length / 2;
+    if (vertexCount === 0)
+      return;
+    const gl = this.resources.gl;
+    const width = POLYGON_VERTEX_TEX_WIDTH;
+    const height = Math.ceil(vertexCount / width);
+    const rowData = new Float32Array(width * height * 2);
+    rowData.set(this.polygonVertexData);
+    gl.bindTexture(gl.TEXTURE_2D, this.polygonVertexTexture);
+    if (height > this.polygonVertexTexHeight) {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RG32F, width, height, 0, gl.RG, gl.FLOAT, rowData);
+      this.polygonVertexTexHeight = height;
+    } else {
+      gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, width, height, gl.RG, gl.FLOAT, rowData);
+    }
+    gl.bindTexture(gl.TEXTURE_2D, null);
+  }
+  pushCapsule(xf2, a2, b2, radius, color, fill) {
+    const mx = (a2.x + b2.x) * 0.5;
+    const my = (a2.y + b2.y) * 0.5;
+    const dx = b2.x - a2.x;
+    const dy = b2.y - a2.y;
+    const length = Math.hypot(dx, dy);
+    const lc = length > 0 ? dx / length : 1;
+    const ls = length > 0 ? dy / length : 0;
+    const bc = xf2.q.c;
+    const bs = xf2.q.s;
+    const worldC = bc * lc - bs * ls;
+    const worldS = bs * lc + bc * ls;
+    temp1.x = mx;
+    temp1.y = my;
+    transformVec2(temp2, xf2, temp1);
+    const [cr, cg, cb, ca] = parseColor(color);
+    const [fr, fg, fb, fa] = fillColorOf(color, fill);
+    this.capsuleData.push(temp2.x, temp2.y, worldC, worldS, radius, length, cr, cg, cb, ca, fr, fg, fb, fa);
+  }
+  pushPolygon(xf2, points, radius, color, fill) {
+    const offset = this.polygonVertexData.length / 2;
+    for (let i2 = 0; i2 < points.length; i2++) {
+      this.polygonVertexData.push(points[i2].x, points[i2].y);
+    }
+    const [cr, cg, cb, ca] = parseColor(color);
+    const [fr, fg, fb, fa] = fillColorOf(color, fill);
+    this.polygonData.push(xf2.p.x, xf2.p.y, xf2.q.c, xf2.q.s, offset, points.length, radius, cr, cg, cb, ca, fr, fg, fb, fa);
+  }
+  uploadAndDraw(shapeProgram, vao, buffer, data, floatsPerInstance, getCapacity, setCapacity, bindExtra) {
+    const instanceCount = data.length / floatsPerInstance;
+    if (instanceCount === 0)
+      return;
+    const gl = this.resources.gl;
+    const array = new Float32Array(data);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    if (array.length > getCapacity()) {
+      gl.bufferData(gl.ARRAY_BUFFER, array, gl.DYNAMIC_DRAW);
+      setCapacity(array.length);
+    } else {
+      gl.bufferSubData(gl.ARRAY_BUFFER, 0, array);
+    }
+    gl.useProgram(shapeProgram.program);
+    gl.uniformMatrix4fv(shapeProgram.uProjectionMatrix, false, this.resources.projectionMatrix);
+    gl.uniform1f(shapeProgram.uPixelScale, this.resources.pixelScale);
+    bindExtra?.();
+    gl.bindVertexArray(vao);
+    gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, instanceCount);
+    gl.bindVertexArray(null);
+    gl.useProgram(null);
+  }
+}
+class DrawWorld extends Middleware {
+  constructor() {
+    super();
+    this.draw = new GLDraw();
+    this.handleFrameRender = () => {
+      const world = this.context.world.value;
+      if (!world)
+        return;
+      if (!this.context.renderConfig.value.shapes)
+        return;
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        this.drawBody(body);
+      }
+    };
+    this.use(this.draw);
+    this.on("frame-update", this.handleFrameRender);
+  }
+  drawBody(body) {
+    const xf2 = body.getTransform();
+    for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
+      const style = getStyle(fixture.getShape()) ?? getStyle(fixture) ?? getStyle(body);
+      const color = style?.stroke ?? shapeColor(body, fixture);
+      const fill = style?.fill ?? DEFAULT_FILL;
+      const type = fixture.getType();
+      if (type === "circle") {
+        const shape = fixture.getShape();
+        this.draw.drawCircle(shape.m_p, shape.m_radius, color, xf2, fill);
+      } else if (type === "polygon") {
+        const shape = fixture.getShape();
+        this.draw.drawPolygon(shape.m_vertices.slice(0, shape.m_count), color, xf2, fill);
+      } else if (type === "edge") {
+        const shape = fixture.getShape();
+        this.draw.drawEdge(shape.m_vertex1, shape.m_vertex2, color, xf2);
+      } else if (type === "chain") {
+        const shape = fixture.getShape();
+        const vertices = shape.m_vertices;
+        const count = shape.m_count;
+        for (let i2 = 1; i2 < count; i2++) {
+          this.draw.drawEdge(vertices[i2 - 1], vertices[i2], color, xf2);
+        }
+        if (shape.isLoop() && count > 1) {
+          this.draw.drawEdge(vertices[count - 1], vertices[0], color, xf2);
+        }
+      }
+    }
+  }
+}
+const DEFAULT_FILL = "rgba(255,255,255,0.1)";
+const hasStyle = (value) => typeof value === "object" && value !== null && ("stroke" in value || "fill" in value);
+function getStyle(obj) {
+  if (hasStyle(obj["render"]))
+    return obj["render"];
+  if (hasStyle(obj["style"]))
+    return obj["style"];
+}
+function shapeColor(body, fixture) {
+  if (fixture.isSensor()) {
+    return "wheat";
+  }
+  if (body.isDynamic()) {
+    return "rgba(255,255,255,0.9)";
+  }
+  if (body.isKinematic()) {
+    return "rgba(255,255,255,0.8)";
+  }
+  return "rgba(255,255,255,0.7)";
+}
+class DrawBounds extends Middleware {
+  constructor() {
+    super();
+    this.draw = new GLDraw();
+    this.handleFrameRender = () => {
+      const world = this.context.world.value;
+      if (!world)
+        return;
+      if (!this.context.renderConfig.value.bounds)
+        return;
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
+          const children = fixture.getShape().getChildCount();
+          for (let child = 0; child < children; child++) {
+            this.draw.drawHollowAABB(fixture.getAABB(child), "gold");
+          }
+        }
+      }
+    };
+    this.use(this.draw);
+    this.on("frame-update", this.handleFrameRender);
+  }
+}
+class TextOverlay extends Middleware {
+  constructor() {
+    super();
+    this.disposers = [];
+    this.canvas = null;
+    this.resizeObserver = null;
+    this.handleActivate = () => {
+      this.disposers.push(j(() => {
+        const containerElement = this.context.containerElement?.value;
+        if (!containerElement)
+          return;
+        const canvas = document.createElement("canvas");
+        canvas.style.position = "absolute";
+        canvas.style.top = "0";
+        canvas.style.left = "0";
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.background = "transparent";
+        canvas.style.pointerEvents = "none";
+        containerElement.appendChild(canvas);
+        this.canvas = canvas;
+        this.context.textOverlay.value = canvas.getContext("2d");
+        this.resizeObserver = new ResizeObserver(this.handleResize);
+        this.resizeObserver.observe(containerElement);
+        this.handleResize();
+        return () => {
+          this.resizeObserver.disconnect();
+          this.resizeObserver = null;
+          this.context.textOverlay.value = void 0;
+          canvas.remove();
+          this.canvas = null;
+        };
+      }));
+    };
+    this.handleDeactivate = () => {
+      this.disposers.forEach((d2) => d2());
+      this.disposers = [];
+    };
+    this.handleResize = () => {
+      if (!this.canvas)
+        return;
+      const containerElement = this.context.containerElement.peek();
+      const ratio = window.devicePixelRatio || 1;
+      this.canvas.width = Math.max(1, Math.round(containerElement.clientWidth * ratio));
+      this.canvas.height = Math.max(1, Math.round(containerElement.clientHeight * ratio));
+    };
+    this.handleFrameBefore = () => {
+      const ctx = this.context.textOverlay.peek();
+      if (!ctx)
+        return;
+      const ratio = window.devicePixelRatio || 1;
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+    this.on("frame-before", this.handleFrameBefore);
+  }
+}
+const screenPoint = { x: 0, y: 0 };
+function drawWorldString(context, p2, text, color, align = "left") {
+  const ctx = context.textOverlay.value;
+  if (!ctx)
+    return;
+  mulMat2dVec2(screenPoint, context.worldMatrix, p2);
+  ctx.font = "12px monospace";
+  ctx.textAlign = align;
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = color;
+  ctx.fillText(text, screenPoint.x, screenPoint.y);
+}
+class DrawBodyInfo extends Middleware {
+  constructor() {
+    super();
+    this.draw = new GLDraw();
+    this.handleFrameRender = () => {
+      const world = this.context.world.value;
+      if (!world)
+        return;
+      const renderConfig = this.context.renderConfig.value;
+      if (!renderConfig.bodyNames && !renderConfig.mass)
+        return;
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        if (renderConfig.bodyNames) {
+          const label = getLabel(body);
+          if (label)
+            this.drawBodyName(body, label);
+        }
+        if (renderConfig.mass && body.isDynamic()) {
+          this.drawMass(body);
+        }
+      }
+    };
+    this.use(this.draw);
+    this.on("frame-update", this.handleFrameRender);
+  }
+  drawBodyName(body, label) {
+    const { c: c2, s: s2 } = body.getTransform().q;
+    const center2 = body.getWorldCenter();
+    const p2 = { x: center2.x + c2 * 0.1 - s2 * 0.1, y: center2.y + s2 * 0.1 + c2 * 0.1 };
+    drawWorldString(this.context, p2, label, "blueviolet");
+  }
+  drawMass(body) {
+    const { c: c2, s: s2 } = body.getTransform().q;
+    const center2 = body.getWorldCenter();
+    this.draw.drawEdge(center2, { x: center2.x + c2, y: center2.y + s2 }, "red");
+    this.draw.drawEdge(center2, { x: center2.x - s2, y: center2.y + c2 }, "green");
+    const p2 = { x: center2.x + c2 * 0.1 - s2 * 0.1, y: center2.y + s2 * 0.1 + c2 * 0.1 };
+    drawWorldString(this.context, p2, `  ${body.getMass().toFixed(2)}`, "white");
+  }
+}
+const DEFAULT_COLOR = "rgba(255,255,255,0.9)";
+class DrawJoints extends Middleware {
+  constructor() {
+    super();
+    this.draw = new GLDraw();
+    this.handleFrameRender = () => {
+      const world = this.context.world.value;
+      if (!world)
+        return;
+      if (!this.context.renderConfig.value.joints)
+        return;
+      for (let joint = world.getJointList(); joint; joint = joint.getNext()) {
+        this.drawJoint(joint);
+      }
+    };
+    this.use(this.draw);
+    this.on("frame-update", this.handleFrameRender);
+  }
+  drawJoint(joint) {
+    const style = joint["style"];
+    const color = style?.stroke ?? DEFAULT_COLOR;
+    const pA2 = joint.getAnchorA();
+    const pB2 = joint.getAnchorB();
+    switch (joint.getType()) {
+      case "pulley-joint": {
+        const pj = joint;
+        const gA = pj.getGroundAnchorA();
+        const gB = pj.getGroundAnchorB();
+        this.draw.drawEdge(pA2, gA, color);
+        this.draw.drawEdge(gA, gB, color);
+        this.draw.drawEdge(gB, pB2, color);
+        break;
+      }
+      case "prismatic-joint":
+      case "wheel-joint": {
+        const axis = joint.getLocalAxisA();
+        const xfA2 = joint.getBodyA().getTransform();
+        const end = Transform.mulVec2(xfA2, {
+          x: joint["m_localAnchorA"].x + axis.x,
+          y: joint["m_localAnchorA"].y + axis.y
+        });
+        this.draw.drawEdge(pA2, end, "gray");
+        this.draw.drawEdge(pA2, pB2, color);
+        break;
+      }
+      case "mouse-joint": {
+        const target = joint.getTarget();
+        this.draw.drawEdge(target, pB2, color);
+        this.draw.drawScreenPoint(target, 4, color);
+        break;
+      }
+      case "revolute-joint": {
+        this.draw.drawEdge(pA2, pB2, color);
+        this.draw.drawScreenPoint(pB2, 6, color);
+        break;
+      }
+      default:
+        this.draw.drawEdge(pA2, pB2, color);
+        break;
+    }
+  }
+}
+const CONTACT_NORMAL_LENGTH = 0.3;
+class DrawContacts extends Middleware {
+  constructor() {
+    super();
+    this.draw = new GLDraw();
+    this.manifold = new WorldManifold();
+    this.handleFrameRender = () => {
+      const world = this.context.world.value;
+      if (!world)
+        return;
+      const renderConfig = this.context.renderConfig.value;
+      if (!renderConfig.contact)
+        return;
+      for (let contact = world.getContactList(); contact; contact = contact.getNext()) {
+        if (!contact.isTouching())
+          continue;
+        const manifold = contact.getWorldManifold(this.manifold);
+        if (!manifold)
+          continue;
+        const normal3 = manifold.normal;
+        for (let i2 = 0; i2 < manifold.pointCount; i2++) {
+          const point2 = manifold.points[i2];
+          this.draw.drawScreenPoint(point2, 5, "blue");
+          if (renderConfig.contactNormals) {
+            const p2 = {
+              x: point2.x + normal3.x * CONTACT_NORMAL_LENGTH,
+              y: point2.y + normal3.y * CONTACT_NORMAL_LENGTH
+            };
+            this.draw.drawEdge(point2, p2, "dimgray");
+          }
+        }
+      }
+    };
+    this.use(this.draw);
+    this.on("frame-update", this.handleFrameRender);
+  }
+}
+class WorldStep extends Middleware {
+  constructor() {
+    super();
+    this.handleStep = (ev) => {
+      const world = this.context.world.value;
+      if (!world)
+        return;
+      try {
+        world.step(ev.timeStep, ev.velocityIterations, ev.positionIterations);
+      } catch (error) {
+        console.error(error);
+        this.context.paused.value = true;
+      }
+    };
+    this.on("step-physics", this.handleStep);
+  }
+}
+class WorldKeys extends Middleware {
+  constructor() {
+    super();
+    this.handleActivate = () => {
+      this.dispose = j(() => {
+        const world = this.context.world.value;
+        if (!world)
+          return;
+        for (let body = world.getBodyList(); body; body = body.getNext()) {
+          setKey(body);
+          for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
+            setKey(fixture);
+          }
+        }
+        for (let joint = world.getJointList(); joint; joint = joint.getNext()) {
+          setKey(joint);
+        }
+        world.on("add-body", this.keyOne);
+        world.on("add-fixture", this.keyOne);
+        world.on("add-joint", this.keyOne);
+        return () => {
+          world.off("add-body", this.keyOne);
+          world.off("add-fixture", this.keyOne);
+          world.off("add-joint", this.keyOne);
+        };
+      });
+    };
+    this.handleDeactivate = () => {
+      this.dispose?.();
+      this.dispose = void 0;
+    };
+    this.keyOne = (obj) => {
+      setKey(obj);
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+  }
+}
+class PullTool extends Middleware {
+  constructor() {
+    super();
+    this.body = null;
+    this.ground = null;
+    this.joint = null;
+    this.handleDeactivate = () => {
+      this.destroyJoint();
+      this.body = null;
+    };
+    this.handlePointerDown = (ev) => {
+      const world = this.context.world.value;
+      if (!world)
+        return;
+      let mouseForce = this.context.mouseForce.value;
+      if (mouseForce === 0)
+        return;
+      if (typeof mouseForce !== "number") {
+        mouseForce = 1e3;
+      }
+      const match = this.context.worldQuery.testPoint(ev.point, (m2) => m2.worldBody.isDynamic());
+      if (!match)
+        return;
+      const hit = match.worldBody;
+      if (hit !== this.body) {
+        this.destroyJoint();
+      }
+      this.body = hit;
+      this.ground = world.createBody();
+      this.joint = new MouseJoint({ maxForce: mouseForce }, this.ground, this.body, ev.point);
+      world.createJoint(this.joint);
+      this.emit("capture-pointer");
+    };
+    this.handlePointerMove = (ev) => {
+      if (!this.joint)
+        return;
+      this.joint.setTarget(ev.point);
+    };
+    this.handlePointerUp = () => {
+      if (!this.joint)
+        return;
+      this.body = null;
+      this.destroyJoint();
+    };
+    this.handlePointerCancel = () => {
+      if (!this.joint)
+        return;
+      this.body = null;
+      this.destroyJoint();
+    };
+    this.destroyJoint = () => {
+      const world = this.context.world.value;
+      if (world && this.joint)
+        world.destroyJoint(this.joint);
+      if (world && this.ground)
+        world.destroyBody(this.ground);
+      this.joint = null;
+      this.ground = null;
+    };
+    this.on("deactivate", this.handleDeactivate);
+    this.on("pointer-down", this.handlePointerDown);
+    this.on("pointer-move", this.handlePointerMove);
+    this.on("pointer-up", this.handlePointerUp);
+    this.on("pointer-cancel", this.handlePointerCancel);
+  }
+}
+toolbarTool.register({
+  name: "pull",
+  activate: (context) => {
+    context.activity.value = "mode:play";
+    context.paused.value = false;
+    context.editable.value = false;
+    context.activeTool.value = { name: "interact-pull" };
+  }
+});
+class ImpulseTool extends Middleware {
+  constructor() {
+    super();
+    this.body = null;
+    this.pointer = { x: 0, y: 0 };
+    this.draw = new GLDraw();
+    this.handleDeactivate = () => {
+      this.body = null;
+    };
+    this.handlePointerDown = (ev) => {
+      if (this.body)
+        return;
+      const mouseForce = this.context.mouseForce.value;
+      if (mouseForce === 0)
+        return;
+      const match = this.context.worldQuery.testPoint(ev.point, (m2) => m2.worldBody.isDynamic());
+      if (!match)
+        return;
+      this.body = match.worldBody;
+      this.pointer.x = ev.point.x;
+      this.pointer.y = ev.point.y;
+      this.emit("capture-pointer");
+    };
+    this.handlePointerMove = (ev) => {
+      if (!this.body)
+        return;
+      this.pointer.x = ev.point.x;
+      this.pointer.y = ev.point.y;
+    };
+    this.handlePointerUp = (ev) => {
+      if (!this.body)
+        return;
+      let mouseForce = this.context.mouseForce.value;
+      if (mouseForce === 0)
+        return;
+      if (typeof mouseForce !== "number") {
+        mouseForce = -1e3;
+      }
+      if (mouseForce > 0) {
+        mouseForce = -mouseForce;
+      }
+      const pos = this.body.getPosition();
+      const force = {
+        x: (ev.point.x - pos.x) * mouseForce,
+        y: (ev.point.y - pos.y) * mouseForce
+      };
+      this.body.applyForceToCenter(force, true);
+      this.body = null;
+    };
+    this.handlePointerCancel = () => {
+      this.body = null;
+    };
+    this.handleFrameUpdate = () => {
+      if (!this.body)
+        return;
+      const pos = this.body.getPosition();
+      this.draw.drawSegment(pos, this.pointer, "rgba(255,255,255,0.5)");
+    };
+    this.use(this.draw);
+    this.on("deactivate", this.handleDeactivate);
+    this.on("pointer-down", this.handlePointerDown);
+    this.on("pointer-move", this.handlePointerMove);
+    this.on("pointer-up", this.handlePointerUp);
+    this.on("pointer-cancel", this.handlePointerCancel);
+    this.on("frame-update", this.handleFrameUpdate);
+  }
+}
+toolbarTool.register({
+  name: "impulse",
+  activate: (context) => {
+    context.activity.value = "mode:play";
+    context.paused.value = false;
+    context.editable.value = false;
+    context.activeTool.value = { name: "interact-impulse" };
+  }
+});
+class InspectTool extends Middleware {
+  constructor() {
+    super();
+    this.handleClick = (ev) => {
+      const match = this.context.worldQuery.testPoint(ev.point);
+      const was = this.context.multiselect.value.selected[0];
+      if (!match?.fixture) {
+        setSelection(this.context, was?.up ?? null);
+      } else if (was?.key === match.body || was?.key !== match.fixture && was?.up?.key === match.body) {
+        setSelection(this.context, selectFixture(match.fixture, match.body));
+      } else {
+        setSelection(this.context, selectBody(match.body));
+      }
+    };
+    this.on("pointer-click", this.handleClick);
+  }
+}
+class SelectionManager extends Middleware {
+  constructor() {
+    super();
+    this.selectBody = (select) => {
+      if (!select?.body)
+        return;
+      setSelection(this.context, selectBody(select.body));
+    };
+    this.deselectBody = (select) => {
+      if (!select?.body)
+        return;
+      removeSelection(this.context, selectBody(select.body));
+    };
+    this.selectFixture = (select) => {
+      if (!select?.fixture)
+        return;
+      setSelection(this.context, selectFixture(select.fixture, select.body));
+    };
+    this.deselectFixture = (select) => {
+      if (!select?.fixture)
+        return;
+      removeSelection(this.context, selectFixture(select.fixture, select.body));
+    };
+    this.selectJoint = (select) => {
+      if (!select?.joint)
+        return;
+      setSelection(this.context, selectJoint(select.joint));
+    };
+    this.deselectJoint = (select) => {
+      if (!select?.joint)
+        return;
+      removeSelection(this.context, selectJoint(select.joint));
+    };
+    this.deselectAll = () => {
+      emptySelection(this.context);
+    };
+    this.on("select-body", this.selectBody);
+    this.on("deselect-body", this.deselectBody);
+    this.on("select-fixture", this.selectFixture);
+    this.on("deselect-fixture", this.deselectFixture);
+    this.on("select-joint", this.selectJoint);
+    this.on("deselect-joint", this.deselectJoint);
+    this.on("deselect-all", this.deselectAll);
+  }
+}
+const DEFAULT_POINTER_RADIUS = 0.1;
+class WorldQuery extends Middleware {
+  constructor() {
+    super();
+    this.handleActivate = () => {
+      this.context.worldQuery = this;
+    };
+    this.testPoint = (point2, filter) => {
+      const world = this.context.world.value;
+      if (!world)
+        return void 0;
+      const radius = this.context.pointerRadius ?? DEFAULT_POINTER_RADIUS;
+      let bestMatch;
+      let bestDistance = radius;
+      const aabb = new AABB(point2, point2).extend(radius);
+      const distanceInput2 = new DistanceInput();
+      distanceInput2.useRadii = true;
+      distanceInput2.proxyB.set(new CircleShape(1e-5), 0);
+      distanceInput2.transformB.p.x = point2.x;
+      distanceInput2.transformB.p.y = point2.y;
+      distanceInput2.transformB.q.s = 0;
+      distanceInput2.transformB.q.c = 1;
+      world.queryAABB(aabb, function(fixture) {
+        const body = fixture.getBody();
+        const match = {
+          worldBody: body,
+          worldFixture: fixture,
+          body: getKey(body),
+          fixture: getKey(fixture)
+        };
+        if (filter && !filter(match)) {
+          return true;
+        }
+        if (fixture.testPoint(point2)) {
+          bestMatch = match;
+          bestDistance = 0;
+          return false;
+        }
+        for (let childIndex = fixture.getShape().getChildCount() - 1; childIndex >= 0; childIndex--) {
+          distanceInput2.proxyA.set(fixture.getShape(), childIndex);
+          const xf2 = fixture.getBody().getTransform();
+          distanceInput2.transformA.p.x = xf2.p.x;
+          distanceInput2.transformA.p.y = xf2.p.y;
+          distanceInput2.transformA.q.s = xf2.q.s;
+          distanceInput2.transformA.q.c = xf2.q.c;
+          const cache2 = new SimplexCache();
+          const output2 = new DistanceOutput();
+          Distance(output2, cache2, distanceInput2);
+          const distance = Vec2.distance(output2.pointA, output2.pointB);
+          if (distance < bestDistance) {
+            bestMatch = match;
+            bestDistance = distance;
+          }
+        }
+        return true;
+      });
+      return bestMatch;
+    };
+    this.testBox = (start, end, filter) => {
+      const world = this.context.world.value;
+      if (!world)
+        return [];
+      const aabb = {
+        lowerBound: { x: Math.min(start.x, end.x), y: Math.min(start.y, end.y) },
+        upperBound: { x: Math.max(start.x, end.x), y: Math.max(start.y, end.y) }
+      };
+      const results = [];
+      world.queryAABB(aabb, function(fixture) {
+        const body = fixture.getBody();
+        const match = {
+          worldBody: body,
+          worldFixture: fixture,
+          body: getKey(body),
+          fixture: getKey(fixture)
+        };
+        if (filter && !filter(match))
+          return true;
+        results.push(match);
+        return true;
+      });
+      return results;
+    };
+    this.on("activate", this.handleActivate);
+  }
+}
+class DefaultTool extends Middleware {
+  constructor() {
+    super();
+    this.disposers = [];
+    this.handleActivate = () => {
+      this.disposers.push(j(() => {
+        this.resetTool();
+      }));
+      this.disposers.push(this.context.activeTool.subscribe((activeTool) => {
+        if (activeTool?.name === "default-tool") {
+          this.resetTool();
+        }
+      }));
+    };
+    this.handleDeactivate = () => {
+      this.disposers.forEach((d2) => d2());
+      this.disposers = [];
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+  }
+  resetTool() {
+    const paused = this.context.paused.value;
+    const mouseForce = this.context.mouseForce.value;
+    let tool = { name: "inspect" };
+    if (!paused) {
+      if (mouseForce > 0) {
+        tool = { name: "interact-pull" };
+      } else if (mouseForce < 0) {
+        tool = { name: "interact-impulse" };
+      }
+    }
+    this.context.activeTool.value = tool;
+  }
+}
+class ConsoleManager extends Middleware {
+  constructor() {
+    super();
+    this.handleActivate = () => {
+      this.context.console = this;
+      this.statusElement = document.getElementById("testbed-status");
+      this.lastStatus = "";
+      if (this.statusElement) {
+        this.statusElement.innerText = this.lastStatus;
+      } else {
+        console.warn("Element with id='testbed-status' not found!");
+      }
+      this.infoElement = document.getElementById("testbed-info");
+      this.lastInfo = "";
+      if (this.infoElement) {
+        this.infoElement.innerText = this.lastInfo;
+      } else {
+        console.warn("Element with id='testbed-info' not found!");
+      }
+    };
+    this.handleDeactivate = () => {
+      this.context.console = null;
+    };
+    this._statusText = "";
+    this._statusMap = {};
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+  }
+  info(text) {
+    this.updateInfo(text);
+  }
+  status(a2, b2) {
+    if (typeof b2 !== "undefined") {
+      const key = a2;
+      const value = b2;
+      if (typeof value !== "function" && typeof value !== "object") {
+        this._statusMap[key] = value;
+      }
+    } else if (a2 && typeof a2 === "object") {
+      for (const key in a2) {
+        const value = a2[key];
+        if (typeof value !== "function" && typeof value !== "object") {
+          this._statusMap[key] = value;
+        }
+      }
+    } else if (typeof a2 === "string") {
+      this._statusText = a2;
+    }
+    const newline = "\n";
+    let text = this._statusText || "";
+    for (const key in this._statusMap) {
+      const value = this._statusMap[key];
+      if (typeof value === "function")
+        continue;
+      text += (text && newline) + key + ": " + value;
+    }
+    this.updateStatus(text);
+  }
+  updateInfo(text) {
+    if (this.lastInfo === text)
+      return;
+    this.lastInfo = text;
+    if (this.infoElement) {
+      this.infoElement.innerText = text;
+    }
+  }
+  updateStatus(text) {
+    if (this.lastStatus === text)
+      return;
+    this.lastStatus = text;
+    if (this.statusElement) {
+      this.statusElement.innerText = text;
+    }
+  }
+}
+class TestbedMain extends Middleware {
+  constructor() {
+    super();
+    this.draw = new GLDraw();
+    this.handleFrameUpdate = (ev) => {
+      if (this.context.paused.value)
+        return;
+      if (!this.context.world.value)
+        return;
+      this.step?.(ev.dt, ev.now);
+    };
+    this.handleKeydown = (ev) => {
+      if (this.context.paused.value)
+        return;
+      this.keydown?.(ev.keyCode, String.fromCharCode(ev.keyCode));
+    };
+    this.handleKeyup = (ev) => {
+      if (this.context.paused.value)
+        return;
+      this.keyup?.(ev.keyCode, String.fromCharCode(ev.keyCode));
+    };
+    this.use(this.draw);
+    this.use(new WorldQuery());
+    this.use(new FrameLoop());
+    this.use(new ContainerLoader());
+    this.use(new WorldStep());
+    this.use(new AutoPause());
+    this.use(new ConsoleManager());
+    this.use(new KeyboardManager());
+    this.use(new CameraTransform());
+    this.use(new GLLoader());
+    this.use(new TextOverlay());
+    this.use(new AutoFocus());
+    this.use(new DrawWorld());
+    this.use(new DrawBounds());
+    this.use(new DrawBodyInfo());
+    this.use(new DrawJoints());
+    this.use(new DrawContacts());
+    this.use(new WorldKeys());
+    this.use(new SelectionManager());
+    this.use(new PointerManager());
+    this.use(new DefaultTool());
+    this.use(new ToolSwitch("inspect", new InspectTool()));
+    this.use(new ToolSwitch("interact-pull", new PullTool()));
+    this.use(new ToolSwitch("interact-impulse", new ImpulseTool()));
+    this.on("frame-update", this.handleFrameUpdate);
+    this.on("keydown", this.handleKeydown);
+    this.on("keyup", this.handleKeyup);
+  }
+  color(r2, g2, b2) {
+    r2 = r2 * 255 | 0;
+    g2 = g2 * 255 | 0;
+    b2 = b2 * 255 | 0;
+    return "rgb(" + r2 + ", " + g2 + ", " + b2 + ")";
+  }
+  findOne(query) {
+    const world = this.context.world.value;
+    return world ? findOne(world, query) : null;
+  }
+  findAll(query) {
+    const world = this.context.world.value;
+    return world ? findAll(world, query) : [];
+  }
+  // @on("tool-request")
+  // handleToolRequest(config: ToolConfig) {
+  //   this.context.activeTool.value = config;
+  // }
+  get width() {
+    return this.context.camera.width;
+  }
+  set width(value) {
+    this.context.camera.width = value;
+  }
+  get height() {
+    return this.context.camera.height;
+  }
+  set height(value) {
+    this.context.camera.height = value;
+  }
+  get x() {
+    return this.context.camera.x;
+  }
+  set x(value) {
+    this.context.camera.x = value;
+  }
+  // planck 1's testbed measured y downwards: `testbed.y = -20` centers the view on world y = 20
+  get y() {
+    return -this.context.camera.y;
+  }
+  set y(value) {
+    this.context.camera.y = -value;
+  }
+  get background() {
+    return this.context.style.background;
+  }
+  set background(value) {
+    this.context.style.background = value;
+  }
+  get hz() {
+    return this.context.simulation.hz;
+  }
+  set hz(value) {
+    this.context.simulation.hz = value;
+  }
+  get speed() {
+    return this.context.simulation.speed;
+  }
+  set speed(value) {
+    this.context.simulation.speed = value;
+  }
+  get mouseForce() {
+    return this.context.mouseForce.value;
+  }
+  set mouseForce(value) {
+    this.context.mouseForce.value = value;
+  }
+  get activeKeys() {
+    return this.context.activeKeys;
+  }
+  start(world) {
+    if (world) {
+      this.context.world.value = world;
+    }
+    this.resume();
+  }
+  // todo: how to add world to testbed api?
+  // get/set world, or get/setWorld
+  get world() {
+    return this.context.world.value;
+  }
+  set world(world) {
+    this.context.world.value = world;
+  }
+  drawPoint(p2, r2, color) {
+    this.draw.drawPoint(p2, r2, color);
+  }
+  drawCircle(p2, r2, color) {
+    this.draw.drawCircle(p2, r2, color);
+  }
+  drawCapsule(a2, b2, r2, color) {
+    this.draw.drawCapsule(a2, b2, r2, color);
+  }
+  drawEdge(a2, b2, color) {
+    this.draw.drawEdge(a2, b2, color);
+  }
+  drawSegment(a2, b2, color) {
+    this.draw.drawEdge(a2, b2, color);
+  }
+  drawPolygon(points, color) {
+    this.draw.drawPolygon(points, color);
+  }
+  drawChain(points, color) {
+    this.draw.drawChain(points, color);
+  }
+  drawAABB(aabb, color) {
+    this.draw.drawAABB(aabb, color);
+  }
+  /** @internal pass paused to WorldComponent */
+  get paused() {
+    return this.context.paused.value;
+  }
+  isPaused() {
+    return this.context.paused.value;
+  }
+  pause() {
+    this.context.paused.value = true;
+  }
+  resume() {
+    this.context.paused.value = false;
+  }
+  info(text) {
+    this.context.console?.info(text);
+  }
+  status(a2, b2) {
+    this.context.console?.status(a2, b2);
+  }
+}
+const mountTestbed = () => {
+  if (runtime.value)
+    return runtime.value.middleware;
+  const main = new TestbedMain();
+  const context = initTestbedContext();
+  context.activeTool.value = { name: "interact-pull" };
+  runtime.value = {
+    middleware: main,
+    context,
+    emit: main.emit.bind(main)
+  };
+  window["runtime"] = main;
+  Runtime.activate(main, context);
+  return main;
+};
+Testbed.mount = mountTestbed;
 export {
   AABB,
   Body,

@@ -27,7 +27,8 @@
   ],
   "type": "commonjs",
   "sideEffects": [
-    "./dist/testbed.*"
+    "./dist/testbed.*",
+    "./testbed/testbed/Testbed.ts"
   ],
   "module": "dist/planck.mjs",
   "main": "dist/planck.js",
