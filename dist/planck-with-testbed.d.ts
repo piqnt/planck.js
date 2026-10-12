@@ -1315,6 +1315,18 @@ declare function getPointStates(state1: PointState[], state2: PointState[], mani
 /**
  * Clipping for contact manifolds. Sutherland-Hodgman clipping.
  */
+/**
+ * Clips the segment vIn against the half-plane normal.v <= offset, into vOut, and returns the point count.
+ *
+ * Contact ids follow one convention, written as if the reference face were on shape A (the collider swaps
+ * them afterwards when it is on B): a point that is an incident vertex k lying on the reference face f
+ * carries (f, e_face, k, e_vertex), and a point produced here, the incident edge cut by the side plane at
+ * reference vertex j, carries (j, e_vertex, edge, e_face). The two kinds differ in their feature types
+ * and two points of one kind differ in their index, so the points of a manifold never share an id;
+ * Contact.update relies on that to carry warm-start impulses to the right point.
+ *
+ * @param vertexIndexA the reference vertex whose side plane this is
+ */
 declare function clipSegmentToLine(vOut: ClipVertex[], vIn: ClipVertex[], normal: Vec2Value, offset: number, vertexIndexA: number): number;
 
 /**
@@ -4281,6 +4293,10 @@ declare class Sweep {
      * normalize the angles in radians to be between -pi and pi.
      */
     normalize(): void;
+    /**
+     * Does this sweep contain only finite values?
+     */
+    isValid(): boolean;
     set(that: Sweep): void;
 }
 
