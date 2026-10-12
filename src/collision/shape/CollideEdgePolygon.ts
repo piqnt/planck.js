@@ -457,11 +457,12 @@ export const CollideEdgePolygon = function (
   } else {
     manifold.type = ManifoldType.e_faceB;
 
+    // ids are written reference-first (see clipSegmentToLine) and swapped to A/B order below
     matrix.copyVec2(ie[0].v, v1);
-    ie[0].id.setFeatures(0, ContactFeatureType.e_vertex, primaryAxis.index, ContactFeatureType.e_face);
+    ie[0].id.setFeatures(primaryAxis.index, ContactFeatureType.e_face, 0, ContactFeatureType.e_vertex);
 
     matrix.copyVec2(ie[1].v, v2);
-    ie[1].id.setFeatures(0, ContactFeatureType.e_vertex, primaryAxis.index, ContactFeatureType.e_face);
+    ie[1].id.setFeatures(primaryAxis.index, ContactFeatureType.e_face, 1, ContactFeatureType.e_vertex);
 
     rf.i1 = primaryAxis.index;
     rf.i2 = rf.i1 + 1 < polygonBA.count ? rf.i1 + 1 : 0;
