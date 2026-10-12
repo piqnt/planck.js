@@ -292,7 +292,7 @@ export class ContactID {
     this.indexB = indexB;
     this.typeA = typeA;
     this.typeB = typeB;
-    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
+    this.key = this.indexA + this.indexB * 256 + this.typeA * 65536 + this.typeB * 16777216;
   }
 
   set(that: ContactID): void {
@@ -300,7 +300,7 @@ export class ContactID {
     this.indexB = that.indexB;
     this.typeA = that.typeA;
     this.typeB = that.typeB;
-    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
+    this.key = this.indexA + this.indexB * 256 + this.typeA * 65536 + this.typeB * 16777216;
   }
 
   swapFeatures(): void {
@@ -312,7 +312,7 @@ export class ContactID {
     this.indexB = indexA;
     this.typeA = typeB;
     this.typeB = typeA;
-    this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
+    this.key = this.indexA + this.indexB * 256 + this.typeA * 65536 + this.typeB * 16777216;
   }
 
   recycle(): void {
@@ -399,6 +399,18 @@ export function getPointStates(
 
 /**
  * Clipping for contact manifolds. Sutherland-Hodgman clipping.
+ */
+/**
+ * Clips the segment vIn against the half-plane normal.v <= offset, into vOut, and returns the point count.
+ *
+ * Contact ids follow one convention, written as if the reference face were on shape A (the collider swaps
+ * them afterwards when it is on B): a point that is an incident vertex k lying on the reference face f
+ * carries (f, e_face, k, e_vertex), and a point produced here, the incident edge cut by the side plane at
+ * reference vertex j, carries (j, e_vertex, edge, e_face). The two kinds differ in their feature types
+ * and two points of one kind differ in their index, so the points of a manifold never share an id;
+ * Contact.update relies on that to carry warm-start impulses to the right point.
+ *
+ * @param vertexIndexA the reference vertex whose side plane this is
  */
 export function clipSegmentToLine(
   vOut: ClipVertex[],

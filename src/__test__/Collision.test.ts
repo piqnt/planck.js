@@ -5,6 +5,11 @@ import { Vec2 } from "../common/Vec2";
 import { AABB } from "../collision/AABB";
 import { DynamicTree } from "../collision/DynamicTree";
 import { BroadPhase } from "../collision/BroadPhase";
+import { Transform } from "../common/Transform";
+import { Manifold, ManifoldType } from "../collision/Manifold";
+import { EdgeShape } from "../collision/shape/EdgeShape";
+import { BoxShape } from "../collision/shape/BoxShape";
+import { CollideEdgePolygon } from "../collision/shape/CollideEdgePolygon";
 
 describe("Collision", function (): void {
   it("AABB", function (): void {
@@ -127,5 +132,48 @@ describe("Collision", function (): void {
     bp.updatePairs(callback);
     expect(AddPair.callCount).equal(1);
     expect(AddPair.calledWith("foo", "baz")).equal(true);
+  });
+});
+
+describe("CollideEdgePolygon contact ids", function (): void {
+  it("gives the two points of a face-B manifold distinct ids", function (): void {
+    // Regression for https://github.com/piqnt/planck.js/issues/315: with equal ids, Contact.update copies
+    // the first point's warm-start impulse onto both points, which lets jammed contacts run away.
+    // Boxes lying across the edge with the box face as the reference face and both edge ends inside it.
+    const edge = new EdgeShape(new Vec2(-1, 0), new Vec2(1, 0));
+    const xfA = new Transform(new Vec2(0, 0), 0);
+    const cases = [
+      {
+        hw: 0.4475753784179688,
+        hh: 0.23543739318847656,
+        x: 0.882720947265625,
+        y: 0.23307838439941406,
+        angle: -1.7545952606201172,
+      },
+      {
+        hw: 0.22182068824768067,
+        hh: 0.31885512471199035,
+        x: -0.9197063446044922,
+        y: -0.11656492352485656,
+        angle: 1.350540463924408,
+      },
+      {
+        hw: 0.556450080871582,
+        hh: 0.4116379737854004,
+        x: -0.7844958305358887,
+        y: -0.38117035031318663,
+        angle: 1.504119803905487,
+      },
+    ];
+    const manifold = new Manifold();
+    for (const c of cases) {
+      const box = new BoxShape(c.hw, c.hh);
+      const xfB = new Transform(new Vec2(c.x, c.y), c.angle);
+      manifold.recycle();
+      CollideEdgePolygon(manifold, edge, xfA, box, xfB);
+      expect(manifold.type).equal(ManifoldType.e_faceB);
+      expect(manifold.pointCount).equal(2);
+      expect(manifold.points[0].id.key).not.equal(manifold.points[1].id.key);
+    }
   });
 });

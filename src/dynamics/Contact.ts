@@ -566,6 +566,11 @@ export class Contact {
 
       this.evaluate(this.m_manifold, xfA, xfB);
       touching = this.m_manifold.pointCount > 0;
+      if (_ASSERT)
+        console.assert(
+          this.m_manifold.pointCount < 2 || this.m_manifold.points[0].id.key !== this.m_manifold.points[1].id.key,
+          "manifold points share a contact id",
+        );
 
       // Match old contact ids to new contact ids and copy the
       // stored impulses to warm start the solver.
