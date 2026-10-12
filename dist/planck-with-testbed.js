@@ -14443,6 +14443,43 @@
       }
     }
   }
+  class PlayButton extends Middleware {
+    constructor() {
+      super();
+      this.button = null;
+      this.disposeEffect = null;
+      this.handleActivate = () => {
+        if (document.readyState !== "loading") {
+          this.handleDomReady();
+        } else {
+          document.addEventListener("DOMContentLoaded", this.handleDomReady);
+        }
+      };
+      this.handleDomReady = () => {
+        this.button = document.getElementById("testbed-play");
+        if (!this.button)
+          return;
+        this.button.addEventListener("click", this.handleClick);
+        this.disposeEffect = j(() => {
+          const paused = this.context.paused.value;
+          this.button.classList.toggle("pause", paused);
+          this.button.classList.toggle("play", !paused);
+        });
+      };
+      this.handleDeactivate = () => {
+        document.removeEventListener("DOMContentLoaded", this.handleDomReady);
+        this.button?.removeEventListener("click", this.handleClick);
+        this.disposeEffect?.();
+        this.button = null;
+        this.disposeEffect = null;
+      };
+      this.handleClick = () => {
+        this.context.paused.value = !this.context.paused.value;
+      };
+      this.on("activate", this.handleActivate);
+      this.on("deactivate", this.handleDeactivate);
+    }
+  }
   class TestbedMain extends Middleware {
     constructor() {
       super();
@@ -14471,6 +14508,7 @@
       this.use(new WorldStep());
       this.use(new AutoPause());
       this.use(new ConsoleManager());
+      this.use(new PlayButton());
       this.use(new KeyboardManager());
       this.use(new CameraTransform());
       this.use(new GLLoader());

@@ -53,10 +53,14 @@ Planck.js is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck
 To use testbed you need to use `planck-with-testbed.min.js` instead:
 
 ```html
+<!DOCTYPE html>
 <html><body>
-  <span id="testbed-info"></span>
-  <span id="testbed-status"></span>
-  <button id="testbed-play">Play</button>
+  <!-- the testbed fills the page; these sit above it -->
+  <div style="position: fixed; top: 8px; left: 8px; z-index: 1; color: #ccc; font: 12px monospace">
+    <button id="testbed-play">Play</button>
+    <span id="testbed-info"></span>
+    <pre id="testbed-status"></pre>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/planck/dist/planck-with-testbed.min.js"></script>
   <script>

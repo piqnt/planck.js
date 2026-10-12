@@ -29,6 +29,7 @@ import { WorldQuery } from "../world-view/WorldQuery";
 import { DefaultTool } from "./DefaultTool";
 import { TestbedContext } from "./TestbedContext";
 import { ConsoleManager } from "./ConsoleManager";
+import { PlayButton } from "./PlayButton";
 import { TestbedInterface } from "./TestbedInterface";
 import { GLDraw } from "../gl/GLDraw";
 import { FrameLoopEvent } from "./FrameLoop";
@@ -51,6 +52,7 @@ export class TestbedMain extends Middleware<TestbedContext> implements TestbedIn
     this.use(new AutoPause());
 
     this.use(new ConsoleManager());
+    this.use(new PlayButton());
 
     this.use(new KeyboardManager());
 
