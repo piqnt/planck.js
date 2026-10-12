@@ -253,7 +253,7 @@ export class DistanceProxy {
    * Get the supporting vertex index in the given direction.
    */
   getSupport(d: Vec2Value): number {
-    let bestIndex = -1;
+    let bestIndex = 0;
     let bestValue = -Infinity;
     for (let i = 0; i < this.m_count; ++i) {
       const value = matrix.dotVec2(this.m_vertices[i], d);
