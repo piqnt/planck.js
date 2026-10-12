@@ -107,6 +107,23 @@ export class Sweep {
     this.a0 = a0;
   }
 
+  /**
+   * Does this sweep contain only finite values?
+   */
+  isValid(): boolean {
+    return (
+      Number.isFinite(this.localCenter.x) &&
+      Number.isFinite(this.localCenter.y) &&
+      Number.isFinite(this.c0.x) &&
+      Number.isFinite(this.c0.y) &&
+      Number.isFinite(this.c.x) &&
+      Number.isFinite(this.c.y) &&
+      Number.isFinite(this.a0) &&
+      Number.isFinite(this.a) &&
+      Number.isFinite(this.alpha0)
+    );
+  }
+
   set(that: Sweep): void {
     matrix.copyVec2(this.localCenter, that.localCenter);
     matrix.copyVec2(this.c, that.c);
