@@ -22,6 +22,12 @@ testbed.hz = 240;
 testbed.info("Box wedged in a pocket and pulled into a chain (#315): the joint impulse should stay small");
 testbed.start(world);
 
+// the testbed steps the world with its own iteration counts; the jam needs 10 and 4
+testbed.on("step-before", (ev) => {
+  ev.velocityIterations = 10;
+  ev.positionIterations = 4;
+});
+
 const hw = 0.8420396029949189; // box half width
 const hh = 0.4911016643047333; // box half height
 const top = 0.31806490421295164; // the box's top face; the chain runs along y = 0, 0.31806490421295164 below it
