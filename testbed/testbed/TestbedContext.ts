@@ -57,6 +57,7 @@ export function initTestbedContext() {
     joints: true,
     contact: false,
     contactNormals: false,
+    particles: true,
   });
 
   ctx.textOverlay = signal(undefined as CanvasRenderingContext2D);
@@ -81,6 +82,7 @@ export interface RenderConfig {
   joints: boolean;
   contact: boolean;
   contactNormals: boolean;
+  particles: boolean;
 }
 
 export interface TestbedContext {

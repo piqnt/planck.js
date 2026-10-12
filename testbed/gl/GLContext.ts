@@ -11,6 +11,14 @@ export interface LineProgram {
   uProjectionMatrix: WebGLUniformLocation;
 }
 
+// gl.POINTS, one per particle (see world-view/DrawParticles.ts): position, size and color per
+// vertex; pointScale turns the size in world units into gl_PointSize's device pixels
+export interface PointProgram {
+  program: WebGLProgram;
+  uProjectionMatrix: WebGLUniformLocation;
+  uPointScale: WebGLUniformLocation;
+}
+
 // Polygon vertices live in a shared data texture (see GLDraw.ts's polygonVertexData/pushPolygon)
 // rather than fixed-size per-instance attributes, so a polygon can carry as many vertices as
 // src/constants.ts's MAX_POLYGON_VERTICES allows instead of a hardcoded cap.
@@ -32,6 +40,7 @@ export interface GLResources {
   capsuleProgram: ShapeProgram;
   polygonProgram: PolygonProgram;
   lineProgram: LineProgram;
+  pointProgram: PointProgram;
   projectionMatrix: Float32Array;
   pixelScale: number;
 }
