@@ -1,5 +1,5 @@
 import { Middleware } from "polymatic";
-import { effect } from "@preact/signals";
+import { effect } from "@preact/signals-core";
 import { type TransformValue, type Vec2Value } from "planck";
 import { createInstancedVAO, createDataTexture, parseColor } from "./glUtil";
 import { GLDrawContext, GLResources, ShapeProgram } from "./GLContext";

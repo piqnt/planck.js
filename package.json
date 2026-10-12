@@ -60,6 +60,7 @@
     "@mantine/core": "^8.0.0",
     "@mantine/hooks": "^8.0.0",
     "@preact/signals": ">=2.0.0",
+    "@preact/signals-core": "^1.0.0",
     "polymatic": "^0.3.1",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
@@ -73,6 +74,7 @@
     "@mantine/hooks": "^8.3.18",
     "@preact/preset-vite": "^2.10.6",
     "@preact/signals": "^2.11.2",
+    "@preact/signals-core": "^1.14.4",
     "@types/chai": "^5.2.3",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
@@ -144,6 +146,9 @@
       "optional": true
     },
     "@preact/signals": {
+      "optional": true
+    },
+    "@preact/signals-core": {
       "optional": true
     },
     "polymatic": {

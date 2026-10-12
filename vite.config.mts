@@ -26,8 +26,9 @@ export default function viteConfig(configEnv: ConfigEnv) {
 //
 // the testbed's own entry, `planck/testbed`: ES2020 classes on top of polymatic (a native class,
 // which ES5 output could not extend), with planck itself and the testbed's peer dependencies left
-// to the consumer
-const TESTBED_EXTERNAL = ["planck", "polymatic", "@preact/signals", "@egjs/hammerjs"];
+// to the consumer. Signals come from @preact/signals-core: @preact/signals loads preact to hook its
+// renders, so only the shell (shipped as source, not built here) imports it
+const TESTBED_EXTERNAL = ["planck", "polymatic", "@preact/signals-core", "@egjs/hammerjs"];
 
 function buildConfig() {
   const entry = normalizePath(path.resolve(__dirname, "src", "main.ts"));

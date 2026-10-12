@@ -1,7 +1,7 @@
 // global dependency injection
 // todo: split to multiple files
 
-import { signal, type Signal } from "@preact/signals";
+import { signal, type Signal } from "@preact/signals-core";
 import { type Middleware } from "polymatic";
 import { TestbedContext } from "../testbed/TestbedContext";
 

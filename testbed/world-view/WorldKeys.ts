@@ -1,5 +1,5 @@
 import { Middleware } from "polymatic";
-import { effect, type Signal } from "@preact/signals";
+import { effect, type Signal } from "@preact/signals-core";
 import { type Body, type Fixture, type Joint, type World } from "planck";
 
 import { setKey } from "../common/Key";

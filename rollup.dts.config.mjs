@@ -3,7 +3,7 @@
 // stay imports — the core for testbed.d.ts, so consumers see one set of planck types
 import dts from "rollup-plugin-dts";
 
-const PEERS = ["polymatic", "@preact/signals", "@egjs/hammerjs"];
+const PEERS = ["polymatic", "@preact/signals-core", "@egjs/hammerjs"];
 
 const bundle = (input, file, external, tsconfig) => ({
   input,

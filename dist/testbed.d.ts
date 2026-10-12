@@ -1,4 +1,4 @@
-import { Signal } from '@preact/signals';
+import { Signal } from '@preact/signals-core';
 import { Middleware } from 'polymatic';
 import { Vec2Value, AABBValue, World, Body, Joint, Fixture } from 'planck';
 export { Testbed } from 'planck';

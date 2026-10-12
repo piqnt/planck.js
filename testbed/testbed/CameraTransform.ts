@@ -1,5 +1,5 @@
 import { Middleware, Memo } from "polymatic";
-import { effect, type Signal } from "@preact/signals";
+import { effect, type Signal } from "@preact/signals-core";
 import {
   type Mat2d,
   makeMat2d,

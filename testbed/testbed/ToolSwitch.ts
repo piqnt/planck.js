@@ -1,5 +1,5 @@
 import { Middleware } from "polymatic";
-import { effect, type Signal } from "@preact/signals";
+import { effect, type Signal } from "@preact/signals-core";
 
 export interface ToolConfig {
   name: string;

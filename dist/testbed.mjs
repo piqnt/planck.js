@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { signal, effect } from "@preact/signals";
+import { signal, effect } from "@preact/signals-core";
 import { Middleware, Memo, Runtime } from "polymatic";
 import { Transform, Rot, WorldManifold, MouseJoint, AABB, DistanceInput, CircleShape, SimplexCache, DistanceOutput, Distance, Vec2, Testbed } from "planck";
 import { Testbed as Testbed2 } from "planck";

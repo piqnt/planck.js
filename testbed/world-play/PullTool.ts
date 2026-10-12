@@ -1,5 +1,5 @@
 import { Middleware } from "polymatic";
-import { type Signal } from "@preact/signals";
+import { type Signal } from "@preact/signals-core";
 import { type LocalPointerDownEvent, type LocalPointerMove } from "../testbed/Pointer";
 
 import { type Body, type World, MouseJoint } from "planck";

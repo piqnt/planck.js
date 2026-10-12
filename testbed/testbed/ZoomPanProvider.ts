@@ -1,6 +1,6 @@
 import Hammer from "@egjs/hammerjs";
 import { Middleware } from "polymatic";
-import { effect, type Signal } from "@preact/signals";
+import { effect, type Signal } from "@preact/signals-core";
 
 interface ZoomPanContext {
   pointerCaptured: boolean;

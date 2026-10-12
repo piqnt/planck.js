@@ -1,5 +1,5 @@
 import { Middleware, Memo } from "polymatic";
-import { effect, type Signal } from "@preact/signals";
+import { effect, type Signal } from "@preact/signals-core";
 import { type Mat2d } from "../common/Mat2d";
 import { createShapeProgram, createPolygonProgram, createLineProgram, createUnitQuadBuffer } from "./glUtil";
 import { type GLResources } from "./GLContext";

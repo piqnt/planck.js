@@ -1,5 +1,5 @@
 import { Middleware } from "polymatic";
-import { type Signal } from "@preact/signals";
+import { type Signal } from "@preact/signals-core";
 import { getKey } from "../common/Key";
 
 import {

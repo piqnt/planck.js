@@ -1,5 +1,5 @@
 import { Middleware } from "polymatic";
-import { effect, type Signal } from "@preact/signals";
+import { effect, type Signal } from "@preact/signals-core";
 import { type Mat2d, mulMat2dVec2 } from "../common/Mat2d";
 import { type Vec2Value } from "planck";
 

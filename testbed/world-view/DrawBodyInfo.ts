@@ -1,5 +1,5 @@
 import { Middleware } from "polymatic";
-import { type Signal } from "@preact/signals";
+import { type Signal } from "@preact/signals-core";
 import { GLDraw } from "../gl/GLDraw";
 import { type GLResources } from "../gl/GLContext";
 import { drawWorldString } from "../gl/TextOverlay";
