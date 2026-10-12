@@ -130,6 +130,38 @@ export class Settings {
   static baumgarte: number = 0.2;
   static toiBaugarte: number = 0.75;
 
+  // Particle
+
+  /** A symbolic constant that stands for particle allocation error. */
+  static b2_invalidParticleIndex = -1;
+
+  static b2_maxParticleIndex = 0x7FFFFFFF;
+
+  /** The default distance between particles, multiplied by the particle diameter. */
+  static b2_particleStride = 0.75;
+
+  /** The minimum particle weight that produces pressure. */
+  static b2_minParticleWeight = 1.0;
+
+  /** The upper limit for particle pressure. */
+  static b2_maxParticlePressure = 0.25;
+
+  /** The upper limit for force between particles. */
+  static b2_maxParticleForce = 0.5;
+
+  /**
+   * The maximum distance between particles in a triad, multiplied by the
+   * particle diameter.
+   */
+  static b2_maxTriadDistance = 2;
+  static b2_maxTriadDistanceSquared = (Settings.b2_maxTriadDistance * Settings.b2_maxTriadDistance)
+
+  /** The initial size of particle data buffers. */
+  static b2_minParticleSystemBufferCapacity = 256;
+
+  /** The time into the future that collisions against barrier particles will be detected. */
+  static b2_barrierCollisionTime = 2.5;
+
   // Sleep
 
   /**
@@ -214,6 +246,36 @@ export class SettingsInternal {
   }
   static get toiBaugarte() {
     return Settings.toiBaugarte;
+  }
+  static get b2_invalidParticleIndex() {
+    return Settings.b2_invalidParticleIndex;
+  }
+  static get b2_maxParticleIndex() {
+    return Settings.b2_maxParticleIndex;
+  }
+  static get b2_particleStride() {
+    return Settings.b2_particleStride;
+  }
+  static get b2_minParticleWeight() {
+    return Settings.b2_minParticleWeight;
+  }
+  static get b2_maxParticlePressure() {
+    return Settings.b2_maxParticlePressure;
+  }
+  static get b2_maxParticleForce() {
+    return Settings.b2_maxParticleForce;
+  }
+  static get b2_maxTriadDistance() {
+    return Settings.b2_maxTriadDistance;
+  }
+  static get b2_maxTriadDistanceSquared() {
+    return Settings.b2_maxTriadDistanceSquared;
+  }
+  static get b2_minParticleSystemBufferCapacity() {
+    return Settings.b2_minParticleSystemBufferCapacity;
+  }
+  static get b2_barrierCollisionTime() {
+    return Settings.b2_barrierCollisionTime;
   }
   static get timeToSleep() {
     return Settings.timeToSleep;
