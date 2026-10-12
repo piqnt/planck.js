@@ -114,6 +114,13 @@ export const TimeOfImpact = function (output: TOIOutput, input: TOIInput): void 
   sweepA.normalize();
   sweepB.normalize();
 
+  // Non-finite sweeps (a body whose state has become NaN) cannot be resolved.
+  // Give up early instead of spinning in the root finder.
+  if (!sweepA.isValid() || !sweepB.isValid()) {
+    output.state = TOIOutputState.e_failed;
+    return;
+  }
+
   const tMax = input.tMax;
 
   const totalRadius = proxyA.m_radius + proxyB.m_radius;
