@@ -1,5 +1,5 @@
 /**
- * Planck.js v1.5.0
+ * Planck.js v1.5.1
  * @license The MIT license
  * @copyright Copyright (c) 2026 Erin Catto, Ali Shakiba
  *
@@ -1997,6 +1997,9 @@ var Sweep = (
       this.a -= this.a0 - a0;
       this.a0 = a0;
     };
+    Sweep2.prototype.isValid = function() {
+      return Number.isFinite(this.localCenter.x) && Number.isFinite(this.localCenter.y) && Number.isFinite(this.c0.x) && Number.isFinite(this.c0.y) && Number.isFinite(this.c.x) && Number.isFinite(this.c.y) && Number.isFinite(this.a0) && Number.isFinite(this.a) && Number.isFinite(this.alpha0);
+    };
     Sweep2.prototype.set = function(that) {
       copyVec2(this.localCenter, that.localCenter);
       copyVec2(this.c, that.c);
@@ -3270,7 +3273,7 @@ var DistanceProxy = (
       return this.m_vertices[index];
     };
     DistanceProxy2.prototype.getSupport = function(d2) {
-      var bestIndex = -1;
+      var bestIndex = 0;
       var bestValue = -Infinity;
       for (var i = 0; i < this.m_count; ++i) {
         var value = dotVec2(this.m_vertices[i], d2);
@@ -3822,6 +3825,10 @@ var TimeOfImpact = function(output2, input2) {
   var sweepB = input2.sweepB;
   sweepA.normalize();
   sweepB.normalize();
+  if (!sweepA.isValid() || !sweepB.isValid()) {
+    output2.state = TOIOutputState.e_failed;
+    return;
+  }
   var tMax = input2.tMax;
   var totalRadius = proxyA.m_radius + proxyB.m_radius;
   var target = math_max$3(SettingsInternal.linearSlop, totalRadius - 3 * SettingsInternal.linearSlop);
@@ -4955,14 +4962,14 @@ var ContactID = (
       this.indexB = indexB;
       this.typeA = typeA;
       this.typeB = typeB;
-      this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
+      this.key = this.indexA + this.indexB * 256 + this.typeA * 65536 + this.typeB * 16777216;
     };
     ContactID2.prototype.set = function(that) {
       this.indexA = that.indexA;
       this.indexB = that.indexB;
       this.typeA = that.typeA;
       this.typeB = that.typeB;
-      this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
+      this.key = this.indexA + this.indexB * 256 + this.typeA * 65536 + this.typeB * 16777216;
     };
     ContactID2.prototype.swapFeatures = function() {
       var indexA = this.indexA;
@@ -4973,7 +4980,7 @@ var ContactID = (
       this.indexB = indexA;
       this.typeA = typeB;
       this.typeB = typeA;
-      this.key = this.indexA + this.indexB * 4 + this.typeA * 16 + this.typeB * 64;
+      this.key = this.indexA + this.indexB * 256 + this.typeA * 65536 + this.typeB * 16777216;
     };
     ContactID2.prototype.recycle = function() {
       this.indexA = 0;
@@ -11581,9 +11588,9 @@ var CollideEdgePolygon = function(manifold, edgeA, xfA2, polygonB, xfB2) {
   } else {
     manifold.type = ManifoldType.e_faceB;
     copyVec2(ie[0].v, v13);
-    ie[0].id.setFeatures(0, ContactFeatureType.e_vertex, primaryAxis.index, ContactFeatureType.e_face);
+    ie[0].id.setFeatures(primaryAxis.index, ContactFeatureType.e_face, 0, ContactFeatureType.e_vertex);
     copyVec2(ie[1].v, v22);
-    ie[1].id.setFeatures(0, ContactFeatureType.e_vertex, primaryAxis.index, ContactFeatureType.e_face);
+    ie[1].id.setFeatures(primaryAxis.index, ContactFeatureType.e_face, 1, ContactFeatureType.e_vertex);
     rf.i1 = primaryAxis.index;
     rf.i2 = rf.i1 + 1 < polygonBA.count ? rf.i1 + 1 : 0;
     copyVec2(rf.v1, polygonBA.vertices[rf.i1]);
