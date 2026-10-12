@@ -113,7 +113,7 @@ export class Vec2 {
   }
 
   static assert(o: any): void {
-    if (_ASSERT) console.assert(!Vec2.isValid(o), "Invalid Vec2!", o);
+    if (_ASSERT) console.assert(Vec2.isValid(o), "Invalid Vec2!", o);
   }
 
   clone(): Vec2 {
