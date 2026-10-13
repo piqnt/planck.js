@@ -21,6 +21,7 @@
     "docs",
     "vite.config.*",
     "test-d/",
-    "dist"
+    "dist",
+    "testbed"
   ]
 }
