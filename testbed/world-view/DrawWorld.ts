@@ -48,10 +48,11 @@ export class DrawWorld extends Middleware<DrawWorldContext> {
     const xf = body.getTransform();
 
     for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-      // stroke/fill set as `style` on the body, the fixture or the shape (`render` before v1)
-      const style = getStyle(fixture.getShape()) ?? getStyle(fixture) ?? getStyle(body);
-      const color = style?.stroke ?? shapeColor(body, fixture);
-      const fill = style?.fill ?? DEFAULT_FILL;
+      // stroke and fill set as `style` on the shape, the fixture or the body (`render` before
+      // v1), each taken from the first that sets it, as planck 1.5's testbed did
+      const styles = [getStyle(fixture.getShape()), getStyle(fixture), getStyle(body)];
+      const color = styles.find((s) => s?.stroke)?.stroke ?? shapeColor(body, fixture);
+      const fill = styles.find((s) => s?.fill)?.fill ?? DEFAULT_FILL;
 
       const type = fixture.getType();
       if (type === "circle") {
@@ -85,12 +86,12 @@ const hasStyle = (value: unknown): value is Style =>
   typeof value === "object" && value !== null && ("stroke" in value || "fill" in value);
 
 /**
- * The style set on a shape, fixture or body, or undefined when it sets none,
+ * The style set on a shape, fixture, body or joint, or undefined when it sets none,
  * so the lookup goes on to the next one. An empty `style` (planck's default)
  * must not end it: then a body's `render` or `style` was never reached and
  * every shape drew in the default colors.
  */
-function getStyle(obj: object): Style | undefined {
+export function getStyle(obj: object): Style | undefined {
   // `render` was used in planck before v1
   if (hasStyle(obj["render"])) return obj["render"];
   if (hasStyle(obj["style"])) return obj["style"];

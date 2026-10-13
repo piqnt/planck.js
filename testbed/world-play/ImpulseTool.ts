@@ -62,14 +62,13 @@ export class ImpulseTool extends Middleware<ImpulseToolContext> {
 
     let mouseForce = this.context.mouseForce.value as number;
     if (mouseForce === 0) return;
+    // picked from the toolbar with no mouseForce set: a slingshot
     if (typeof mouseForce !== "number") {
       mouseForce = -1000;
     }
 
-    // if tool is changed but mouseForce is not changed
-    if (mouseForce > 0) {
-      mouseForce = -mouseForce;
-    }
+    // as in planck 1.5, toward the release point times mouseForce, so a negative one is a
+    // slingshot (away from where the pointer was let go)
 
     const pos = this.body.getPosition();
     const force = {

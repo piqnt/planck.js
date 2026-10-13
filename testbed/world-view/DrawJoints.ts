@@ -3,7 +3,7 @@ import { type Signal } from "@preact/signals-core";
 import { GLDraw } from "../gl/GLDraw";
 import { type GLResources } from "../gl/GLContext";
 import { type RenderConfig } from "../testbed/TestbedContext";
-import { type Style } from "../testbed/TestbedInterface";
+import { getStyle } from "./DrawWorld";
 
 import {
   type World,
@@ -47,8 +47,8 @@ export class DrawJoints extends Middleware<DrawJointsContext> {
   };
 
   private drawJoint(joint: Joint) {
-    const style = joint["style"] as Style | undefined;
-    const color = style?.stroke ?? DEFAULT_COLOR;
+    // `style`, or `render` before v1, as for shapes
+    const color = getStyle(joint)?.stroke || DEFAULT_COLOR;
 
     const pA = joint.getAnchorA();
     const pB = joint.getAnchorB();

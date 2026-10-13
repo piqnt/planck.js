@@ -17,6 +17,9 @@ interface FrameLoopContext {
   simulation?: ContextSimulation;
 }
 
+// the longest frame time, in ms, a frame steps and reports
+const MAX_ELAPSE = 1000 / 30;
+
 const DEFAULTS = {
   speed: 1,
   hz: 60,
@@ -70,7 +73,9 @@ export class FrameLoop extends Middleware<FrameLoopContext> {
     if (!this.activated) return;
 
     const now = performance.now();
-    const delta = now - this.lastTime;
+    // capped as planck 1.5's testbed (stage-js MAX_ELAPSE) capped it: after a stall or a
+    // background tab the world goes on from where it was, it does not run minutes of steps
+    const delta = Math.min(now - this.lastTime, MAX_ELAPSE);
     this.lastTime = now;
 
     this.event.now = now;

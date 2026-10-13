@@ -638,6 +638,8 @@ interface TestbedInterface {
     mouseForce?: number;
     /** Zoom with the wheel or a pinch, pan by dragging empty space. */
     zoomPan?: boolean;
+    /** Pause after 15 seconds without user input. Off by default. */
+    autoPause?: boolean;
     activeKeys: ActiveKeys;
     /** callback, to be implemented by user */
     step?: (dt: number, t: number) => void;
@@ -4431,6 +4433,7 @@ type planck_ChainShape = ChainShape;
 declare const planck_ChainShape: typeof ChainShape;
 type planck_CircleShape = CircleShape;
 declare const planck_CircleShape: typeof CircleShape;
+type planck_ClassName = ClassName;
 type planck_ClipVertex = ClipVertex;
 declare const planck_ClipVertex: typeof ClipVertex;
 declare const planck_CollideCircles: typeof CollideCircles;
@@ -4451,6 +4454,7 @@ declare const planck_ContactImpulse: typeof ContactImpulse;
 type planck_DataDriver<D extends object, R> = DataDriver<D, R>;
 declare const planck_DataDriver: typeof DataDriver;
 type planck_DataDriverListener<D, R> = DataDriverListener<D, R>;
+type planck_DataType = DataType;
 declare const planck_Distance: typeof Distance;
 type planck_DistanceInput = DistanceInput;
 declare const planck_DistanceInput: typeof DistanceInput;
@@ -4488,6 +4492,7 @@ type planck_JointDef = JointDef;
 type planck_JointEdge = JointEdge;
 declare const planck_JointEdge: typeof JointEdge;
 type planck_JointOpt = JointOpt;
+type planck_KEY = KEY;
 type planck_Manifold = Manifold;
 declare const planck_Manifold: typeof Manifold;
 type planck_ManifoldPoint = ManifoldPoint;
@@ -4507,6 +4512,7 @@ type planck_MouseJoint = MouseJoint;
 declare const planck_MouseJoint: typeof MouseJoint;
 type planck_MouseJointDef = MouseJointDef;
 type planck_MouseJointOpt = MouseJointOpt;
+type planck_ObjectType = ObjectType;
 type planck_PointState = PointState;
 declare const planck_PointState: typeof PointState;
 type planck_PolygonShape = PolygonShape;
@@ -4533,8 +4539,10 @@ type planck_RopeJointOpt = RopeJointOpt;
 type planck_Rot = Rot;
 declare const planck_Rot: typeof Rot;
 type planck_RotValue = RotValue;
+type planck_SerializedType = SerializedType;
 type planck_Serializer<T> = Serializer<T>;
 declare const planck_Serializer: typeof Serializer;
+type planck_SerializerOptions = SerializerOptions;
 type planck_Settings = Settings;
 declare const planck_Settings: typeof Settings;
 type planck_Shape = Shape;
@@ -4560,7 +4568,10 @@ type planck_TOIOutputState = TOIOutputState;
 declare const planck_TOIOutputState: typeof TOIOutputState;
 type planck_Testbed = Testbed;
 declare const planck_Testbed: typeof Testbed;
+type planck_TestbedCallback = TestbedCallback;
+type planck_TestbedFactoryOptions = TestbedFactoryOptions;
 type planck_TestbedInterface = TestbedInterface;
+type planck_TestbedMountOptions = TestbedMountOptions;
 declare const planck_TimeOfImpact: typeof TimeOfImpact;
 type planck_TimeStep = TimeStep;
 declare const planck_TimeStep: typeof TimeStep;
@@ -4602,8 +4613,8 @@ declare const planck_testOverlap: typeof testOverlap;
 declare const planck_testbed: typeof testbed;
 declare namespace planck {
   export { planck_AABB as AABB, planck_Body as Body, BoxShape as Box, planck_BoxShape as BoxShape, planck_BroadPhase as BroadPhase, ChainShape as Chain, planck_ChainShape as ChainShape, CircleShape as Circle, planck_CircleShape as CircleShape, planck_ClipVertex as ClipVertex, planck_CollideCircles as CollideCircles, planck_CollideEdgeCircle as CollideEdgeCircle, planck_CollideEdgePolygon as CollideEdgePolygon, planck_CollidePolygonCircle as CollidePolygonCircle, planck_CollidePolygons as CollidePolygons, planck_Contact as Contact, planck_ContactEdge as ContactEdge, planck_ContactFeatureType as ContactFeatureType, planck_ContactID as ContactID, planck_ContactImpulse as ContactImpulse, planck_DataDriver as DataDriver, planck_Distance as Distance, planck_DistanceInput as DistanceInput, planck_DistanceJoint as DistanceJoint, planck_DistanceOutput as DistanceOutput, planck_DistanceProxy as DistanceProxy, planck_DynamicTree as DynamicTree, EdgeShape as Edge, planck_EdgeShape as EdgeShape, planck_Fixture as Fixture, planck_FixtureProxy as FixtureProxy, planck_FrictionJoint as FrictionJoint, planck_GearJoint as GearJoint, planck_Joint as Joint, planck_JointEdge as JointEdge, planck_Manifold as Manifold, planck_ManifoldPoint as ManifoldPoint, planck_ManifoldType as ManifoldType, planck_Mat22 as Mat22, planck_Mat33 as Mat33, math as Math, planck_MotorJoint as MotorJoint, planck_MouseJoint as MouseJoint, planck_PointState as PointState, PolygonShape as Polygon, planck_PolygonShape as PolygonShape, planck_PrismaticJoint as PrismaticJoint, planck_PulleyJoint as PulleyJoint, planck_RevoluteJoint as RevoluteJoint, planck_RopeJoint as RopeJoint, planck_Rot as Rot, planck_Serializer as Serializer, planck_Settings as Settings, planck_Shape as Shape, planck_ShapeCast as ShapeCast, planck_ShapeCastInput as ShapeCastInput, planck_ShapeCastOutput as ShapeCastOutput, planck_SimplexCache as SimplexCache, planck_Solver as Solver, planck_Sweep as Sweep, planck_TOIInput as TOIInput, planck_TOIOutput as TOIOutput, planck_TOIOutputState as TOIOutputState, planck_Testbed as Testbed, planck_TimeOfImpact as TimeOfImpact, planck_TimeStep as TimeStep, planck_Transform as Transform, planck_TreeNode as TreeNode, planck_Vec2 as Vec2, planck_Vec3 as Vec3, planck_VelocityConstraintPoint as VelocityConstraintPoint, planck_WeldJoint as WeldJoint, planck_WheelJoint as WheelJoint, planck_World as World, planck_WorldManifold as WorldManifold, planck_clipSegmentToLine as clipSegmentToLine, planck_getPointStates as getPointStates, planck_internal as internal, planck_mixFriction as mixFriction, planck_mixRestitution as mixRestitution, planck_stats as stats, planck_testOverlap as testOverlap, planck_testbed as testbed };
-  export type { planck_AABBValue as AABBValue, planck_ActiveKeys as ActiveKeys, planck_BodyDef as BodyDef, planck_BodyType as BodyType, planck_DataDriverListener as DataDriverListener, planck_DistanceJointDef as DistanceJointDef, planck_DistanceJointOpt as DistanceJointOpt, planck_DynamicTreeQueryCallback as DynamicTreeQueryCallback, planck_EvaluateFunction as EvaluateFunction, planck_FixtureDef as FixtureDef, planck_FixtureOpt as FixtureOpt, planck_FrictionJointDef as FrictionJointDef, planck_FrictionJointOpt as FrictionJointOpt, planck_GearJointDef as GearJointDef, planck_GearJointOpt as GearJointOpt, planck_JointDef as JointDef, planck_JointOpt as JointOpt, planck_MassData as MassData, planck_MotorJointDef as MotorJointDef, planck_MotorJointOpt as MotorJointOpt, planck_MouseJointDef as MouseJointDef, planck_MouseJointOpt as MouseJointOpt, planck_PrismaticJointDef as PrismaticJointDef, planck_PrismaticJointOpt as PrismaticJointOpt, planck_PulleyJointDef as PulleyJointDef, planck_PulleyJointOpt as PulleyJointOpt, planck_RayCastCallback as RayCastCallback, planck_RayCastInput as RayCastInput, planck_RayCastOutput as RayCastOutput, planck_RevoluteJointDef as RevoluteJointDef, planck_RevoluteJointOpt as RevoluteJointOpt, planck_RopeJointDef as RopeJointDef, planck_RopeJointOpt as RopeJointOpt, planck_RotValue as RotValue, planck_ShapeType as ShapeType, planck_Style as Style, planck_TestbedInterface as TestbedInterface, planck_TransformValue as TransformValue, planck_Vec2Value as Vec2Value, planck_Vec3Value as Vec3Value, planck_WeldJointDef as WeldJointDef, planck_WeldJointOpt as WeldJointOpt, planck_WheelJointDef as WheelJointDef, planck_WheelJointOpt as WheelJointOpt, planck_WorldAABBQueryCallback as WorldAABBQueryCallback, planck_WorldDef as WorldDef, planck_WorldRayCastCallback as WorldRayCastCallback };
+  export type { planck_AABBValue as AABBValue, planck_ActiveKeys as ActiveKeys, planck_BodyDef as BodyDef, planck_BodyType as BodyType, planck_ClassName as ClassName, planck_DataDriverListener as DataDriverListener, planck_DataType as DataType, planck_DistanceJointDef as DistanceJointDef, planck_DistanceJointOpt as DistanceJointOpt, planck_DynamicTreeQueryCallback as DynamicTreeQueryCallback, planck_EvaluateFunction as EvaluateFunction, planck_FixtureDef as FixtureDef, planck_FixtureOpt as FixtureOpt, planck_FrictionJointDef as FrictionJointDef, planck_FrictionJointOpt as FrictionJointOpt, planck_GearJointDef as GearJointDef, planck_GearJointOpt as GearJointOpt, planck_JointDef as JointDef, planck_JointOpt as JointOpt, planck_KEY as KEY, planck_MassData as MassData, planck_MotorJointDef as MotorJointDef, planck_MotorJointOpt as MotorJointOpt, planck_MouseJointDef as MouseJointDef, planck_MouseJointOpt as MouseJointOpt, planck_ObjectType as ObjectType, planck_PrismaticJointDef as PrismaticJointDef, planck_PrismaticJointOpt as PrismaticJointOpt, planck_PulleyJointDef as PulleyJointDef, planck_PulleyJointOpt as PulleyJointOpt, planck_RayCastCallback as RayCastCallback, planck_RayCastInput as RayCastInput, planck_RayCastOutput as RayCastOutput, planck_RevoluteJointDef as RevoluteJointDef, planck_RevoluteJointOpt as RevoluteJointOpt, planck_RopeJointDef as RopeJointDef, planck_RopeJointOpt as RopeJointOpt, planck_RotValue as RotValue, planck_SerializedType as SerializedType, planck_SerializerOptions as SerializerOptions, planck_ShapeType as ShapeType, planck_Style as Style, planck_TestbedCallback as TestbedCallback, planck_TestbedFactoryOptions as TestbedFactoryOptions, planck_TestbedInterface as TestbedInterface, planck_TestbedMountOptions as TestbedMountOptions, planck_TransformValue as TransformValue, planck_Vec2Value as Vec2Value, planck_Vec3Value as Vec3Value, planck_WeldJointDef as WeldJointDef, planck_WeldJointOpt as WeldJointOpt, planck_WheelJointDef as WheelJointDef, planck_WheelJointOpt as WheelJointOpt, planck_WorldAABBQueryCallback as WorldAABBQueryCallback, planck_WorldDef as WorldDef, planck_WorldRayCastCallback as WorldRayCastCallback };
 }
 
 export { AABB, Body, BoxShape as Box, BoxShape, BroadPhase, ChainShape as Chain, ChainShape, CircleShape as Circle, CircleShape, ClipVertex, CollideCircles, CollideEdgeCircle, CollideEdgePolygon, CollidePolygonCircle, CollidePolygons, Contact, ContactEdge, ContactFeatureType, ContactID, ContactImpulse, DataDriver, Distance, DistanceInput, DistanceJoint, DistanceOutput, DistanceProxy, DynamicTree, EdgeShape as Edge, EdgeShape, Fixture, FixtureProxy, FrictionJoint, GearJoint, Joint, JointEdge, Manifold, ManifoldPoint, ManifoldType, Mat22, Mat33, math as Math, MotorJoint, MouseJoint, PointState, PolygonShape as Polygon, PolygonShape, PrismaticJoint, PulleyJoint, RevoluteJoint, RopeJoint, Rot, Serializer, Settings, Shape, ShapeCast, ShapeCastInput, ShapeCastOutput, SimplexCache, Solver, Sweep, TOIInput, TOIOutput, TOIOutputState, Testbed, TimeOfImpact, TimeStep, Transform, TreeNode, Vec2, Vec3, VelocityConstraintPoint, WeldJoint, WheelJoint, World, WorldManifold, clipSegmentToLine, planck as default, getPointStates, internal, mixFriction, mixRestitution, stats, testOverlap, testbed };
-export type { AABBValue, ActiveKeys, BodyDef, BodyType, DataDriverListener, DistanceJointDef, DistanceJointOpt, DynamicTreeQueryCallback, EvaluateFunction, FixtureDef, FixtureOpt, FrictionJointDef, FrictionJointOpt, GearJointDef, GearJointOpt, JointDef, JointOpt, MassData, MotorJointDef, MotorJointOpt, MouseJointDef, MouseJointOpt, PrismaticJointDef, PrismaticJointOpt, PulleyJointDef, PulleyJointOpt, RayCastCallback, RayCastInput, RayCastOutput, RevoluteJointDef, RevoluteJointOpt, RopeJointDef, RopeJointOpt, RotValue, ShapeType, Style, TestbedInterface, TransformValue, Vec2Value, Vec3Value, WeldJointDef, WeldJointOpt, WheelJointDef, WheelJointOpt, WorldAABBQueryCallback, WorldDef, WorldRayCastCallback };
+export type { AABBValue, ActiveKeys, BodyDef, BodyType, ClassName, DataDriverListener, DataType, DistanceJointDef, DistanceJointOpt, DynamicTreeQueryCallback, EvaluateFunction, FixtureDef, FixtureOpt, FrictionJointDef, FrictionJointOpt, GearJointDef, GearJointOpt, JointDef, JointOpt, KEY, MassData, MotorJointDef, MotorJointOpt, MouseJointDef, MouseJointOpt, ObjectType, PrismaticJointDef, PrismaticJointOpt, PulleyJointDef, PulleyJointOpt, RayCastCallback, RayCastInput, RayCastOutput, RevoluteJointDef, RevoluteJointOpt, RopeJointDef, RopeJointOpt, RotValue, SerializedType, SerializerOptions, ShapeType, Style, TestbedCallback, TestbedFactoryOptions, TestbedInterface, TestbedMountOptions, TransformValue, Vec2Value, Vec3Value, WeldJointDef, WeldJointOpt, WheelJointDef, WheelJointOpt, WorldAABBQueryCallback, WorldDef, WorldRayCastCallback };

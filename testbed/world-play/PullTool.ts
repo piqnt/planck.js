@@ -7,6 +7,9 @@ import { type Body, type World, MouseJoint } from "planck";
 import { WorldQuery } from "../world-view/WorldQuery";
 import { toolbarTool } from "../common/globals";
 
+// the mouse joint's maxForce, as planck 1.5's testbed had it
+const PULL_FORCE = 1000;
+
 interface PullToolContext {
   world: Signal<World>;
   worldQuery: WorldQuery;
@@ -37,11 +40,8 @@ export class PullTool extends Middleware<PullToolContext> {
     const world = this.context.world.value;
     if (!world) return;
 
-    let mouseForce = this.context.mouseForce.value;
-    if (mouseForce === 0) return;
-    if (typeof mouseForce !== "number") {
-      mouseForce = 1000;
-    }
+    // a set mouseForce is the impulse tool's; the pull is planck 1.5's fixed-strength joint
+    if (this.context.mouseForce.value === 0) return;
 
     const match = this.context.worldQuery.testPoint(ev.point, (m) => m.worldBody.isDynamic());
     if (!match) return;
@@ -53,7 +53,7 @@ export class PullTool extends Middleware<PullToolContext> {
 
     this.body = hit;
     this.ground = world.createBody();
-    this.joint = new MouseJoint({ maxForce: mouseForce }, this.ground, this.body, ev.point);
+    this.joint = new MouseJoint({ maxForce: PULL_FORCE }, this.ground, this.body, ev.point);
     world.createJoint(this.joint);
 
     this.emit("capture-pointer");

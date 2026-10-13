@@ -44,6 +44,8 @@ export interface TestbedInterface {
   mouseForce?: number;
   /** Zoom with the wheel or a pinch, pan by dragging empty space. */
   zoomPan?: boolean;
+  /** Pause after 15 seconds without user input. Off by default. */
+  autoPause?: boolean;
 
   activeKeys: ActiveKeys;
 

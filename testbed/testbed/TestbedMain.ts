@@ -97,20 +97,21 @@ export class TestbedMain extends Middleware<TestbedContext> implements TestbedIn
     this.step?.(ev.dt, ev.now);
   };
 
+  // called while paused too, as in planck 1.5
   private handleKeydown = (ev: KeyboardEvent) => {
-    if (this.context.paused.value) return;
     this.keydown?.(ev.keyCode, String.fromCharCode(ev.keyCode));
   };
 
+  // called while paused too, as in planck 1.5
   private handleKeyup = (ev: KeyboardEvent) => {
-    if (this.context.paused.value) return;
     this.keyup?.(ev.keyCode, String.fromCharCode(ev.keyCode));
   };
 
   color(r: number, g: number, b: number): string {
-    r = (r * 255) | 0;
-    g = (g * 255) | 0;
-    b = (b * 255) | 0;
+    // * 256 as in planck 1.5; 1.0 gives 256, which CSS reads as 255
+    r = (r * 256) | 0;
+    g = (g * 256) | 0;
+    b = (b * 256) | 0;
     return "rgb(" + r + ", " + g + ", " + b + ")";
   }
 
@@ -198,6 +199,15 @@ export class TestbedMain extends Middleware<TestbedContext> implements TestbedIn
     this.context.zoomPan.value = value;
   }
 
+  /** Pause after 15 seconds without user input. Off by default. */
+  get autoPause() {
+    return this.context.autoPause.value;
+  }
+
+  set autoPause(value: boolean) {
+    this.context.autoPause.value = value;
+  }
+
   get activeKeys() {
     return this.context.activeKeys;
   }
@@ -219,8 +229,9 @@ export class TestbedMain extends Middleware<TestbedContext> implements TestbedIn
     this.context.world.value = world;
   }
 
+  /** A dot at p, 5 px in radius whatever the zoom; `r` is ignored, as in planck 1.5. */
   drawPoint(p: Vec2Value, r: number, color: string): void {
-    this.draw.drawPoint(p, r, color);
+    this.draw.drawScreenPoint(p, 5, color);
   }
 
   drawCircle(p: Vec2Value, r: number, color: string): void {

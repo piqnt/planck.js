@@ -11747,6 +11747,101 @@
       return DataDriver2;
     })()
   );
+  const planck = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    AABB,
+    Body,
+    Box: BoxShape,
+    BoxShape,
+    BroadPhase,
+    Chain: ChainShape,
+    ChainShape,
+    Circle: CircleShape,
+    CircleShape,
+    ClipVertex,
+    CollideCircles,
+    CollideEdgeCircle,
+    CollideEdgePolygon,
+    CollidePolygonCircle,
+    CollidePolygons,
+    Contact,
+    ContactEdge,
+    get ContactFeatureType() {
+      return exports2.ContactFeatureType;
+    },
+    ContactID,
+    ContactImpulse,
+    DataDriver,
+    Distance,
+    DistanceInput,
+    DistanceJoint,
+    DistanceOutput,
+    DistanceProxy,
+    DynamicTree,
+    Edge: EdgeShape,
+    EdgeShape,
+    Fixture,
+    FixtureProxy,
+    FrictionJoint,
+    GearJoint,
+    Joint,
+    JointEdge,
+    Manifold,
+    ManifoldPoint,
+    get ManifoldType() {
+      return exports2.ManifoldType;
+    },
+    Mat22,
+    Mat33,
+    Math: math,
+    MotorJoint,
+    MouseJoint,
+    get PointState() {
+      return exports2.PointState;
+    },
+    Polygon: PolygonShape,
+    PolygonShape,
+    PrismaticJoint,
+    PulleyJoint,
+    RevoluteJoint,
+    RopeJoint,
+    Rot,
+    Serializer,
+    Settings,
+    SettingsInternal,
+    Shape,
+    ShapeCast,
+    ShapeCastInput,
+    ShapeCastOutput,
+    SimplexCache,
+    Solver,
+    Sweep,
+    TOIInput,
+    TOIOutput,
+    get TOIOutputState() {
+      return exports2.TOIOutputState;
+    },
+    Testbed,
+    TimeOfImpact,
+    TimeStep,
+    Transform,
+    TreeNode,
+    Vec2,
+    Vec3,
+    VelocityConstraintPoint,
+    WeldJoint,
+    WheelJoint,
+    World,
+    WorldManifold,
+    clipSegmentToLine,
+    getPointStates,
+    internal,
+    mixFriction,
+    mixRestitution,
+    stats,
+    testOverlap,
+    testbed
+  }, Symbol.toStringTag, { value: "Module" }));
   /**
    * Polymatic v0.3.1
    * @copyright Copyright 2026 Ali Shakiba
@@ -12659,12 +12754,13 @@
     ctx.canvasElement = y(void 0);
     ctx.gl = y(void 0);
     ctx.worldMatrix = makeMat2d();
-    ctx.mouseForce = y(1e3);
+    ctx.mouseForce = y(void 0);
     ctx.pixelPerUnit = 1;
     ctx.pointerRadius = 20;
     ctx.showOutline = y(true);
     ctx.showToolbar = y(true);
     ctx.zoomPan = y(true);
+    ctx.autoPause = y(false);
     ctx.activeKeys = {};
     ctx.multiselect = y(new Multiselect([]));
     ctx.world = y();
@@ -13082,6 +13178,7 @@
       this.on("activate", this.handleActivate);
     }
   }
+  const MAX_ELAPSE = 1e3 / 30;
   const DEFAULTS = {
     speed: 1,
     hz: 60,
@@ -13110,7 +13207,7 @@
         if (!this.activated)
           return;
         const now2 = performance.now();
-        const delta = now2 - this.lastTime;
+        const delta = Math.min(now2 - this.lastTime, MAX_ELAPSE);
         this.lastTime = now2;
         this.event.now = now2;
         this.event.dt = delta;
@@ -13319,13 +13416,20 @@
   class AutoPause extends Middleware {
     constructor() {
       super();
+      this.disposeEffect = null;
       this.handleActivate = () => {
         window.addEventListener("pointerdown", this.handleInteraction);
         window.addEventListener("pointermove", this.handleInteraction);
         window.addEventListener("keydown", this.handleInteraction);
         window.addEventListener("wheel", this.handleInteraction, { passive: true });
         window.addEventListener("touchstart", this.handleInteraction, { passive: true });
-        this.resetIdleTimeout();
+        this.disposeEffect = j(() => {
+          if (this.context.autoPause?.value) {
+            this.resetIdleTimeout();
+          } else {
+            clearTimeout(this.idleTimeout);
+          }
+        });
       };
       this.handleDeactivate = () => {
         window.removeEventListener("pointerdown", this.handleInteraction);
@@ -13333,12 +13437,17 @@
         window.removeEventListener("keydown", this.handleInteraction);
         window.removeEventListener("wheel", this.handleInteraction);
         window.removeEventListener("touchstart", this.handleInteraction);
+        this.disposeEffect?.();
+        this.disposeEffect = null;
         clearTimeout(this.idleTimeout);
       };
       this.handleInteraction = () => {
-        this.resetIdleTimeout();
+        if (this.context.autoPause?.peek())
+          this.resetIdleTimeout();
       };
       this.handleIdleTimeout = () => {
+        if (!this.context.autoPause?.peek())
+          return;
         this.context.paused.value = true;
       };
       this.on("activate", this.handleActivate);
@@ -13595,9 +13704,9 @@
     drawBody(body) {
       const xf2 = body.getTransform();
       for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-        const style = getStyle(fixture.getShape()) ?? getStyle(fixture) ?? getStyle(body);
-        const color = style?.stroke ?? shapeColor(body, fixture);
-        const fill = style?.fill ?? DEFAULT_FILL;
+        const styles = [getStyle(fixture.getShape()), getStyle(fixture), getStyle(body)];
+        const color = styles.find((s2) => s2?.stroke)?.stroke ?? shapeColor(body, fixture);
+        const fill = styles.find((s2) => s2?.fill)?.fill ?? DEFAULT_FILL;
         const type = fixture.getType();
         if (type === "circle") {
           const shape = fixture.getShape();
@@ -13804,8 +13913,7 @@
       this.on("frame-update", this.handleFrameRender);
     }
     drawJoint(joint) {
-      const style = joint["style"];
-      const color = style?.stroke ?? DEFAULT_COLOR;
+      const color = getStyle(joint)?.stroke || DEFAULT_COLOR;
       const pA2 = joint.getAnchorA();
       const pB2 = joint.getAnchorB();
       switch (joint.getType()) {
@@ -14036,6 +14144,7 @@
   y();
   const toolbarTool = new ProviderCollection();
   const runtime = y();
+  const PULL_FORCE = 1e3;
   class PullTool extends Middleware {
     constructor() {
       super();
@@ -14050,12 +14159,8 @@
         const world = this.context.world.value;
         if (!world)
           return;
-        let mouseForce = this.context.mouseForce.value;
-        if (mouseForce === 0)
+        if (this.context.mouseForce.value === 0)
           return;
-        if (typeof mouseForce !== "number") {
-          mouseForce = 1e3;
-        }
         const match = this.context.worldQuery.testPoint(ev.point, (m2) => m2.worldBody.isDynamic());
         if (!match)
           return;
@@ -14065,7 +14170,7 @@
         }
         this.body = hit;
         this.ground = world.createBody();
-        this.joint = new MouseJoint({ maxForce: mouseForce }, this.ground, this.body, ev.point);
+        this.joint = new MouseJoint({ maxForce: PULL_FORCE }, this.ground, this.body, ev.point);
         world.createJoint(this.joint);
         this.emit("capture-pointer");
       };
@@ -14148,9 +14253,6 @@
           return;
         if (typeof mouseForce !== "number") {
           mouseForce = -1e3;
-        }
-        if (mouseForce > 0) {
-          mouseForce = -mouseForce;
         }
         const pos = this.body.getPosition();
         const force = {
@@ -14360,9 +14462,9 @@
       const mouseForce = this.context.mouseForce.value;
       let tool = { name: "inspect" };
       if (!paused) {
-        if (mouseForce > 0) {
+        if (mouseForce === void 0 || mouseForce === null) {
           tool = { name: "interact-pull" };
-        } else if (mouseForce < 0) {
+        } else if (mouseForce !== 0) {
           tool = { name: "interact-impulse" };
         }
       }
@@ -14648,13 +14750,9 @@
         this.step?.(ev.dt, ev.now);
       };
       this.handleKeydown = (ev) => {
-        if (this.context.paused.value)
-          return;
         this.keydown?.(ev.keyCode, String.fromCharCode(ev.keyCode));
       };
       this.handleKeyup = (ev) => {
-        if (this.context.paused.value)
-          return;
         this.keyup?.(ev.keyCode, String.fromCharCode(ev.keyCode));
       };
       this.use(this.draw);
@@ -14688,9 +14786,9 @@
       this.on("keyup", this.handleKeyup);
     }
     color(r2, g, b2) {
-      r2 = r2 * 255 | 0;
-      g = g * 255 | 0;
-      b2 = b2 * 255 | 0;
+      r2 = r2 * 256 | 0;
+      g = g * 256 | 0;
+      b2 = b2 * 256 | 0;
       return "rgb(" + r2 + ", " + g + ", " + b2 + ")";
     }
     findOne(query) {
@@ -14761,6 +14859,13 @@
     set zoomPan(value) {
       this.context.zoomPan.value = value;
     }
+    /** Pause after 15 seconds without user input. Off by default. */
+    get autoPause() {
+      return this.context.autoPause.value;
+    }
+    set autoPause(value) {
+      this.context.autoPause.value = value;
+    }
     get activeKeys() {
       return this.context.activeKeys;
     }
@@ -14778,8 +14883,9 @@
     set world(world) {
       this.context.world.value = world;
     }
+    /** A dot at p, 5 px in radius whatever the zoom; `r` is ignored, as in planck 1.5. */
     drawPoint(p2, r2, color) {
-      this.draw.drawPoint(p2, r2, color);
+      this.draw.drawScreenPoint(p2, 5, color);
     }
     drawCircle(p2, r2, color) {
       this.draw.drawCircle(p2, r2, color);
@@ -14827,8 +14933,10 @@
       return runtime.value.middleware;
     const main = new TestbedMain();
     const context = initTestbedContext();
-    context.activeTool.value = { name: "interact-pull" };
     context.zoomPan.value = options2.zoomPan ?? true;
+    context.autoPause.value = options2.autoPause ?? false;
+    if (options2.background)
+      context.style.background = options2.background;
     runtime.value = {
       middleware: main,
       context,
@@ -14838,7 +14946,8 @@
     Runtime.activate(main, context);
     return main;
   };
-  Testbed.mount = () => mount({ zoomPan: false });
+  Testbed.mount = () => mount({ zoomPan: false, autoPause: false, background: "#222222" });
+  const StageTestbed = TestbedMain;
   exports2.AABB = AABB;
   exports2.Body = Body;
   exports2.Box = BoxShape;
@@ -14896,6 +15005,7 @@
   exports2.ShapeCastOutput = ShapeCastOutput;
   exports2.SimplexCache = SimplexCache;
   exports2.Solver = Solver;
+  exports2.StageTestbed = StageTestbed;
   exports2.Sweep = Sweep;
   exports2.TOIInput = TOIInput;
   exports2.TOIOutput = TOIOutput;
@@ -14912,6 +15022,7 @@
   exports2.World = World;
   exports2.WorldManifold = WorldManifold;
   exports2.clipSegmentToLine = clipSegmentToLine;
+  exports2.default = planck;
   exports2.getPointStates = getPointStates;
   exports2.internal = internal;
   exports2.mixFriction = mixFriction;
@@ -14919,6 +15030,6 @@
   exports2.stats = stats;
   exports2.testOverlap = testOverlap;
   exports2.testbed = testbed;
-  Object.defineProperty(exports2, Symbol.toStringTag, { value: "Module" });
+  Object.defineProperties(exports2, { __esModule: { value: true }, [Symbol.toStringTag]: { value: "Module" } });
 }));
 //# sourceMappingURL=planck-with-testbed.js.map

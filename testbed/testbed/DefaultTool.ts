@@ -51,10 +51,11 @@ export class DefaultTool extends Middleware<ToolSwitchContext> {
 
     let tool = { name: "inspect" };
 
+    // planck 1.5's mouseForce: unset pulls, any other non-zero value flings, 0 does neither
     if (!paused) {
-      if (mouseForce > 0) {
+      if (mouseForce === undefined || mouseForce === null) {
         tool = { name: "interact-pull" };
-      } else if (mouseForce < 0) {
+      } else if (mouseForce !== 0) {
         tool = { name: "interact-impulse" };
       }
     }

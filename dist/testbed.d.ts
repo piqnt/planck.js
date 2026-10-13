@@ -43,6 +43,8 @@ interface TestbedInterface {
     mouseForce?: number;
     /** Zoom with the wheel or a pinch, pan by dragging empty space. */
     zoomPan?: boolean;
+    /** Pause after 15 seconds without user input. Off by default. */
+    autoPause?: boolean;
     activeKeys: ActiveKeys;
     /** callback, to be implemented by user */
     step?: (dt: number, t: number) => void;
@@ -213,6 +215,8 @@ interface TestbedContext {
     showToolbar: Signal<boolean>;
     /** wheel, drag and pinch zoom and pan the view (ZoomPanProvider) */
     zoomPan: Signal<boolean>;
+    /** pause after 15 seconds without user input (AutoPause) */
+    autoPause: Signal<boolean>;
     activeKeys: ActiveKeys;
     /** what the outline and the inspect tool selected, by key */
     multiselect: Signal<Multiselect>;
@@ -308,10 +312,14 @@ declare class TestbedMain extends Middleware<TestbedContext> implements TestbedI
     /** Zoom with the wheel or a pinch, pan by dragging empty space. */
     get zoomPan(): boolean;
     set zoomPan(value: boolean);
+    /** Pause after 15 seconds without user input. Off by default. */
+    get autoPause(): boolean;
+    set autoPause(value: boolean);
     get activeKeys(): ActiveKeys;
     start(world: World): void;
     get world(): World;
     set world(world: World);
+    /** A dot at p, 5 px in radius whatever the zoom; `r` is ignored, as in planck 1.5. */
     drawPoint(p: Vec2Value, r: number, color: string): void;
     drawCircle(p: Vec2Value, r: number, color: string): void;
     drawCapsule(a: Vec2Value, b: Vec2Value, r: number, color: string): void;
@@ -346,6 +354,13 @@ declare class DrawWorld extends Middleware<DrawWorldContext> {
     handleFrameRender: () => void;
     private drawBody;
 }
+/**
+ * The style set on a shape, fixture, body or joint, or undefined when it sets none,
+ * so the lookup goes on to the next one. An empty `style` (planck's default)
+ * must not end it: then a body's `render` or `style` was never reached and
+ * every shape drew in the default colors.
+ */
+declare function getStyle(obj: object): Style | undefined;
 
 interface DrawBoundsContext {
     world: Signal<World>;
@@ -497,5 +512,5 @@ declare class TextOverlay extends Middleware<TextOverlayLoaderContext> {
 }
 declare function drawWorldString(context: DrawTextContext, p: Vec2Value, text: string, color: string, align?: CanvasTextAlign): void;
 
-export { DrawBodyInfo, DrawBounds, DrawContacts, DrawJoints, DrawWorld, InspectTool, Multiselect, ProviderCollection, SelectionManager, TestbedMain, TextOverlay, WorldKeys, WorldQuery, WorldStep, currentPlay, drawWorldString, emptySelection, findAll, findBody, findFixture, findJoint, findOne, generateKey, getKey, getLabel, initTestbedContext, isSelected, mountTestbed, playlist, removeSelection, replaceKey, rotate, runtime, selectBody, selectFixture, selectJoint, setKey, setLabel, setSelection, toolbarTool };
+export { DrawBodyInfo, DrawBounds, DrawContacts, DrawJoints, DrawWorld, InspectTool, Multiselect, ProviderCollection, SelectionManager, TestbedMain, TextOverlay, WorldKeys, WorldQuery, WorldStep, currentPlay, drawWorldString, emptySelection, findAll, findBody, findFixture, findJoint, findOne, generateKey, getKey, getLabel, getStyle, initTestbedContext, isSelected, mountTestbed, playlist, removeSelection, replaceKey, rotate, runtime, selectBody, selectFixture, selectJoint, setKey, setLabel, setSelection, toolbarTool };
 export type { ActiveKeys, ContextSimulation, DrawTextContext, FrameCallback, KeydownCallback, KeyupCallback, PlayConfig, RenderConfig, RuntimeRef, StepCallback, StepEvent, Style, Target, TestbedContext, TestbedInterface, ToolbarTool, WorldQueryMatch };

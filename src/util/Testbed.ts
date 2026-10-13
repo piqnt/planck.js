@@ -13,7 +13,7 @@ export interface Style {
 
 export type ActiveKeys = { [key in KEY]?: boolean };
 
-type TestbedMountOptions = { [key: string]: any };
+export type TestbedMountOptions = { [key: string]: any };
 
 export class Testbed {
   /**
@@ -54,6 +54,8 @@ export interface TestbedInterface {
   mouseForce?: number;
   /** Zoom with the wheel or a pinch, pan by dragging empty space. */
   zoomPan?: boolean;
+  /** Pause after 15 seconds without user input. Off by default. */
+  autoPause?: boolean;
   activeKeys: ActiveKeys;
 
   /** callback, to be implemented by user */
@@ -83,10 +85,10 @@ export interface TestbedInterface {
   findAll(query: string): (Body | Joint | Fixture)[];
 }
 
-type TestbedFactoryOptions = string | TestbedMountOptions;
+export type TestbedFactoryOptions = string | TestbedMountOptions;
 
 /** @deprecated */
-type TestbedCallback = (testbed: TestbedInterface) => World | undefined;
+export type TestbedCallback = (testbed: TestbedInterface) => World | undefined;
 
 /** @deprecated */
 export function testbed(callback: TestbedCallback): void;
@@ -115,7 +117,7 @@ export function testbed(a?: any, b?: any) {
   }
 }
 
-type KEY =
+export type KEY =
   | "0"
   | "1"
   | "2"

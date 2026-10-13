@@ -30,12 +30,14 @@ export function initTestbedContext() {
   ctx.canvasElement = signal(undefined as HTMLCanvasElement);
   ctx.gl = signal(undefined as GLResources);
   ctx.worldMatrix = makeMat2d();
-  ctx.mouseForce = signal(1000);
+  // as in planck 1.5: unset pulls (a mouse joint), non-zero flings on release, 0 does neither
+  ctx.mouseForce = signal(undefined as number);
   ctx.pixelPerUnit = 1;
   ctx.pointerRadius = 20;
   ctx.showOutline = signal(true);
   ctx.showToolbar = signal(true);
   ctx.zoomPan = signal(true);
+  ctx.autoPause = signal(false);
   ctx.activeKeys = {};
   ctx.multiselect = signal(new Multiselect([]));
 
@@ -100,6 +102,8 @@ export interface TestbedContext {
   showToolbar: Signal<boolean>;
   /** wheel, drag and pinch zoom and pan the view (ZoomPanProvider) */
   zoomPan: Signal<boolean>;
+  /** pause after 15 seconds without user input (AutoPause) */
+  autoPause: Signal<boolean>;
   activeKeys: ActiveKeys;
   /** what the outline and the inspect tool selected, by key */
   multiselect: Signal<Multiselect>;
