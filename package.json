@@ -60,7 +60,6 @@
     "node": ">=24.0"
   },
   "peerDependencies": {
-    "@egjs/hammerjs": "^2.0.17",
     "@mantine/core": "^8.0.0",
     "@mantine/hooks": "^8.0.0",
     "@preact/signals-core": "^1.0.0",
@@ -72,7 +71,6 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
-    "@egjs/hammerjs": "^2.0.17",
     "@eslint/js": "^9.39.2",
     "@mantine/core": "^8.3.18",
     "@mantine/hooks": "^8.3.18",
@@ -140,9 +138,6 @@
     "build:types": "rollup -c rollup.dts.config.mjs"
   },
   "peerDependenciesMeta": {
-    "@egjs/hammerjs": {
-      "optional": true
-    },
     "@mantine/core": {
       "optional": true
     },

@@ -35,6 +35,7 @@ export function initTestbedContext() {
   ctx.pointerRadius = 20;
   ctx.showOutline = signal(true);
   ctx.showToolbar = signal(true);
+  ctx.zoomPan = signal(true);
   ctx.activeKeys = {};
   ctx.multiselect = signal(new Multiselect([]));
 
@@ -97,6 +98,8 @@ export interface TestbedContext {
   pointerRadius: number;
   showOutline: Signal<boolean>;
   showToolbar: Signal<boolean>;
+  /** wheel, drag and pinch zoom and pan the view (ZoomPanProvider) */
+  zoomPan: Signal<boolean>;
   activeKeys: ActiveKeys;
   /** what the outline and the inspect tool selected, by key */
   multiselect: Signal<Multiselect>;

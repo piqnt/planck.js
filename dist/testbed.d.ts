@@ -41,6 +41,8 @@ interface TestbedInterface {
     speed: number;
     background: string;
     mouseForce?: number;
+    /** Zoom with the wheel or a pinch, pan by dragging empty space. */
+    zoomPan?: boolean;
     activeKeys: ActiveKeys;
     /** callback, to be implemented by user */
     step?: (dt: number, t: number) => void;
@@ -209,6 +211,8 @@ interface TestbedContext {
     pointerRadius: number;
     showOutline: Signal<boolean>;
     showToolbar: Signal<boolean>;
+    /** wheel, drag and pinch zoom and pan the view (ZoomPanProvider) */
+    zoomPan: Signal<boolean>;
     activeKeys: ActiveKeys;
     /** what the outline and the inspect tool selected, by key */
     multiselect: Signal<Multiselect>;
@@ -301,6 +305,9 @@ declare class TestbedMain extends Middleware<TestbedContext> implements TestbedI
     set speed(value: number);
     get mouseForce(): number;
     set mouseForce(value: number);
+    /** Zoom with the wheel or a pinch, pan by dragging empty space. */
+    get zoomPan(): boolean;
+    set zoomPan(value: boolean);
     get activeKeys(): ActiveKeys;
     start(world: World): void;
     get world(): World;
@@ -322,8 +329,9 @@ declare class TestbedMain extends Middleware<TestbedContext> implements TestbedI
 }
 
 /**
- * Mounts the testbed. `Testbed.mount()` and `Testbed.start(world)` on planck's own Testbed class
- * do this once `planck/testbed` is loaded.
+ * Mounts the testbed, with zoom and pan on (wheel, pinch, and dragging where no tool holds the
+ * pointer; `testbed.zoomPan = false` turns them off). `Testbed.mount()` and
+ * `Testbed.start(world)` on planck's own Testbed class do this once `planck/testbed` is loaded.
  */
 declare const mountTestbed: () => TestbedMain;
 

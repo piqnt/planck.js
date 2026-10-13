@@ -30,6 +30,7 @@ import { DefaultTool } from "./DefaultTool";
 import { TestbedContext } from "./TestbedContext";
 import { ConsoleManager } from "./ConsoleManager";
 import { PlayButton } from "./PlayButton";
+import { ZoomPanProvider } from "./ZoomPanProvider";
 import { TestbedInterface } from "./TestbedInterface";
 import { GLDraw } from "../gl/GLDraw";
 import { FrameLoopEvent } from "./FrameLoop";
@@ -59,6 +60,7 @@ export class TestbedMain extends Middleware<TestbedContext> implements TestbedIn
     // CameraTransform must precede GLLoader: both handle "frame-before", and GLLoader reads
     // context.worldMatrix (written by CameraTransform) to compute pixelPerUnit/pointerRadius.
     this.use(new CameraTransform());
+    this.use(new ZoomPanProvider());
     this.use(new GLLoader());
     this.use(new TextOverlay());
     this.use(new AutoFocus());
@@ -185,6 +187,15 @@ export class TestbedMain extends Middleware<TestbedContext> implements TestbedIn
 
   set mouseForce(value: number) {
     this.context.mouseForce.value = value;
+  }
+
+  /** Zoom with the wheel or a pinch, pan by dragging empty space. */
+  get zoomPan() {
+    return this.context.zoomPan.value;
+  }
+
+  set zoomPan(value: boolean) {
+    this.context.zoomPan.value = value;
   }
 
   get activeKeys() {

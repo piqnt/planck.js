@@ -11743,508 +11743,6 @@ var DataDriver = (
     return DataDriver2;
   })()
 );
-var i = Symbol.for("preact-signals");
-function t() {
-  if (!(v > 1)) {
-    var i2, t2 = false;
-    !(function() {
-      var i3 = c;
-      c = void 0;
-      while (void 0 !== i3) {
-        var t3 = i3.S;
-        if (t3.v === i3.v) {
-          for (var n3 = t3.t; void 0 !== n3; n3 = n3.x) if (n3.i === i3.i) n3.i = t3.i;
-        }
-        i3 = i3.o;
-      }
-    })();
-    while (void 0 !== h) {
-      var n2 = h;
-      h = void 0;
-      s++;
-      while (void 0 !== n2) {
-        var r2 = n2.u;
-        n2.u = void 0;
-        n2.f &= -3;
-        if (!(8 & n2.f) && w(n2)) try {
-          n2.c();
-        } catch (n3) {
-          if (!t2) {
-            i2 = n3;
-            t2 = true;
-          }
-        }
-        n2 = r2;
-      }
-    }
-    s = 0;
-    v--;
-    if (t2) throw i2;
-  } else v--;
-}
-var r, o = void 0;
-function f(i2) {
-  var t2 = o, n2 = r;
-  o = void 0;
-  r = void 0;
-  try {
-    return i2();
-  } finally {
-    o = t2;
-    r = n2;
-  }
-}
-var h = void 0, v = 0, s = 0, e = 0, c = void 0, d = 0;
-function a(i2) {
-  if (void 0 !== o) {
-    var t2 = i2.n;
-    if (void 0 === t2 || t2.t !== o) {
-      t2 = { i: 0, S: i2, p: o.s, n: void 0, t: o, e: void 0, x: void 0, r: t2 };
-      if (void 0 !== o.s) o.s.n = t2;
-      o.s = t2;
-      i2.n = t2;
-      if (32 & o.f) i2.S(t2);
-      return t2;
-    } else if (-1 === t2.i) {
-      t2.i = 0;
-      if (void 0 !== t2.n) {
-        t2.n.p = t2.p;
-        if (void 0 !== t2.p) t2.p.n = t2.n;
-        t2.p = o.s;
-        t2.n = void 0;
-        o.s.n = t2;
-        o.s = t2;
-      }
-      return t2;
-    }
-  }
-}
-function l(i2, t2) {
-  this.v = i2;
-  this.i = 0;
-  this.n = void 0;
-  this.t = void 0;
-  this.l = 0;
-  this.W = null == t2 ? void 0 : t2.watched;
-  this.Z = null == t2 ? void 0 : t2.unwatched;
-  this.name = null == t2 ? void 0 : t2.name;
-}
-l.prototype.brand = i;
-l.prototype.h = function() {
-  return true;
-};
-l.prototype.S = function(i2) {
-  var t2 = this, n2 = this.t;
-  if (n2 !== i2 && void 0 === i2.e) {
-    i2.x = n2;
-    this.t = i2;
-    if (void 0 !== n2) n2.e = i2;
-    else f(function() {
-      var i3;
-      null == (i3 = t2.W) || i3.call(t2);
-    });
-  }
-};
-l.prototype.U = function(i2) {
-  var t2 = this;
-  if (void 0 !== this.t) {
-    var n2 = i2.e, r2 = i2.x;
-    if (void 0 !== n2) {
-      n2.x = r2;
-      i2.e = void 0;
-    }
-    if (void 0 !== r2) {
-      r2.e = n2;
-      i2.x = void 0;
-    }
-    if (i2 === this.t) {
-      this.t = r2;
-      if (void 0 === r2) f(function() {
-        var i3;
-        null == (i3 = t2.Z) || i3.call(t2);
-      });
-    }
-  }
-};
-l.prototype.subscribe = function(i2) {
-  var t2 = this;
-  return j(function() {
-    var n2 = t2.value;
-    f(function() {
-      return i2(n2);
-    });
-  }, { name: "sub" });
-};
-l.prototype.valueOf = function() {
-  return this.value;
-};
-l.prototype.toString = function() {
-  return this.value + "";
-};
-l.prototype.toJSON = function() {
-  return this.value;
-};
-l.prototype.peek = function() {
-  var i2 = this;
-  return f(function() {
-    return i2.value;
-  });
-};
-Object.defineProperty(l.prototype, "value", { get: function() {
-  var i2 = a(this);
-  if (void 0 !== i2) i2.i = this.i;
-  return this.v;
-}, set: function(i2) {
-  if (i2 !== this.v) {
-    if (s > 100) throw new Error("Cycle detected");
-    !(function(i3) {
-      if (0 !== v && 0 === s) {
-        if (i3.l !== e) {
-          i3.l = e;
-          c = { S: i3, v: i3.v, i: i3.i, o: c };
-        }
-      }
-    })(this);
-    this.v = i2;
-    this.i++;
-    d++;
-    v++;
-    try {
-      for (var n2 = this.t; void 0 !== n2; n2 = n2.x) n2.t.N();
-    } finally {
-      t();
-    }
-  }
-} });
-function y(i2, t2) {
-  return new l(i2, t2);
-}
-function w(i2) {
-  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) if (t2.S.i !== t2.i || !t2.S.h() || t2.S.i !== t2.i) return true;
-  return false;
-}
-function _(i2) {
-  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) {
-    var n2 = t2.S.n;
-    if (void 0 !== n2) t2.r = n2;
-    t2.S.n = t2;
-    t2.i = -1;
-    if (void 0 === t2.n) {
-      i2.s = t2;
-      break;
-    }
-  }
-}
-function b(i2) {
-  var t2 = i2.s, n2 = void 0;
-  while (void 0 !== t2) {
-    var r2 = t2.p;
-    if (-1 === t2.i) {
-      t2.S.U(t2);
-      if (void 0 !== r2) r2.n = t2.n;
-      if (void 0 !== t2.n) t2.n.p = r2;
-    } else n2 = t2;
-    t2.S.n = t2.r;
-    if (void 0 !== t2.r) t2.r = void 0;
-    t2 = r2;
-  }
-  i2.s = n2;
-}
-function p(i2, t2) {
-  l.call(this, void 0, t2);
-  this.x = i2;
-  this.s = void 0;
-  this.g = d - 1;
-  this.f = 4;
-}
-p.prototype = new l();
-p.prototype.h = function() {
-  this.f &= -3;
-  if (1 & this.f) return false;
-  if (32 == (36 & this.f)) return true;
-  this.f &= -5;
-  if (this.g === d) return true;
-  this.g = d;
-  this.f |= 1;
-  if (this.i > 0 && !w(this)) {
-    this.f &= -2;
-    return true;
-  }
-  var i2 = o;
-  try {
-    _(this);
-    o = this;
-    var t2 = this.x();
-    if (16 & this.f || this.v !== t2 || 0 === this.i) {
-      this.v = t2;
-      this.f &= -17;
-      this.i++;
-    }
-  } catch (i3) {
-    this.v = i3;
-    this.f |= 16;
-    this.i++;
-  }
-  o = i2;
-  b(this);
-  this.f &= -2;
-  return true;
-};
-p.prototype.S = function(i2) {
-  if (void 0 === this.t) {
-    this.f |= 36;
-    for (var t2 = this.s; void 0 !== t2; t2 = t2.n) t2.S.S(t2);
-  }
-  l.prototype.S.call(this, i2);
-};
-p.prototype.U = function(i2) {
-  if (void 0 !== this.t) {
-    l.prototype.U.call(this, i2);
-    if (void 0 === this.t) {
-      this.f &= -33;
-      for (var t2 = this.s; void 0 !== t2; t2 = t2.n) t2.S.U(t2);
-    }
-  }
-};
-p.prototype.N = function() {
-  if (!(2 & this.f)) {
-    this.f |= 6;
-    for (var i2 = this.t; void 0 !== i2; i2 = i2.x) i2.t.N();
-  }
-};
-Object.defineProperty(p.prototype, "value", { get: function() {
-  if (1 & this.f) throw new Error("Cycle detected");
-  var i2 = a(this);
-  this.h();
-  if (void 0 !== i2) i2.i = this.i;
-  if (16 & this.f) throw this.v;
-  return this.v;
-} });
-function S(i2) {
-  var n2 = i2.m;
-  i2.m = void 0;
-  if ("function" == typeof n2) {
-    v++;
-    var r2 = o;
-    o = void 0;
-    try {
-      n2();
-    } catch (t2) {
-      i2.f &= -2;
-      i2.f |= 8;
-      m(i2);
-      throw t2;
-    } finally {
-      o = r2;
-      t();
-    }
-  }
-}
-function m(i2) {
-  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) t2.S.U(t2);
-  i2.x = void 0;
-  i2.s = void 0;
-  S(i2);
-}
-function x(i2) {
-  if (o !== this) throw new Error("Out-of-order effect");
-  b(this);
-  o = i2;
-  this.f &= -2;
-  if (8 & this.f) m(this);
-  t();
-}
-function E(i2, t2) {
-  this.x = i2;
-  this.m = void 0;
-  this.s = void 0;
-  this.u = void 0;
-  this.f = 32;
-  this.name = null == t2 ? void 0 : t2.name;
-  if (r) r.push(this);
-}
-E.prototype.c = function() {
-  var i2 = this.S();
-  try {
-    if (8 & this.f) return;
-    if (void 0 === this.x) return;
-    var t2 = this.x();
-    if ("function" == typeof t2) this.m = t2;
-  } finally {
-    i2();
-  }
-};
-E.prototype.S = function() {
-  if (1 & this.f) throw new Error("Cycle detected");
-  this.f |= 1;
-  this.f &= -9;
-  S(this);
-  _(this);
-  v++;
-  var i2 = o;
-  o = this;
-  return x.bind(this, i2);
-};
-E.prototype.N = function() {
-  if (!(2 & this.f)) {
-    this.f |= 2;
-    this.u = h;
-    h = this;
-  }
-};
-E.prototype.d = function() {
-  this.f |= 8;
-  if (!(1 & this.f)) m(this);
-};
-E.prototype.dispose = function() {
-  this.d();
-};
-function j(i2, t2) {
-  var n2 = new E(i2, t2);
-  try {
-    n2.c();
-  } catch (i3) {
-    n2.d();
-    throw i3;
-  }
-  var r2 = n2.d.bind(n2);
-  r2[Symbol.dispose] = r2;
-  return r2;
-}
-class ProviderCollection {
-  constructor() {
-    this.list = [];
-  }
-  register(provider) {
-    this.list.push(provider);
-  }
-}
-y();
-const toolbarTool = new ProviderCollection();
-const runtime = y();
-let random = (bytes) => crypto.getRandomValues(new Uint8Array(bytes));
-let customRandom = (alphabet, defaultSize, getRandom) => {
-  let mask = (2 << Math.log(alphabet.length - 1) / Math.LN2) - 1;
-  let step = -~(1.6 * mask * defaultSize / alphabet.length);
-  return (size = defaultSize) => {
-    let id = "";
-    while (true) {
-      let bytes = getRandom(step);
-      let j2 = step | 0;
-      while (j2--) {
-        id += alphabet[bytes[j2] & mask] || "";
-        if (id.length === size) return id;
-      }
-    }
-  };
-};
-let customAlphabet = (alphabet, size = 21) => customRandom(alphabet, size, random);
-const generateKey = customAlphabet("0123456789abcdefghijklmnopqrstuvwxyz", 16);
-function getKey(obj) {
-  if (obj && typeof obj["__key"] === "string") {
-    return obj["__key"];
-  }
-}
-function setKey(obj, key) {
-  if (!obj)
-    return;
-  if (!obj["__key"]) {
-    obj["__key"] = generateKey();
-  }
-  return obj["__key"];
-}
-const getLabel = (obj) => {
-  if (obj.lookupId) {
-    return obj.lookupId;
-  }
-  if (obj.spaceName) {
-    return obj.spaceName;
-  }
-  return null;
-};
-const findOne = (world, query) => {
-  if (query.indexOf("#")) {
-    const [type, label] = query.split("#", 2);
-    if (type === "body") {
-      for (let body = world.getBodyList(); body; body = body.getNext()) {
-        if (getLabel(body) === label) {
-          return body;
-        }
-      }
-    } else if (type === "fixture") {
-      for (let body = world.getBodyList(); body; body = body.getNext()) {
-        for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-          if (getLabel(fixture) === label) {
-            return fixture;
-          }
-        }
-      }
-    } else if (type === "joint") {
-      for (let joint = world.getJointList(); joint; joint = joint.getNext()) {
-        if (getLabel(joint) === label) {
-          return joint;
-        }
-      }
-    }
-  }
-  return null;
-};
-const findAll = (world, query) => {
-  const result = [];
-  if (query.indexOf("#")) {
-    const [type, label] = query.split("#", 2);
-    if (type === "body") {
-      for (let body = world.getBodyList(); body; body = body.getNext()) {
-        if (getLabel(body) === label) {
-          result.push(body);
-        }
-      }
-    } else if (type === "fixture") {
-      for (let body = world.getBodyList(); body; body = body.getNext()) {
-        for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-          if (getLabel(fixture) === label) {
-            result.push(fixture);
-          }
-        }
-      }
-    } else if (type === "joint") {
-      for (let joint = world.getJointList(); joint; joint = joint.getNext()) {
-        if (getLabel(joint) === label) {
-          result.push(joint);
-        }
-      }
-    }
-  }
-  return result;
-};
-class Multiselect {
-  constructor(selected = []) {
-    this.selected = [];
-    this.selected = selected;
-  }
-}
-function isSelected(selection, key) {
-  return !!selection?.selected.some((s2) => s2.key === key);
-}
-function setSelection(context, selection) {
-  context.multiselect.value = new Multiselect(selection?.key ? [selection] : []);
-}
-function emptySelection(context) {
-  setSelection(context, null);
-}
-function removeSelection(context, selection) {
-  if (isSelected(context.multiselect.value, selection.key))
-    emptySelection(context);
-}
-function selectBody(body) {
-  return { type: "body", key: body };
-}
-function selectFixture(fixture, body) {
-  return { type: "fixture", key: fixture, up: { type: "body", key: body } };
-}
-function selectJoint(joint) {
-  return { type: "joint", key: joint };
-}
 /**
  * Polymatic v0.3.1
  * @copyright Copyright 2026 Ali Shakiba
@@ -12674,6 +12172,374 @@ class Memo {
     this.memory.length = 0;
   }
 }
+var i = Symbol.for("preact-signals");
+function t() {
+  if (!(v > 1)) {
+    var i2, t2 = false;
+    !(function() {
+      var i3 = c;
+      c = void 0;
+      while (void 0 !== i3) {
+        var t3 = i3.S;
+        if (t3.v === i3.v) {
+          for (var n3 = t3.t; void 0 !== n3; n3 = n3.x) if (n3.i === i3.i) n3.i = t3.i;
+        }
+        i3 = i3.o;
+      }
+    })();
+    while (void 0 !== h) {
+      var n2 = h;
+      h = void 0;
+      s++;
+      while (void 0 !== n2) {
+        var r2 = n2.u;
+        n2.u = void 0;
+        n2.f &= -3;
+        if (!(8 & n2.f) && w(n2)) try {
+          n2.c();
+        } catch (n3) {
+          if (!t2) {
+            i2 = n3;
+            t2 = true;
+          }
+        }
+        n2 = r2;
+      }
+    }
+    s = 0;
+    v--;
+    if (t2) throw i2;
+  } else v--;
+}
+var r, o = void 0;
+function f(i2) {
+  var t2 = o, n2 = r;
+  o = void 0;
+  r = void 0;
+  try {
+    return i2();
+  } finally {
+    o = t2;
+    r = n2;
+  }
+}
+var h = void 0, v = 0, s = 0, e = 0, c = void 0, d = 0;
+function a(i2) {
+  if (void 0 !== o) {
+    var t2 = i2.n;
+    if (void 0 === t2 || t2.t !== o) {
+      t2 = { i: 0, S: i2, p: o.s, n: void 0, t: o, e: void 0, x: void 0, r: t2 };
+      if (void 0 !== o.s) o.s.n = t2;
+      o.s = t2;
+      i2.n = t2;
+      if (32 & o.f) i2.S(t2);
+      return t2;
+    } else if (-1 === t2.i) {
+      t2.i = 0;
+      if (void 0 !== t2.n) {
+        t2.n.p = t2.p;
+        if (void 0 !== t2.p) t2.p.n = t2.n;
+        t2.p = o.s;
+        t2.n = void 0;
+        o.s.n = t2;
+        o.s = t2;
+      }
+      return t2;
+    }
+  }
+}
+function l(i2, t2) {
+  this.v = i2;
+  this.i = 0;
+  this.n = void 0;
+  this.t = void 0;
+  this.l = 0;
+  this.W = null == t2 ? void 0 : t2.watched;
+  this.Z = null == t2 ? void 0 : t2.unwatched;
+  this.name = null == t2 ? void 0 : t2.name;
+}
+l.prototype.brand = i;
+l.prototype.h = function() {
+  return true;
+};
+l.prototype.S = function(i2) {
+  var t2 = this, n2 = this.t;
+  if (n2 !== i2 && void 0 === i2.e) {
+    i2.x = n2;
+    this.t = i2;
+    if (void 0 !== n2) n2.e = i2;
+    else f(function() {
+      var i3;
+      null == (i3 = t2.W) || i3.call(t2);
+    });
+  }
+};
+l.prototype.U = function(i2) {
+  var t2 = this;
+  if (void 0 !== this.t) {
+    var n2 = i2.e, r2 = i2.x;
+    if (void 0 !== n2) {
+      n2.x = r2;
+      i2.e = void 0;
+    }
+    if (void 0 !== r2) {
+      r2.e = n2;
+      i2.x = void 0;
+    }
+    if (i2 === this.t) {
+      this.t = r2;
+      if (void 0 === r2) f(function() {
+        var i3;
+        null == (i3 = t2.Z) || i3.call(t2);
+      });
+    }
+  }
+};
+l.prototype.subscribe = function(i2) {
+  var t2 = this;
+  return j(function() {
+    var n2 = t2.value;
+    f(function() {
+      return i2(n2);
+    });
+  }, { name: "sub" });
+};
+l.prototype.valueOf = function() {
+  return this.value;
+};
+l.prototype.toString = function() {
+  return this.value + "";
+};
+l.prototype.toJSON = function() {
+  return this.value;
+};
+l.prototype.peek = function() {
+  var i2 = this;
+  return f(function() {
+    return i2.value;
+  });
+};
+Object.defineProperty(l.prototype, "value", { get: function() {
+  var i2 = a(this);
+  if (void 0 !== i2) i2.i = this.i;
+  return this.v;
+}, set: function(i2) {
+  if (i2 !== this.v) {
+    if (s > 100) throw new Error("Cycle detected");
+    !(function(i3) {
+      if (0 !== v && 0 === s) {
+        if (i3.l !== e) {
+          i3.l = e;
+          c = { S: i3, v: i3.v, i: i3.i, o: c };
+        }
+      }
+    })(this);
+    this.v = i2;
+    this.i++;
+    d++;
+    v++;
+    try {
+      for (var n2 = this.t; void 0 !== n2; n2 = n2.x) n2.t.N();
+    } finally {
+      t();
+    }
+  }
+} });
+function y(i2, t2) {
+  return new l(i2, t2);
+}
+function w(i2) {
+  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) if (t2.S.i !== t2.i || !t2.S.h() || t2.S.i !== t2.i) return true;
+  return false;
+}
+function _(i2) {
+  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) {
+    var n2 = t2.S.n;
+    if (void 0 !== n2) t2.r = n2;
+    t2.S.n = t2;
+    t2.i = -1;
+    if (void 0 === t2.n) {
+      i2.s = t2;
+      break;
+    }
+  }
+}
+function b(i2) {
+  var t2 = i2.s, n2 = void 0;
+  while (void 0 !== t2) {
+    var r2 = t2.p;
+    if (-1 === t2.i) {
+      t2.S.U(t2);
+      if (void 0 !== r2) r2.n = t2.n;
+      if (void 0 !== t2.n) t2.n.p = r2;
+    } else n2 = t2;
+    t2.S.n = t2.r;
+    if (void 0 !== t2.r) t2.r = void 0;
+    t2 = r2;
+  }
+  i2.s = n2;
+}
+function p(i2, t2) {
+  l.call(this, void 0, t2);
+  this.x = i2;
+  this.s = void 0;
+  this.g = d - 1;
+  this.f = 4;
+}
+p.prototype = new l();
+p.prototype.h = function() {
+  this.f &= -3;
+  if (1 & this.f) return false;
+  if (32 == (36 & this.f)) return true;
+  this.f &= -5;
+  if (this.g === d) return true;
+  this.g = d;
+  this.f |= 1;
+  if (this.i > 0 && !w(this)) {
+    this.f &= -2;
+    return true;
+  }
+  var i2 = o;
+  try {
+    _(this);
+    o = this;
+    var t2 = this.x();
+    if (16 & this.f || this.v !== t2 || 0 === this.i) {
+      this.v = t2;
+      this.f &= -17;
+      this.i++;
+    }
+  } catch (i3) {
+    this.v = i3;
+    this.f |= 16;
+    this.i++;
+  }
+  o = i2;
+  b(this);
+  this.f &= -2;
+  return true;
+};
+p.prototype.S = function(i2) {
+  if (void 0 === this.t) {
+    this.f |= 36;
+    for (var t2 = this.s; void 0 !== t2; t2 = t2.n) t2.S.S(t2);
+  }
+  l.prototype.S.call(this, i2);
+};
+p.prototype.U = function(i2) {
+  if (void 0 !== this.t) {
+    l.prototype.U.call(this, i2);
+    if (void 0 === this.t) {
+      this.f &= -33;
+      for (var t2 = this.s; void 0 !== t2; t2 = t2.n) t2.S.U(t2);
+    }
+  }
+};
+p.prototype.N = function() {
+  if (!(2 & this.f)) {
+    this.f |= 6;
+    for (var i2 = this.t; void 0 !== i2; i2 = i2.x) i2.t.N();
+  }
+};
+Object.defineProperty(p.prototype, "value", { get: function() {
+  if (1 & this.f) throw new Error("Cycle detected");
+  var i2 = a(this);
+  this.h();
+  if (void 0 !== i2) i2.i = this.i;
+  if (16 & this.f) throw this.v;
+  return this.v;
+} });
+function S(i2) {
+  var n2 = i2.m;
+  i2.m = void 0;
+  if ("function" == typeof n2) {
+    v++;
+    var r2 = o;
+    o = void 0;
+    try {
+      n2();
+    } catch (t2) {
+      i2.f &= -2;
+      i2.f |= 8;
+      m(i2);
+      throw t2;
+    } finally {
+      o = r2;
+      t();
+    }
+  }
+}
+function m(i2) {
+  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) t2.S.U(t2);
+  i2.x = void 0;
+  i2.s = void 0;
+  S(i2);
+}
+function x(i2) {
+  if (o !== this) throw new Error("Out-of-order effect");
+  b(this);
+  o = i2;
+  this.f &= -2;
+  if (8 & this.f) m(this);
+  t();
+}
+function E(i2, t2) {
+  this.x = i2;
+  this.m = void 0;
+  this.s = void 0;
+  this.u = void 0;
+  this.f = 32;
+  this.name = null == t2 ? void 0 : t2.name;
+  if (r) r.push(this);
+}
+E.prototype.c = function() {
+  var i2 = this.S();
+  try {
+    if (8 & this.f) return;
+    if (void 0 === this.x) return;
+    var t2 = this.x();
+    if ("function" == typeof t2) this.m = t2;
+  } finally {
+    i2();
+  }
+};
+E.prototype.S = function() {
+  if (1 & this.f) throw new Error("Cycle detected");
+  this.f |= 1;
+  this.f &= -9;
+  S(this);
+  _(this);
+  v++;
+  var i2 = o;
+  o = this;
+  return x.bind(this, i2);
+};
+E.prototype.N = function() {
+  if (!(2 & this.f)) {
+    this.f |= 2;
+    this.u = h;
+    h = this;
+  }
+};
+E.prototype.d = function() {
+  this.f |= 8;
+  if (!(1 & this.f)) m(this);
+};
+E.prototype.dispose = function() {
+  this.d();
+};
+function j(i2, t2) {
+  var n2 = new E(i2, t2);
+  try {
+    n2.c();
+  } catch (i3) {
+    n2.d();
+    throw i3;
+  }
+  var r2 = n2.d.bind(n2);
+  r2[Symbol.dispose] = r2;
+  return r2;
+}
 function makeMat2d() {
   return { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 };
 }
@@ -12743,6 +12609,34 @@ function mat2dToProjection(out, m2, screenWidth, screenHeight) {
   out[13] = ty;
   out[15] = 1;
 }
+class Multiselect {
+  constructor(selected = []) {
+    this.selected = [];
+    this.selected = selected;
+  }
+}
+function isSelected(selection, key) {
+  return !!selection?.selected.some((s2) => s2.key === key);
+}
+function setSelection(context, selection) {
+  context.multiselect.value = new Multiselect(selection?.key ? [selection] : []);
+}
+function emptySelection(context) {
+  setSelection(context, null);
+}
+function removeSelection(context, selection) {
+  if (isSelected(context.multiselect.value, selection.key))
+    emptySelection(context);
+}
+function selectBody(body) {
+  return { type: "body", key: body };
+}
+function selectFixture(fixture, body) {
+  return { type: "fixture", key: fixture, up: { type: "body", key: body } };
+}
+function selectJoint(joint) {
+  return { type: "joint", key: joint };
+}
 function initTestbedContext() {
   const ctx = {};
   ctx.activity = y("mode:play");
@@ -12766,6 +12660,7 @@ function initTestbedContext() {
   ctx.pointerRadius = 20;
   ctx.showOutline = y(true);
   ctx.showToolbar = y(true);
+  ctx.zoomPan = y(true);
   ctx.activeKeys = {};
   ctx.multiselect = y(new Multiselect([]));
   ctx.world = y();
@@ -13424,7 +13319,7 @@ class AutoPause extends Middleware {
       window.addEventListener("pointerdown", this.handleInteraction);
       window.addEventListener("pointermove", this.handleInteraction);
       window.addEventListener("keydown", this.handleInteraction);
-      window.addEventListener("wheel", this.handleInteraction);
+      window.addEventListener("wheel", this.handleInteraction, { passive: true });
       window.addEventListener("touchstart", this.handleInteraction);
       this.resetIdleTimeout();
     };
@@ -13837,6 +13732,15 @@ function drawWorldString(context, p2, text, color, align = "left") {
   ctx.fillStyle = color;
   ctx.fillText(text, screenPoint.x, screenPoint.y);
 }
+const getLabel = (obj) => {
+  if (obj.lookupId) {
+    return obj.lookupId;
+  }
+  if (obj.spaceName) {
+    return obj.spaceName;
+  }
+  return null;
+};
 class DrawBodyInfo extends Middleware {
   constructor() {
     super();
@@ -13993,6 +13897,37 @@ class WorldStep extends Middleware {
     this.on("step-physics", this.handleStep);
   }
 }
+let random = (bytes) => crypto.getRandomValues(new Uint8Array(bytes));
+let customRandom = (alphabet, defaultSize, getRandom) => {
+  let mask = (2 << Math.log(alphabet.length - 1) / Math.LN2) - 1;
+  let step = -~(1.6 * mask * defaultSize / alphabet.length);
+  return (size = defaultSize) => {
+    let id = "";
+    while (true) {
+      let bytes = getRandom(step);
+      let j2 = step | 0;
+      while (j2--) {
+        id += alphabet[bytes[j2] & mask] || "";
+        if (id.length === size) return id;
+      }
+    }
+  };
+};
+let customAlphabet = (alphabet, size = 21) => customRandom(alphabet, size, random);
+const generateKey = customAlphabet("0123456789abcdefghijklmnopqrstuvwxyz", 16);
+function getKey(obj) {
+  if (obj && typeof obj["__key"] === "string") {
+    return obj["__key"];
+  }
+}
+function setKey(obj, key) {
+  if (!obj)
+    return;
+  if (!obj["__key"]) {
+    obj["__key"] = generateKey();
+  }
+  return obj["__key"];
+}
 class WorldKeys extends Middleware {
   constructor() {
     super();
@@ -14031,6 +13966,72 @@ class WorldKeys extends Middleware {
     this.on("deactivate", this.handleDeactivate);
   }
 }
+const findOne = (world, query) => {
+  if (query.indexOf("#")) {
+    const [type, label] = query.split("#", 2);
+    if (type === "body") {
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        if (getLabel(body) === label) {
+          return body;
+        }
+      }
+    } else if (type === "fixture") {
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
+          if (getLabel(fixture) === label) {
+            return fixture;
+          }
+        }
+      }
+    } else if (type === "joint") {
+      for (let joint = world.getJointList(); joint; joint = joint.getNext()) {
+        if (getLabel(joint) === label) {
+          return joint;
+        }
+      }
+    }
+  }
+  return null;
+};
+const findAll = (world, query) => {
+  const result = [];
+  if (query.indexOf("#")) {
+    const [type, label] = query.split("#", 2);
+    if (type === "body") {
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        if (getLabel(body) === label) {
+          result.push(body);
+        }
+      }
+    } else if (type === "fixture") {
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
+          if (getLabel(fixture) === label) {
+            result.push(fixture);
+          }
+        }
+      }
+    } else if (type === "joint") {
+      for (let joint = world.getJointList(); joint; joint = joint.getNext()) {
+        if (getLabel(joint) === label) {
+          result.push(joint);
+        }
+      }
+    }
+  }
+  return result;
+};
+class ProviderCollection {
+  constructor() {
+    this.list = [];
+  }
+  register(provider) {
+    this.list.push(provider);
+  }
+}
+y();
+const toolbarTool = new ProviderCollection();
+const runtime = y();
 class PullTool extends Middleware {
   constructor() {
     super();
@@ -14292,10 +14293,10 @@ class WorldQuery extends Middleware {
           const cache2 = new SimplexCache();
           const output2 = new DistanceOutput();
           Distance(output2, cache2, distanceInput2);
-          const distance = Vec2.distance(output2.pointA, output2.pointB);
-          if (distance < bestDistance) {
+          const distance2 = Vec2.distance(output2.pointA, output2.pointB);
+          if (distance2 < bestDistance) {
             bestMatch = match;
-            bestDistance = distance;
+            bestDistance = distance2;
           }
         }
         return true;
@@ -14476,6 +14477,161 @@ class PlayButton extends Middleware {
     this.on("deactivate", this.handleDeactivate);
   }
 }
+const PAN_THRESHOLD = 10;
+const WHEEL_ZOOM = 0.05;
+class ZoomPanProvider extends Middleware {
+  constructor() {
+    super();
+    this.containerElement = null;
+    this.disposers = [];
+    this.pointers = /* @__PURE__ */ new Map();
+    this.panFrom = null;
+    this.panning = false;
+    this.panBlocked = false;
+    this.pinchDistance = 0;
+    this.pinchCenter = null;
+    this.handleActivate = () => {
+      this.disposers.push(
+        j(() => {
+          const containerElement = this.context.containerElement?.value;
+          if (!containerElement)
+            return;
+          this.containerElement = containerElement;
+          containerElement.addEventListener("pointerdown", this.handlePointerDown);
+          containerElement.addEventListener("wheel", this.handleWheel, { passive: false });
+          return () => {
+            containerElement.removeEventListener("pointerdown", this.handlePointerDown);
+            containerElement.removeEventListener("wheel", this.handleWheel);
+            this.endAll();
+            this.containerElement = null;
+          };
+        }),
+        // touches go to the testbed, not to scrolling or zooming the page, while it is on
+        j(() => {
+          const containerElement = this.context.containerElement?.value;
+          if (!containerElement || !this.context.zoomPan?.value)
+            return;
+          const touchAction = containerElement.style.touchAction;
+          containerElement.style.touchAction = "none";
+          return () => {
+            containerElement.style.touchAction = touchAction;
+          };
+        })
+      );
+    };
+    this.handleDeactivate = () => {
+      this.disposers.forEach((d2) => d2());
+      this.disposers = [];
+    };
+    this.handleWheel = (ev) => {
+      if (!this.enabled)
+        return;
+      ev.preventDefault();
+      const delta = Math.max(-1, Math.min(1, -(ev.deltaX + ev.deltaY)));
+      this.emit("display-zoom", { zoom: 1 + delta * WHEEL_ZOOM, center: this.toPoint(ev) });
+    };
+    this.handlePointerDown = (ev) => {
+      if (!this.enabled || !this.containerElement)
+        return;
+      if (ev.pointerType === "mouse" && ev.button !== 0)
+        return;
+      if (this.pointers.size === 0) {
+        window.addEventListener("pointermove", this.handlePointerMove);
+        window.addEventListener("pointerup", this.handlePointerUp);
+        window.addEventListener("pointercancel", this.handlePointerUp);
+      }
+      this.pointers.set(ev.pointerId, this.toPoint(ev));
+      this.restart();
+    };
+    this.handlePointerMove = (ev) => {
+      if (!this.pointers.has(ev.pointerId))
+        return;
+      const point2 = this.toPoint(ev);
+      this.pointers.set(ev.pointerId, point2);
+      if (!this.enabled)
+        return;
+      if (this.pointers.size === 1) {
+        this.movePan(point2);
+      } else if (this.pointers.size === 2) {
+        this.movePinch();
+      }
+    };
+    this.handlePointerUp = (ev) => {
+      if (!this.pointers.delete(ev.pointerId))
+        return;
+      if (this.pointers.size === 0) {
+        this.endAll();
+      } else {
+        this.restart();
+      }
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+  }
+  get enabled() {
+    return !!this.context.zoomPan?.value;
+  }
+  toPoint(ev) {
+    const rect = this.containerElement.getBoundingClientRect();
+    return { x: ev.clientX - rect.left, y: ev.clientY - rect.top };
+  }
+  // a pointer came or went: the gesture starts over from where the pointers are now, so the
+  // view does not jump
+  restart() {
+    const points = [...this.pointers.values()];
+    if (points.length === 1) {
+      if (!this.panning && !this.panFrom)
+        this.panBlocked = this.context.pointerCaptured;
+      this.panFrom = { ...points[0] };
+      this.panning = this.panning && !this.panBlocked;
+      this.pinchCenter = null;
+    } else if (points.length === 2) {
+      this.panFrom = null;
+      this.pinchDistance = distance(points[0], points[1]);
+      this.pinchCenter = midpoint(points[0], points[1]);
+    }
+  }
+  movePan(point2) {
+    if (this.panBlocked || this.context.pointerCaptured || !this.panFrom)
+      return;
+    const dx = point2.x - this.panFrom.x;
+    const dy = point2.y - this.panFrom.y;
+    if (!this.panning && Math.hypot(dx, dy) < PAN_THRESHOLD)
+      return;
+    this.panning = true;
+    this.emit("display-pan", { delta: { x: -dx, y: -dy } });
+    this.panFrom = point2;
+  }
+  movePinch() {
+    const [a2, b2] = [...this.pointers.values()];
+    const spread = distance(a2, b2);
+    const center2 = midpoint(a2, b2);
+    if (this.pinchCenter) {
+      this.emit("display-pan", { delta: { x: this.pinchCenter.x - center2.x, y: this.pinchCenter.y - center2.y } });
+    }
+    if (this.pinchDistance > 0 && spread > 0) {
+      this.emit("display-zoom", { zoom: spread / this.pinchDistance, center: center2 });
+    }
+    this.pinchDistance = spread;
+    this.pinchCenter = center2;
+  }
+  endAll() {
+    this.pointers.clear();
+    this.panFrom = null;
+    this.panning = false;
+    this.panBlocked = false;
+    this.pinchCenter = null;
+    window.removeEventListener("pointermove", this.handlePointerMove);
+    window.removeEventListener("pointerup", this.handlePointerUp);
+    window.removeEventListener("pointercancel", this.handlePointerUp);
+  }
+}
+function distance(a2, b2) {
+  return Math.hypot(a2.x - b2.x, a2.y - b2.y);
+}
+function midpoint(a2, b2) {
+  return { x: (a2.x + b2.x) / 2, y: (a2.y + b2.y) / 2 };
+}
 class TestbedMain extends Middleware {
   constructor() {
     super();
@@ -14507,6 +14663,7 @@ class TestbedMain extends Middleware {
     this.use(new PlayButton());
     this.use(new KeyboardManager());
     this.use(new CameraTransform());
+    this.use(new ZoomPanProvider());
     this.use(new GLLoader());
     this.use(new TextOverlay());
     this.use(new AutoFocus());
@@ -14593,6 +14750,13 @@ class TestbedMain extends Middleware {
   set mouseForce(value) {
     this.context.mouseForce.value = value;
   }
+  /** Zoom with the wheel or a pinch, pan by dragging empty space. */
+  get zoomPan() {
+    return this.context.zoomPan.value;
+  }
+  set zoomPan(value) {
+    this.context.zoomPan.value = value;
+  }
   get activeKeys() {
     return this.context.activeKeys;
   }
@@ -14654,12 +14818,13 @@ class TestbedMain extends Middleware {
     this.context.console?.status(a2, b2);
   }
 }
-const mountTestbed = () => {
+const mount = (options2 = {}) => {
   if (runtime.value)
     return runtime.value.middleware;
   const main = new TestbedMain();
   const context = initTestbedContext();
   context.activeTool.value = { name: "interact-pull" };
+  context.zoomPan.value = options2.zoomPan ?? true;
   runtime.value = {
     middleware: main,
     context,
@@ -14669,7 +14834,7 @@ const mountTestbed = () => {
   Runtime.activate(main, context);
   return main;
 };
-Testbed.mount = mountTestbed;
+Testbed.mount = () => mount({ zoomPan: false });
 export {
   AABB,
   Body,

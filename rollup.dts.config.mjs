@@ -3,7 +3,7 @@
 // stay imports — the core for testbed.d.ts, so consumers see one set of planck types
 import dts from "rollup-plugin-dts";
 
-const PEERS = ["polymatic", "@preact/signals-core", "@egjs/hammerjs"];
+const PEERS = ["polymatic", "@preact/signals-core"];
 const SHELL_PEERS = ["@preact/signals-react", "react", "react-dom", "@mantine/core", "@mantine/hooks", "react-icons"];
 
 // a package or any of its subpaths: planck covers planck/testbed, the shell's one testbed

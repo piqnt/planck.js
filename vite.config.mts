@@ -31,7 +31,7 @@ export default function viteConfig(configEnv: ConfigEnv) {
 // which ES5 output could not extend), with planck itself and the testbed's peer dependencies left
 // to the consumer. Signals come from @preact/signals-core, not @preact/signals, which loads preact
 // to hook its renders
-const TESTBED_EXTERNAL = ["planck", "polymatic", "@preact/signals-core", "@egjs/hammerjs"];
+const TESTBED_EXTERNAL = ["planck", "polymatic", "@preact/signals-core"];
 
 // the shell's entry, `planck/testbed/shell`: the toolbar and the outline, React components that
 // read the testbed's signals through useSignals(), so they run on React or on preact/compat.

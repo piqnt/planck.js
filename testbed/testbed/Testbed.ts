@@ -1,33 +1,13 @@
-import { Runtime } from "polymatic";
-
 import { Testbed } from "planck";
-import { initTestbedContext } from "./TestbedContext";
+import { mount } from "./mount";
 import { TestbedMain } from "./TestbedMain";
-import { runtime } from "../common/globals";
 
 /**
- * Mounts the testbed. `Testbed.mount()` and `Testbed.start(world)` on planck's own Testbed class
- * do this once `planck/testbed` is loaded.
+ * Mounts the testbed, with zoom and pan on (wheel, pinch, and dragging where no tool holds the
+ * pointer; `testbed.zoomPan = false` turns them off). `Testbed.mount()` and
+ * `Testbed.start(world)` on planck's own Testbed class do this once `planck/testbed` is loaded.
  */
-export const mountTestbed = (): TestbedMain => {
-  // activate once, only if user calls Testbed.mount()
-  if (runtime.value) return runtime.value.middleware as TestbedMain;
-
-  const main = new TestbedMain();
-  const context = initTestbedContext();
-
-  context.activeTool.value = { name: "interact-pull" };
-
-  runtime.value = {
-    middleware: main,
-    context: context,
-    emit: main.emit.bind(main),
-  };
-  window["runtime"] = main; // for debugging
-  Runtime.activate(main, context);
-
-  return main;
-};
+export const mountTestbed = (): TestbedMain => mount();
 
 Testbed.mount = mountTestbed;
 

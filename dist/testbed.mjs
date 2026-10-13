@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 import { signal, effect } from "@preact/signals-core";
-import { Middleware, Memo, Runtime } from "polymatic";
 import { Transform, Rot, WorldManifold, MouseJoint, AABB, DistanceInput, CircleShape, SimplexCache, DistanceOutput, Distance, Vec2, Testbed } from "planck";
 import { Testbed as Testbed2 } from "planck";
+import { Middleware, Memo, Runtime } from "polymatic";
 class ProviderCollection {
   constructor() {
     this.list = [];
@@ -306,6 +306,7 @@ function initTestbedContext() {
   ctx.pointerRadius = 20;
   ctx.showOutline = signal(true);
   ctx.showToolbar = signal(true);
+  ctx.zoomPan = signal(true);
   ctx.activeKeys = {};
   ctx.multiselect = signal(new Multiselect([]));
   ctx.world = signal();
@@ -964,7 +965,7 @@ class AutoPause extends Middleware {
       window.addEventListener("pointerdown", this.handleInteraction);
       window.addEventListener("pointermove", this.handleInteraction);
       window.addEventListener("keydown", this.handleInteraction);
-      window.addEventListener("wheel", this.handleInteraction);
+      window.addEventListener("wheel", this.handleInteraction, { passive: true });
       window.addEventListener("touchstart", this.handleInteraction);
       this.resetIdleTimeout();
     };
@@ -1833,10 +1834,10 @@ class WorldQuery extends Middleware {
           const cache = new SimplexCache();
           const output = new DistanceOutput();
           Distance(output, cache, distanceInput);
-          const distance = Vec2.distance(output.pointA, output.pointB);
-          if (distance < bestDistance) {
+          const distance2 = Vec2.distance(output.pointA, output.pointB);
+          if (distance2 < bestDistance) {
             bestMatch = match;
-            bestDistance = distance;
+            bestDistance = distance2;
           }
         }
         return true;
@@ -2017,6 +2018,161 @@ class PlayButton extends Middleware {
     this.on("deactivate", this.handleDeactivate);
   }
 }
+const PAN_THRESHOLD = 10;
+const WHEEL_ZOOM = 0.05;
+class ZoomPanProvider extends Middleware {
+  constructor() {
+    super();
+    this.containerElement = null;
+    this.disposers = [];
+    this.pointers = /* @__PURE__ */ new Map();
+    this.panFrom = null;
+    this.panning = false;
+    this.panBlocked = false;
+    this.pinchDistance = 0;
+    this.pinchCenter = null;
+    this.handleActivate = () => {
+      this.disposers.push(
+        effect(() => {
+          const containerElement = this.context.containerElement?.value;
+          if (!containerElement)
+            return;
+          this.containerElement = containerElement;
+          containerElement.addEventListener("pointerdown", this.handlePointerDown);
+          containerElement.addEventListener("wheel", this.handleWheel, { passive: false });
+          return () => {
+            containerElement.removeEventListener("pointerdown", this.handlePointerDown);
+            containerElement.removeEventListener("wheel", this.handleWheel);
+            this.endAll();
+            this.containerElement = null;
+          };
+        }),
+        // touches go to the testbed, not to scrolling or zooming the page, while it is on
+        effect(() => {
+          const containerElement = this.context.containerElement?.value;
+          if (!containerElement || !this.context.zoomPan?.value)
+            return;
+          const touchAction = containerElement.style.touchAction;
+          containerElement.style.touchAction = "none";
+          return () => {
+            containerElement.style.touchAction = touchAction;
+          };
+        })
+      );
+    };
+    this.handleDeactivate = () => {
+      this.disposers.forEach((d) => d());
+      this.disposers = [];
+    };
+    this.handleWheel = (ev) => {
+      if (!this.enabled)
+        return;
+      ev.preventDefault();
+      const delta = Math.max(-1, Math.min(1, -(ev.deltaX + ev.deltaY)));
+      this.emit("display-zoom", { zoom: 1 + delta * WHEEL_ZOOM, center: this.toPoint(ev) });
+    };
+    this.handlePointerDown = (ev) => {
+      if (!this.enabled || !this.containerElement)
+        return;
+      if (ev.pointerType === "mouse" && ev.button !== 0)
+        return;
+      if (this.pointers.size === 0) {
+        window.addEventListener("pointermove", this.handlePointerMove);
+        window.addEventListener("pointerup", this.handlePointerUp);
+        window.addEventListener("pointercancel", this.handlePointerUp);
+      }
+      this.pointers.set(ev.pointerId, this.toPoint(ev));
+      this.restart();
+    };
+    this.handlePointerMove = (ev) => {
+      if (!this.pointers.has(ev.pointerId))
+        return;
+      const point = this.toPoint(ev);
+      this.pointers.set(ev.pointerId, point);
+      if (!this.enabled)
+        return;
+      if (this.pointers.size === 1) {
+        this.movePan(point);
+      } else if (this.pointers.size === 2) {
+        this.movePinch();
+      }
+    };
+    this.handlePointerUp = (ev) => {
+      if (!this.pointers.delete(ev.pointerId))
+        return;
+      if (this.pointers.size === 0) {
+        this.endAll();
+      } else {
+        this.restart();
+      }
+    };
+    this.on("activate", this.handleActivate);
+    this.on("deactivate", this.handleDeactivate);
+  }
+  get enabled() {
+    return !!this.context.zoomPan?.value;
+  }
+  toPoint(ev) {
+    const rect = this.containerElement.getBoundingClientRect();
+    return { x: ev.clientX - rect.left, y: ev.clientY - rect.top };
+  }
+  // a pointer came or went: the gesture starts over from where the pointers are now, so the
+  // view does not jump
+  restart() {
+    const points = [...this.pointers.values()];
+    if (points.length === 1) {
+      if (!this.panning && !this.panFrom)
+        this.panBlocked = this.context.pointerCaptured;
+      this.panFrom = { ...points[0] };
+      this.panning = this.panning && !this.panBlocked;
+      this.pinchCenter = null;
+    } else if (points.length === 2) {
+      this.panFrom = null;
+      this.pinchDistance = distance(points[0], points[1]);
+      this.pinchCenter = midpoint(points[0], points[1]);
+    }
+  }
+  movePan(point) {
+    if (this.panBlocked || this.context.pointerCaptured || !this.panFrom)
+      return;
+    const dx = point.x - this.panFrom.x;
+    const dy = point.y - this.panFrom.y;
+    if (!this.panning && Math.hypot(dx, dy) < PAN_THRESHOLD)
+      return;
+    this.panning = true;
+    this.emit("display-pan", { delta: { x: -dx, y: -dy } });
+    this.panFrom = point;
+  }
+  movePinch() {
+    const [a, b] = [...this.pointers.values()];
+    const spread = distance(a, b);
+    const center = midpoint(a, b);
+    if (this.pinchCenter) {
+      this.emit("display-pan", { delta: { x: this.pinchCenter.x - center.x, y: this.pinchCenter.y - center.y } });
+    }
+    if (this.pinchDistance > 0 && spread > 0) {
+      this.emit("display-zoom", { zoom: spread / this.pinchDistance, center });
+    }
+    this.pinchDistance = spread;
+    this.pinchCenter = center;
+  }
+  endAll() {
+    this.pointers.clear();
+    this.panFrom = null;
+    this.panning = false;
+    this.panBlocked = false;
+    this.pinchCenter = null;
+    window.removeEventListener("pointermove", this.handlePointerMove);
+    window.removeEventListener("pointerup", this.handlePointerUp);
+    window.removeEventListener("pointercancel", this.handlePointerUp);
+  }
+}
+function distance(a, b) {
+  return Math.hypot(a.x - b.x, a.y - b.y);
+}
+function midpoint(a, b) {
+  return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+}
 class TestbedMain extends Middleware {
   constructor() {
     super();
@@ -2048,6 +2204,7 @@ class TestbedMain extends Middleware {
     this.use(new PlayButton());
     this.use(new KeyboardManager());
     this.use(new CameraTransform());
+    this.use(new ZoomPanProvider());
     this.use(new GLLoader());
     this.use(new TextOverlay());
     this.use(new AutoFocus());
@@ -2134,6 +2291,13 @@ class TestbedMain extends Middleware {
   set mouseForce(value) {
     this.context.mouseForce.value = value;
   }
+  /** Zoom with the wheel or a pinch, pan by dragging empty space. */
+  get zoomPan() {
+    return this.context.zoomPan.value;
+  }
+  set zoomPan(value) {
+    this.context.zoomPan.value = value;
+  }
   get activeKeys() {
     return this.context.activeKeys;
   }
@@ -2195,12 +2359,13 @@ class TestbedMain extends Middleware {
     this.context.console?.status(a, b);
   }
 }
-const mountTestbed = () => {
+const mount = (options = {}) => {
   if (runtime.value)
     return runtime.value.middleware;
   const main = new TestbedMain();
   const context = initTestbedContext();
   context.activeTool.value = { name: "interact-pull" };
+  context.zoomPan.value = options.zoomPan ?? true;
   runtime.value = {
     middleware: main,
     context,
@@ -2210,6 +2375,7 @@ const mountTestbed = () => {
   Runtime.activate(main, context);
   return main;
 };
+const mountTestbed = () => mount();
 Testbed.mount = mountTestbed;
 export {
   DrawBodyInfo,

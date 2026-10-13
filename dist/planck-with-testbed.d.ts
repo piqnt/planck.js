@@ -636,6 +636,8 @@ interface TestbedInterface {
     speed: number;
     background: string;
     mouseForce?: number;
+    /** Zoom with the wheel or a pinch, pan by dragging empty space. */
+    zoomPan?: boolean;
     activeKeys: ActiveKeys;
     /** callback, to be implemented by user */
     step?: (dt: number, t: number) => void;
