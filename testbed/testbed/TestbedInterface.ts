@@ -73,6 +73,13 @@ export interface TestbedInterface {
 
   start(world: World): void;
 
+  /** The world the testbed steps and draws; `start(world)` sets it too. */
+  world: World;
+
+  isPaused(): boolean;
+  pause(): void;
+  resume(): void;
+
   findOne(query: string): Body | Joint | Fixture | null;
   findAll(query: string): (Body | Joint | Fixture)[];
 

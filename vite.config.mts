@@ -28,24 +28,16 @@ export default function viteConfig(configEnv: ConfigEnv) {
 // The declaration bundles (dist/*.d.ts) are rollup.dts.config.mjs, run after these builds.
 //
 // the testbed's own entry, `planck/testbed`: ES2020 classes on top of polymatic (a native class,
-// which ES5 output could not extend), with planck itself and the testbed's peer dependencies left
-// to the consumer. Signals come from @preact/signals-core, not @preact/signals, which loads preact
-// to hook its renders
-const TESTBED_EXTERNAL = ["planck", "polymatic", "@preact/signals-core"];
+// which ES5 output could not extend). Only planck is left to the host, so the testbed and the
+// host's code share one planck; polymatic and @preact/signals-core are bundled in (the shell gets
+// the latter through planck/testbed, see testbed/shell/signals-core.ts)
+const TESTBED_EXTERNAL = ["planck"];
 
-// the shell's entry, `planck/testbed/shell`: the toolbar and the outline, React components that
-// read the testbed's signals through useSignals(), so they run on React or on preact/compat.
-// planck/testbed stays external, so the shell and the user's code share one testbed (one `runtime`)
-const SHELL_EXTERNAL = [
-  ...TESTBED_EXTERNAL,
-  "planck/testbed",
-  "@preact/signals-react",
-  "react",
-  "react-dom",
-  "@mantine/core",
-  "@mantine/hooks",
-  "react-icons",
-];
+// the outline's entry, `planck/testbed-outline`, for hosts such as piqnt: the outline panel alone,
+// self-contained — Preact (as react/react-dom), the Mantine parts it uses, react-icons and
+// signals-react bundled in. planck/testbed stays external, so it reads the testbed the page's code
+// mounted. (The rest of the shell, toolbar and menus, is the examples site's, from source.)
+const SHELL_EXTERNAL = ["planck", "planck/testbed"];
 
 function buildConfig() {
   const entry = normalizePath(path.resolve(__dirname, "src", "main.ts"));
@@ -153,26 +145,41 @@ function buildTestbedConfig() {
 }
 
 function buildShellConfig() {
-  const entry = normalizePath(path.resolve(__dirname, "testbed", "shell", "index.tsx"));
+  const entry = normalizePath(path.resolve(__dirname, "testbed", "shell", "renderOutline.tsx"));
   const tsconfig = path.resolve(__dirname, "testbed", "tsconfig.json");
 
   return defineConfig({
-    // classic JSX: React.createElement, which preact/compat provides as well
+    // classic JSX: React.createElement, which preact/compat provides
     esbuild: { jsx: "transform", jsxFactory: "React.createElement", jsxFragment: "React.Fragment" },
+    // use-sync-external-store (signals-react's) picks its build by NODE_ENV when it loads
+    define: { "process.env.NODE_ENV": JSON.stringify("production") },
+    resolve: {
+      alias: [
+        { find: /^react-dom\/client$/, replacement: "preact/compat/client" },
+        { find: /^react-dom$/, replacement: "preact/compat" },
+        { find: /^react\/jsx-runtime$/, replacement: "preact/jsx-runtime" },
+        { find: /^react$/, replacement: "preact/compat" },
+        // the testbed's copy, not a second one (see the file)
+        {
+          find: /^@preact\/signals-core$/,
+          replacement: path.resolve(__dirname, "testbed", "shell", "signals-core.ts"),
+        },
+      ],
+    },
     build: {
       lib: {
         entry: entry,
-        name: "planckTestbedShell",
-        fileName: () => "shell.mjs",
+        name: "planckTestbedOutline",
+        fileName: () => "testbed-outline.mjs",
         formats: ["es"],
       },
       target: "es2020",
       emptyOutDir: false,
       minify: false,
-      sourcemap: true,
+      // no map: it would carry whole react-icons sets, ~10 MB in the package
+      sourcemap: false,
       rollupOptions: {
-        // a package or any of its subpaths, e.g. react-dom/client, react-icons/md
-        external: (id) => SHELL_EXTERNAL.some((name) => id === name || id.startsWith(name + "/")),
+        external: SHELL_EXTERNAL,
       },
     },
     plugins: [
@@ -210,6 +217,7 @@ function serveConfig(configEnv: ConfigEnv) {
         { find: "react", replacement: "preact/compat" },
         { find: "react-dom", replacement: "preact/compat" },
         { find: "react-dom/client", replacement: "preact/compat/client" },
+        { find: /^planck\/testbed-outline$/, replacement: path.resolve(__dirname, "testbed", "shell", "renderOutline.tsx") },
         { find: /^planck\/testbed(\/.*)?$/, replacement: path.resolve(__dirname, "testbed") + "$1" },
         { find: /^planck$/, replacement: path.resolve(__dirname, "src", "main.ts") },
       ],

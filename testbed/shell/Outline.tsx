@@ -5,8 +5,11 @@ import { Affix } from "@mantine/core";
 import { runtime } from "planck/testbed";
 import { LiveOutlinePanel } from "../world-outline/OutlinePanel";
 
+/** the outline panel's width, in px; the testbed's container leaves this much room for it */
+export const OUTLINE_WIDTH = 290;
+
 const affixStyle: React.CSSProperties = {
-  width: 290,
+  width: OUTLINE_WIDTH,
   overflowY: "auto",
   background: "#1e1e1e",
   borderLeft: "1px solid #333",

@@ -21,10 +21,448 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { signal, effect } from "@preact/signals-core";
 import { Transform, Rot, WorldManifold, MouseJoint, AABB, DistanceInput, CircleShape, SimplexCache, DistanceOutput, Distance, Vec2, Testbed } from "planck";
 import { Testbed as Testbed2 } from "planck";
-import { Middleware, Memo, Runtime } from "polymatic";
+var i = Symbol.for("preact-signals");
+function t() {
+  if (!(v > 1)) {
+    var i2, t2 = false;
+    !(function() {
+      var i3 = c;
+      c = void 0;
+      while (void 0 !== i3) {
+        var t3 = i3.S;
+        if (t3.v === i3.v) {
+          for (var n3 = t3.t; void 0 !== n3; n3 = n3.x) if (n3.i === i3.i) n3.i = t3.i;
+        }
+        i3 = i3.o;
+      }
+    })();
+    while (void 0 !== h) {
+      var n2 = h;
+      h = void 0;
+      s++;
+      while (void 0 !== n2) {
+        var r2 = n2.u;
+        n2.u = void 0;
+        n2.f &= -3;
+        if (!(8 & n2.f) && w(n2)) try {
+          n2.c();
+        } catch (n3) {
+          if (!t2) {
+            i2 = n3;
+            t2 = true;
+          }
+        }
+        n2 = r2;
+      }
+    }
+    s = 0;
+    v--;
+    if (t2) throw i2;
+  } else v--;
+}
+function n(i2) {
+  if (v > 0) return i2();
+  e = ++u;
+  v++;
+  try {
+    return i2();
+  } finally {
+    t();
+  }
+}
+var r, o = void 0;
+function f(i2) {
+  var t2 = o, n2 = r;
+  o = void 0;
+  r = void 0;
+  try {
+    return i2();
+  } finally {
+    o = t2;
+    r = n2;
+  }
+}
+var h = void 0, v = 0, s = 0, u = 0, e = 0, c = void 0, d = 0;
+function a(i2) {
+  if (void 0 !== o) {
+    var t2 = i2.n;
+    if (void 0 === t2 || t2.t !== o) {
+      t2 = { i: 0, S: i2, p: o.s, n: void 0, t: o, e: void 0, x: void 0, r: t2 };
+      if (void 0 !== o.s) o.s.n = t2;
+      o.s = t2;
+      i2.n = t2;
+      if (32 & o.f) i2.S(t2);
+      return t2;
+    } else if (-1 === t2.i) {
+      t2.i = 0;
+      if (void 0 !== t2.n) {
+        t2.n.p = t2.p;
+        if (void 0 !== t2.p) t2.p.n = t2.n;
+        t2.p = o.s;
+        t2.n = void 0;
+        o.s.n = t2;
+        o.s = t2;
+      }
+      return t2;
+    }
+  }
+}
+function l(i2, t2) {
+  this.v = i2;
+  this.i = 0;
+  this.n = void 0;
+  this.t = void 0;
+  this.l = 0;
+  this.W = null == t2 ? void 0 : t2.watched;
+  this.Z = null == t2 ? void 0 : t2.unwatched;
+  this.name = null == t2 ? void 0 : t2.name;
+}
+l.prototype.brand = i;
+l.prototype.h = function() {
+  return true;
+};
+l.prototype.S = function(i2) {
+  var t2 = this, n2 = this.t;
+  if (n2 !== i2 && void 0 === i2.e) {
+    i2.x = n2;
+    this.t = i2;
+    if (void 0 !== n2) n2.e = i2;
+    else f(function() {
+      var i3;
+      null == (i3 = t2.W) || i3.call(t2);
+    });
+  }
+};
+l.prototype.U = function(i2) {
+  var t2 = this;
+  if (void 0 !== this.t) {
+    var n2 = i2.e, r2 = i2.x;
+    if (void 0 !== n2) {
+      n2.x = r2;
+      i2.e = void 0;
+    }
+    if (void 0 !== r2) {
+      r2.e = n2;
+      i2.x = void 0;
+    }
+    if (i2 === this.t) {
+      this.t = r2;
+      if (void 0 === r2) f(function() {
+        var i3;
+        null == (i3 = t2.Z) || i3.call(t2);
+      });
+    }
+  }
+};
+l.prototype.subscribe = function(i2) {
+  var t2 = this;
+  return j(function() {
+    var n2 = t2.value;
+    f(function() {
+      return i2(n2);
+    });
+  }, { name: "sub" });
+};
+l.prototype.valueOf = function() {
+  return this.value;
+};
+l.prototype.toString = function() {
+  return this.value + "";
+};
+l.prototype.toJSON = function() {
+  return this.value;
+};
+l.prototype.peek = function() {
+  var i2 = this;
+  return f(function() {
+    return i2.value;
+  });
+};
+Object.defineProperty(l.prototype, "value", { get: function() {
+  var i2 = a(this);
+  if (void 0 !== i2) i2.i = this.i;
+  return this.v;
+}, set: function(i2) {
+  if (i2 !== this.v) {
+    if (s > 100) throw new Error("Cycle detected");
+    !(function(i3) {
+      if (0 !== v && 0 === s) {
+        if (i3.l !== e) {
+          i3.l = e;
+          c = { S: i3, v: i3.v, i: i3.i, o: c };
+        }
+      }
+    })(this);
+    this.v = i2;
+    this.i++;
+    d++;
+    v++;
+    try {
+      for (var n2 = this.t; void 0 !== n2; n2 = n2.x) n2.t.N();
+    } finally {
+      t();
+    }
+  }
+} });
+function y(i2, t2) {
+  return new l(i2, t2);
+}
+function w(i2) {
+  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) if (t2.S.i !== t2.i || !t2.S.h() || t2.S.i !== t2.i) return true;
+  return false;
+}
+function _(i2) {
+  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) {
+    var n2 = t2.S.n;
+    if (void 0 !== n2) t2.r = n2;
+    t2.S.n = t2;
+    t2.i = -1;
+    if (void 0 === t2.n) {
+      i2.s = t2;
+      break;
+    }
+  }
+}
+function b(i2) {
+  var t2 = i2.s, n2 = void 0;
+  while (void 0 !== t2) {
+    var r2 = t2.p;
+    if (-1 === t2.i) {
+      t2.S.U(t2);
+      if (void 0 !== r2) r2.n = t2.n;
+      if (void 0 !== t2.n) t2.n.p = r2;
+    } else n2 = t2;
+    t2.S.n = t2.r;
+    if (void 0 !== t2.r) t2.r = void 0;
+    t2 = r2;
+  }
+  i2.s = n2;
+}
+function p(i2, t2) {
+  l.call(this, void 0, t2);
+  this.x = i2;
+  this.s = void 0;
+  this.g = d - 1;
+  this.f = 4;
+}
+p.prototype = new l();
+p.prototype.h = function() {
+  this.f &= -3;
+  if (1 & this.f) return false;
+  if (32 == (36 & this.f)) return true;
+  this.f &= -5;
+  if (this.g === d) return true;
+  this.g = d;
+  this.f |= 1;
+  if (this.i > 0 && !w(this)) {
+    this.f &= -2;
+    return true;
+  }
+  var i2 = o;
+  try {
+    _(this);
+    o = this;
+    var t2 = this.x();
+    if (16 & this.f || this.v !== t2 || 0 === this.i) {
+      this.v = t2;
+      this.f &= -17;
+      this.i++;
+    }
+  } catch (i3) {
+    this.v = i3;
+    this.f |= 16;
+    this.i++;
+  }
+  o = i2;
+  b(this);
+  this.f &= -2;
+  return true;
+};
+p.prototype.S = function(i2) {
+  if (void 0 === this.t) {
+    this.f |= 36;
+    for (var t2 = this.s; void 0 !== t2; t2 = t2.n) t2.S.S(t2);
+  }
+  l.prototype.S.call(this, i2);
+};
+p.prototype.U = function(i2) {
+  if (void 0 !== this.t) {
+    l.prototype.U.call(this, i2);
+    if (void 0 === this.t) {
+      this.f &= -33;
+      for (var t2 = this.s; void 0 !== t2; t2 = t2.n) t2.S.U(t2);
+    }
+  }
+};
+p.prototype.N = function() {
+  if (!(2 & this.f)) {
+    this.f |= 6;
+    for (var i2 = this.t; void 0 !== i2; i2 = i2.x) i2.t.N();
+  }
+};
+Object.defineProperty(p.prototype, "value", { get: function() {
+  if (1 & this.f) throw new Error("Cycle detected");
+  var i2 = a(this);
+  this.h();
+  if (void 0 !== i2) i2.i = this.i;
+  if (16 & this.f) throw this.v;
+  return this.v;
+} });
+function g(i2, t2) {
+  return new p(i2, t2);
+}
+function S(i2) {
+  var n2 = i2.m;
+  i2.m = void 0;
+  if ("function" == typeof n2) {
+    v++;
+    var r2 = o;
+    o = void 0;
+    try {
+      n2();
+    } catch (t2) {
+      i2.f &= -2;
+      i2.f |= 8;
+      m(i2);
+      throw t2;
+    } finally {
+      o = r2;
+      t();
+    }
+  }
+}
+function m(i2) {
+  for (var t2 = i2.s; void 0 !== t2; t2 = t2.n) t2.S.U(t2);
+  i2.x = void 0;
+  i2.s = void 0;
+  S(i2);
+}
+function x(i2) {
+  if (o !== this) throw new Error("Out-of-order effect");
+  b(this);
+  o = i2;
+  this.f &= -2;
+  if (8 & this.f) m(this);
+  t();
+}
+function E(i2, t2) {
+  this.x = i2;
+  this.m = void 0;
+  this.s = void 0;
+  this.u = void 0;
+  this.f = 32;
+  this.name = null == t2 ? void 0 : t2.name;
+  if (r) r.push(this);
+}
+E.prototype.c = function() {
+  var i2 = this.S();
+  try {
+    if (8 & this.f) return;
+    if (void 0 === this.x) return;
+    var t2 = this.x();
+    if ("function" == typeof t2) this.m = t2;
+  } finally {
+    i2();
+  }
+};
+E.prototype.S = function() {
+  if (1 & this.f) throw new Error("Cycle detected");
+  this.f |= 1;
+  this.f &= -9;
+  S(this);
+  _(this);
+  v++;
+  var i2 = o;
+  o = this;
+  return x.bind(this, i2);
+};
+E.prototype.N = function() {
+  if (!(2 & this.f)) {
+    this.f |= 2;
+    this.u = h;
+    h = this;
+  }
+};
+E.prototype.d = function() {
+  this.f |= 8;
+  if (!(1 & this.f)) m(this);
+};
+E.prototype.dispose = function() {
+  this.d();
+};
+function j(i2, t2) {
+  var n2 = new E(i2, t2);
+  try {
+    n2.c();
+  } catch (i3) {
+    n2.d();
+    throw i3;
+  }
+  var r2 = n2.d.bind(n2);
+  r2[Symbol.dispose] = r2;
+  return r2;
+}
+function C(i2) {
+  return function() {
+    var t2 = arguments, r2 = this;
+    return n(function() {
+      return f(function() {
+        return i2.apply(r2, [].slice.call(t2));
+      });
+    });
+  };
+}
+function O() {
+  var i2 = r;
+  r = [];
+  return function() {
+    var t2 = r;
+    if (r && i2) i2 = i2.concat(r);
+    r = i2;
+    return t2;
+  };
+}
+var k = function(i2) {
+  for (var t2 in i2) {
+    var n2 = i2[t2];
+    if ("function" == typeof n2) i2[t2] = C(n2);
+    else if ("object" == typeof n2 && null !== n2 && !("brand" in n2)) k(n2);
+  }
+};
+function T(i2) {
+  return function() {
+    var t2, n2, o2 = O();
+    try {
+      n2 = i2.apply(void 0, [].slice.call(arguments));
+    } catch (i3) {
+      r = void 0;
+      throw i3;
+    } finally {
+      t2 = o2();
+    }
+    k(n2);
+    n2[Symbol.dispose] = C(function() {
+      if (t2) for (var i3 = 0; i3 < t2.length; i3++) t2[i3].dispose();
+      t2 = void 0;
+    });
+    return n2;
+  };
+}
+const signalsCore_module = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  Computed: p,
+  Effect: E,
+  Signal: l,
+  action: C,
+  batch: n,
+  computed: g,
+  createModel: T,
+  effect: j,
+  signal: y,
+  untracked: f
+}, Symbol.toStringTag, { value: "Module" }));
 class ProviderCollection {
   constructor() {
     this.list = [];
@@ -34,9 +472,9 @@ class ProviderCollection {
   }
 }
 const playlist = [];
-const currentPlay = signal();
+const currentPlay = y();
 const toolbarTool = new ProviderCollection();
-const runtime = signal();
+const runtime = y();
 let random = (bytes) => crypto.getRandomValues(new Uint8Array(bytes));
 let customRandom = (alphabet, defaultSize, getRandom) => {
   let mask = (2 << Math.log(alphabet.length - 1) / Math.LN2) - 1;
@@ -45,9 +483,9 @@ let customRandom = (alphabet, defaultSize, getRandom) => {
     let id = "";
     while (true) {
       let bytes = getRandom(step);
-      let j = step | 0;
-      while (j--) {
-        id += alphabet[bytes[j] & mask] || "";
+      let j2 = step | 0;
+      while (j2--) {
+        id += alphabet[bytes[j2] & mask] || "";
         if (id.length === size) return id;
       }
     }
@@ -193,7 +631,7 @@ class Multiselect {
   }
 }
 function isSelected(selection, key) {
-  return !!selection?.selected.some((s) => s.key === key);
+  return !!selection?.selected.some((s2) => s2.key === key);
 }
 function setSelection(context, selection) {
   context.multiselect.value = new Multiselect(selection?.key ? [selection] : []);
@@ -214,6 +652,435 @@ function selectFixture(fixture, body) {
 function selectJoint(joint) {
   return { type: "joint", key: joint };
 }
+/**
+ * Polymatic v0.3.1
+ * @copyright Copyright 2026 Ali Shakiba
+ * @license Licensed under the MIT (https://github.com/piqnt/polymatic/blob/main/LICENSE.md)
+ */
+class EventType {
+  static create(name) {
+    return new EventType(name);
+  }
+  constructor(name) {
+    this.name = name;
+  }
+}
+const Failure = EventType.create("polymatic:failure");
+const INSPECTOR_KEY = "__POLYMATIC_INSPECTOR__";
+function inspector() {
+  return globalThis[INSPECTOR_KEY];
+}
+let bubbling = false;
+let handled = 0;
+function next(children, i2, child) {
+  if (children[i2] === child)
+    return i2;
+  const at = children.indexOf(child);
+  return at >= 0 ? at : i2 - 1;
+}
+class Middleware {
+  constructor() {
+    this.__handlers = {};
+    this.__children = [];
+    this.__parent = null;
+    this.__pendingActivate = false;
+    this.__deactivated = false;
+    this._swap = (children) => {
+      const current = this.__children;
+      const removed = [];
+      const added = [];
+      for (const child of children) {
+        if (current.indexOf(child) === -1) {
+          added.push(child);
+        }
+      }
+      for (const child of current) {
+        if (children.indexOf(child) === -1) {
+          removed.push(child);
+        }
+      }
+      this.__children.length = 0;
+      this.__children.push(...children);
+      for (const child of removed) {
+        child.__deactivate();
+        child.__detach();
+      }
+      if (this.activated) {
+        for (const child of added) {
+          child.__attach(this);
+          child.__activate();
+        }
+      }
+    };
+  }
+  get activated() {
+    return this.__parent ? this.__parent.activated : false;
+  }
+  /**
+   * Add a child middleware.
+   *
+   * The child's context type is what it needs, and this middleware's context type must provide
+   * all of it: fields it declares with the same types. A middleware that uses children with
+   * different needs declares all of them in its own context type.
+   */
+  use(middleware) {
+    const index = this.__children.indexOf(middleware);
+    if (index !== -1)
+      return;
+    if (this.activated) {
+      middleware.__attach(this);
+      middleware.__activate();
+    }
+    this.__children.push(middleware);
+  }
+  unuse(middleware) {
+    const index = this.__children.indexOf(middleware);
+    if (index !== -1) {
+      this.__children.splice(index, 1);
+      middleware === null || middleware === void 0 ? void 0 : middleware.__deactivate();
+      middleware === null || middleware === void 0 ? void 0 : middleware.__detach();
+    }
+  }
+  /**
+   * Activation runs in two passes over the subtree: `__attach` links every middleware to its
+   * parent, then `__activate` calls activate handlers, parents before children. So an activate
+   * handler can rely on the whole subtree being attached. Deactivation mirrors it: `__deactivate`
+   * calls deactivate handlers while the subtree is still attached, then `__detach` unlinks it.
+   *
+   * @internal @hidden
+   */
+  __attach(parent) {
+    if (this.__parent) {
+      return;
+    }
+    this.__parent = parent;
+    this.__pendingActivate = true;
+    this.__deactivated = false;
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      this.__children[i2].__attach(this);
+    }
+  }
+  /** @internal @hidden */
+  __activate() {
+    var _a, _b;
+    if (!this.__pendingActivate) {
+      return;
+    }
+    this.__pendingActivate = false;
+    (_b = (_a = inspector()) === null || _a === void 0 ? void 0 : _a.activate) === null || _b === void 0 ? void 0 : _b.call(_a, this);
+    this._handle("activate");
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      const child = this.__children[i2];
+      child.__activate();
+      i2 = next(this.__children, i2, child);
+    }
+  }
+  /** @internal @hidden */
+  __deactivate() {
+    var _a, _b;
+    if (!this.__parent || this.__deactivated) {
+      return;
+    }
+    this.__deactivated = true;
+    if (!this.__pendingActivate) {
+      (_b = (_a = inspector()) === null || _a === void 0 ? void 0 : _a.deactivate) === null || _b === void 0 ? void 0 : _b.call(_a, this);
+      this._handle("deactivate");
+    }
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      const child = this.__children[i2];
+      child.__deactivate();
+      i2 = next(this.__children, i2, child);
+    }
+  }
+  /** @internal @hidden */
+  __detach() {
+    if (!this.__parent) {
+      return;
+    }
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      this.__children[i2].__detach();
+    }
+    this.__pendingActivate = false;
+    this.__deactivated = false;
+    this.__parent = null;
+  }
+  get context() {
+    if (this.__parent) {
+      return this.__parent.context;
+    } else {
+      return null;
+    }
+  }
+  /** @hidden @deprecated Set context directly */
+  setContext(setter) {
+    if (this.__parent) {
+      this.__parent.setContext(setter);
+    } else {
+      console.error("Middleware is not activated");
+    }
+  }
+  /**
+   * Add an event handler.
+   *
+   * If an event handler function returns true, it will stop propagation to any other middlewares.
+   *
+   * If it throws, or returns a promise that is rejected, the event is still delivered to the other
+   * middlewares, and the error goes to `Failure` handlers up the parent chain.
+   *
+   * A middleware can have up to one handler for each event `type`.
+   *
+   * `type` is an event type, and the handler receives its payload type, or an event name.
+   */
+  on(type, handler) {
+    const name = typeof type === "string" ? type : type.name;
+    if (this.__handlers[name])
+      throw Error(`Handler for ${name} already exists`);
+    this.__handlers[name] = handler;
+  }
+  /**
+   * This is used internally, calls event handler and passes down event to children.
+   */
+  _consume(type, ev) {
+    const stop = this._handle(type, ev);
+    if (stop)
+      return true;
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      const child = this.__children[i2];
+      const stop2 = child._consume(type, ev);
+      if (stop2)
+        return true;
+      i2 = next(this.__children, i2, child);
+    }
+    return false;
+  }
+  /**
+   * This is used internally, calls event handler.
+   */
+  _handle(type, ev) {
+    var _a;
+    if (!this.activated)
+      return;
+    const handler = this.__handlers && this.__handlers[type];
+    if (handler) {
+      if (typeof handler === "function") {
+        handled++;
+        const inspect2 = inspector();
+        const start = (inspect2 === null || inspect2 === void 0 ? void 0 : inspect2.handle) ? performance.now() : 0;
+        let result;
+        let failed = false;
+        let error;
+        try {
+          result = handler.call(this, ev);
+        } catch (e2) {
+          failed = true;
+          error = e2;
+        }
+        const stop = result === true;
+        (_a = inspect2 === null || inspect2 === void 0 ? void 0 : inspect2.handle) === null || _a === void 0 ? void 0 : _a.call(inspect2, type, ev, this, performance.now() - start, stop);
+        if (failed) {
+          fail({ error, middleware: this, type, ev });
+        } else if (result && typeof result.then === "function") {
+          result.then(void 0, (e2) => fail({ error: e2, middleware: this, type, ev }));
+        }
+        return stop;
+      }
+    }
+    return false;
+  }
+  /**
+   * Send an event to all active middlewares.
+   *
+   * An event is first bubbled to the runtime through middleware parent chain.
+   * Runtime queues events as microtask -- they are asynchronously but in the same animation frame.
+   * Events are then recursively passed down to all active middlewares and their children.
+   *
+   * If an event handler returns true, delivering the event is stopped.
+   *
+   * `type` is an event type, and `ev` must be its payload type, or an event name.
+   */
+  emit(type, ...[ev]) {
+    var _a, _b;
+    if (!this.activated)
+      return;
+    const name = typeof type === "string" ? type : type.name;
+    if (!bubbling)
+      (_b = (_a = inspector()) === null || _a === void 0 ? void 0 : _a.emit) === null || _b === void 0 ? void 0 : _b.call(_a, name, ev, this);
+    if (this.__parent) {
+      const outer = bubbling;
+      bubbling = true;
+      try {
+        this.__parent.emit(name, ev);
+      } finally {
+        bubbling = outer;
+      }
+    } else {
+      console.error(Error("Not active!"));
+    }
+  }
+  /** @hidden @deprecated */
+  static activate(middleware, context) {
+    return Runtime.activate(middleware, context);
+  }
+}
+function fail(failure) {
+  var _a, _b, _c;
+  let stoppedBy = null;
+  let m2 = failure.middleware.__parent;
+  while (m2 && !stoppedBy) {
+    const handler = m2.activated && ((_a = m2.__handlers) === null || _a === void 0 ? void 0 : _a[Failure.name]);
+    if (typeof handler === "function") {
+      try {
+        if (handler.call(m2, failure) === true)
+          stoppedBy = m2;
+      } catch (e2) {
+        report(e2);
+      }
+    }
+    m2 = m2.__parent;
+  }
+  (_c = (_b = inspector()) === null || _b === void 0 ? void 0 : _b.failure) === null || _c === void 0 ? void 0 : _c.call(_b, failure, stoppedBy);
+  if (!stoppedBy)
+    report(failure.error);
+}
+function report(error) {
+  const reportError = globalThis.reportError;
+  if (typeof reportError === "function")
+    reportError(error);
+  else
+    console.error(error);
+}
+class Runtime extends Middleware {
+  constructor() {
+    super(...arguments);
+    this.displayName = "Runtime";
+    this.__handlers = {};
+    this.__children = [];
+    this._activated = false;
+    this.contextUpdateEmit = () => {
+      this.emit("context-change");
+    };
+    this._microtask = Promise.resolve();
+  }
+  get activated() {
+    return this._activated;
+  }
+  _activate(context) {
+    var _a, _b;
+    if (this._activated) {
+      return;
+    }
+    this._context = context;
+    this._activated = true;
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      this.__children[i2].__attach(this);
+    }
+    (_b = (_a = inspector()) === null || _a === void 0 ? void 0 : _a.activate) === null || _b === void 0 ? void 0 : _b.call(_a, this);
+    this._handle("activate");
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      const child = this.__children[i2];
+      child.__activate();
+      i2 = next(this.__children, i2, child);
+    }
+  }
+  _deactivate() {
+    var _a, _b;
+    if (!this._activated) {
+      return;
+    }
+    (_b = (_a = inspector()) === null || _a === void 0 ? void 0 : _a.deactivate) === null || _b === void 0 ? void 0 : _b.call(_a, this);
+    this._handle("deactivate");
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      const child = this.__children[i2];
+      child.__deactivate();
+      i2 = next(this.__children, i2, child);
+    }
+    for (let i2 = 0; i2 < this.__children.length; i2++) {
+      this.__children[i2].__detach();
+    }
+    this._activated = false;
+  }
+  get context() {
+    return this._context;
+  }
+  setContext(setter) {
+    if (typeof setter !== "function") {
+      console.error("Setter is not a function: ", setter);
+      return;
+    }
+    setter(this.context);
+    clearTimeout(this.contextUpdateEmitTimeout);
+    this.contextUpdateEmitTimeout = setTimeout(this.contextUpdateEmit);
+  }
+  emit(type, ...[ev]) {
+    var _a, _b;
+    const name = typeof type === "string" ? type : type.name;
+    if (!bubbling)
+      (_b = (_a = inspector()) === null || _a === void 0 ? void 0 : _a.emit) === null || _b === void 0 ? void 0 : _b.call(_a, name, ev, this);
+    this._microtask.then(() => this.__dispatch(name, ev));
+  }
+  /** @internal @hidden delivers a queued event down the tree */
+  __dispatch(name, ev) {
+    var _a, _b;
+    const inspect2 = inspector();
+    if (!inspect2) {
+      this._consume(name, ev);
+      return;
+    }
+    (_a = inspect2.dispatch) === null || _a === void 0 ? void 0 : _a.call(inspect2, name, ev, this);
+    const outer = handled;
+    handled = 0;
+    try {
+      this._consume(name, ev);
+    } finally {
+      const count = handled;
+      handled = outer;
+      (_b = inspect2.dispatched) === null || _b === void 0 ? void 0 : _b.call(inspect2, name, ev, count);
+    }
+  }
+  static activate(middleware, context) {
+    const manager = new Runtime();
+    manager.use(middleware);
+    manager._activate(context);
+  }
+  static deactivate(middleware) {
+    if ("_deactivate" in middleware && typeof middleware._deactivate === "function") {
+      middleware._deactivate();
+      return true;
+    }
+    const parent = middleware.__parent;
+    if (parent && "_deactivate" in parent && typeof parent._deactivate === "function") {
+      parent._deactivate();
+      return true;
+    }
+    return false;
+  }
+}
+class Memo {
+  constructor() {
+    this.memory = [];
+  }
+  static init(...args) {
+    const memo = new Memo();
+    if (args.length)
+      memo.update(...args);
+    return memo;
+  }
+  /**
+   * Returns true if args are updated.
+   */
+  update(...args) {
+    let equal = this.memory.length === args.length;
+    for (let i2 = 0; i2 < args.length; i2++) {
+      equal = equal && this.memory[i2] === args[i2];
+      this.memory[i2] = args[i2];
+    }
+    this.memory.length = args.length;
+    return !equal;
+  }
+  clear() {
+    this.memory.length = 0;
+  }
+}
 function makeMat2d() {
   return { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 };
 }
@@ -225,59 +1092,59 @@ function identityMat2d(out) {
   out.e = 0;
   out.f = 0;
 }
-function translateMat2d(m, x, y) {
-  m.e += x;
-  m.f += y;
+function translateMat2d(m2, x2, y2) {
+  m2.e += x2;
+  m2.f += y2;
 }
-function scaleMat2d(m, x, y) {
-  m.a *= x;
-  m.c *= x;
-  m.e *= x;
-  m.b *= y;
-  m.d *= y;
-  m.f *= y;
+function scaleMat2d(m2, x2, y2) {
+  m2.a *= x2;
+  m2.c *= x2;
+  m2.e *= x2;
+  m2.b *= y2;
+  m2.d *= y2;
+  m2.f *= y2;
 }
 function mulMat2ds(out, A, B) {
-  const a = A.a * B.a + A.c * B.b;
-  const b = A.b * B.a + A.d * B.b;
-  const c = A.a * B.c + A.c * B.d;
-  const d = A.b * B.c + A.d * B.d;
-  const e = A.a * B.e + A.c * B.f + A.e;
-  const f = A.b * B.e + A.d * B.f + A.f;
-  out.a = a;
-  out.b = b;
-  out.c = c;
-  out.d = d;
-  out.e = e;
-  out.f = f;
+  const a2 = A.a * B.a + A.c * B.b;
+  const b2 = A.b * B.a + A.d * B.b;
+  const c2 = A.a * B.c + A.c * B.d;
+  const d2 = A.b * B.c + A.d * B.d;
+  const e2 = A.a * B.e + A.c * B.f + A.e;
+  const f2 = A.b * B.e + A.d * B.f + A.f;
+  out.a = a2;
+  out.b = b2;
+  out.c = c2;
+  out.d = d2;
+  out.e = e2;
+  out.f = f2;
 }
-function mulMat2dVec2(out, m, v) {
-  const x = v.x;
-  const y = v.y;
-  out.x = m.a * x + m.c * y + m.e;
-  out.y = m.b * x + m.d * y + m.f;
+function mulMat2dVec2(out, m2, v2) {
+  const x2 = v2.x;
+  const y2 = v2.y;
+  out.x = m2.a * x2 + m2.c * y2 + m2.e;
+  out.y = m2.b * x2 + m2.d * y2 + m2.f;
 }
-function invMat2dVec2(out, m, v) {
-  const id = 1 / (m.a * m.d - m.c * m.b);
-  const x = v.x;
-  const y = v.y;
-  out.x = m.d * id * x - m.c * id * y + (m.f * m.c - m.e * m.d) * id;
-  out.y = m.a * id * y - m.b * id * x + (m.e * m.b - m.f * m.a) * id;
+function invMat2dVec2(out, m2, v2) {
+  const id = 1 / (m2.a * m2.d - m2.c * m2.b);
+  const x2 = v2.x;
+  const y2 = v2.y;
+  out.x = m2.d * id * x2 - m2.c * id * y2 + (m2.f * m2.c - m2.e * m2.d) * id;
+  out.y = m2.a * id * y2 - m2.b * id * x2 + (m2.e * m2.b - m2.f * m2.a) * id;
 }
-function mat2dToProjection(out, m, screenWidth, screenHeight) {
+function mat2dToProjection(out, m2, screenWidth, screenHeight) {
   const sx = 2 / screenWidth;
   const sy = -2 / screenHeight;
-  const a = sx * m.a;
-  const b = sy * m.b;
-  const c = sx * m.c;
-  const d = sy * m.d;
-  const tx = sx * m.e - 1;
-  const ty = sy * m.f + 1;
+  const a2 = sx * m2.a;
+  const b2 = sy * m2.b;
+  const c2 = sx * m2.c;
+  const d2 = sy * m2.d;
+  const tx = sx * m2.e - 1;
+  const ty = sy * m2.f + 1;
   out.fill(0);
-  out[0] = a;
-  out[1] = b;
-  out[4] = c;
-  out[5] = d;
+  out[0] = a2;
+  out[1] = b2;
+  out[4] = c2;
+  out[5] = d2;
   out[10] = 1;
   out[12] = tx;
   out[13] = ty;
@@ -285,10 +1152,10 @@ function mat2dToProjection(out, m, screenWidth, screenHeight) {
 }
 function initTestbedContext() {
   const ctx = {};
-  ctx.activity = signal("mode:play");
-  ctx.activeTool = signal(void 0);
-  ctx.paused = signal(false);
-  ctx.editable = signal(false);
+  ctx.activity = y("mode:play");
+  ctx.activeTool = y(void 0);
+  ctx.paused = y(false);
+  ctx.editable = y(false);
   ctx.pointerCaptured = false;
   ctx.style = { background: "#111" };
   ctx.camera = {
@@ -297,27 +1164,27 @@ function initTestbedContext() {
     width: 80,
     height: 60
   };
-  ctx.containerElement = signal(void 0);
-  ctx.canvasElement = signal(void 0);
-  ctx.gl = signal(void 0);
+  ctx.containerElement = y(void 0);
+  ctx.canvasElement = y(void 0);
+  ctx.gl = y(void 0);
   ctx.worldMatrix = makeMat2d();
-  ctx.mouseForce = signal(void 0);
+  ctx.mouseForce = y(void 0);
   ctx.pixelPerUnit = 1;
   ctx.pointerRadius = 20;
-  ctx.showOutline = signal(true);
-  ctx.showToolbar = signal(true);
-  ctx.zoomPan = signal(true);
-  ctx.autoPause = signal(false);
+  ctx.showOutline = y(true);
+  ctx.showToolbar = y(true);
+  ctx.zoomPan = y(true);
+  ctx.autoPause = y(false);
   ctx.activeKeys = {};
-  ctx.multiselect = signal(new Multiselect([]));
-  ctx.world = signal();
+  ctx.multiselect = y(new Multiselect([]));
+  ctx.world = y();
   ctx.simulation = {
     speed: 1,
     hz: 60,
     velocityIterations: 8,
     positionIterations: 3
   };
-  ctx.renderConfig = signal({
+  ctx.renderConfig = y({
     shapes: true,
     bounds: false,
     mass: false,
@@ -326,7 +1193,7 @@ function initTestbedContext() {
     contact: false,
     contactNormals: false
   });
-  ctx.textOverlay = signal(void 0);
+  ctx.textOverlay = y(void 0);
   return ctx;
 }
 class ToolSwitch extends Middleware {
@@ -334,7 +1201,7 @@ class ToolSwitch extends Middleware {
     super();
     this.disposers = [];
     this.handleActivate = () => {
-      this.disposers.push(effect(() => {
+      this.disposers.push(j(() => {
         const activeTool = this.context.activeTool.value;
         const isMe = activeTool?.name === this.name;
         if (isMe && !this.tool.activated) {
@@ -345,7 +1212,7 @@ class ToolSwitch extends Middleware {
       }));
     };
     this.handleDeactivate = () => {
-      this.disposers.forEach((d) => d());
+      this.disposers.forEach((d2) => d2());
       this.disposers = [];
       this.unuse(this.tool);
     };
@@ -410,9 +1277,9 @@ function createInstancedVAO(gl, quadBuffer, instanceBuffer, instanceAttribSizes)
   const stride = instanceAttribSizes.reduce((sum, size) => sum + size, 0) * 4;
   gl.bindBuffer(gl.ARRAY_BUFFER, instanceBuffer);
   let offset = 0;
-  for (let i = 0; i < instanceAttribSizes.length; i++) {
-    const location = i + 1;
-    const size = instanceAttribSizes[i];
+  for (let i2 = 0; i2 < instanceAttribSizes.length; i2++) {
+    const location = i2 + 1;
+    const size = instanceAttribSizes[i2];
     gl.enableVertexAttribArray(location);
     gl.vertexAttribPointer(location, size, gl.FLOAT, false, stride, offset);
     gl.vertexAttribDivisor(location, 1);
@@ -470,8 +1337,8 @@ function parseColor(css) {
   colorCanvasCtx.clearRect(0, 0, 1, 1);
   colorCanvasCtx.fillStyle = css;
   colorCanvasCtx.fillRect(0, 0, 1, 1);
-  const [r, g, b, a] = colorCanvasCtx.getImageData(0, 0, 1, 1).data;
-  const parsed = [r / 255, g / 255, b / 255, a / 255];
+  const [r2, g2, b2, a2] = colorCanvasCtx.getImageData(0, 0, 1, 1).data;
+  const parsed = [r2 / 255, g2 / 255, b2 / 255, a2 / 255];
   colorCache.set(css, parsed);
   return parsed;
 }
@@ -489,7 +1356,7 @@ class GLLoader extends Middleware {
     this.disposers = [];
     this.backgroundMemo = Memo.init();
     this.handleActivate = () => {
-      this.disposers.push(effect(() => {
+      this.disposers.push(j(() => {
         const containerElement = this.context.containerElement?.value;
         if (!containerElement)
           return;
@@ -542,7 +1409,7 @@ class GLLoader extends Middleware {
       }));
     };
     this.handleDeactivate = () => {
-      this.disposers.forEach((d) => d());
+      this.disposers.forEach((d2) => d2());
       this.disposers = [];
     };
     this.handleResize = () => {
@@ -571,8 +1438,8 @@ class GLLoader extends Middleware {
       this.handleUpdateState();
       if (!this.resources)
         return;
-      const m = this.context.worldMatrix;
-      this.context.pixelPerUnit = Math.max(m.a, m.d) || 1;
+      const m2 = this.context.worldMatrix;
+      this.context.pixelPerUnit = Math.max(m2.a, m2.d) || 1;
       this.context.pointerRadius = 20 / this.context.pixelPerUnit;
       this.resources.pixelScale = this.context.pixelPerUnit;
       const gl = this.resources.gl;
@@ -591,7 +1458,7 @@ class CameraTransform extends Middleware {
     this.panZoom = makeMat2d();
     this.fitMatrix = makeMat2d();
     this.handleActivate = () => {
-      this.disposers.push(effect(() => {
+      this.disposers.push(j(() => {
         const canvas = this.context.canvasElement.value;
         const resources = this.context.gl.value;
         if (!canvas || !resources)
@@ -608,7 +1475,7 @@ class CameraTransform extends Middleware {
       }));
     };
     this.handleDeactivate = () => {
-      this.disposers.forEach((d) => d());
+      this.disposers.forEach((d2) => d2());
       this.disposers = [];
     };
     this.handleFrameBefore = () => {
@@ -659,7 +1526,7 @@ class AutoFocus extends Middleware {
     this.disposers = [];
     this.pausedMemo = Memo.init();
     this.handleActivate = () => {
-      this.disposers.push(effect(() => {
+      this.disposers.push(j(() => {
         const canvas = this.context.canvasElement.value;
         if (!canvas)
           return;
@@ -674,7 +1541,7 @@ class AutoFocus extends Middleware {
       }));
     };
     this.handleDeactivate = () => {
-      this.disposers.forEach((d) => d());
+      this.disposers.forEach((d2) => d2());
       this.disposers = [];
     };
     this.handleFrameBefore = () => {
@@ -796,7 +1663,7 @@ class PointerManager extends Middleware {
     super();
     this.disposers = [];
     this.handleActivate = () => {
-      this.disposers.push(effect(() => {
+      this.disposers.push(j(() => {
         const canvas = this.context.canvasElement.value;
         if (!canvas)
           return;
@@ -813,7 +1680,7 @@ class PointerManager extends Middleware {
       }));
     };
     this.handleDeactivate = () => {
-      this.disposers.forEach((d) => d());
+      this.disposers.forEach((d2) => d2());
       this.disposers = [];
     };
     this.handleCapturePointer = () => {
@@ -970,7 +1837,7 @@ class AutoPause extends Middleware {
       window.addEventListener("keydown", this.handleInteraction);
       window.addEventListener("wheel", this.handleInteraction, { passive: true });
       window.addEventListener("touchstart", this.handleInteraction, { passive: true });
-      this.disposeEffect = effect(() => {
+      this.disposeEffect = j(() => {
         if (this.context.autoPause?.value) {
           this.resetIdleTimeout();
         } else {
@@ -1006,11 +1873,11 @@ class AutoPause extends Middleware {
   }
 }
 const noxf = { p: { x: 0, y: 0 }, q: { c: 1, s: 0 } };
-const transformVec2 = (out, xf, v) => {
-  const x = xf.q.c * v.x - xf.q.s * v.y + xf.p.x;
-  const y = xf.q.s * v.x + xf.q.c * v.y + xf.p.y;
-  out.x = x;
-  out.y = y;
+const transformVec2 = (out, xf, v2) => {
+  const x2 = xf.q.c * v2.x - xf.q.s * v2.y + xf.p.x;
+  const y2 = xf.q.s * v2.x + xf.q.c * v2.y + xf.p.y;
+  out.x = x2;
+  out.y = y2;
 };
 const temp1 = { x: 0, y: 0 };
 const temp2 = { x: 0, y: 0 };
@@ -1021,8 +1888,8 @@ function fillColorOf(color, fill) {
     return parseColor(fill);
   let dimmed = dimmedCache.get(color);
   if (!dimmed) {
-    const [r, g, b, a] = parseColor(color);
-    dimmed = [0.6 * r, 0.6 * g, 0.6 * b, 0.6 * a];
+    const [r2, g2, b2, a2] = parseColor(color);
+    dimmed = [0.6 * r2, 0.6 * g2, 0.6 * b2, 0.6 * a2];
     dimmedCache.set(color, dimmed);
   }
   return dimmed;
@@ -1048,7 +1915,7 @@ class GLDraw extends Middleware {
     this.polygonVertexTexHeight = 0;
     this.polygonVertexData = [];
     this.handleActivate = () => {
-      this.disposers.push(effect(() => {
+      this.disposers.push(j(() => {
         const resources = this.context.gl.value;
         if (!resources)
           return;
@@ -1079,7 +1946,7 @@ class GLDraw extends Middleware {
       }));
     };
     this.handleDeactivate = () => {
-      this.disposers.forEach((d) => d());
+      this.disposers.forEach((d2) => d2());
       this.disposers = [];
     };
     this.handleFrameBefore = () => {
@@ -1091,10 +1958,10 @@ class GLDraw extends Middleware {
     this.handleFrameRender = () => {
       if (!this.resources)
         return;
-      this.uploadAndDraw(this.resources.circleProgram, this.circleVAO, this.circleBuffer, this.circleData, 13, () => this.circleCapacity, (n) => this.circleCapacity = n);
-      this.uploadAndDraw(this.resources.capsuleProgram, this.capsuleVAO, this.capsuleBuffer, this.capsuleData, 14, () => this.capsuleCapacity, (n) => this.capsuleCapacity = n);
+      this.uploadAndDraw(this.resources.circleProgram, this.circleVAO, this.circleBuffer, this.circleData, 13, () => this.circleCapacity, (n2) => this.circleCapacity = n2);
+      this.uploadAndDraw(this.resources.capsuleProgram, this.capsuleVAO, this.capsuleBuffer, this.capsuleData, 14, () => this.capsuleCapacity, (n2) => this.capsuleCapacity = n2);
       this.uploadPolygonVertexTexture();
-      this.uploadAndDraw(this.resources.polygonProgram, this.polygonVAO, this.polygonBuffer, this.polygonData, 15, () => this.polygonCapacity, (n) => this.polygonCapacity = n, () => {
+      this.uploadAndDraw(this.resources.polygonProgram, this.polygonVAO, this.polygonBuffer, this.polygonData, 15, () => this.polygonCapacity, (n2) => this.polygonCapacity = n2, () => {
         const gl = this.resources.gl;
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.polygonVertexTexture);
@@ -1102,33 +1969,33 @@ class GLDraw extends Middleware {
         gl.uniform1i(this.resources.polygonProgram.uVertexTexWidth, POLYGON_VERTEX_TEX_WIDTH);
       });
     };
-    this.drawCircle = (p, r, color, xf = noxf, fill) => {
-      transformVec2(temp1, xf, p);
+    this.drawCircle = (p2, r2, color, xf = noxf, fill) => {
+      transformVec2(temp1, xf, p2);
       const [cr, cg, cb, ca] = parseColor(color);
       const [fr, fg, fb, fa] = fillColorOf(color, fill);
-      this.circleData.push(temp1.x, temp1.y, xf.q.c, xf.q.s, r, cr, cg, cb, ca, fr, fg, fb, fa);
+      this.circleData.push(temp1.x, temp1.y, xf.q.c, xf.q.s, r2, cr, cg, cb, ca, fr, fg, fb, fa);
     };
     this.drawPoint = this.drawCircle;
-    this.drawScreenPoint = (p, pixelSize, color, xf = noxf) => {
+    this.drawScreenPoint = (p2, pixelSize, color, xf = noxf) => {
       const pixelScale = this.resources?.pixelScale || 1;
-      this.drawCircle(p, pixelSize / pixelScale, color, xf);
+      this.drawCircle(p2, pixelSize / pixelScale, color, xf);
     };
-    this.drawCapsule = (a, b, r, color, xf = noxf, fill) => {
-      this.pushCapsule(xf, a, b, r, color, fill);
+    this.drawCapsule = (a2, b2, r2, color, xf = noxf, fill) => {
+      this.pushCapsule(xf, a2, b2, r2, color, fill);
     };
-    this.drawEdge = (a, b, color, xf = noxf) => {
-      this.pushCapsule(xf, a, b, 0, color);
+    this.drawEdge = (a2, b2, color, xf = noxf) => {
+      this.pushCapsule(xf, a2, b2, 0, color);
     };
     this.drawSegment = this.drawEdge;
     this.drawPolygon = (points, color, xf = noxf, fill) => {
       this.pushPolygon(xf, points, 0, color, fill);
     };
-    this.drawRoundedPolygon = (points, count, r, color, xf = noxf, fill) => {
-      this.pushPolygon(xf, points.slice(0, count), r, color, fill);
+    this.drawRoundedPolygon = (points, count, r2, color, xf = noxf, fill) => {
+      this.pushPolygon(xf, points.slice(0, count), r2, color, fill);
     };
     this.drawChain = (points, color, xf = noxf) => {
-      for (let i = 0; i < points.length - 1; i++) {
-        this.pushCapsule(xf, points[i], points[i + 1], 0, color);
+      for (let i2 = 0; i2 < points.length - 1; i2++) {
+        this.pushCapsule(xf, points[i2], points[i2 + 1], 0, color);
       }
     };
     this.drawAABB = (aabb, color, xf = noxf) => {
@@ -1137,9 +2004,9 @@ class GLDraw extends Middleware {
     };
     this.drawHollowPolygon = (points, color, xf = noxf) => {
       let prev = points[points.length - 1];
-      for (const p of points) {
-        this.pushCapsule(xf, prev, p, 0, color);
-        prev = p;
+      for (const p2 of points) {
+        this.pushCapsule(xf, prev, p2, 0, color);
+        prev = p2;
       }
     };
     this.drawHollowAABB = (aabb, color, xf = noxf) => {
@@ -1148,9 +2015,9 @@ class GLDraw extends Middleware {
     };
     this.drawHollowCircle = (center, radius, color, xf = noxf, segments = 24) => {
       const points = [];
-      for (let i = 0; i < segments; i++) {
-        const a = i / segments * Math.PI * 2;
-        points.push({ x: center.x + radius * Math.cos(a), y: center.y + radius * Math.sin(a) });
+      for (let i2 = 0; i2 < segments; i2++) {
+        const a2 = i2 / segments * Math.PI * 2;
+        points.push({ x: center.x + radius * Math.cos(a2), y: center.y + radius * Math.sin(a2) });
       }
       this.drawHollowPolygon(points, color, xf);
     };
@@ -1180,11 +2047,11 @@ class GLDraw extends Middleware {
     }
     gl.bindTexture(gl.TEXTURE_2D, null);
   }
-  pushCapsule(xf, a, b, radius, color, fill) {
-    const mx = (a.x + b.x) * 0.5;
-    const my = (a.y + b.y) * 0.5;
-    const dx = b.x - a.x;
-    const dy = b.y - a.y;
+  pushCapsule(xf, a2, b2, radius, color, fill) {
+    const mx = (a2.x + b2.x) * 0.5;
+    const my = (a2.y + b2.y) * 0.5;
+    const dx = b2.x - a2.x;
+    const dy = b2.y - a2.y;
     const length = Math.hypot(dx, dy);
     const lc = length > 0 ? dx / length : 1;
     const ls = length > 0 ? dy / length : 0;
@@ -1201,8 +2068,8 @@ class GLDraw extends Middleware {
   }
   pushPolygon(xf, points, radius, color, fill) {
     const offset = this.polygonVertexData.length / 2;
-    for (let i = 0; i < points.length; i++) {
-      this.polygonVertexData.push(points[i].x, points[i].y);
+    for (let i2 = 0; i2 < points.length; i2++) {
+      this.polygonVertexData.push(points[i2].x, points[i2].y);
     }
     const [cr, cg, cb, ca] = parseColor(color);
     const [fr, fg, fb, fa] = fillColorOf(color, fill);
@@ -1252,8 +2119,8 @@ class DrawWorld extends Middleware {
     const xf = body.getTransform();
     for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
       const styles = [getStyle(fixture.getShape()), getStyle(fixture), getStyle(body)];
-      const color = styles.find((s) => s?.stroke)?.stroke ?? shapeColor(body, fixture);
-      const fill = styles.find((s) => s?.fill)?.fill ?? DEFAULT_FILL;
+      const color = styles.find((s2) => s2?.stroke)?.stroke ?? shapeColor(body, fixture);
+      const fill = styles.find((s2) => s2?.fill)?.fill ?? DEFAULT_FILL;
       const type = fixture.getType();
       if (type === "circle") {
         const shape = fixture.getShape();
@@ -1268,8 +2135,8 @@ class DrawWorld extends Middleware {
         const shape = fixture.getShape();
         const vertices = shape.m_vertices;
         const count = shape.m_count;
-        for (let i = 1; i < count; i++) {
-          this.draw.drawEdge(vertices[i - 1], vertices[i], color, xf);
+        for (let i2 = 1; i2 < count; i2++) {
+          this.draw.drawEdge(vertices[i2 - 1], vertices[i2], color, xf);
         }
         if (shape.isLoop() && count > 1) {
           this.draw.drawEdge(vertices[count - 1], vertices[0], color, xf);
@@ -1328,7 +2195,7 @@ class TextOverlay extends Middleware {
     this.canvas = null;
     this.resizeObserver = null;
     this.handleActivate = () => {
-      this.disposers.push(effect(() => {
+      this.disposers.push(j(() => {
         const containerElement = this.context.containerElement?.value;
         if (!containerElement)
           return;
@@ -1356,7 +2223,7 @@ class TextOverlay extends Middleware {
       }));
     };
     this.handleDeactivate = () => {
-      this.disposers.forEach((d) => d());
+      this.disposers.forEach((d2) => d2());
       this.disposers = [];
     };
     this.handleResize = () => {
@@ -1381,11 +2248,11 @@ class TextOverlay extends Middleware {
   }
 }
 const screenPoint = { x: 0, y: 0 };
-function drawWorldString(context, p, text, color, align = "left") {
+function drawWorldString(context, p2, text, color, align = "left") {
   const ctx = context.textOverlay.value;
   if (!ctx)
     return;
-  mulMat2dVec2(screenPoint, context.worldMatrix, p);
+  mulMat2dVec2(screenPoint, context.worldMatrix, p2);
   ctx.font = "12px monospace";
   ctx.textAlign = align;
   ctx.textBaseline = "middle";
@@ -1418,18 +2285,18 @@ class DrawBodyInfo extends Middleware {
     this.on("frame-update", this.handleFrameRender);
   }
   drawBodyName(body, label) {
-    const { c, s } = body.getTransform().q;
+    const { c: c2, s: s2 } = body.getTransform().q;
     const center = body.getWorldCenter();
-    const p = { x: center.x + c * 0.1 - s * 0.1, y: center.y + s * 0.1 + c * 0.1 };
-    drawWorldString(this.context, p, label, "blueviolet");
+    const p2 = { x: center.x + c2 * 0.1 - s2 * 0.1, y: center.y + s2 * 0.1 + c2 * 0.1 };
+    drawWorldString(this.context, p2, label, "blueviolet");
   }
   drawMass(body) {
-    const { c, s } = body.getTransform().q;
+    const { c: c2, s: s2 } = body.getTransform().q;
     const center = body.getWorldCenter();
-    this.draw.drawEdge(center, { x: center.x + c, y: center.y + s }, "red");
-    this.draw.drawEdge(center, { x: center.x - s, y: center.y + c }, "green");
-    const p = { x: center.x + c * 0.1 - s * 0.1, y: center.y + s * 0.1 + c * 0.1 };
-    drawWorldString(this.context, p, `  ${body.getMass().toFixed(2)}`, "white");
+    this.draw.drawEdge(center, { x: center.x + c2, y: center.y + s2 }, "red");
+    this.draw.drawEdge(center, { x: center.x - s2, y: center.y + c2 }, "green");
+    const p2 = { x: center.x + c2 * 0.1 - s2 * 0.1, y: center.y + s2 * 0.1 + c2 * 0.1 };
+    drawWorldString(this.context, p2, `  ${body.getMass().toFixed(2)}`, "white");
   }
 }
 const DEFAULT_COLOR = "rgba(255,255,255,0.9)";
@@ -1493,7 +2360,7 @@ class DrawJoints extends Middleware {
     }
   }
 }
-const rotate = (q, v) => Rot.mulVec2(q, v);
+const rotate = (q, v2) => Rot.mulVec2(q, v2);
 const CONTACT_NORMAL_LENGTH = 0.3;
 class DrawContacts extends Middleware {
   constructor() {
@@ -1514,8 +2381,8 @@ class DrawContacts extends Middleware {
         if (!manifold)
           continue;
         const normal = manifold.normal;
-        for (let i = 0; i < manifold.pointCount; i++) {
-          const point = manifold.points[i];
+        for (let i2 = 0; i2 < manifold.pointCount; i2++) {
+          const point = manifold.points[i2];
           this.draw.drawScreenPoint(point, 5, "blue");
           if (renderConfig.contactNormals) {
             const p2 = {
@@ -1552,7 +2419,7 @@ class WorldKeys extends Middleware {
   constructor() {
     super();
     this.handleActivate = () => {
-      this.dispose = effect(() => {
+      this.dispose = j(() => {
         const world = this.context.world.value;
         if (!world)
           return;
@@ -1603,7 +2470,7 @@ class PullTool extends Middleware {
         return;
       if (this.context.mouseForce.value === 0)
         return;
-      const match = this.context.worldQuery.testPoint(ev.point, (m) => m.worldBody.isDynamic());
+      const match = this.context.worldQuery.testPoint(ev.point, (m2) => m2.worldBody.isDynamic());
       if (!match)
         return;
       const hit = match.worldBody;
@@ -1673,7 +2540,7 @@ class ImpulseTool extends Middleware {
       const mouseForce = this.context.mouseForce.value;
       if (mouseForce === 0)
         return;
-      const match = this.context.worldQuery.testPoint(ev.point, (m) => m.worldBody.isDynamic());
+      const match = this.context.worldQuery.testPoint(ev.point, (m2) => m2.worldBody.isDynamic());
       if (!match)
         return;
       this.body = match.worldBody;
@@ -1883,7 +2750,7 @@ class DefaultTool extends Middleware {
     super();
     this.disposers = [];
     this.handleActivate = () => {
-      this.disposers.push(effect(() => {
+      this.disposers.push(j(() => {
         this.resetTool();
       }));
       this.disposers.push(this.context.activeTool.subscribe((activeTool) => {
@@ -1893,7 +2760,7 @@ class DefaultTool extends Middleware {
       }));
     };
     this.handleDeactivate = () => {
-      this.disposers.forEach((d) => d());
+      this.disposers.forEach((d2) => d2());
       this.disposers = [];
     };
     this.on("activate", this.handleActivate);
@@ -1944,22 +2811,22 @@ class ConsoleManager extends Middleware {
   info(text) {
     this.updateInfo(text);
   }
-  status(a, b) {
-    if (typeof b !== "undefined") {
-      const key = a;
-      const value = b;
+  status(a2, b2) {
+    if (typeof b2 !== "undefined") {
+      const key = a2;
+      const value = b2;
       if (typeof value !== "function" && typeof value !== "object") {
         this._statusMap[key] = value;
       }
-    } else if (a && typeof a === "object") {
-      for (const key in a) {
-        const value = a[key];
+    } else if (a2 && typeof a2 === "object") {
+      for (const key in a2) {
+        const value = a2[key];
         if (typeof value !== "function" && typeof value !== "object") {
           this._statusMap[key] = value;
         }
       }
-    } else if (typeof a === "string") {
-      this._statusText = a;
+    } else if (typeof a2 === "string") {
+      this._statusText = a2;
     }
     const newline = "\n";
     let text = this._statusText || "";
@@ -2005,7 +2872,7 @@ class PlayButton extends Middleware {
       if (!this.button)
         return;
       this.button.addEventListener("click", this.handleClick);
-      this.disposeEffect = effect(() => {
+      this.disposeEffect = j(() => {
         const paused = this.context.paused.value;
         this.button.classList.toggle("pause", paused);
         this.button.classList.toggle("play", !paused);
@@ -2040,7 +2907,7 @@ class ZoomPanProvider extends Middleware {
     this.pinchCenter = null;
     this.handleActivate = () => {
       this.disposers.push(
-        effect(() => {
+        j(() => {
           const containerElement = this.context.containerElement?.value;
           if (!containerElement)
             return;
@@ -2055,7 +2922,7 @@ class ZoomPanProvider extends Middleware {
           };
         }),
         // touches go to the testbed, not to scrolling or zooming the page, while it is on
-        effect(() => {
+        j(() => {
           const containerElement = this.context.containerElement?.value;
           if (!containerElement || !this.context.zoomPan?.value)
             return;
@@ -2068,7 +2935,7 @@ class ZoomPanProvider extends Middleware {
       );
     };
     this.handleDeactivate = () => {
-      this.disposers.forEach((d) => d());
+      this.disposers.forEach((d2) => d2());
       this.disposers = [];
     };
     this.handleWheel = (ev) => {
@@ -2151,9 +3018,9 @@ class ZoomPanProvider extends Middleware {
     this.panFrom = point;
   }
   movePinch() {
-    const [a, b] = [...this.pointers.values()];
-    const spread = distance(a, b);
-    const center = midpoint(a, b);
+    const [a2, b2] = [...this.pointers.values()];
+    const spread = distance(a2, b2);
+    const center = midpoint(a2, b2);
     if (this.pinchCenter) {
       this.emit("display-pan", { delta: { x: this.pinchCenter.x - center.x, y: this.pinchCenter.y - center.y } });
     }
@@ -2174,11 +3041,11 @@ class ZoomPanProvider extends Middleware {
     window.removeEventListener("pointercancel", this.handlePointerUp);
   }
 }
-function distance(a, b) {
-  return Math.hypot(a.x - b.x, a.y - b.y);
+function distance(a2, b2) {
+  return Math.hypot(a2.x - b2.x, a2.y - b2.y);
 }
-function midpoint(a, b) {
-  return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+function midpoint(a2, b2) {
+  return { x: (a2.x + b2.x) / 2, y: (a2.y + b2.y) / 2 };
 }
 class TestbedMain extends Middleware {
   constructor() {
@@ -2227,11 +3094,11 @@ class TestbedMain extends Middleware {
     this.on("keydown", this.handleKeydown);
     this.on("keyup", this.handleKeyup);
   }
-  color(r, g, b) {
-    r = r * 256 | 0;
-    g = g * 256 | 0;
-    b = b * 256 | 0;
-    return "rgb(" + r + ", " + g + ", " + b + ")";
+  color(r2, g2, b2) {
+    r2 = r2 * 256 | 0;
+    g2 = g2 * 256 | 0;
+    b2 = b2 * 256 | 0;
+    return "rgb(" + r2 + ", " + g2 + ", " + b2 + ")";
   }
   findOne(query) {
     const world = this.context.world.value;
@@ -2326,20 +3193,20 @@ class TestbedMain extends Middleware {
     this.context.world.value = world;
   }
   /** A dot at p, 5 px in radius whatever the zoom; `r` is ignored, as in planck 1.5. */
-  drawPoint(p, r, color) {
-    this.draw.drawScreenPoint(p, 5, color);
+  drawPoint(p2, r2, color) {
+    this.draw.drawScreenPoint(p2, 5, color);
   }
-  drawCircle(p, r, color) {
-    this.draw.drawCircle(p, r, color);
+  drawCircle(p2, r2, color) {
+    this.draw.drawCircle(p2, r2, color);
   }
-  drawCapsule(a, b, r, color) {
-    this.draw.drawCapsule(a, b, r, color);
+  drawCapsule(a2, b2, r2, color) {
+    this.draw.drawCapsule(a2, b2, r2, color);
   }
-  drawEdge(a, b, color) {
-    this.draw.drawEdge(a, b, color);
+  drawEdge(a2, b2, color) {
+    this.draw.drawEdge(a2, b2, color);
   }
-  drawSegment(a, b, color) {
-    this.draw.drawEdge(a, b, color);
+  drawSegment(a2, b2, color) {
+    this.draw.drawEdge(a2, b2, color);
   }
   drawPolygon(points, color) {
     this.draw.drawPolygon(points, color);
@@ -2366,8 +3233,8 @@ class TestbedMain extends Middleware {
   info(text) {
     this.context.console?.info(text);
   }
-  status(a, b) {
-    this.context.console?.status(a, b);
+  status(a2, b2) {
+    this.context.console?.status(a2, b2);
   }
 }
 const mount = (options = {}) => {
@@ -2417,7 +3284,6 @@ export {
   generateKey,
   getKey,
   getLabel,
-  getStyle,
   initTestbedContext,
   isSelected,
   mountTestbed,
@@ -2432,6 +3298,7 @@ export {
   setKey,
   setLabel,
   setSelection,
+  signalsCore_module as signalsCore,
   toolbarTool
 };
 //# sourceMappingURL=testbed.mjs.map

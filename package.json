@@ -47,9 +47,9 @@
       "types": "./dist/testbed.d.ts",
       "import": "./dist/testbed.mjs"
     },
-    "./testbed/shell": {
-      "types": "./dist/shell.d.ts",
-      "import": "./dist/shell.mjs"
+    "./testbed-outline": {
+      "types": "./dist/testbed-outline.d.ts",
+      "import": "./dist/testbed-outline.mjs"
     },
     "./with-testbed": {
       "types": "./dist/planck-with-testbed.d.ts",
@@ -59,16 +59,6 @@
   },
   "engines": {
     "node": ">=24.0"
-  },
-  "peerDependencies": {
-    "@mantine/core": "^8.0.0",
-    "@mantine/hooks": "^8.0.0",
-    "@preact/signals-core": "^1.0.0",
-    "@preact/signals-react": "^3.0.0",
-    "polymatic": "^0.3.1",
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
-    "react-icons": ">=5.0.0"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
@@ -137,31 +127,5 @@
     "build:core": "vite build && npm run terser-core",
     "build:testbed": "BUILD_NAME=testbed vite build && BUILD_NAME=shell vite build && BUILD_NAME=with-testbed vite build && npm run terser-testbed",
     "build:types": "rollup -c rollup.dts.config.mjs"
-  },
-  "peerDependenciesMeta": {
-    "@mantine/core": {
-      "optional": true
-    },
-    "@mantine/hooks": {
-      "optional": true
-    },
-    "@preact/signals-core": {
-      "optional": true
-    },
-    "@preact/signals-react": {
-      "optional": true
-    },
-    "polymatic": {
-      "optional": true
-    },
-    "react": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    },
-    "react-icons": {
-      "optional": true
-    }
   }
 }

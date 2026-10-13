@@ -3,10 +3,10 @@
 // stay imports — the core for testbed.d.ts, so consumers see one set of planck types
 import dts from "rollup-plugin-dts";
 
-const PEERS = ["polymatic", "@preact/signals-core"];
-const SHELL_PEERS = ["@preact/signals-react", "react", "react-dom", "@mantine/core", "@mantine/hooks", "react-icons"];
+// bundled into the testbed's builds, so never named by its declarations
+const BUNDLED = ["polymatic", "@preact/signals-core"];
 
-// a package or any of its subpaths: planck covers planck/testbed, the shell's one testbed
+// a package or any of its subpaths
 const externalOf = (names) => (id) => names.some((name) => id === name || id.startsWith(name + "/"));
 
 const bundle = (input, file, external, tsconfig) => ({
@@ -18,13 +18,9 @@ const bundle = (input, file, external, tsconfig) => ({
 
 export default [
   bundle("src/main.ts", "dist/planck.d.ts", [], "tsconfig.json"),
-  bundle("testbed/index.ts", "dist/testbed.d.ts", ["planck", ...PEERS], "testbed/tsconfig.json"),
+  // what planck/testbed publishes (api.ts), not everything its module exports (index.ts)
+  bundle("testbed/api.ts", "dist/testbed.d.ts", ["planck"], "testbed/tsconfig.json"),
+  bundle("testbed/shell/renderOutline.tsx", "dist/testbed-outline.d.ts", externalOf(["planck"]), "testbed/tsconfig.json"),
   // self-contained: the core's declarations inlined
-  bundle(
-    "testbed/shell/index.tsx",
-    "dist/shell.d.ts",
-    externalOf(["planck", ...PEERS, ...SHELL_PEERS]),
-    "testbed/tsconfig.json",
-  ),
-  bundle("testbed/with-testbed.ts", "dist/planck-with-testbed.d.ts", PEERS, "testbed/tsconfig.json"),
+  bundle("testbed/with-testbed.ts", "dist/planck-with-testbed.d.ts", BUNDLED, "testbed/tsconfig.json"),
 ];
