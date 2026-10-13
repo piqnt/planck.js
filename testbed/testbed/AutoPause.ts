@@ -24,7 +24,7 @@ export class AutoPause extends Middleware<AutoPauseContext> {
     window.addEventListener("pointermove", this.handleInteraction);
     window.addEventListener("keydown", this.handleInteraction);
     window.addEventListener("wheel", this.handleInteraction, { passive: true });
-    window.addEventListener("touchstart", this.handleInteraction);
+    window.addEventListener("touchstart", this.handleInteraction, { passive: true });
     this.resetIdleTimeout();
   };
 
