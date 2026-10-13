@@ -33,7 +33,7 @@ export default function viteConfig(configEnv: ConfigEnv) {
 // the latter through planck/testbed, see testbed/shell/signals-core.ts)
 const TESTBED_EXTERNAL = ["planck"];
 
-// the outline's entry, `planck/testbed-outline`, for hosts such as piqnt: the outline panel alone,
+// the host's shell, `planck/testbed-shell`, for hosts such as piqnt: today the outline panel alone,
 // self-contained — Preact (as react/react-dom), the Mantine parts it uses, react-icons and
 // signals-react bundled in. planck/testbed stays external, so it reads the testbed the page's code
 // mounted. (The rest of the shell, toolbar and menus, is the examples site's, from source.)
@@ -145,7 +145,7 @@ function buildTestbedConfig() {
 }
 
 function buildShellConfig() {
-  const entry = normalizePath(path.resolve(__dirname, "testbed", "shell", "renderOutline.tsx"));
+  const entry = normalizePath(path.resolve(__dirname, "testbed", "shell", "hostShell.tsx"));
   const tsconfig = path.resolve(__dirname, "testbed", "tsconfig.json");
 
   return defineConfig({
@@ -169,8 +169,8 @@ function buildShellConfig() {
     build: {
       lib: {
         entry: entry,
-        name: "planckTestbedOutline",
-        fileName: () => "testbed-outline.mjs",
+        name: "planckTestbedShell",
+        fileName: () => "testbed-shell.mjs",
         formats: ["es"],
       },
       target: "es2020",
@@ -217,7 +217,7 @@ function serveConfig(configEnv: ConfigEnv) {
         { find: "react", replacement: "preact/compat" },
         { find: "react-dom", replacement: "preact/compat" },
         { find: "react-dom/client", replacement: "preact/compat/client" },
-        { find: /^planck\/testbed-outline$/, replacement: path.resolve(__dirname, "testbed", "shell", "renderOutline.tsx") },
+        { find: /^planck\/testbed-shell$/, replacement: path.resolve(__dirname, "testbed", "shell", "hostShell.tsx") },
         { find: /^planck\/testbed(\/.*)?$/, replacement: path.resolve(__dirname, "testbed") + "$1" },
         { find: /^planck$/, replacement: path.resolve(__dirname, "src", "main.ts") },
       ],

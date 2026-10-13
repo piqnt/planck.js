@@ -5,11 +5,11 @@
 
 // the testbed implements Testbed.mount() for the examples, which import Testbed from "planck"
 import "planck/testbed";
-import { renderShell } from "planck/testbed/shell/index";
+import { renderFullShell } from "planck/testbed/shell/index";
 import { findModules, loadModule } from "planck/testbed/shell/Playlist";
 
 // load testbed shell
-renderShell("runtime-shell");
+renderFullShell("runtime-shell");
 
 // setup playlist
 findModules(import.meta.glob(["./**/*.ts", "!./index.ts"]));

@@ -47,9 +47,9 @@
       "types": "./dist/testbed.d.ts",
       "import": "./dist/testbed.mjs"
     },
-    "./testbed-outline": {
-      "types": "./dist/testbed-outline.d.ts",
-      "import": "./dist/testbed-outline.mjs"
+    "./testbed-shell": {
+      "types": "./dist/testbed-shell.d.ts",
+      "import": "./dist/testbed-shell.mjs"
     },
     "./with-testbed": {
       "types": "./dist/planck-with-testbed.d.ts",

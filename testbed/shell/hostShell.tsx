@@ -1,6 +1,6 @@
-// planck/testbed-outline, for hosts such as piqnt: the outline panel beside the testbed the page's
-// code mounted — its world, bodies, joints and selection. The rest of the shell (toolbar, menus,
-// playlist) is this repo's examples site's and is not published.
+// planck/testbed-shell, for hosts such as piqnt: the testbed's UI beside the testbed the page's
+// code mounted. Today that is the outline alone — its world, bodies, joints and selection; the
+// whole shell's toolbar, menus and playlist are this repo's examples site's and are not published.
 import React from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { IconContext } from "react-icons";
@@ -20,7 +20,7 @@ import unstyledButton from "@mantine/core/styles/UnstyledButton.css?inline";
 import { theme } from "./Theme";
 import { OutlineFrame } from "./OutlineFrame";
 
-const STYLE_ID = "planck-testbed-outline-styles";
+const STYLE_ID = "planck-testbed-shell-styles";
 // in Mantine's order: the base, then UnstyledButton before the components built on it (Tabs),
 // which override its reset
 const STYLES = [baseline, variables, global, unstyledButton, affix, group, scrollArea, tabs, text].join("\n");
@@ -37,13 +37,14 @@ function addStyles() {
 }
 
 /**
- * Renders the outline into the element, once: a later call keeps the first. It shows while the
- * testbed's `showOutline` is on, and the testbed's container leaves room for it.
+ * Renders the testbed's UI into the element, once: a later call keeps the first. Today it is the
+ * outline, shown while the testbed's `showOutline` is on, with the testbed's container leaving room
+ * for it.
  *
- * The outline brings its own UI library and stylesheet; the host provides the element and the
- * same planck/testbed its code mounted.
+ * It brings its own UI library and stylesheet; the host provides the element and the same
+ * planck/testbed its code mounted.
  */
-export function renderOutline(id: string) {
+export function renderShell(id: string) {
   const container = document.getElementById(id);
   if (!container) {
     console.log("Element not found: ", id);

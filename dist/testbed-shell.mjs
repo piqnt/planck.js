@@ -6501,7 +6501,7 @@ const OutlineFrame = ({ top = 0 }) => {
   }, [top]);
   return /* @__PURE__ */ gn.createElement(OutlineComponent, { top });
 };
-const STYLE_ID = "planck-testbed-outline-styles";
+const STYLE_ID = "planck-testbed-shell-styles";
 const STYLES = [baseline, variables, global, unstyledButton, affix, group, scrollArea, tabs, text].join("\n");
 let root;
 function addStyles() {
@@ -6512,7 +6512,7 @@ function addStyles() {
   style.textContent = STYLES;
   document.head.appendChild(style);
 }
-function renderOutline(id) {
+function renderShell(id) {
   const container = document.getElementById(id);
   if (!container) {
     console.log("Element not found: ", id);
@@ -6525,5 +6525,5 @@ function renderOutline(id) {
   root.render(/* @__PURE__ */ gn.createElement(IconContext.Provider, { value: { className: "svg-icon" } }, /* @__PURE__ */ gn.createElement(MantineProvider, { theme, defaultColorScheme: "dark" }, /* @__PURE__ */ gn.createElement(OutlineFrame, null))));
 }
 export {
-  renderOutline
+  renderShell
 };

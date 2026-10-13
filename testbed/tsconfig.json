@@ -9,7 +9,7 @@
     "paths": {
       "planck": ["../src/main.ts"],
       "planck/testbed": ["./index.ts"],
-      "planck/testbed-outline": ["./shell/renderOutline.tsx"],
+      "planck/testbed-shell": ["./shell/hostShell.tsx"],
       "planck/testbed/*": ["./*"]
     }
   },

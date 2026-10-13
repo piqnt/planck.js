@@ -11,7 +11,7 @@ interface OutlineFrameProps {
 
 /**
  * The outline beside the testbed: the testbed's container makes room for it while it shows.
- * Shared by the whole shell (testbed/shell) and the outline alone (planck/testbed-outline).
+ * Shared by the whole shell (renderFullShell) and the published one (planck/testbed-shell).
  */
 export const OutlineFrame: React.FC<OutlineFrameProps> = ({ top = 0 }) => {
   useEffect(() => {
