@@ -123,11 +123,13 @@ export function prepareTests(factories: TestFactory[]) {
 }
 
 export function runTest(test: TestInterface) {
+    test.setup();
     setupWorld(test);
 
     warmup(test);
 
     const times = bench(test);
+    test.teardown();
     return {
         name: test.name,
         avg: mean(times),
@@ -137,11 +139,13 @@ export function runTest(test: TestInterface) {
 }
 
 export async function runTestAsync(test: TestInterface, progress: ProgressFunc) {
+    test.setup();
     setupWorld(test);
 
     await warmupAsync(test, progress);
 
     const times = await benchAsync(test, progress);
+    test.teardown();
     return {
         name: test.name,
         avg: mean(times),
