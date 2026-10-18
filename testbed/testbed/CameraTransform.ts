@@ -56,7 +56,11 @@ export class CameraTransform extends Middleware<CameraTransformContext> {
     super();
     this.on("activate", this.handleActivate);
     this.on("deactivate", this.handleDeactivate);
-    this.on("frame-before", this.handleFrameBefore);
+    // frame-update is after the step callback and before any Draw*, so the frame draws through
+    // the camera it simulated; read only at frame-before, a follow camera lags a frame and shakes.
+    // frame-before stays for GLLoader's pixelPerUnit; the memo makes the second call free.
+    this.on("frame-before", this.handleCameraChange);
+    this.on("frame-update", this.handleCameraChange);
     this.on("display-zoom", this.handleZoom);
     this.on("display-pan", this.handlePan);
   }
@@ -89,7 +93,7 @@ export class CameraTransform extends Middleware<CameraTransformContext> {
     this.disposers = [];
   };
 
-  handleFrameBefore = () => {
+  handleCameraChange = () => {
     const camera = this.context.camera;
     if (this.viewboxMemo.update(camera.x, camera.y, camera.width, camera.height)) {
       this.rescale();
