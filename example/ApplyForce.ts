@@ -3,7 +3,8 @@
  * Licensed under the MIT license
  */
 
-import { Vec2, Transform, Polygon, Box, FrictionJoint, World, Edge, Testbed } from "planck";
+import { Vec2, Transform, Polygon, Box, FrictionJoint, World, Edge } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World();
 

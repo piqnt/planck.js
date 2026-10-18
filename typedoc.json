@@ -1,7 +1,10 @@
 {
   "name": "API Reference",
   "readme": "none",
-  "entryPoints": ["./src"],
+  "entryPoints": [
+    "./src"
+  ],
+  "tsconfig": "./src/tsconfig.json",
   "out": "./docs/pages/api/",
   "basePath": "/api/",
   "publicPath": "/api/",
@@ -27,5 +30,7 @@
   "hideBreadcrumbs": true,
   "hidePageHeader": true,
   "mergeReadme": true,
-  "plugin": ["typedoc-plugin-markdown"]
+  "plugin": [
+    "typedoc-plugin-markdown"
+  ]
 }

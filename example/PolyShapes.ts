@@ -12,12 +12,12 @@ import {
   Box,
   World,
   Distance,
-  Testbed,
   Body,
   Shape,
   Fixture,
   PolygonShape,
 } from "planck";
+import { Testbed } from "planck/testbed";
 
 // This tests stacking. It also shows how to use World.query and TestOverlap.
 // This callback is called by World.queryAABB. We find all the fixtures

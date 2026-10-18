@@ -6,7 +6,8 @@
 // This tests bullet collision and provides an example of a gameplay scenario.
 // This also uses a loop shape.
 
-import { World, Circle, Box, Chain, RevoluteJoint, Testbed } from "planck";
+import { World, Circle, Box, Chain, RevoluteJoint } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

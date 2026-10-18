@@ -68,18 +68,18 @@ const DESERIALIZE_BY_TYPE_FIELD = {
 };
 
 // dummy types
-type DataType = any;
-type ObjectType = any;
-type ClassName = any;
+export type DataType = any;
+export type ObjectType = any;
+export type ClassName = any;
 
-type SerializedType = object[];
+export type SerializedType = object[];
 
 type RefType = {
   refIndex: number;
   refType: string;
 };
 
-type SerializerOptions = {
+export type SerializerOptions = {
   rootClass: ClassName;
   preSerialize?: (obj: ObjectType) => DataType;
   postSerialize?: (data: DataType, obj: any) => DataType;

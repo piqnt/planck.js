@@ -18,10 +18,10 @@ import {
   Circle,
   Polygon,
   Box,
-  Testbed,
   RayCastOutput,
   Vec2Value,
 } from "planck";
+import { Testbed } from "planck/testbed";
 
 const outputClosest = {
   point: null as Vec2Value | null,
@@ -34,12 +34,7 @@ function resetClosest() {
 }
 
 // This callback finds the closest hit. Polygon 0 is filtered.
-function callbackClosest(
-  fixture: Fixture,
-  point: Vec2Value,
-  normal: Vec2Value,
-  fraction: number,
-): number {
+function callbackClosest(fixture: Fixture, point: Vec2Value, normal: Vec2Value, fraction: number): number {
   const body = fixture.getBody();
   const userData = body.getUserData();
   if (userData !== undefined) {
@@ -71,12 +66,7 @@ function resetAny() {
 
 // This callback finds any hit. Polygon 0 is filtered. For this type of query we are usually
 // just checking for obstruction, so the actual fixture and hit point are irrelevant.
-function callbackAny(
-  fixture: Fixture,
-  point: Vec2Value,
-  normal: Vec2Value,
-  fraction: number,
-): number {
+function callbackAny(fixture: Fixture, point: Vec2Value, normal: Vec2Value, fraction: number): number {
   const body = fixture.getBody();
   const userData = body.getUserData();
   if (userData !== undefined) {
@@ -108,12 +98,7 @@ function resetMultiple() {
 // This ray cast collects multiple hits along the ray. Polygon 0 is filtered.
 // The fixtures are not necessary reported in order, so we might not capture
 // the closest fixture.
-function callbackMultiple(
-  fixture: Fixture,
-  point: Vec2Value,
-  normal: Vec2Value,
-  fraction: number,
-): number {
+function callbackMultiple(fixture: Fixture, point: Vec2Value, normal: Vec2Value, fraction: number): number {
   const body = fixture.getBody();
   const userData = body.getUserData();
   if (userData !== undefined) {

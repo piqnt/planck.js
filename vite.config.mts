@@ -1,22 +1,46 @@
 import { execSync } from "child_process";
 import path from "path";
 import { defineConfig, normalizePath, type ConfigEnv, type Plugin } from "vite";
-import dtsBundleGenerator from "vite-plugin-dts-bundle-generator";
 import typescript from "vite-plugin-typescript";
 import rollupLicensePlugin from "rollup-plugin-license";
+import glsl from "vite-plugin-glsl";
 
 export default function viteConfig(configEnv: ConfigEnv) {
   const isServe = configEnv.command === "serve";
   if (isServe) {
     return serveConfig(configEnv);
   }
-  const buildTestbed = process.env.BUILD_TESTBED === "true";
-  return buildConfig(configEnv, buildTestbed);
+  // which bundle to build: the core (default), the testbed, its shell, or planck-with-testbed
+  const buildName = process.env.BUILD_NAME;
+  if (buildName === "with-testbed") {
+    return buildWithTestbedConfig();
+  }
+  if (buildName === "shell") {
+    return buildShellConfig();
+  }
+  if (buildName === "testbed") {
+    return buildTestbedConfig();
+  } else {
+    return buildConfig();
+  }
 }
 
-function buildConfig(configEnv: ConfigEnv, buildTestbed: boolean) {
-  const filename = buildTestbed ? "planck-with-testbed" : "planck";
-  const entry = normalizePath(path.resolve(__dirname, buildTestbed ? "testbed" : "src", "main.ts"));
+// The declaration bundles (dist/*.d.ts) are rollup.dts.config.mjs, run after these builds.
+//
+// the testbed's own entry, `planck/testbed`: ES2020 classes on top of polymatic (a native class,
+// which ES5 output could not extend). Only planck is left to the host, so the testbed and the
+// host's code share one planck; polymatic and @preact/signals-core are bundled in (the shell gets
+// the latter through planck/testbed, see testbed/shell/signals-core.ts)
+const TESTBED_EXTERNAL = ["planck"];
+
+// the host's shell, `planck/testbed-shell`, for hosts such as piqnt: today the outline panel alone,
+// self-contained — Preact (as react/react-dom), the Mantine parts it uses, react-icons and
+// signals-react bundled in. planck/testbed stays external, so it reads the testbed the page's code
+// mounted. (The rest of the shell, toolbar and menus, is the examples site's, from source.)
+const SHELL_EXTERNAL = ["planck", "planck/testbed"];
+
+function buildConfig() {
+  const entry = normalizePath(path.resolve(__dirname, "src", "main.ts"));
 
   return defineConfig({
     define: {
@@ -31,11 +55,11 @@ function buildConfig(configEnv: ConfigEnv, buildTestbed: boolean) {
         name: "planck",
         fileName: function (format) {
           if (format === "umd") {
-            return filename + ".js";
+            return "planck.js";
           } else if (format === "es") {
-            return filename + ".mjs";
+            return "planck.mjs";
           }
-          return filename + "." + format + ".js";
+          return "planck." + format + ".js";
         },
         formats: ["es", "umd"],
       },
@@ -48,14 +72,128 @@ function buildConfig(configEnv: ConfigEnv, buildTestbed: boolean) {
         banner: getLicense(),
       }) as Plugin,
       typescript({}),
-      dtsBundleGenerator({
-        fileName: filename + ".d.ts",
-      })
-    ]
+    ],
+  });
+}
+
+// planck-with-testbed.{js,mjs}: the core (its ES5 build, so `Vec2(x, y)` without `new` keeps working),
+// the testbed and the testbed's dependencies in one file; the rest is ES2020 like the testbed.
+// Built after the core and the testbed: it bundles dist/planck.mjs.
+function buildWithTestbedConfig() {
+  const entry = normalizePath(path.resolve(__dirname, "testbed", "with-testbed.ts"));
+  const tsconfig = path.resolve(__dirname, "testbed", "tsconfig.json");
+
+  return defineConfig({
+    resolve: {
+      alias: [
+        { find: /^planck\/testbed(\/.*)?$/, replacement: path.resolve(__dirname, "testbed") + "$1" },
+        { find: "planck", replacement: path.resolve(__dirname, "dist", "planck.mjs") },
+      ],
+    },
+    build: {
+      lib: {
+        entry: entry,
+        name: "planck",
+        fileName: (format) => (format === "es" ? "planck-with-testbed.mjs" : "planck-with-testbed.js"),
+        formats: ["es", "umd"],
+      },
+      target: "es2020",
+      emptyOutDir: false,
+      minify: false,
+      sourcemap: true,
+    },
+    plugins: [
+      glsl(),
+      rollupLicensePlugin({
+        banner: getLicense(),
+      }) as Plugin,
+      typescript({ tsconfig }),
+    ],
+  });
+}
+
+function buildTestbedConfig() {
+  const entry = normalizePath(path.resolve(__dirname, "testbed", "index.ts"));
+  const tsconfig = path.resolve(__dirname, "testbed", "tsconfig.json");
+
+  return defineConfig({
+    build: {
+      lib: {
+        entry: entry,
+        name: "planckTestbed",
+        // the package is commonjs, so .js is what node reads as such; the es build is .mjs
+        // like the core's
+        fileName: (format) => (format === "es" ? "testbed.mjs" : "testbed.js"),
+        formats: ["es"],
+      },
+      target: "es2020",
+      emptyOutDir: false,
+      minify: false,
+      sourcemap: true,
+      rollupOptions: {
+        external: TESTBED_EXTERNAL,
+      },
+    },
+    plugins: [
+      glsl(),
+      rollupLicensePlugin({
+        banner: getLicense(),
+      }) as Plugin,
+      typescript({ tsconfig }),
+    ],
+  });
+}
+
+function buildShellConfig() {
+  const entry = normalizePath(path.resolve(__dirname, "testbed", "shell", "hostShell.tsx"));
+  const tsconfig = path.resolve(__dirname, "testbed", "tsconfig.json");
+
+  return defineConfig({
+    // classic JSX: React.createElement, which preact/compat provides
+    esbuild: { jsx: "transform", jsxFactory: "React.createElement", jsxFragment: "React.Fragment" },
+    // use-sync-external-store (signals-react's) picks its build by NODE_ENV when it loads
+    define: { "process.env.NODE_ENV": JSON.stringify("production") },
+    resolve: {
+      alias: [
+        { find: /^react-dom\/client$/, replacement: "preact/compat/client" },
+        { find: /^react-dom$/, replacement: "preact/compat" },
+        { find: /^react\/jsx-runtime$/, replacement: "preact/jsx-runtime" },
+        { find: /^react$/, replacement: "preact/compat" },
+        // the testbed's copy, not a second one (see the file)
+        {
+          find: /^@preact\/signals-core$/,
+          replacement: path.resolve(__dirname, "testbed", "shell", "signals-core.ts"),
+        },
+      ],
+    },
+    build: {
+      lib: {
+        entry: entry,
+        name: "planckTestbedShell",
+        fileName: () => "testbed-shell.mjs",
+        formats: ["es"],
+      },
+      target: "es2020",
+      emptyOutDir: false,
+      minify: false,
+      // no map: it would carry whole react-icons sets, ~10 MB in the package
+      sourcemap: false,
+      rollupOptions: {
+        external: SHELL_EXTERNAL,
+      },
+    },
+    plugins: [
+      rollupLicensePlugin({
+        banner: getLicense(),
+      }) as Plugin,
+      typescript({ tsconfig }),
+    ],
   });
 }
 
 function serveConfig(configEnv: ConfigEnv) {
+  // vitest runs this config too (mode "test"): the tests live at the repo root, not the dev site
+  const isTest = configEnv.mode === "test";
   const commitDate = execSync("git log -1 --format=%cI").toString().trimEnd();
   const branchName = execSync("git rev-parse --abbrev-ref HEAD").toString().trimEnd();
   const commitHash = execSync("git rev-parse HEAD").toString().trimEnd();
@@ -68,16 +206,29 @@ function serveConfig(configEnv: ConfigEnv) {
   process.env.VITE_GIT_LAST_COMMIT_MESSAGE = lastCommitMessage;
 
   return defineConfig({
+    // the examples browser (example/index.html) is the dev site: /<example> opens that example,
+    // every url falling back to it. `vite benchmark` serves the benchmark page instead.
+    root: isTest ? __dirname : path.resolve(__dirname, "example"),
+    appType: "spa",
+    // the testbed's shaders are imported as strings; its shell is React on preact
+    plugins: [glsl()],
     resolve: {
-      alias: {
-        "planck": path.resolve(__dirname, "testbed", "main.ts"),
-      },
+      alias: [
+        { find: "react", replacement: "preact/compat" },
+        { find: "react-dom", replacement: "preact/compat" },
+        { find: "react-dom/client", replacement: "preact/compat/client" },
+        { find: /^planck\/testbed-shell$/, replacement: path.resolve(__dirname, "testbed", "shell", "hostShell.tsx") },
+        { find: /^planck\/testbed(\/.*)?$/, replacement: path.resolve(__dirname, "testbed") + "$1" },
+        { find: /^planck$/, replacement: path.resolve(__dirname, "src", "main.ts") },
+      ],
     },
     define: {
       ASSERT: "false",
       _ASSERT: "false",
       CONSTRUCTOR_FACTORY: "false",
       _CONSTRUCTOR_FACTORY: "false",
+      // the examples browser's url base (see testbed/shell/Playlist)
+      SHELL_URL: JSON.stringify("/example"),
     },
   });
 }

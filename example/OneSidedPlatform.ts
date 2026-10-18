@@ -3,7 +3,8 @@
  * Licensed under the MIT license
  */
 
-import { World, Edge, Box, Circle, Testbed } from "planck";
+import { World, Edge, Box, Circle } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },
@@ -57,8 +58,7 @@ world.on("pre-solve", function (contact, oldManifold) {
   const fixB = contact.getFixtureB();
 
   const isCharPlatformContact =
-    (fixA === platformFix && fixB === characterFix) ||
-    (fixB === platformFix && fixA === characterFix);
+    (fixA === platformFix && fixB === characterFix) || (fixB === platformFix && fixA === characterFix);
 
   if (!isCharPlatformContact) {
     return;

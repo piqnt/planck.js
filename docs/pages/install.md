@@ -26,16 +26,19 @@ import planck from 'planck';
 const world = new planck.World();
 ```
 
-To use testbed you need to import `planck/with-testbed` instead:
+To use testbed, import it beside the library:
 
 ```js
-import { World, Testbed } from 'planck/with-testbed';
+import { World } from 'planck';
+import { Testbed } from 'planck/testbed';
 
 const world = new World();
 
 const testbed = Testbed.mount();
 testbed.start(world);
 ```
+
+`planck/with-testbed` has both in one module, as planck 1.5 did.
 
 
 #### Script tag
@@ -53,10 +56,14 @@ Planck.js is available on [jsDelivr](https://www.jsdelivr.com/package/npm/planck
 To use testbed you need to use `planck-with-testbed.min.js` instead:
 
 ```html
+<!DOCTYPE html>
 <html><body>
-  <span id="testbed-info"></span>
-  <span id="testbed-status"></span>
-  <button id="testbed-play">Play</button>
+  <!-- the testbed fills the page; these sit above it -->
+  <div style="position: fixed; top: 8px; left: 8px; z-index: 1; color: #ccc; font: 12px monospace">
+    <button id="testbed-play">Play</button>
+    <span id="testbed-info"></span>
+    <pre id="testbed-status"></pre>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/planck/dist/planck-with-testbed.min.js"></script>
   <script>

@@ -6,7 +6,8 @@
 // Note: even with a restitution of 1.0, there is some energy change
 // due to position correction.
 
-import { World, Circle, Edge, Testbed } from "planck";
+import { World, Circle, Edge } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

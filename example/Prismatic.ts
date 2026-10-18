@@ -5,7 +5,8 @@
 
 // The motor in this test gets smoother with higher velocity iterations.
 
-import { World, Vec2, PrismaticJoint, Edge, Box, Testbed } from "planck";
+import { World, Vec2, PrismaticJoint, Edge, Box } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

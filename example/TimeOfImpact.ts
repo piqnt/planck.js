@@ -3,18 +3,8 @@
  * Licensed under the MIT license
  */
 
-import {
-  World,
-  Transform,
-  Box,
-  TimeOfImpact,
-  Sweep,
-  TOIInput,
-  TOIOutput,
-  stats,
-  Testbed,
-  Vec2Value,
-} from "planck";
+import { World, Transform, Box, TimeOfImpact, Sweep, TOIInput, TOIOutput, stats, Vec2Value } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World();
 

@@ -6,18 +6,8 @@
 // Inspired by a contribution by roman_m
 // Dimensions scooped from APE (http://www.cove.org/ape/index.htm)
 
-import {
-  World,
-  Vec2,
-  Edge,
-  Circle,
-  Box,
-  PolygonShape,
-  RevoluteJoint,
-  DistanceJoint,
-  Testbed,
-  Vec2Value,
-} from "planck";
+import { World, Vec2, Edge, Circle, Box, PolygonShape, RevoluteJoint, DistanceJoint, Vec2Value } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },
@@ -156,18 +146,10 @@ function createLeg(s: number, wheelAnchor: Vec2Value) {
     dampingRatio: 0.5,
     frequencyHz: 10.0,
   };
-  world.createJoint(
-    new DistanceJoint(djd, body1, body2, Vec2.add(p2, offset), Vec2.add(p5, offset)),
-  );
-  world.createJoint(
-    new DistanceJoint(djd, body1, body2, Vec2.add(p3, offset), Vec2.add(p4, offset)),
-  );
-  world.createJoint(
-    new DistanceJoint(djd, body1, wheel, Vec2.add(p3, offset), Vec2.add(wheelAnchor, offset)),
-  );
-  world.createJoint(
-    new DistanceJoint(djd, body2, wheel, Vec2.add(p6, offset), Vec2.add(wheelAnchor, offset)),
-  );
+  world.createJoint(new DistanceJoint(djd, body1, body2, Vec2.add(p2, offset), Vec2.add(p5, offset)));
+  world.createJoint(new DistanceJoint(djd, body1, body2, Vec2.add(p3, offset), Vec2.add(p4, offset)));
+  world.createJoint(new DistanceJoint(djd, body1, wheel, Vec2.add(p3, offset), Vec2.add(wheelAnchor, offset)));
+  world.createJoint(new DistanceJoint(djd, body2, wheel, Vec2.add(p6, offset), Vec2.add(wheelAnchor, offset)));
 
   world.createJoint(new RevoluteJoint({}, body2, chassis, Vec2.add(p4, offset)));
 }

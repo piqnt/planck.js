@@ -5,7 +5,8 @@
 
 // This is used to test sensor shapes.
 
-import { World, Body, Fixture, Vec2, CircleShape, Box, Edge, Testbed } from "planck";
+import { World, Body, Fixture, Vec2, CircleShape, Box, Edge } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

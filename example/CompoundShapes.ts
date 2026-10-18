@@ -4,7 +4,8 @@
  */
 
 // TODO_ERIN test joints on compounds.
-import { World, Vec2, Transform, Math, Edge, Circle, Polygon, Box, Testbed } from "planck";
+import { World, Vec2, Transform, Math, Edge, Circle, Polygon, Box } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

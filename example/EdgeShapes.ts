@@ -3,7 +3,8 @@
  * Licensed under the MIT license
  */
 
-import { Vec2, World, Body, Fixture, Shape, Edge, Polygon, Box, Circle, Testbed } from "planck";
+import { Vec2, World, Body, Fixture, Shape, Edge, Polygon, Box, Circle } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

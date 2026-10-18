@@ -10,7 +10,8 @@
 // The 3 large ones never collide.
 // The boxes don't collide with triangles (except if both are small).
 
-import { World, Edge, Polygon, Box, Circle, PrismaticJoint, Testbed } from "planck";
+import { World, Edge, Polygon, Box, Circle, PrismaticJoint } from "planck";
+import { Testbed } from "planck/testbed";
 
 const SMALL_GROUP = 1;
 const LARGE_GROUP = -1;

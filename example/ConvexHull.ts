@@ -3,7 +3,8 @@
  * Licensed under the MIT license
  */
 
-import { World, Vec2, PolygonShape, Testbed, Vec2Value } from "planck";
+import { World, Vec2, PolygonShape, Vec2Value } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World();
 

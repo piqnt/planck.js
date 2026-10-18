@@ -1,0 +1,24 @@
+{
+  // What every project in this repo shares. Each one — src (the core), testbed, example —
+  // has its own tsconfig beside its code, because they compile differently: the core is ES5,
+  // the others are ES modules a bundler serves.
+  "compilerOptions": {
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    // the ambient ASSERT / CONSTRUCTOR_FACTORY the build defines; every project compiles src/
+    "typeRoots": ["./types"],
+    // the package resolves itself by its own name, as a consumer writes it, to the sources
+    // the dev server serves (see vite.config.mts)
+    "paths": {
+      "planck": ["./src/main.ts"],
+      "planck/testbed": ["./testbed/index.ts"],
+      "planck/testbed-shell": ["./testbed/shell/hostShell.tsx"],
+      "planck/testbed/*": ["./testbed/*"]
+    }
+  }
+}

@@ -5,7 +5,8 @@
 
 // This is used to test sensor shapes.
 
-import { World, Vec2, Edge, Box, Testbed } from "planck";
+import { World, Vec2, Edge, Box } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },
@@ -91,14 +92,8 @@ function breakIt() {
   const center1 = body1.getWorldCenter();
   const center2 = body2.getWorldCenter();
 
-  const velocity1 = Vec2.add(
-    breakVelocity,
-    Vec2.cross(breakAngularVelocity, Vec2.sub(center1, center)),
-  );
-  const velocity2 = Vec2.add(
-    breakVelocity,
-    Vec2.cross(breakAngularVelocity, Vec2.sub(center2, center)),
-  );
+  const velocity1 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center1, center)));
+  const velocity2 = Vec2.add(breakVelocity, Vec2.cross(breakAngularVelocity, Vec2.sub(center2, center)));
 
   body1.setAngularVelocity(breakAngularVelocity);
   body1.setLinearVelocity(velocity1);

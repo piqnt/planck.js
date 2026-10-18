@@ -3,7 +3,8 @@
  * Licensed under the MIT license
  */
 
-import { World, Transform, Manifold, CollidePolygons, Box, Testbed } from "planck";
+import { World, Transform, Manifold, CollidePolygons, Box } from "planck";
+import { Testbed } from "planck/testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },
