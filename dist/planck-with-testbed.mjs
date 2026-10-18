@@ -13167,7 +13167,7 @@ class CameraTransform extends Middleware {
       this.disposers.forEach((d2) => d2());
       this.disposers = [];
     };
-    this.handleFrameBefore = () => {
+    this.handleCameraChange = () => {
       const camera = this.context.camera;
       if (this.viewboxMemo.update(camera.x, camera.y, camera.width, camera.height)) {
         this.rescale();
@@ -13204,7 +13204,8 @@ class CameraTransform extends Middleware {
     };
     this.on("activate", this.handleActivate);
     this.on("deactivate", this.handleDeactivate);
-    this.on("frame-before", this.handleFrameBefore);
+    this.on("frame-before", this.handleCameraChange);
+    this.on("frame-update", this.handleCameraChange);
     this.on("display-zoom", this.handleZoom);
     this.on("display-pan", this.handlePan);
   }
