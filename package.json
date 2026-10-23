@@ -34,6 +34,13 @@
   "jsdelivr": "dist/planck.min.js",
   "unpkg": "dist/planck.min.js",
   "types": "index.d.ts",
+  "files": [
+    "src",
+    "testbed",
+    "dist",
+    "index.d.ts",
+    "CHANGELOG.md"
+  ],
   "exports": {
     ".": {
       "types": "./dist/planck.d.ts",
