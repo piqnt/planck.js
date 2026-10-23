@@ -5,7 +5,7 @@
 
 // This tests distance joints, body destruction, and joint destruction.
 
-import { World, Body, Joint, Box, DistanceJoint, Testbed } from "planck";
+import { World, Body, Joint, Box, DistanceJoint, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

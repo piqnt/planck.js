@@ -3,16 +3,7 @@
  * Licensed under the MIT license
  */
 
-import {
-  World,
-  Circle,
-  Box,
-  Edge,
-  RevoluteJoint,
-  PrismaticJoint,
-  GearJoint,
-  Testbed,
-} from "planck";
+import { World, Circle, Box, Edge, RevoluteJoint, PrismaticJoint, GearJoint, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },
@@ -108,12 +99,8 @@ const jointB3 = world.createJoint(
   ),
 );
 
-const jointB4 = world.createJoint(
-  new GearJoint({}, gearB1, gearB2, jointB1!, jointB2!, radius2 / radius1),
-);
-const jointB5 = world.createJoint(
-  new GearJoint({}, gearB2, plankB1, jointB2!, jointB3!, -1.0 / radius2),
-);
+const jointB4 = world.createJoint(new GearJoint({}, gearB1, gearB2, jointB1!, jointB2!, radius2 / radius1));
+const jointB5 = world.createJoint(new GearJoint({}, gearB2, plankB1, jointB2!, jointB3!, -1.0 / radius2));
 
 testbed.step = function () {
   const ratio1 = jointB4!.getRatio();

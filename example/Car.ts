@@ -5,7 +5,7 @@
 
 // This is a fun demo that shows off the wheel joint
 
-import { World, Edge, Box, Circle, Polygon, RevoluteJoint, WheelJoint, Testbed } from "planck";
+import { World, Edge, Box, Circle, Polygon, RevoluteJoint, WheelJoint, Testbed } from "planck/with-testbed";
 
 const testbed = Testbed.mount();
 
@@ -134,9 +134,7 @@ for (i = 0; i < 20; ++i) {
     ...bridgeFD,
   });
 
-  world.createJoint(
-    new RevoluteJoint({}, prevBody, bridgeBlock, { x: 160.0 + 2.0 * i, y: -0.125 }),
-  );
+  world.createJoint(new RevoluteJoint({}, prevBody, bridgeBlock, { x: 160.0 + 2.0 * i, y: -0.125 }));
 
   prevBody = bridgeBlock;
 }

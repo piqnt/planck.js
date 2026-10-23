@@ -3,7 +3,7 @@
  * Licensed under the MIT license
  */
 
-import { World, Circle, Box, Testbed } from "planck";
+import { World, Circle, Box, Testbed } from "planck/with-testbed";
 
 const world = new World();
 

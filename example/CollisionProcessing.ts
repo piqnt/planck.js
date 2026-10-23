@@ -3,7 +3,7 @@
  * Licensed under the MIT license
  */
 
-import { World, Body, Fixture, Vec2Value, Edge, Polygon, Box, Circle, Math, Testbed } from "planck";
+import { World, Body, Fixture, Vec2Value, Edge, Polygon, Box, Circle, Math, Testbed } from "planck/with-testbed";
 
 // This test shows collision processing and tests
 // deferred body destruction.

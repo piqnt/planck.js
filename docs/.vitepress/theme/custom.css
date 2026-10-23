@@ -1,0 +1,3 @@
+html.dark .vp-doc img {
+  filter: invert(1) hue-rotate(180deg);
+}

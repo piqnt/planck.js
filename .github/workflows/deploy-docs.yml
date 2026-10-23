@@ -1,4 +1,4 @@
-name: Deploy docs to github pages
+name: Deploy site to github pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -37,14 +37,15 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run typedoc && npm run docs:build
+        # the examples at /planck.js/<Name> and the docs at /planck.js/docs/, both into site/
+        run: npm run build:site
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          # Upload dist folder
-          path: "./dist"
+          # site/, not dist/: that one is the npm package's, and nothing links to it
+          path: "./site"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

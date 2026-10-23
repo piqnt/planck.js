@@ -7,7 +7,7 @@
 // can be used to animate a dynamic body. With finite motor forces
 // the body can be blocked by collision with other bodies.
 
-import { World, MotorJoint, Box, Edge, Testbed } from "planck";
+import { World, MotorJoint, Box, Edge, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

@@ -9,7 +9,7 @@
 // factor until they overflow, and World.step() throws from the time-of-impact solver. Exact values matter;
 // a plain Edge works too but is more fragile, the chain's ghost segments help hold the jam.
 
-import { World, Vec2, Box, Chain, RevoluteJoint, Testbed } from "planck";
+import { World, Vec2, Box, Chain, RevoluteJoint, Testbed } from "planck/with-testbed";
 
 const world = new World({ gravity: { x: 0, y: -10 } });
 
@@ -21,6 +21,12 @@ testbed.height = 4;
 testbed.hz = 240;
 testbed.info("Box wedged in a pocket and pulled into a chain (#315): the joint impulse should stay small");
 testbed.start(world);
+
+// the testbed steps the world with its own iteration counts; the jam needs 10 and 4
+testbed.on("step-before", (ev) => {
+  ev.velocityIterations = 10;
+  ev.positionIterations = 4;
+});
 
 const hw = 0.8420396029949189; // box half width
 const hh = 0.4911016643047333; // box half height

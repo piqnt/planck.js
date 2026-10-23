@@ -3,7 +3,7 @@
  * Licensed under the MIT license
  */
 
-import { World, Transform, Box, Distance, Testbed } from "planck";
+import { World, Transform, Box, Distance, Testbed } from "planck/with-testbed";
 
 const DistanceInput = Distance.Input;
 const DistanceOutput = Distance.Output;

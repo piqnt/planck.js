@@ -1,11 +1,18 @@
+---
+title: Run Your Code
+# This page's content moved to Testbed; it stays as a redirect for links in the wild (it was in
+# the sidebar and on piqnt.com for years). The refresh fires before any script runs, so it works
+# without JavaScript and for crawlers; the link below is what a reader sees if it does not.
+head:
+  - - meta
+    - http-equiv: refresh
+      content: 0; url=./testbed.html
+  - - link
+    - rel: canonical
+      href: https://piqnt.com/planck.js/docs/testbed.html
+search: false
+---
 
-## Run Your Code
+# Run Your Code
 
-Planck.js is a physics simulation library, and it doesn't draw anything.
-
-[Piqnt](https://piqnt.com/) is an online playground for Planck.js. You can explore [examples](https://piqnt.com/planck.js/), inspect and edit them, or create new ones.
-
-[Testbed](./testbed) is a simple tool (included in the project repository) to visualize and interact with physics simulation. Testbed is compatible with Piqnt playground.
-
-You can use Planck.js with any game engines or frameworks, or use an existing integrations. See [Simulation](./world/simulation) and [Rendering](./rendering) page for more information.
-
+Moved to [Testbed](./testbed).

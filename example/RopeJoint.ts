@@ -12,7 +12,7 @@
 // This test also shows how to use contact filtering. Filtering is configured
 // so that the payload does not collide with the chain.
 
-import { World, Edge, Box, RevoluteJoint, RopeJoint, Testbed, BodyDef } from "planck";
+import { World, Edge, Box, RevoluteJoint, RopeJoint, BodyDef, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

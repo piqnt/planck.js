@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.base.json",
+  // the published core: ES5, so `Vec2(x, y)` works without `new`, and no internals in its
+  // declarations
+  "compilerOptions": {
+    "module": "ES2015",
+    "moduleResolution": "Node",
+    "target": "ES5",
+    "lib": ["ES2015", "DOM"],
+    "stripInternal": true
+  },
+  "include": ["./**/*.ts"]
+}

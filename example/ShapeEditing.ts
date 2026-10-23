@@ -3,7 +3,7 @@
  * Licensed under the MIT license
  */
 
-import { World, Fixture, Edge, Circle, Box, Testbed } from "planck";
+import { World, Fixture, Edge, Circle, Box, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

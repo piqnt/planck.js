@@ -1,4 +1,4 @@
-import { Testbed, World } from "planck";
+import { World, Testbed } from "planck/with-testbed";
 
 const testbed = Testbed.mount();
 

@@ -3,7 +3,7 @@
  * Licensed under the MIT license
  */
 
-import { World, Circle, Box, PulleyJoint, Testbed } from "planck";
+import { World, Circle, Box, PulleyJoint, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },
@@ -61,9 +61,7 @@ const anchor2 = { x: 10.0, y: y + b };
 const groundAnchor1 = { x: -10.0, y: y + b + L };
 const groundAnchor2 = { x: 10.0, y: y + b + L };
 
-const joint1 = world.createJoint(
-  new PulleyJoint({}, box1, box2, groundAnchor1, groundAnchor2, anchor1, anchor2, 1.5),
-);
+const joint1 = world.createJoint(new PulleyJoint({}, box1, box2, groundAnchor1, groundAnchor2, anchor1, anchor2, 1.5));
 
 testbed.step = function () {
   if (!joint1) return;

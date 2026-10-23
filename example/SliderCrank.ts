@@ -5,7 +5,7 @@
 
 // A motor driven slider crank with joint friction.
 
-import { World, RevoluteJoint, PrismaticJoint, Edge, Box, Testbed } from "planck";
+import { World, RevoluteJoint, PrismaticJoint, Edge, Box, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

@@ -1,4 +1,4 @@
-import { World, Edge, Circle, Box, Chain, Math, Testbed } from "planck";
+import { World, Edge, Circle, Box, Chain, Math, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

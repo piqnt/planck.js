@@ -15,9 +15,9 @@ import {
   DistanceOutput,
   Distance,
   SimplexCache,
-  Testbed,
   Vec2Value,
-} from "planck";
+  Testbed,
+} from "planck/with-testbed";
 
 const world = new World();
 

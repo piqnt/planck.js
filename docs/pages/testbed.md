@@ -1,18 +1,21 @@
 
 ## Testbed
 
-Testbed is a debugging tool that is provided with the library. It is useful to get started with Planck.js, and develop and debug physics code, and run examples.
+Planck.js is a physics simulation library, and it doesn't draw anything. Testbed is a debugging
+tool that is provided with the library. It is useful to get started with Planck.js, and develop and debug physics code, and run examples.
 
 Testbed is not required to use Planck.js physics. You can run simulation and render physics world directly, with any rendering library or framework (see [Simulation](./world/simulation) and [Rendering](./rendering) sections for more details).
 
 There are multiple way to use testbed:
-- Use Piqnt online playground
+- Run the examples on this site
 - Install from NPM, or from CDN
 - Run locally from source
 
-### Piqnt onlin playground
+### Examples on this site
 
-[Piqnt](https://piqnt.com/) is an online playground to run testbed code. It is useful to quickly try out physics examples, and share them with others.
+Every [example](./examples) runs in the testbed on its own page, which is the quickest way to see
+what the testbed does. The code is not editable there; each page links to its source, and running
+locally from source (below) is how to change one.
 
 ### Install from NPM
 
@@ -23,18 +26,24 @@ npm install planck
 ```
 
 ```js
-import { World, Testbed } from 'planck/with-testbed';
+import { Testbed, World } from 'planck/with-testbed';
 ```
+
+`planck/with-testbed` has both in one module, as planck 1.5 did.
 
 ### Script tag and CDN
 
 To use testbed from CDN, add the following script tag to your HTML file.
 
 ```html
+<!DOCTYPE html>
 <html><body>
-  <span id="testbed-info"></span>
-  <span id="testbed-status"></span>
-  <button id="testbed-play">Play</button>
+  <!-- the testbed fills the page; these sit above it -->
+  <div style="position: fixed; top: 8px; left: 8px; z-index: 1; color: #ccc; font: 12px monospace">
+    <button id="testbed-play">Play</button>
+    <span id="testbed-info"></span>
+    <pre id="testbed-status"></pre>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/planck/dist/planck-with-testbed.min.js"></script>
   <script>
@@ -54,7 +63,7 @@ Running testbed locally is useful if you want to debug or edit the library or te
 To run testbed from source, clone the repository and run `npm install` and `npm run dev` in the root directory. This will start a local server and open testbed in your browser.
 
 ```bash
-git clone
+git clone https://github.com/piqnt/planck.js.git
 cd planck.js
 npm install
 npm run dev

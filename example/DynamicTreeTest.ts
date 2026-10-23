@@ -3,7 +3,7 @@
  * Licensed under the MIT license
  */
 
-import { World, Vec2, DynamicTree, AABB, Math, Testbed, RayCastInput, RayCastOutput } from "planck";
+import { World, Vec2, DynamicTree, AABB, Math, RayCastInput, RayCastOutput, Testbed } from "planck/with-testbed";
 
 class Actor {
   aabb = new AABB();

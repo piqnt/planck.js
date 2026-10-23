@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.base.json",
+  // ES2020: the testbed extends polymatic's native classes, which ES5 output cannot
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM"],
+    "jsx": "preserve"
+  },
+  "include": ["./**/*.ts", "./**/*.tsx", "../src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

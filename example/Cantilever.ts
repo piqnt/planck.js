@@ -8,7 +8,7 @@
 // So why not go ahead and use soft weld joints? They behave like a revolute
 // joint with a rotational spring.
 
-import { World, Edge, Box, WeldJoint, Polygon, Circle, Testbed } from "planck";
+import { World, Edge, Box, WeldJoint, Polygon, Circle, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

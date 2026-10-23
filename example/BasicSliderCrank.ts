@@ -5,7 +5,7 @@
 
 // A basic slider crank created for GDC tutorial: Understanding Constraints
 
-import { World, Box, RevoluteJoint, PrismaticJoint, Testbed } from "planck";
+import { World, Box, RevoluteJoint, PrismaticJoint, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

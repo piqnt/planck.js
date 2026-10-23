@@ -7,7 +7,7 @@
 // show how you should implement a character in your application.
 // Instead this is used to test smooth collision on edge chains.
 
-import { World, Vec2Value, Edge, Chain, Box, Polygon, Circle, Testbed } from "planck";
+import { World, Vec2Value, Edge, Chain, Box, Polygon, Circle, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },

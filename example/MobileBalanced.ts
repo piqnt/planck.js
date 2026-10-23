@@ -3,7 +3,7 @@
  * Licensed under the MIT license
  */
 
-import { World, Vec2, Box, RevoluteJoint, Testbed, Body, Vec2Value } from "planck";
+import { World, Vec2, Box, RevoluteJoint, Body, Vec2Value, Testbed } from "planck/with-testbed";
 
 const world = new World({
   gravity: { x: 0, y: -10 },
