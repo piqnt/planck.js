@@ -1,5 +1,16 @@
 # planck
 
+## 1.6.0
+
+### Minor Changes
+
+- ce65dd2: New testbed with WebGL and polymatic
+- 46aa765: Publish the library and its sources — `src`, `testbed`, `dist`, the type entry point and the changelog — rather than the whole repository.
+
+### Patch Changes
+
+- b93ed7e: `DataDriver` is deprecated; it was experimental, use polymatic data-binder instead.
+
 ## 1.5.1
 
 ### Patch Changes
@@ -92,19 +103,23 @@ Versions below predate this file; their notes were kept by hand in CHANGES.md, m
 1.0.2, 1.0.5, 1.0.6, 1.1.1, 1.1.2 and 1.1.4 were released without notes.
 
 ## 1.1.0
+
 - Vite build migration
 
 ## 1.0.0
+
 - Typescript migration
 - Performance improvements
 
 ## 0.2
+
 - TypeScript definitions added
 - wSet/wAdd/wSub(a, v, b, w) replaced with combine/setCombine/addCombine/subCombine(a, v, b, w)
 - wSet/wAdd/wSub(a, v) replaced with mul/setMul/addMul/subMul(a, v)
 - Joints constructors cleanup
 
 ## 0.1
+
 - source code directory layout changed, classes moved around!
 - b2Class renamed to Class
 - Dumping is removed, Drawing is moved to tesbed
