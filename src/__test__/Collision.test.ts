@@ -10,6 +10,8 @@ import { Manifold, ManifoldType } from "../collision/Manifold";
 import { EdgeShape } from "../collision/shape/EdgeShape";
 import { BoxShape } from "../collision/shape/BoxShape";
 import { CollideEdgePolygon } from "../collision/shape/CollideEdgePolygon";
+import { CircleShape } from "../collision/shape/CircleShape";
+import { Distance, DistanceInput, DistanceOutput, SimplexCache } from "../collision/Distance";
 
 describe("Collision", function (): void {
   it("AABB", function (): void {
@@ -175,5 +177,37 @@ describe("CollideEdgePolygon contact ids", function (): void {
       expect(manifold.pointCount).equal(2);
       expect(manifold.points[0].id.key).not.equal(manifold.points[1].id.key);
     }
+  });
+  it("Distance with useRadii puts overlapping witness points in the middle", function (): void {
+    function distance(a: CircleShape | BoxShape, xa: Vec2, b: CircleShape | BoxShape, xb: Vec2): DistanceOutput {
+      const input = new DistanceInput();
+      input.proxyA.set(a, 0);
+      input.proxyB.set(b, 0);
+      input.transformA.set(new Transform(xa, 0));
+      input.transformB.set(new Transform(xb, 0));
+      input.useRadii = true;
+      const output = new DistanceOutput();
+      Distance(output, new SimplexCache(), input);
+      return output;
+    }
+
+    let out = distance(new CircleShape(1), new Vec2(0, 0), new CircleShape(1), new Vec2(1.5, 0));
+    expect(out.distance).equal(0);
+    expect(out.pointA.x).closeTo(0.75, 1e-12);
+    expect(out.pointA.y).closeTo(0, 1e-12);
+    expect(out.pointB.x).closeTo(0.75, 1e-12);
+    expect(out.pointB.y).closeTo(0, 1e-12);
+
+    out = distance(new CircleShape(1), new Vec2(3, 4), new CircleShape(1), new Vec2(4, 4));
+    expect(out.pointA.x).closeTo(3.5, 1e-12);
+    expect(out.pointA.y).closeTo(4, 1e-12);
+    expect(out.pointB.x).closeTo(3.5, 1e-12);
+    expect(out.pointB.y).closeTo(4, 1e-12);
+
+    // separated shapes keep the witness points on the surfaces
+    out = distance(new CircleShape(1), new Vec2(0, 0), new CircleShape(1), new Vec2(3, 0));
+    expect(out.distance).closeTo(1, 1e-12);
+    expect(out.pointA.x).closeTo(1, 1e-12);
+    expect(out.pointB.x).closeTo(2, 1e-12);
   });
 });

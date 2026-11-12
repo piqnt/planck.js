@@ -211,7 +211,7 @@ export const Distance = function (output: DistanceOutput, cache: SimplexCache, i
     } else {
       // Shapes are overlapped when radii are considered.
       // Move the witness points to the middle.
-      const p = matrix.subVec2(temp, output.pointA, output.pointB);
+      const p = matrix.combine2Vec2(temp, 0.5, output.pointA, 0.5, output.pointB);
       matrix.copyVec2(output.pointA, p);
       matrix.copyVec2(output.pointB, p);
       output.distance = 0.0;
