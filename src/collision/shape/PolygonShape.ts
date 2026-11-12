@@ -22,6 +22,7 @@ import { Shape } from "../Shape";
 /** @internal */ const _CONSTRUCTOR_FACTORY = typeof CONSTRUCTOR_FACTORY === "undefined" ? false : CONSTRUCTOR_FACTORY;
 /** @internal */ const math_max = Math.max;
 /** @internal */ const math_min = Math.min;
+/** @internal */ const math_abs = Math.abs;
 
 /** @internal */ const temp = matrix.vec2(0, 0);
 /** @internal */ const e = matrix.vec2(0, 0);
@@ -212,13 +213,16 @@ export class PolygonShape extends Shape {
         const r = Vec2.sub(ps[ie], ps[hull[m]]);
         const v = Vec2.sub(ps[j], ps[hull[m]]);
         const c = Vec2.crossVec2Vec2(r, v);
+        // Treat round-off sized cross products as collinear, otherwise their
+        // sign depends on the pivot and the hull may never close.
+        const tolerance = EPSILON * r.length() * v.length();
         // c < 0 means counter-clockwise wrapping, c > 0 means clockwise wrapping
-        if (c < 0.0) {
+        if (c < -tolerance) {
           ie = j;
         }
 
         // Collinearity check
-        if (c === 0.0 && v.lengthSquared() > r.lengthSquared()) {
+        if (math_abs(c) <= tolerance && v.lengthSquared() > r.lengthSquared()) {
           ie = j;
         }
       }
