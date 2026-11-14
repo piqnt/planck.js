@@ -201,6 +201,14 @@ export class PolygonShape extends Shape {
 
     while (true) {
       if (_ASSERT) console.assert(m < Settings.maxPolygonVertices);
+      if (m >= n) {
+        // A hull can't have more vertices than input points. If the wrap did
+        // not close by now (e.g. inconsistent orientation tests), give up
+        // instead of looping forever.
+        if (_ASSERT) console.assert(false);
+        this._setAsBox(1.0, 1.0);
+        return;
+      }
       hull[m] = ih;
 
       let ie = 0;
