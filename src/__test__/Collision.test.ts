@@ -14,6 +14,18 @@ import { CircleShape } from "../collision/shape/CircleShape";
 import { Distance, DistanceInput, DistanceOutput, SimplexCache } from "../collision/Distance";
 
 describe("Collision", function (): void {
+  it("AABB.isValid rejects unsorted bounds", function (): void {
+    expect(new AABB(new Vec2(0, 0), new Vec2(1, 1)).isValid()).equal(true);
+    expect(new AABB(new Vec2(1, 1), new Vec2(1, 1)).isValid()).equal(true);
+
+    expect(new AABB(new Vec2(1, 1), new Vec2(0, 0)).isValid()).equal(false);
+    expect(new AABB(new Vec2(1, 0), new Vec2(0, 1)).isValid()).equal(false);
+    expect(new AABB(new Vec2(0, 1), new Vec2(1, 0)).isValid()).equal(false);
+    expect(AABB.isValid({ lowerBound: { x: 2, y: 0 }, upperBound: { x: 1, y: 5 } })).equal(false);
+
+    expect(new AABB(new Vec2(NaN, 0), new Vec2(1, 1)).isValid()).equal(false);
+  });
+
   it("AABB", function (): void {
     const o = new AABB();
     expect(o.isValid()).equal(true);
