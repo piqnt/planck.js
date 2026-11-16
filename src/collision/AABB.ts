@@ -85,7 +85,8 @@ export class AABB {
     return (
       Vec2.isValid(obj.lowerBound) &&
       Vec2.isValid(obj.upperBound) &&
-      Vec2.sub(obj.upperBound, obj.lowerBound).lengthSquared() >= 0
+      obj.upperBound.x - obj.lowerBound.x >= 0 &&
+      obj.upperBound.y - obj.lowerBound.y >= 0
     );
   }
 
