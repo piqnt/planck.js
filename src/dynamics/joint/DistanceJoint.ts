@@ -150,6 +150,7 @@ export class DistanceJoint extends Joint {
     this.m_frequencyHz = def.frequencyHz;
     this.m_dampingRatio = def.dampingRatio;
     this.m_impulse = 0.0;
+    this.m_u = Vec2.zero();
     this.m_gamma = 0.0;
     this.m_bias = 0.0;
 
