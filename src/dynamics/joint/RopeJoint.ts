@@ -126,6 +126,7 @@ export class RopeJoint extends Joint {
 
     this.m_mass = 0.0;
     this.m_impulse = 0.0;
+    this.m_u = Vec2.zero();
     this.m_length = 0.0;
     this.m_state = LimitState.inactiveLimit;
 

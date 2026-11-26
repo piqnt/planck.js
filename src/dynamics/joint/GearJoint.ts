@@ -230,6 +230,12 @@ export class GearJoint extends Joint {
     this.m_constant = coordinateA + this.m_ratio * coordinateB;
 
     this.m_impulse = 0.0;
+    this.m_JvAC = Vec2.zero();
+    this.m_JvBD = Vec2.zero();
+    this.m_JwA = 0.0;
+    this.m_JwB = 0.0;
+    this.m_JwC = 0.0;
+    this.m_JwD = 0.0;
 
     // Gear Joint:
     // C0 = (coordinate1 + ratio * coordinate2)_initial

@@ -172,6 +172,8 @@ export class PulleyJoint extends Joint {
     this.m_constant = this.m_lengthA + this.m_ratio * this.m_lengthB;
 
     this.m_impulse = 0.0;
+    this.m_uA = Vec2.zero();
+    this.m_uB = Vec2.zero();
 
     // Pulley:
     // length1 = norm(p1 - s1)
